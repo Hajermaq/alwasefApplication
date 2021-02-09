@@ -68,6 +68,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('hello');
     return Scaffold(
       body: SizedBox.expand(
         child: PageView(
