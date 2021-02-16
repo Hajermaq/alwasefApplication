@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/Register_hospital_screen.dart';
 import 'package:alwasef_app/Screens/login_screen.dart';
 import 'package:alwasef_app/Screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -63,11 +64,30 @@ class _LogInORSignInState extends State<LogInORSignIn> {
             padding: EdgeInsets.symmetric(horizontal: 100.0),
             child: RaisedButton(
               child: Text(
-                'تسجيل جديد',
-                style: TextStyle(fontSize: 30.0),
+                'تسجيل مستخدم',
+                style: TextStyle(fontSize: 29.0),
               ),
               onPressed: () {
                 Navigator.pushNamed(context, RegisterScreen.id);
+              },
+              color: Color(0xffabd1c6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 33.0,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 100.0),
+            child: RaisedButton(
+              child: Text(
+                'تسجيل مستشفى',
+                style: TextStyle(fontSize: 30.0),
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, RegisterHospitalScreen.id);
               },
               color: Color(0xffabd1c6),
               shape: RoundedRectangleBorder(
