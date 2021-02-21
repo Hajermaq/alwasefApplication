@@ -1,48 +1,23 @@
-import 'package:alwasef_app/Screens/doctors_mainpage.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import '../admin_page.dart';
+import '../all_admin_screen/admin_page.dart';
 
 class UserManagement {
+  //FireStore
   FirebaseAuth auth = FirebaseAuth.instance;
-  String documentName = FirebaseAuth.instance.currentUser.uid;
+  // String documentName = FirebaseAuth.instance.currentUser.uid;
+  var db = FirebaseFirestore.instance;
+
+  //Variables
   String role;
-  List<ListTile> patientNames = [];
+  var currentName;
+  var currentEmail;
 
-  listPatients() {
-    return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Patient').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Text('has no data');
-          } else {
-            return ListView.builder(
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (_, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        title:
-                            Text(snapshot.data.docs[index].get('patient-name')),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 15.0,
-                          right: 15.0,
-                        ),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                    ],
-                  );
-                });
-          }
-        });
-  } //end of method
-
+  // get roles
   getDoctor(String role) {
     return FirebaseFirestore.instance
         .collection('/Doctors')
@@ -73,6 +48,7 @@ class UserManagement {
         .get();
   }
 
+  // setUps
   Future<void> newHospitalSetUp(
     context,
     String password,
@@ -113,7 +89,7 @@ class UserManagement {
     String password,
     String doctorName,
     String role,
-    String hospital_uid,
+    String hospitalUID,
   ) async {
     try {
       CollectionReference collection =
@@ -131,7 +107,7 @@ class UserManagement {
           'email': email,
           'password': password,
           'role': role,
-          'hospital-uid': hospital_uid,
+          'hospital-uid': hospitalUID,
         }).then((_) {
           print('collection is created');
           Navigator.pushNamed(context, DoctorMainPage.id);
@@ -150,7 +126,7 @@ class UserManagement {
     String password,
     String pharmacistName,
     String role,
-    String hospital_uid,
+    String hospitalUID,
   ) async {
     try {
       CollectionReference collection =
@@ -168,7 +144,7 @@ class UserManagement {
           'email': email,
           'password': password,
           'role': role,
-          'hospital-uid': hospital_uid,
+          'hospital-uid': hospitalUID,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
@@ -189,7 +165,7 @@ class UserManagement {
     String password,
     String patientName,
     String role,
-    String hospital_uid,
+    String hospitalUID,
   ) async {
     try {
       CollectionReference collection =
@@ -207,7 +183,7 @@ class UserManagement {
           'email': email,
           'password': password,
           'role': role,
-          'hospital-uid': hospital_uid,
+          'hospital-uid': hospitalUID,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();

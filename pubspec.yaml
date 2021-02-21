@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.0
   flutter_svg: ^0.19.0
   bottom_navy_bar: ^5.6.0
@@ -32,6 +33,11 @@ dependencies:
   firebase_core: ^0.7.0
   cloud_firestore: ^0.16.0
   firebase_auth: ^0.20.0+1
+  google_fonts: ^1.1.2
+  provider: ^4.3.3
+  tab_indicator_styler: ^1.0.0
+#  flutter_localizations:
+#  sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -67,13 +73,9 @@ flutter:
       fonts:
         - asset: assets/fonts/Harmattan-Bold.ttf
         - asset: assets/fonts/Harmattan-Regular.ttf
-    - family: Segoe UI
+    - family: Almarai
       fonts:
-        - asset: assets/fonts/Segoe_UI.ttf
-        - asset: assets/fonts/Segoe_UI_Bold.ttf
-        - asset: assets/fonts/Segoe_UI_Bold_Italic.ttf
-        - asset: assets/fonts/Segoe_UI_Italic.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+        - asset: assets/fonts/Almarai-ExtraBold.ttf
+        - asset: assets/fonts/Almarai-Bold.ttf
+        - asset: assets/fonts/Almarai-Light.ttf
+        - asset: assets/fonts/Almarai-Regular.ttf

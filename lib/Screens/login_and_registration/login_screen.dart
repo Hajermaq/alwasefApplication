@@ -1,9 +1,6 @@
-import 'dart:developer';
-
-import 'package:alwasef_app/Screens/doctors_mainpage.dart';
-import 'package:alwasef_app/Screens/patients_mainpage.dart';
-import 'package:alwasef_app/Screens/pharamacists_mainpage.dart';
-import 'package:alwasef_app/Screens/reset_password_screen.dart';
+import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patients_mainpage.dart';
+import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:alwasef_app/components/round_text_fields.dart';
+import 'package:alwasef_app/components/round-button.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -19,8 +18,10 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
+  //FireStore
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
+  //Variables
   String email;
   String password;
   String role;
@@ -29,9 +30,9 @@ class _LogInScreenState extends State<LogInScreen> {
   String dbPatientRole;
   String dbPharmacistRole;
   String dbHospitalRole;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     UserManagement().getDoctor(role).then((QuerySnapshot documents) {
       if (documents.docs.isNotEmpty) {
@@ -76,7 +77,7 @@ class _LogInScreenState extends State<LogInScreen> {
             width: 200.0,
             child: SvgPicture.asset(
               'assets/images/password.svg',
-              color: Colors.white,
+              color: kSVGcolor,
             ),
           ),
           Container(
@@ -86,126 +87,114 @@ class _LogInScreenState extends State<LogInScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 25.0,
-                fontFamily: 'Segoe UI',
               ),
             ),
           ),
           SizedBox(
-            height: 50.0,
+            height: 30.0,
           ),
-          Container(
-            margin: EdgeInsets.only(right: 50, left: 50),
-            height: 50.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border.all(
-                color: Color(0xffabd1c6),
-                width: 3.0,
-              ),
-            ),
-            child: TextField(
-              onChanged: (selectedEmail) {
-                email = selectedEmail;
-              },
-              textAlign: TextAlign.end,
-              decoration: InputDecoration(
-                hintText: 'إيميل',
-                hintStyle: kTextFieldHintStyle,
-                focusedBorder: OutlineInputBorder(),
-              ),
-            ),
+          RoundTextFields(
+            color: kButtonColor,
+            hintMessage: 'ايميل',
+            onChanged: (value) {
+              email = value;
+            },
           ),
           SizedBox(
             height: 20.0,
           ),
-          Container(
-            margin: EdgeInsets.only(right: 50, left: 50),
-            height: 50.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              border: Border.all(
-                color: Color(0xffabd1c6),
-                width: 3.0,
-              ),
-            ),
-            child: TextField(
-              onChanged: (selectedPassword) {
-                password = selectedPassword;
-              },
-              textAlign: TextAlign.end,
-              decoration: InputDecoration(
-                hintText: 'كلمة المرور',
-                hintStyle: TextStyle(
-                  color: kLightColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.normal,
-                ),
-                focusedBorder: OutlineInputBorder(),
-              ),
-            ),
+          RoundTextFields(
+            color: kButtonColor,
+            hintMessage: 'كلمة المرور',
+            onChanged: (value) {
+              password = value;
+            },
           ),
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(
-                  child: ListTile(
-                    title: Text('طبيب'),
-                    trailing: Radio(
-                      value: 'طبيب',
-                      groupValue: role,
-                      onChanged: (selectedRole) {
-                        setState(() {
-                          role = selectedRole;
-                        });
-                      },
-                    ),
-                  ),
+                Radio(
+                  value: 'مريض',
+                  groupValue: role,
+                  onChanged: (selectedRole) {
+                    setState(() {
+                      role = selectedRole;
+                    });
+                  },
                 ),
-                Flexible(
-                  child: ListTile(
-                    title: Text('صيدلي'),
-                    trailing: Radio(
-                      value: 'صيدلي',
-                      groupValue: role,
-                      onChanged: (selectedRole) {
-                        setState(() {
-                          role = selectedRole;
-                        });
-                      },
-                    ),
-                  ),
+                Text(
+                  'مريض',
                 ),
-                Flexible(
-                  child: ListTile(
-                    title: Text('مريض'),
-                    trailing: Radio(
-                      value: 'مريض',
-                      groupValue: role,
-                      onChanged: (selectedRole) {
-                        setState(() {
-                          role = selectedRole;
-                        });
-                      },
-                    ),
-                  ),
+                Radio(
+                  value: 'طبيب',
+                  groupValue: role,
+                  onChanged: (selectedRole) {
+                    setState(() {
+                      role = selectedRole;
+                    });
+                  },
                 ),
+                Text('طبيب'),
+                Radio(
+                  value: 'صيدلي',
+                  groupValue: role,
+                  onChanged: (selectedRole) {
+                    setState(() {
+                      role = selectedRole;
+                    });
+                  },
+                ),
+                Text('صيدلي'),
+                // Flexible(
+                //   child: ListTile(
+                //     title: Text('طبيب'),
+                //     trailing: Radio(
+                //       value: 'طبيب',
+                //       groupValue: role,
+                //       onChanged: (selectedRole) {
+                //         setState(() {
+                //           role = selectedRole;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
+                // Flexible(
+                //   child: ListTile(
+                //     title: Text('صيدلي'),
+                //     trailing: Radio(
+                //       value: 'صيدلي',
+                //       groupValue: role,
+                //       onChanged: (selectedRole) {
+                //         setState(() {
+                //           role = selectedRole;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
+                // Flexible(
+                //   child: ListTile(
+                //     title: Text('مريض'),
+                //     trailing: Radio(
+                //       value: 'مريض',
+                //       groupValue: role,
+                //       onChanged: (selectedRole) {
+                //         setState(() {
+                //           role = selectedRole;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
-          SizedBox(
-            height: 50.0,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 120.0),
-            child: RaisedButton(
-              child: Text(
-                'إذهب',
-                style: TextStyle(fontSize: 30.0),
-              ),
+          RoundRaisedButton(
+              text: ' إذهب',
               onPressed: () async {
-                // Doctor
+// Doctor
                 if (dbDoctorRole == role) {
                   await auth
                       .signInWithEmailAndPassword(
@@ -215,7 +204,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   }).catchError((e) {
                     print(e);
                   });
-                  //patient
+//patient
                 } else if (dbPatientRole == role) {
                   await auth
                       .signInWithEmailAndPassword(
@@ -226,7 +215,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     print(e);
                   });
                 }
-                //pharamacist
+//pharamacist
                 else {
                   await auth
                       .signInWithEmailAndPassword(
@@ -237,14 +226,9 @@ class _LogInScreenState extends State<LogInScreen> {
                     print(e);
                   });
                 }
-              },
-              color: Color(0xffabd1c6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-            ),
-          ),
+              }),
           Container(
+            // TODO write this code
             padding: EdgeInsets.all(10.0),
             child: InkWell(
               onTap: () {},
