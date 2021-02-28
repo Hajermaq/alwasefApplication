@@ -131,9 +131,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < drugsForDisplay.length; i++) {
-      print(drugsForDisplay[i]);
-    }
     return Theme(
       data: Theme.of(context).copyWith(
         scaffoldBackgroundColor: kLightColor,
