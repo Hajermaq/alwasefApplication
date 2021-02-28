@@ -41,6 +41,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             height: 50.0,
           ),
           RoundTextFields(
+            color: kBlueColor,
             hintMessage: 'اسم المستشفى',
             onChanged: (value) {
               hospitalname = value;
@@ -50,6 +51,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             height: 20.0,
           ),
           RoundTextFields(
+            color: kBlueColor,
             hintMessage: 'البريد الإلكتروني',
             onChanged: (value) {
               email = value;

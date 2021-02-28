@@ -22,17 +22,24 @@ class FilledRoundTextFields extends StatelessWidget {
         child: TextField(
           onChanged: onChanged,
           decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(),
             filled: true,
             contentPadding: EdgeInsets.all(16),
             fillColor: fillColor,
-            icon: Icon(Icons.search_outlined),
-            border: OutlineInputBorder(
+            icon: Icon(
+              Icons.search_outlined,
+              color: kBlueColor,
+            ),
+            enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(
                 width: 0,
                 style: BorderStyle.none,
               ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  width: 0, style: BorderStyle.none, color: Colors.transparent),
+              borderRadius: BorderRadius.circular(30),
             ),
             hintText: hintMessage,
             hintStyle: TextStyle(

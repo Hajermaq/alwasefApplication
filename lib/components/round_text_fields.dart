@@ -27,7 +27,9 @@ class RoundTextFields extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintMessage,
           hintStyle: kTextFieldHintStyle,
-          focusedBorder: OutlineInputBorder(),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
+import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
 import 'Screens/services/provider_management.dart';
@@ -21,56 +23,63 @@ import 'package:google_fonts/google_fonts.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider(
-      create: (context) => PatientData(), child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales
-      ],
-      locale: Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales,
-
-      title: 'Al-Wasef Application',
-      theme: ThemeData(
-        scaffoldBackgroundColor: kScaffoldBackGroundColor,
-        // scaffoldBackgroundColor: Color(0xffC2B4AF),
-        // fontFamily: GoogleFonts.almarai(fontSize: 12.0),
-        accentColor: kRedColor,
-        textTheme: GoogleFonts.almaraiTextTheme(
-          Theme.of(context).textTheme.apply(
-                bodyColor: Color(0xffE4E8F4),
-              ),
-        ),
-      ),
-      initialRoute: WelcomeScreen.id,
-      routes: {
-        //login & registration
-        WelcomeScreen.id: (context) => WelcomeScreen(),
-        LogInORSignIn.id: (context) => LogInORSignIn(),
-        LogInScreen.id: (context) => LogInScreen(),
-        RegisterScreen.id: (context) => RegisterScreen(),
-        RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
-        ResetPassword.id: (context) => ResetPassword(),
-        //Admin Screens
-        AdminScreen.id: (context) => AdminScreen(),
-        //Doctor Screens
-        DoctorMainPage.id: (context) => DoctorMainPage(),
-        PatientDetails.id: (context) => PatientDetails(),
-        //Pharmacist Screens
-        PharmacistMainPage.id: (context) => PharmacistMainPage(),
-        //Patient Screens
-        PatientMainPage.id: (context) => PatientMainPage(),
-        PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).unfocus();
       },
+      child: MaterialApp(
+        localizationsDelegates: [
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales
+        ],
+        locale:
+            Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales,
+
+        title: 'Al-Wasef Application',
+        theme: ThemeData(
+          scaffoldBackgroundColor: kScaffoldBackGroundColor,
+          // scaffoldBackgroundColor: Color(0xffC2B4AF),
+          // fontFamily: GoogleFonts.almarai(fontSize: 12.0),
+          accentColor: kRedColor,
+          textTheme: GoogleFonts.almaraiTextTheme(
+            Theme.of(context).textTheme.apply(
+                  bodyColor: Color(0xffE4E8F4),
+                ),
+          ),
+        ),
+        initialRoute: WelcomeScreen.id,
+        routes: {
+          //login & registration
+          WelcomeScreen.id: (context) => WelcomeScreen(),
+          LogInORSignIn.id: (context) => LogInORSignIn(),
+          LogInScreen.id: (context) => LogInScreen(),
+          RegisterScreen.id: (context) => RegisterScreen(),
+          RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
+          ResetPassword.id: (context) => ResetPassword(),
+          //Admin Screens
+          AdminScreen.id: (context) => AdminScreen(),
+          //Doctor Screens
+          DoctorMainPage.id: (context) => DoctorMainPage(),
+          PatientDetails.id: (context) => PatientDetails(),
+          AddPrescriptions.id: (context) => AddPrescriptions(),
+          //Pharmacist Screens
+          PharmacistMainPage.id: (context) => PharmacistMainPage(),
+          //Patient Screens
+          PatientMainPage.id: (context) => PatientMainPage(),
+          PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
+        },
+      ),
     );
   }
 }

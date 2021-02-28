@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,11 +19,14 @@ class PatientDetails extends StatefulWidget {
   _PatientDetailsState createState() => _PatientDetailsState();
 }
 
-class _PatientDetailsState extends State<PatientDetails> {
+class _PatientDetailsState extends State<PatientDetails>
+    with TickerProviderStateMixin {
   @override
-  void setState(fn) {
-    // TODO: implement setState
-    super.setState(fn);
+  TabController _tabController;
+  @override
+  void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
   }
 
   @override
@@ -95,6 +99,7 @@ class _PatientDetailsState extends State<PatientDetails> {
                           DefaultTabController(
                             length: 3,
                             child: TabBar(
+                              controller: _tabController,
                               labelStyle: TextStyle(
                                   //up to your taste
                                   fontWeight: FontWeight.w700),
@@ -112,13 +117,13 @@ class _PatientDetailsState extends State<PatientDetails> {
                                   ),
                               tabs: <Widget>[
                                 Tab(
-                                  text: "التاريخ الطبي",
+                                  text: "الوصفة الطبية",
                                 ),
                                 Tab(
                                   text: "التشخيصات",
                                 ),
                                 Tab(
-                                  text: "الوصفة الطبية",
+                                  text: "التاريخ الطبي",
                                 ),
                               ],
                             ),
@@ -126,26 +131,20 @@ class _PatientDetailsState extends State<PatientDetails> {
                           Expanded(
                             child: DefaultTabController(
                               length: 3,
-                              child: TabBarView(children: [
-                                Center(
-                                  child: Text(
-                                    'a',
-                                    style: TextStyle(fontSize: 500.0),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'b',
-                                    style: TextStyle(fontSize: 500.0),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'c',
-                                    style: TextStyle(fontSize: 500.0),
-                                  ),
-                                ),
-                              ]),
+                              child: TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    Prescriptions(),
+                                    Center(
+                                      child: Text('hey'),
+                                    ),
+                                    Center(
+                                      child: Text('hey'),
+                                    ),
+
+                                    // add_diagnosis(),
+                                    // view_medical_history(),
+                                  ]),
                             ),
                           ),
                         ],

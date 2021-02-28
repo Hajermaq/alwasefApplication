@@ -64,7 +64,7 @@ class UserManagement {
         String uid = currentUser.uid.toString();
         String email = currentUser.email.toString();
 
-        await collection.add({
+        await collection.doc(uid).set({
           'uid': uid,
           'hospital-name': hospitalName,
           'email': email,
@@ -101,7 +101,7 @@ class UserManagement {
         String uid = currentUser.uid.toString();
         String email = currentUser.email.toString();
 
-        await collection.add({
+        await collection.doc(uid).set({
           'uid': uid,
           'doctor-name': doctorName,
           'email': email,
@@ -138,7 +138,7 @@ class UserManagement {
         String uid = currentUser.uid.toString();
         String email = currentUser.email.toString();
 
-        await collection.add({
+        await collection.doc(uid).set({
           'uid': uid,
           'Pharmacist-name': pharmacistName,
           'email': email,
@@ -177,7 +177,7 @@ class UserManagement {
         String uid = currentUser.uid.toString();
         String email = currentUser.email.toString();
 
-        await collection.add({
+        await collection.doc(uid).set({
           'uid': uid,
           'patient-name': patientName,
           'email': email,

@@ -23,6 +23,21 @@ const kRegisterHospitalHeadlineStyle = TextStyle(
   fontFamily: 'Almarai',
   fontWeight: FontWeight.bold,
 );
+const kBoldLabelTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+const ksubBoldLabelTextStyle = TextStyle(
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+  fontSize: 18.0,
+);
+
+const kValuesTextStyle = TextStyle(
+  color: Colors.black45,
+  fontSize: 19.0,
+  fontWeight: FontWeight.bold,
+);
 const kRegisterUsersHeadlineStyle = TextStyle(
   fontSize: 60.0,
   fontFamily: 'Almarai',
