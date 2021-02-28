@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
 import 'Screens/services/provider_management.dart';
 import 'constants.dart';
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patints_info_screen.dart';
+//import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patints_info_screen.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,8 @@ import 'Screens/login_and_registration/welcome_screen.dart';
 import 'Screens/login_and_registration/login_or_signin_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+//أناااااااااااااااااا هناا
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,7 +79,7 @@ class MyApp extends StatelessWidget {
           PharmacistMainPage.id: (context) => PharmacistMainPage(),
           //Patient Screens
           PatientMainPage.id: (context) => PatientMainPage(),
-          PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
+          //PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
         },
       ),
     );
