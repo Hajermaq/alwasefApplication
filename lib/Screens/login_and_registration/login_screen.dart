@@ -94,6 +94,7 @@ class _LogInScreenState extends State<LogInScreen> {
             height: 30.0,
           ),
           RoundTextFields(
+            isObscure: false,
             color: kButtonColor,
             hintMessage: 'ايميل',
             onChanged: (value) {
@@ -104,6 +105,7 @@ class _LogInScreenState extends State<LogInScreen> {
             height: 20.0,
           ),
           RoundTextFields(
+            isObscure: true,
             color: kButtonColor,
             hintMessage: 'كلمة المرور',
             onChanged: (value) {

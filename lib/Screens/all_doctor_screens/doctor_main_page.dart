@@ -23,6 +23,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
   // Variables
   String currentName;
   String currentEmail;
+  String currentUID;
 
   @override
   Widget build(BuildContext context) {

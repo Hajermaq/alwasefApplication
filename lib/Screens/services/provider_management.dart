@@ -1,7 +1,9 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
+import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +15,28 @@ class PatientData extends StatefulWidget {
 class _PatientDataState extends State<PatientData> {
   String currentName;
   String currentEmail;
+  String currentUID;
   String searchValue = '';
+  String hUID = '';
+
+  @override
+  void initState() {
+    setState(() {
+      FirebaseFirestore.instance
+          .collection('/Doctors')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .get()
+          .then((doc) {
+        hUID = doc.data()['hospital-uid'];
+      });
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(hUID);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
@@ -37,6 +58,7 @@ class _PatientDataState extends State<PatientData> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('/Patient')
+                        .where('hospital-uid', isEqualTo: hUID)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -50,6 +72,7 @@ class _PatientDataState extends State<PatientData> {
                             itemBuilder: (_, index) {
                               DocumentSnapshot documentSnapshot =
                                   snapshot.data.docs[index];
+
                               String name =
                                   documentSnapshot.data()['patient-name'];
                               if (name
@@ -86,6 +109,10 @@ class _PatientDataState extends State<PatientData> {
                                               fontSize: 15.0),
                                         ),
                                         onTap: () async {
+                                          currentUID = snapshot.data.docs[index]
+                                              .get('uid');
+                                          print(
+                                              " the id: ${snapshot.data.docs[index].get('uid')}");
                                           currentName = snapshot
                                               .data.docs[index]
                                               .get('patient-name');
@@ -99,6 +126,7 @@ class _PatientDataState extends State<PatientData> {
                                                       PatientDetails(
                                                         name: currentName,
                                                         email: currentEmail,
+                                                        uid: currentUID,
                                                       )));
                                         },
                                       ),

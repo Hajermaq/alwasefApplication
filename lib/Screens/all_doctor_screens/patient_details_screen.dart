@@ -14,7 +14,8 @@ class PatientDetails extends StatefulWidget {
   final UserManagement user = UserManagement();
   final String name;
   final String email;
-  PatientDetails({this.name, this.email});
+  final String uid;
+  PatientDetails({this.name, this.email, this.uid});
   @override
   _PatientDetailsState createState() => _PatientDetailsState();
 }
@@ -75,7 +76,7 @@ class _PatientDetailsState extends State<PatientDetails>
                                 height: 7.0,
                               ),
                               Text(
-                                '0545133660',
+                                widget.email,
                                 style: TextStyle(
                                     color: kBlueColor, fontSize: 20.0),
                               ),
@@ -134,7 +135,9 @@ class _PatientDetailsState extends State<PatientDetails>
                               child: TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    Prescriptions(),
+                                    Prescriptions(
+                                      uid: widget.uid,
+                                    ),
                                     Center(
                                       child: Text('hey'),
                                     ),

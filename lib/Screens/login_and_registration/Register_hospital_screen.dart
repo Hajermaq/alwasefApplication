@@ -25,6 +25,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,7 +42,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             height: 50.0,
           ),
           RoundTextFields(
-            color: kBlueColor,
+            isObscure: false,
+            color: kButtonColor,
             hintMessage: 'اسم المستشفى',
             onChanged: (value) {
               hospitalname = value;
@@ -51,7 +53,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             height: 20.0,
           ),
           RoundTextFields(
-            color: kBlueColor,
+            isObscure: false,
+            color: kButtonColor,
             hintMessage: 'البريد الإلكتروني',
             onChanged: (value) {
               email = value;
@@ -61,6 +64,8 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
             height: 20.0,
           ),
           RoundTextFields(
+            isObscure: true,
+            color: kButtonColor,
             hintMessage: 'كلمة المرور',
             onChanged: (value) {
               password = value;

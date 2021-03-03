@@ -6,7 +6,9 @@ class RoundTextFields extends StatelessWidget {
   final Function onChanged;
   final String hintMessage;
   final Color color;
-  RoundTextFields({this.hintMessage, this.onChanged, this.color});
+  final bool isObscure;
+  RoundTextFields(
+      {this.hintMessage, this.onChanged, this.color, this.isObscure});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +25,7 @@ class RoundTextFields extends StatelessWidget {
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: TextField(
+        obscureText: isObscure,
         onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintMessage,

@@ -11,12 +11,14 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TabBar(
-        tabs: [
-          Tab(text: 'Doctor'),
-          Tab(text: 'Pharmacist'),
-          Tab(text: 'Patient'),
-        ],
+      body: DefaultTabController(
+        child: TabBar(
+          tabs: [
+            Tab(text: 'Doctor'),
+            Tab(text: 'Pharmacist'),
+            Tab(text: 'Patient'),
+          ],
+        ),
       ),
     );
   }

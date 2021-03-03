@@ -61,6 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             height: 50.0,
           ),
           RoundTextFields(
+            isObscure: false,
             color: kButtonColor,
             hintMessage: 'اسم المستخدم',
             onChanged: (value) {
@@ -71,6 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             height: 20.0,
           ),
           RoundTextFields(
+            isObscure: false,
             color: kButtonColor,
             hintMessage: 'البريد الإلكتروني',
             onChanged: (value) {
@@ -81,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             height: 20.0,
           ),
           RoundTextFields(
+            isObscure: true,
             color: kButtonColor,
             hintMessage: 'كلمة المرور',
             onChanged: (value) {
@@ -218,7 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     .createUserWithEmailAndPassword(
                         email: email, password: password)
                     .then((value) => UserManagement().newPatientSetUp(
-                        context, password, name, role, hospital_UID))
+                        context, password, name, role, hospital_UID, ''))
                     .catchError((e) {
                   print(e);
                 });
