@@ -1,5 +1,5 @@
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patients_mainpage.dart';
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
+import '../all_patient_screen/patients_mainpage.dart';
+import '../all_pharmacist_screens/pharamacists_mainpage.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
@@ -99,6 +99,7 @@ class _LogInScreenState extends State<LogInScreen> {
             onChanged: (value) {
               email = value;
             },
+            //hiddenPass: false,
           ),
           SizedBox(
             height: 20.0,
@@ -109,6 +110,7 @@ class _LogInScreenState extends State<LogInScreen> {
             onChanged: (value) {
               password = value;
             },
+            //hiddenPass: true,
           ),
           Container(
             child: Row(

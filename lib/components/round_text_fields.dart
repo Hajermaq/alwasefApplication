@@ -6,6 +6,7 @@ class RoundTextFields extends StatelessWidget {
   final Function onChanged;
   final String hintMessage;
   final Color color;
+  //final bool hiddenPass;
   RoundTextFields({this.hintMessage, this.onChanged, this.color});
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class RoundTextFields extends StatelessWidget {
             borderSide: BorderSide(color: Colors.transparent),
           ),
         ),
+        //obscureText: hiddenPass,
       ),
     );
   }

@@ -1,10 +1,14 @@
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/Register_hospital_screen.dart';
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/login_screen.dart';
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/register_screen.dart';
+//import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/Register_hospital_screen.dart';
+//import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/login_screen.dart';
+//import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/components/outlined_button.dart';
+
+import 'Register_hospital_screen.dart';
+import 'login_screen.dart';
+import 'register_screen.dart';
 
 class LogInORSignIn extends StatefulWidget {
   static const String id = 'signin_or_login_screen';
