@@ -19,16 +19,20 @@ class _PatientDataState extends State<PatientData> {
   String searchValue = '';
   String hUID = '';
 
+  getHUID() {
+    FirebaseFirestore.instance
+        .collection('/Doctors')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      hUID = doc.data()['hospital-uid'];
+    });
+  }
+
   @override
   void initState() {
     setState(() {
-      FirebaseFirestore.instance
-          .collection('/Doctors')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .get()
-          .then((doc) {
-        hUID = doc.data()['hospital-uid'];
-      });
+      getHUID();
     });
 
     super.initState();
@@ -36,7 +40,6 @@ class _PatientDataState extends State<PatientData> {
 
   @override
   Widget build(BuildContext context) {
-    print(hUID);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,

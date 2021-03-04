@@ -12,6 +12,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DefaultTabController(
+        length: 3,
         child: TabBar(
           tabs: [
             Tab(text: 'Doctor'),

@@ -11,13 +11,15 @@ class Prescription {
       strength,
       publicPrice,
       instructionNote,
-      doctorNotes;
+      doctorNotes,
+      date;
 
   int dose, quantity, refill, dosingExpire, size;
 
   var frequency;
 
   Prescription(
+    this.date,
     this.scientificName,
     this.scientificNameArabic,
     this.tradeName,

@@ -1,6 +1,7 @@
 import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'package:alwasef_app/components/DatePicker.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/models/PrescriptionData.dart';
@@ -533,6 +534,14 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           ),
                                         ],
                                       ),
+                                      Row(
+                                        children: [
+                                          FilledRoundTextFields(
+                                            color: kBlueColor,
+                                            fillColor: kGreyColor,
+                                          ),
+                                        ],
+                                      ),
                                       Divider(
                                         color: klighterColor,
                                         thickness: 0.9,
@@ -677,6 +686,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                           onPressed: () {
                             UserManagement().newPrescriptionSetUp(
                                 context,
+                                date,
                                 widget.uid,
                                 scientificName,
                                 scientificNameArabic,

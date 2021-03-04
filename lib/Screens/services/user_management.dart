@@ -215,6 +215,7 @@ class UserManagement {
 
   Future<void> newPrescriptionSetUp(
     context,
+    String date,
     String id,
     String scientificName,
     String scientificNameArabic,
@@ -264,9 +265,11 @@ class UserManagement {
           'instruction-note': instructionNote,
           'doctor-note': doctorNotes,
           'prescriber': doctorUID,
+          'prescription-creation-date': date,
         }).then((_) {
           print('collection is created');
           Provider.of<PrescriptionData>(context, listen: false).addPrescription(
+              date,
               scientificName,
               scientificNameArabic,
               tradeName,

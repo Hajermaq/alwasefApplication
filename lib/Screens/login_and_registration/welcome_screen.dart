@@ -1,9 +1,10 @@
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/login_and_registration/login_or_signin_screen.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:alwasef_app/components/outlined_button.dart';
+
+import 'login_or_signin_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';

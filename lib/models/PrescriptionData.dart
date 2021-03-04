@@ -11,6 +11,7 @@ class PrescriptionData extends ChangeNotifier {
   }
 
   void addPrescription(
+    String date,
     String scientificName,
     String scientificNameArabic,
     String tradeName,
@@ -33,6 +34,7 @@ class PrescriptionData extends ChangeNotifier {
     context,
   ) {
     var p = Prescription(
+      date,
       scientificName,
       scientificNameArabic,
       tradeName,

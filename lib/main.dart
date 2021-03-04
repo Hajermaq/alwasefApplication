@@ -2,6 +2,7 @@ import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
+import 'Screens/all_patient_screen/medical_history_screen.dart';
 import 'Screens/services/provider_management.dart';
 import 'constants.dart';
 //import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patints_info_screen.dart';
@@ -83,9 +84,34 @@ class MyApp extends StatelessWidget {
             PharmacistMainPage.id: (context) => PharmacistMainPage(),
             //Patient Screens
             PatientMainPage.id: (context) => PatientMainPage(),
+            MedicalHistoryPage.id: (context) => MedicalHistoryPage(),
             //PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
           },
         ),
+// <<<<<<< HEAD
+// =======
+//         initialRoute: WelcomeScreen.id,
+//         routes: {
+//           //login & registration
+//           WelcomeScreen.id: (context) => WelcomeScreen(),
+//           LogInORSignIn.id: (context) => LogInORSignIn(),
+//           LogInScreen.id: (context) => LogInScreen(),
+//           RegisterScreen.id: (context) => RegisterScreen(),
+//           RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
+//           ResetPassword.id: (context) => ResetPassword(),
+//           //Admin Screens
+//           AdminScreen.id: (context) => AdminScreen(),
+//           //Doctor Screens
+//           DoctorMainPage.id: (context) => DoctorMainPage(),
+//           PatientDetails.id: (context) => PatientDetails(),
+//           AddPrescriptions.id: (context) => AddPrescriptions(),
+//           //Pharmacist Screens
+//           PharmacistMainPage.id: (context) => PharmacistMainPage(),
+//           //Patient Screens
+//           PatientMainPage.id: (context) => PatientMainPage(),
+//           MedicalHistoryPage.id: (context) => MedicalHistoryPage(),
+//         },
+// >>>>>>> 50793c904c9ea87e33850f0c1d542a79068dbf28
       ),
     );
   }
