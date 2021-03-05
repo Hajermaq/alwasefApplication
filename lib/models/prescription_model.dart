@@ -12,14 +12,17 @@ class Prescription {
       publicPrice,
       instructionNote,
       doctorNotes,
-      date;
+      creationDate;
 
   int dose, quantity, refill, dosingExpire, size;
 
   var frequency;
+  String startDate, endDate;
 
   Prescription(
-    this.date,
+    this.endDate,
+    this.startDate,
+    this.creationDate,
     this.scientificName,
     this.scientificNameArabic,
     this.tradeName,

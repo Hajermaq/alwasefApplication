@@ -31,10 +31,7 @@ class _PatientDataState extends State<PatientData> {
 
   @override
   void initState() {
-    setState(() {
-      getHUID();
-    });
-
+    getHUID();
     super.initState();
   }
 

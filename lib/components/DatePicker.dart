@@ -14,7 +14,8 @@ class DatePicker extends StatelessWidget {
   final Color textColor;
   final Color borderColor;
   final Color labelColor;
-  final DateTime date;
+  final String date;
+  // final String date;
   DatePicker({
     this.labelText,
     this.date,
@@ -35,25 +36,15 @@ class DatePicker extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           style: TextStyle(
-              fontSize: 23, fontWeight: FontWeight.bold, color: textColor),
+            color: Colors.black54,
+          ),
           resetIcon: Icon(
-            Icons.cancel_outlined,
-            color: Colors.white,
+            Icons.cancel,
+            color: Colors.black54,
           ),
           decoration: InputDecoration(
-            suffixIcon: Icon(
-              Icons.arrow_drop_down,
-              size: 42,
-            ),
-            prefixIcon: Icon(
-              Icons.calendar_today_outlined,
-              color: kGreyColor,
-              size: 30,
-            ),
-            labelText: labelText,
-            labelStyle: TextStyle(
-                fontSize: 23, fontWeight: FontWeight.bold, color: labelColor),
-            fillColor: klighterColor,
+            hintText: date.toString(),
+            fillColor: Colors.white54,
             filled: true,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -78,7 +69,7 @@ class DatePicker extends StatelessWidget {
                         primary: kBlueColor,
                         onPrimary: klighterColor,
                         surface: kLightColor,
-                        onSurface: kGreyColor, // numbers color
+                        onSurface: Colors.blueGrey, // numbers color
                       ),
                       dialogBackgroundColor: klighterColor,
                       // textTheme: TextTheme(
@@ -96,7 +87,7 @@ class DatePicker extends StatelessWidget {
                   );
                 },
                 context: context,
-                firstDate: DateTime(2021),
+                firstDate: DateTime.now().subtract(Duration(days: 0)),
                 initialDate: currentValue ?? DateTime.now(),
                 lastDate: DateTime(2070));
           }),

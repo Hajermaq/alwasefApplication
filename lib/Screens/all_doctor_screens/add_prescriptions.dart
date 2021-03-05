@@ -12,43 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:provider/provider.dart';
-
-// searchTextField = AutoCompleteTextField<PrescriptionModel>(
-// // textChanged: (value) {
-// //   print('pritnttt $value');
-// // },
-// itemSubmitted: (item) {
-// setState(() {
-// searchTextField.textField.controller.text =
-// item.scientificName.toLowerCase();
-// });
-// },
-// controller: controller,
-// clearOnSubmit: false,
-// key: key,
-// suggestions: drugs,
-// style: TextStyle(
-// color: kBlueColor,
-// fontSize: 16.0,
-// ),
-// decoration: InputDecoration(
-// contentPadding:
-// EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
-// hintText: 'ابحث عن اسم الدواء',
-// hintStyle: TextStyle(color: kBlueColor),
-// ),
-// itemBuilder: (context, item) {
-// return row(item);
-// },
-// itemSorter: (a, b) {
-// return a.scientificName
-//     .toLowerCase()
-//     .compareTo(b.scientificName.toLowerCase());
-// },
-// itemFilter: (item, query) {
-// return item.scientificName.startsWith(query);
-// }),
 class AddPrescriptions extends StatefulWidget {
   AddPrescriptions({this.uid});
   String uid;
@@ -71,7 +34,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   int size = 0;
   String sizeUnit = '...';
   String publicPrice = '...';
-  final String date = formatter.format(now);
+  // formatted date
+  static final DateTime now = DateTime.now();
+  final String creationDate = formatter.format(now);
   //Data from TextFields
   int dose;
   int quantity;
@@ -81,14 +46,19 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   String instructionNote;
   String doctorNotes;
   //Random Variables
-  String textt;
+  String stringFromTF;
   final maxLines = 5;
-  static final DateTime now = DateTime.now();
+  // the creation on the prescription date
   static final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  // start date
+  String startDate;
+  // end date
+  String endDate;
 
   //Lists
   static List<Prescription> drugsForDisplay = List<Prescription>();
   List<Prescription> _drugs = List<Prescription>();
+
   //Methods
   Future<List<Prescription>> fetchPrescription() async {
     String URL =
@@ -107,7 +77,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
           // print('2');
           var b = v.toString();
           String name = obj['tradeName'].toLowerCase();
-          if (name.contains(textt)) {
+          if (name.contains(stringFromTF)) {
             tradeName = obj['tradeName'].toString();
             scientificName = obj['scientificName'].toString();
             tradeNameArabic = obj['tradeNameArabic'].toString();
@@ -132,12 +102,33 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
     return FilledRoundTextFields(
       hintMessage: 'ابحث عن اسم الدواء هنا',
       onChanged: (text) {
-        textt = text.toLowerCase();
+        stringFromTF = text.toLowerCase();
         fetchPrescription();
       },
       fillColor: kGreyColor,
     );
   }
+
+  // Future<Null> _selectedDate(BuildContext context) async {
+  //   DateTime _datePicker = await showDatePicker(
+  //       context: context,
+  //       initialDate: _date,
+  //       firstDate: DateTime.now().subtract(Duration(days: 0)),
+  //       lastDate: DateTime(2050),
+  //       builder: (BuildContext context, Widget child) {
+  //         return Theme(
+  //             data: ThemeData(
+  //               primarySwatch: kBlueColor,
+  //             ),
+  //             child: child);
+  //       });
+  //
+  //   if (_datePicker != null && _datePicker != _date) {
+  //     setState(() {
+  //       _date = _datePicker;
+  //     });
+  //   }
+  // }
 
   String checkDrugName() {
     if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
@@ -183,7 +174,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                   pharmaceuticalForm: pharmaceuticalForm,
                                   strength: strength,
                                   strengthUnit: strengthUnit,
-                                  date: date,
+                                  date: creationDate,
                                   administrationRoute: administrationRoute,
                                   storageCondition: storageConditions,
                                   size: size,
@@ -425,7 +416,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                 pharmaceuticalForm: pharmaceuticalForm,
                                 strength: strength,
                                 strengthUnit: strengthUnit,
-                                date: date.toString(),
+                                date: creationDate,
                                 administrationRoute: administrationRoute,
                                 storageCondition: storageConditions,
                                 size: size,
@@ -459,8 +450,8 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           refill = value;
                                         },
                                         label_2: 'يوم انتهاء\n الوصفة',
-                                        onChanged_2: (value) {
-                                          dosingExpire = value;
+                                        onTap_2: () {
+                                          dosingExpire = dose * refill;
                                         },
                                       ),
                                       Divider(
@@ -536,9 +527,43 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                       ),
                                       Row(
                                         children: [
-                                          FilledRoundTextFields(
-                                            color: kBlueColor,
-                                            fillColor: kGreyColor,
+                                          Container(
+                                            child: Expanded(
+                                              child: ListTile(
+                                                leading: Text(
+                                                  'تاريخ البداية',
+                                                  style: ksubBoldLabelTextStyle,
+                                                ),
+                                                title: DatePicker(
+                                                  date: creationDate,
+                                                  onChanged: (value) {
+                                                    startDate =
+                                                        formatter.format(value);
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            child: Expanded(
+                                              child: ListTile(
+                                                leading: Text(
+                                                  'تاريخ النهاية',
+                                                  style: ksubBoldLabelTextStyle,
+                                                ),
+                                                title: DatePicker(
+                                                  date: creationDate,
+                                                  onChanged: (value) {
+                                                    endDate = value;
+                                                    print(endDate);
+                                                  },
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -686,7 +711,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                           onPressed: () {
                             UserManagement().newPrescriptionSetUp(
                                 context,
-                                date,
+                                creationDate,
+                                startDate,
+                                endDate,
                                 widget.uid,
                                 scientificName,
                                 scientificNameArabic,
@@ -914,13 +941,19 @@ class InfoRow extends StatelessWidget {
       this.value_1,
       this.value_2,
       this.onChanged_1,
-      this.onChanged_2});
+      this.onChanged_2,
+      this.onTap_1,
+      this.onTap_2,
+      this.hintText});
   final String label_1;
   final String label_2;
   final String value_1;
   final String value_2;
+  final String hintText;
   Function onChanged_1;
   Function onChanged_2;
+  Function onTap_1;
+  Function onTap_2;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -936,6 +969,7 @@ class InfoRow extends StatelessWidget {
                 ),
                 title: Container(
                   child: TextField(
+                    onTap: onTap_1,
                     onChanged: onChanged_1,
                     style: TextStyle(
                       color: Colors.black54,
@@ -970,11 +1004,13 @@ class InfoRow extends StatelessWidget {
                 ),
                 title: Container(
                   child: TextField(
+                    onTap: onTap_2,
                     onChanged: onChanged_2,
                     style: TextStyle(
                       color: Colors.black54,
                     ),
                     decoration: InputDecoration(
+                      hintText: hintText,
                       fillColor: Colors.white54,
                       filled: true,
                       enabledBorder: OutlineInputBorder(

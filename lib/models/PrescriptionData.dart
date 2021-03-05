@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +13,8 @@ class PrescriptionData extends ChangeNotifier {
   }
 
   void addPrescription(
+    String startDate,
+    String endDate,
     String date,
     String scientificName,
     String scientificNameArabic,
@@ -34,6 +38,8 @@ class PrescriptionData extends ChangeNotifier {
     context,
   ) {
     var p = Prescription(
+      startDate,
+      endDate,
       date,
       scientificName,
       scientificNameArabic,

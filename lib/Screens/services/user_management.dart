@@ -215,7 +215,9 @@ class UserManagement {
 
   Future<void> newPrescriptionSetUp(
     context,
-    String date,
+    String creationDate,
+    String startDate,
+    String endDate,
     String id,
     String scientificName,
     String scientificNameArabic,
@@ -247,6 +249,8 @@ class UserManagement {
 
       if (currentUser != null) {
         await collection.doc(id).collection('/Prescriptions').doc().set({
+          'start-date': startDate,
+          'end-date': endDate,
           'scientificName': scientificName,
           'tradeName': tradeName,
           'strength': strength,
@@ -265,11 +269,13 @@ class UserManagement {
           'instruction-note': instructionNote,
           'doctor-note': doctorNotes,
           'prescriber': doctorUID,
-          'prescription-creation-date': date,
+          'prescription-creation-date': creationDate,
         }).then((_) {
           print('collection is created');
           Provider.of<PrescriptionData>(context, listen: false).addPrescription(
-              date,
+              startDate,
+              endDate,
+              creationDate,
               scientificName,
               scientificNameArabic,
               tradeName,
