@@ -2,7 +2,7 @@ import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
-import 'Screens/all_patient_screen/medical_history_screen.dart';
+import 'Screens/all_patient_screen/fill_medical_history_screen.dart';
 import 'Screens/services/provider_management.dart';
 import 'constants.dart';
 //import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/Screens/all_patient_screen/patints_info_screen.dart';
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
             PharmacistMainPage.id: (context) => PharmacistMainPage(),
             //Patient Screens
             PatientMainPage.id: (context) => PatientMainPage(),
-            MedicalHistoryPage.id: (context) => MedicalHistoryPage(),
+            FillMedicalHistoryPage.id: (context) => FillMedicalHistoryPage(),
             //PatientsInfoScreen.id: (context) => PatientsInfoScreen(),
           },
         ),

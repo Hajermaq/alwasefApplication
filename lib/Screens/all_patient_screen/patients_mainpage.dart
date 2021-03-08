@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
@@ -11,7 +12,7 @@ import '../../constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
-import 'medical_history_screen.dart';
+import 'fill_medical_history_screen.dart';
 
 
 
@@ -28,6 +29,8 @@ class PatientMainPage extends StatefulWidget {
 class _PatientMainPageState extends State<PatientMainPage> {
 
   CalendarController _calendarController = CalendarController();
+  final authM = FirebaseAuth.instance;
+  final fireM = FirebaseFirestore.instance;
 
   // @override
   // void setState(fn) {
@@ -43,6 +46,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
         startingDayOfWeek: StartingDayOfWeek.sunday,
         calendarController: _calendarController);
   }
+
   Widget addReport(){
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -306,30 +310,32 @@ class _PatientMainPageState extends State<PatientMainPage> {
                                   ],
                                 ),
                               ),
+
                               Expanded(
                                 child: DefaultTabController(
                                   length: 3,
                                   child: TabBarView(children: [
                                     //TODO: snapshot from database weather fill or show medicall history
-                                    Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text('قم بتعبئة سجلك الطبي', style: TextStyle(color: kScaffoldBackGroundColor)),
-                                          SizedBox(width: 8),
-                                          IconButton(
-                                            icon: Icon(Icons.edit_outlined),
-                                            onPressed: (){
-                                              Navigator.pushNamed(context, MedicalHistoryPage.id);
 
-                                            },),
-                                          IconButton(
-                                            icon: Icon(Icons.add),
-                                            onPressed: (){
-                                              return TextField(decoration: InputDecoration(border: OutlineInputBorder(), fillColor: Colors.red,));
-                                            },
-                                          ),
-                                        ]
+
+                                    Row(
+                                      children:[
+                                      Text(
+                                        'اضغط هنا لمعاينة السجل الصحي',
+                                        style: TextStyle(
+                                          color: kScaffoldBackGroundColor)),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.edit_outlined),
+                                        onPressed: (){
+                                          Navigator.pushNamed(context, FillMedicalHistoryPage.id);
+                                      },),
+                                      ]
                                     ),
+
+
                                     Center(
                                       child: Text(
                                         'b',
