@@ -12,6 +12,7 @@ import '../../constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'edit_medical_history_screen.dart';
 import 'fill_medical_history_screen.dart';
 
 
@@ -330,7 +331,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
                                       IconButton(
                                         icon: Icon(Icons.edit_outlined),
                                         onPressed: (){
-                                          Navigator.pushNamed(context, FillMedicalHistoryPage.id);
+                                          Navigator.pushNamed(context, EditMedicalHistoryPage.id);
                                       },),
                                       ]
                                     ),

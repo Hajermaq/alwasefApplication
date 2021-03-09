@@ -1,6 +1,7 @@
 import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
+import 'package:alwasef_app/models/medical_history_model.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +10,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:age/age.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../constants.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class FillMedicalHistoryPage extends StatefulWidget {
-  static const String id = 'patient_medical_history';
+  static const String id = 'fill_medical_history';
   @override
   _FillMedicalHistoryPageState createState() => _FillMedicalHistoryPageState();
 }
@@ -20,24 +23,9 @@ class FillMedicalHistoryPage extends StatefulWidget {
 class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   final authM = FirebaseAuth.instance;
   final fireM = FirebaseFirestore.instance;
-  final GlobalKey<FormState>_formKey = GlobalKey<FormState>();
+  MedicalHistory medicalHistory = MedicalHistory();
+  final GlobalKey<FormState>_formKey = GlobalKey<FormState>(); //var
   final dateFormat = DateFormat('yyyy-MM-dd');
-
-  String patientFullName = ' ';
-  String gender;
-  String birthDate;
-  int age;
-  double weight;
-  double height;
-  String maritalStatus;
-  String pregnancy;
-  String smoking;
-  List<String> hospitalizations;
-  List<String> surgery;
-  List<String> currentMed; //current medications
-  List<String> chronicDisease;
-  List<String> allergies;
-  List<String> medAllergies; //medication allergies
 
   List<String> genderList = ['ذكر', 'أنثى'];
   List<String> maritalStatusList = ['أعزب', 'متزوج', 'غير ذلك'];
@@ -45,6 +33,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   List<String> smokingList = ['لا أبدا', 'أحيانا', ' نعم دائما'];
 
   final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController birthDateCtrl = TextEditingController();
   final TextEditingController ageCtrl = TextEditingController();
   final TextEditingController weightCtrl = TextEditingController();
   final TextEditingController heightCtrl = TextEditingController();
@@ -54,66 +43,12 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   final TextEditingController chroDisCtrl = TextEditingController();
   final TextEditingController allergCtrl = TextEditingController();
   final TextEditingController medAllergCtrl = TextEditingController();
-  bool has = false;
 
-  void iniState() {
-    super.initState();
-    // getCurrentPatient();
-  }
 
-  void saveMedicalHistoryForm() async {
-    //or fire.collection('/Medical History').add()
-    CollectionReference collection =
-    FirebaseFirestore.instance.collection('/Medical History');
-    await collection.add({
-      'patient': authM.currentUser.uid,
-      'full name': patientFullName,
-      'gender': gender,
-      'birth date': birthDate,
-      'age': age,
-      'weight': weight,
-      'height': height,
-      'marital status': maritalStatus,
-      'pregnancy': pregnancy,
-      'smoking': smoking,
-      'hospitalization': hospitalizations,
-      'surgery': surgery,
-      'current medications': currentMed,
-      'chronic disease': chronicDisease,
-      'medication allergies': medAllergies,
-      'allergies': allergies,
-    });
-  }
-
-  int calculateAge() {
-    DateTime birthDateYear = DateTime.parse(birthDate);
-    int agee = (DateTime
-        .now()
-        .year - birthDateYear.year);
-    age = agee;
-    return agee;
-  }
-
-  // Widget fillMedicalHistoryForm() {
-  //   //hasMedicalHistory();
-  //   //if (has) {
-  //  // } else
-  //   //  return displayMedicalHistoryForm();
+  // void iniState() {
+  //   super.initState();
   // }
 
-  // Widget displayMedicalHistoryForm() {
-  //   return Scaffold();
-  // }
-
-
-  // Widget hasMedicalHistory() {
-  //
-  // }
-
-
-  // Widget updateMedicalHistory(){
-  //   return Container;
-  // }
 
 
   @override
@@ -158,7 +93,9 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     return null;
                   },
                   onChanged: (value) {
-                    patientFullName = value;
+                    medicalHistory.patientFullName = value;
+                    medicalHistory.patient = authM.currentUser.uid;
+
                   },
                   controller: nameCtrl,
                 ),
@@ -174,7 +111,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     border: OutlineInputBorder(),
                   ),
                   icon: Icon(Icons.arrow_drop_down),
-                  value: gender,
+                  value: medicalHistory.gender,
                   items: genderList.map((item) {
                     //to convert list items into dropdown menu items
                     return DropdownMenuItem(
@@ -188,7 +125,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       : null,
                   onChanged: (selectedValue) {
                     setState(() {
-                      gender = selectedValue;
+                      medicalHistory.gender = selectedValue;
                     });
                   },
                 ),
@@ -197,23 +134,31 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
               //تاريخ الميلاد
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RaisedButton(
-                    child: Text(birthDate == null ?
-                    //if not null display the date
-                    'اختر تاريخ ميلادك' : birthDate),
-                    onPressed: () {
-                      showDatePicker(
+                  child: DateTimeField(
+                    textAlign: TextAlign.center,
+                    decoration: InputDecoration(
+                      labelText: 'تاريخ الميلاد:',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.calendar_today),
+                    ),
+                    format: dateFormat,
+                    validator: (value) =>
+                    value == null
+                        ? 'هذا الحقل مطلوب'
+                        : null,
+                    onShowPicker: (context, currentValue){
+                      return showDatePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: currentValue ?? DateTime.now(),
                           firstDate: DateTime(1920),
-                          lastDate: DateTime.now())
-                          .then((pickedDate) {
-                        setState(() {
-                          birthDate = dateFormat.format(pickedDate);
-                          calculateAge();
-                        });
-                      });
-                    }),
+                          lastDate: DateTime.now()
+                      );
+                    },
+                    onChanged: (date){
+                      medicalHistory.birthDate = date.toString();
+                    },
+                    controller: birthDateCtrl,
+                  ),
               ),
 
               //العمر
@@ -233,7 +178,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     return null;
                   },
                   onChanged: (value) {
-                    age = int.parse(value);
+                    medicalHistory.age = int.parse(value);
                     // age = Age.dateDifference(
                     //     fromDate: birthDate, toDate: DateTime.now(), includeToDate: false) as int;
                   },
@@ -259,7 +204,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     return null;
                   },
                   onChanged: (value) {
-                    weight = double.parse(value);
+                    medicalHistory.weight = double.parse(value);
                   },
                   controller: weightCtrl,
                 ),
@@ -283,7 +228,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     return null;
                   },
                   onChanged: (value) {
-                    height = double.parse(value);
+                    medicalHistory.height = double.parse(value);
                   },
                   controller: heightCtrl,
                 ),
@@ -299,7 +244,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     border: OutlineInputBorder(),
                   ),
                   icon: Icon(Icons.arrow_drop_down),
-                  value: maritalStatus,
+                  value: medicalHistory.maritalStatus,
                   items: maritalStatusList.map((item) {
                     //to convert list items into dropdown menu items
                     return DropdownMenuItem(
@@ -313,7 +258,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       : null,
                   onChanged: (selectedValue) {
                     setState(() {
-                      maritalStatus = selectedValue;
+                      medicalHistory.maritalStatus = selectedValue;
                     });
                   },
                 ),
@@ -329,7 +274,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     border: OutlineInputBorder(),
                   ),
                   icon: Icon(Icons.arrow_drop_down),
-                  value: smoking,
+                  value: medicalHistory.smoking,
                   items: smokingList.map((item) {
                     //to convert list items into dropdown menu items
                     return DropdownMenuItem(
@@ -343,7 +288,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       : null,
                   onChanged: (selectedValue) {
                     setState(() {
-                      smoking = selectedValue;
+                      medicalHistory.smoking = selectedValue;
                     });
                   },
                 ),
@@ -358,7 +303,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     labelText: 'هل هناك احتمال حمل :',
                     border: OutlineInputBorder(),
                   ),
-                  value: pregnancy,
+                  value: medicalHistory.pregnancy,
                   items: yesNoAnswers.map((item) {
                     //to convert list items into dropdown menu items
                     return DropdownMenuItem(
@@ -372,7 +317,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       : null,
                   onChanged: (selectedValue) {
                     setState(() {
-                      pregnancy = selectedValue;
+                      medicalHistory.pregnancy = selectedValue;
                     });
                   },
                 ),
@@ -391,7 +336,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    hospitalizations = value.split('\n');
+                    medicalHistory.hospitalizations = value.split('\n');
                   },
                   controller: hospCtrl,
                 ),
@@ -410,8 +355,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    surgery = value.split('\n');
-                    print(surgery);
+                    medicalHistory.surgery = value.split('\n');
                   },
                   controller: surgCtrl,
                 ),
@@ -430,7 +374,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    chronicDisease = value.split('\n');
+                    medicalHistory.chronicDisease = value.split('\n');
                   },
                   controller: chroDisCtrl,
                 ),
@@ -449,7 +393,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    currentMed = value.split('\n');
+                    medicalHistory.currentMed = value.split('\n');
                   },
                   controller: currMedCtrl,
                 ),
@@ -468,35 +412,36 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    allergies = value.split('\n');
+                    medicalHistory.allergies = value.split('\n');
                   },
                   controller: allergCtrl,
                 ),
               ),
 
+              //TODO: check forms validations
               //حساسية دوائية
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    labelText: 'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
-                    hintText: 'اكتب كل نوع في سطر',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'هذا الحقل مطلوب';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    medAllergies = value.split('\n');
-                  },
-                  controller: medAllergCtrl,
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: TextFormField(
+              //     textAlign: TextAlign.center,
+              //     maxLines: 5,
+              //     decoration: InputDecoration(
+              //       labelText: 'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
+              //       hintText: 'اكتب كل نوع في سطر',
+              //       border: OutlineInputBorder(),
+              //     ),
+              //     // validator: (value) {
+              //     //   if (value.isEmpty) {
+              //     //     return 'هذا الحقل مطلوب';
+              //     //   }
+              //     //   return null;
+              //     // },
+              //     onChanged: (value) {
+              //       medicalHistory.medAllergies = value.split('\n');
+              //     },
+              //     controller: medAllergCtrl,
+              //   ),
+              // ),
 
               Divider(
                 height: 20,
@@ -519,11 +464,13 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       child: RaisedButton(
                           child: Text('حفظ'),
                           onPressed: () {
-                            if (!_formKey.currentState.validate()) {
-                              return ;
-                            }
-                            _formKey.currentState.save();
-                            saveMedicalHistoryForm();
+                            setState((){
+                              if (!_formKey.currentState.validate()) {
+                                return ;
+                              }
+                              _formKey.currentState.save();
+                              medicalHistory.saveMedicalHistoryForm(authM.currentUser.uid);
+                            });
                             //Navigator.pop(context);
                           }),
                     ),
