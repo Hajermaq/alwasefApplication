@@ -13,8 +13,6 @@ import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'medical_history_screen.dart';
 
-
-
 class PatientMainPage extends StatefulWidget {
   static const String id = 'patient_screen';
   final UserManagement user = UserManagement();
@@ -26,7 +24,6 @@ class PatientMainPage extends StatefulWidget {
 }
 
 class _PatientMainPageState extends State<PatientMainPage> {
-
   CalendarController _calendarController = CalendarController();
 
   // @override
@@ -34,7 +31,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
   //   // TODO:
   //   super.setState(fn);
   // }
-  Widget createCalendar(){
+  Widget createCalendar() {
     return TableCalendar(
         calendarStyle: CalendarStyle(
           todayColor: kRedColor,
@@ -43,17 +40,22 @@ class _PatientMainPageState extends State<PatientMainPage> {
         startingDayOfWeek: StartingDayOfWeek.sunday,
         calendarController: _calendarController);
   }
-  Widget addReport(){
+
+  Widget addReport() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(height: 40.0,),
-          Text('اختر الوصفة التي تريد التقرير عنها:',
+          SizedBox(
+            height: 40.0,
+          ),
+          Text(
+            'اختر الوصفة التي تريد التقرير عنها:',
             style: TextStyle(
               fontSize: 20.0,
-              color: kRedColor, ),
+              color: kRedColor,
+            ),
           ),
           SizedBox(
             height: 30,
@@ -61,55 +63,70 @@ class _PatientMainPageState extends State<PatientMainPage> {
             child: FlatButton(
               child: Text('اخــتـر'),
               color: kTextFieldborderColor,
-              onPressed: (){},
+              onPressed: () {},
             ),
           ),
-          Text('هل أتممت الوصفة الطبية؟',
+          Text(
+            'هل أتممت الوصفة الطبية؟',
             style: TextStyle(
               fontSize: 20.0,
-              color: kRedColor, ),
+              color: kRedColor,
+            ),
           ),
           TextField(
-            maxLines: 2, decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          ),),
-          Text('هل التزمت بالوصفة الطبية؟',
+            maxLines: 2,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+          Text(
+            'هل التزمت بالوصفة الطبية؟',
             style: TextStyle(
               fontSize: 20.0,
-              color: kRedColor, ),
+              color: kRedColor,
+            ),
           ),
           TextField(
-            maxLines: 2, decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          ),),
-          Text('هل ظهرت عليك أعراض جانبية، اذكرها:',
+            maxLines: 2,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+          Text(
+            'هل ظهرت عليك أعراض جانبية، اذكرها:',
             style: TextStyle(
               fontSize: 20.0,
-              color: kRedColor, ),
+              color: kRedColor,
+            ),
           ),
           TextField(
-            maxLines: 5, decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          ),),
-          Text('ملاحظات أخرى:',
+            maxLines: 5,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+          Text(
+            'ملاحظات أخرى:',
             style: TextStyle(
               fontSize: 20.0,
-              color: kRedColor, ),
+              color: kRedColor,
+            ),
           ),
           TextField(
-            maxLines: 5, decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          ),),
+            maxLines: 5,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
           FlatButton(
             child: Text('حفظ'),
             color: kRedColor,
-            onPressed: (){},
+            onPressed: () {},
           ),
         ],
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +136,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
+          // resizeToAvoidBottomPadding: false,
           body: ScrollNavigation(
             barStyle: NavigationBarStyle(
               background: Color(0xffBBC6E3),
@@ -135,10 +152,10 @@ class _PatientMainPageState extends State<PatientMainPage> {
                 appBar: AppBar(
                   backgroundColor: kGreyColor,
                   leading: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       //creatReport()
                     },
-                    child:Icon(Icons.add),
+                    child: Icon(Icons.add),
                   ),
                   title: Text(
                     'قدم تقريرا عن مدى مناسبة الوصفة لك',
@@ -152,33 +169,29 @@ class _PatientMainPageState extends State<PatientMainPage> {
                 floatingActionButton: FloatingActionButton(
                     backgroundColor: kButtonTextColor,
                     child: Icon(Icons.add),
-                    onPressed: (){
+                    onPressed: () {
                       showModalBottomSheet(
                           isScrollControlled: true,
                           context: context,
                           builder: (context) => addReport());
-                    }
-                ),
-                body:  ListView(
-                    children: <Widget>[
-                      Container(
-                        height: 50,
-                        child: Card(
-                          color: kGreyColor,
-                          child: Text(' تقرير 1 '),
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        child: Card(
-                          color: kGreyColor,
-                          child: Text(' تقرير 2 '),
-                        ),
-                      ),
-                    ]
-                ),
+                    }),
+                body: ListView(children: <Widget>[
+                  Container(
+                    height: 50,
+                    child: Card(
+                      color: kGreyColor,
+                      child: Text(' تقرير 1 '),
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    child: Card(
+                      color: kGreyColor,
+                      child: Text(' تقرير 2 '),
+                    ),
+                  ),
+                ]),
               ),
-
 
               //calendar Page
               Column(
@@ -199,9 +212,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
                     ),
                   ),
                   createCalendar(),
-
                   Expanded(
-
                     child: Card(
                       child: Text('الوصفة 1'),
                       color: kScaffoldBackGroundColor,
@@ -210,7 +221,6 @@ class _PatientMainPageState extends State<PatientMainPage> {
                   ),
                 ],
               ),
-
 
               //Profile Page
               Container(
@@ -279,20 +289,21 @@ class _PatientMainPageState extends State<PatientMainPage> {
                                 length: 3,
                                 child: TabBar(
                                   labelStyle: TextStyle(
-                                    //up to your taste
+                                      //up to your taste
                                       fontWeight: FontWeight.w700),
-                                  indicatorSize:
-                                  TabBarIndicatorSize.label, //makes it better
+                                  indicatorSize: TabBarIndicatorSize
+                                      .label, //makes it better
                                   labelColor: kBlueColor, //Google's sweet blue
-                                  unselectedLabelColor: kGreyColor, //niceish grey
+                                  unselectedLabelColor:
+                                      kGreyColor, //niceish grey
                                   isScrollable: true, //up to your taste
                                   indicator: MD2Indicator(
-                                    //it begins here
+                                      //it begins here
                                       indicatorHeight: 3,
                                       indicatorColor: kBlueColor,
                                       indicatorSize: MD2IndicatorSize
                                           .normal //3 different modes tiny-normal-full
-                                  ),
+                                      ),
                                   tabs: <Widget>[
                                     Tab(
                                       text: "السجل الطبي",
@@ -312,24 +323,32 @@ class _PatientMainPageState extends State<PatientMainPage> {
                                   child: TabBarView(children: [
                                     //TODO: snapshot from database weather fill or show medicall history
                                     Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text('قم بتعبئة سجلك الطبي', style: TextStyle(color: kScaffoldBackGroundColor)),
+                                          Text('قم بتعبئة سجلك الطبي',
+                                              style: TextStyle(
+                                                  color:
+                                                      kScaffoldBackGroundColor)),
                                           SizedBox(width: 8),
                                           IconButton(
                                             icon: Icon(Icons.edit_outlined),
-                                            onPressed: (){
-                                              Navigator.pushNamed(context, MedicalHistoryPage.id);
-
-                                            },),
-                                          IconButton(
-                                            icon: Icon(Icons.add),
-                                            onPressed: (){
-                                              return TextField(decoration: InputDecoration(border: OutlineInputBorder(), fillColor: Colors.red,));
+                                            onPressed: () {
+                                              Navigator.pushNamed(context,
+                                                  MedicalHistoryPage.id);
                                             },
                                           ),
-                                        ]
-                                    ),
+                                          IconButton(
+                                            icon: Icon(Icons.add),
+                                            onPressed: () {
+                                              return TextField(
+                                                  decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                fillColor: Colors.red,
+                                              ));
+                                            },
+                                          ),
+                                        ]),
                                     Center(
                                       child: Text(
                                         'b',
@@ -355,15 +374,10 @@ class _PatientMainPageState extends State<PatientMainPage> {
                   ],
                 ),
               ),
-
-
-
             ], //end of pages
 
             items: [
-              ScrollNavigationItem(
-                  icon: Icon(Icons.article_outlined)
-              ),
+              ScrollNavigationItem(icon: Icon(Icons.article_outlined)),
               ScrollNavigationItem(
                 icon: Icon(Icons.calendar_today_sharp),
               ),
@@ -375,7 +389,5 @@ class _PatientMainPageState extends State<PatientMainPage> {
         ),
       ),
     );
-
   }
-
 }

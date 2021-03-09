@@ -31,7 +31,7 @@ dependencies:
   scroll_navigation: ^1.2.1
   md2_tab_indicator: ^1.0.2
   firebase_core: ^0.7.0
-  cloud_firestore: ^0.16.0
+  cloud_firestore: ^0.16.0+1
   firebase_auth: ^0.20.0+1
   google_fonts: ^1.1.2
   provider: ^4.3.3

@@ -39,7 +39,7 @@ class _PatientDataState extends State<PatientData> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        // resizeToAvoidBottomPadding: false,
         body: Container(
           padding: EdgeInsets.all(10),
           child: Column(children: [

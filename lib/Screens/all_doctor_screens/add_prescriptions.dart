@@ -31,9 +31,10 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   String strengthUnit = '...';
   String administrationRoute = '...';
   String storageConditions = '...';
-  int size = 0;
+  String size = '...';
   String sizeUnit = '...';
   String publicPrice = '...';
+  String registerNumber = ' ';
   // formatted date
   static final DateTime now = DateTime.now();
   final String creationDate = formatter.format(now);
@@ -62,7 +63,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   //Methods
   Future<List<Prescription>> fetchPrescription() async {
     String URL =
-        "https://script.googleusercontent.com/macros/echo?user_content_key=ch35Vxoajiqxza0FSvAdEheh0HES3Lz2e4-4UZlh4MBzWaer9nX0yrAT_5-tL0WKnYgC5u5T0UHSBNPXpL-2dKnZOCBggDAbm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnPsISVB9LxVeJlpr_xgRdjHnjvdICkfnEX1ie34R1BLiWZPA0kx7zt8eOiaQDa_wFLM0pjjXN9yIvJsw0wqpxiI&lib=MpUICE4vsIfJjj6VE8jMtH_aUQYat3_A-";
+        "https://script.googleusercontent.com/macros/echo?user_content_key=cAbM4t4QBok3C-ge7q-btotJwo5vEKkmPMfTJG7KxohRGXb1klbjY2WwX5qzlnIMrooCIe9jBqj8Jzb0JQp7oOylv8--WLXPm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnPsISVB9LxVeJlpr_xgRdjHnjvdICkfnEX1ie34R1BLiWZPA0kx7zt8eOiaQDa_wFLM0pjjXN9yIvJsw0wqpxiI&lib=MpUICE4vsIfJjj6VE8jMtH_aUQYat3_A-";
 
     http.Response response = await http.get(URL);
 
@@ -78,6 +79,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
           var b = v.toString();
           String name = obj['tradeName'].toLowerCase();
           if (name.contains(stringFromTF)) {
+            registerNumber = obj['RegisterNumber'].toString();
             tradeName = obj['tradeName'].toString();
             scientificName = obj['scientificName'].toString();
             tradeNameArabic = obj['tradeNameArabic'].toString();
@@ -87,7 +89,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
             strengthUnit = obj['StrengthUnit'].toString();
             administrationRoute = obj['AdministrationRoute'].toString();
             storageConditions = obj['Storage conditions'].toString();
-            size = obj['Size'];
+            size = obj['Size'].toString();
             sizeUnit = obj['SizeUnit'].toString();
             publicPrice = obj['Public price'].toString();
           }
@@ -130,18 +132,18 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   //   }
   // }
 
-  String checkDrugName() {
-    if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
-      return scientificName;
-    else if ((scientificName == ' ' || scientificNameArabic == ' ') &&
-        tradeName != ' ')
-      return tradeName;
-    else if ((tradeName == ' ' || scientificName == ' ') &&
-        tradeNameArabic != ' ')
-      return tradeNameArabic;
-    else
-      return scientificNameArabic;
-  }
+  // String checkDrugName() {
+  //   if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
+  //     return scientificName;
+  //   else if ((scientificName == ' ' || scientificNameArabic == ' ') &&
+  //       tradeName != ' ')
+  //     return tradeName;
+  //   else if ((tradeName == ' ' || scientificName == ' ') &&
+  //       tradeNameArabic != ' ')
+  //     return tradeNameArabic;
+  //   else
+  //     return scientificNameArabic;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +153,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
         scaffoldBackgroundColor: kLightColor,
       ),
       child: Scaffold(
-        resizeToAvoidBottomPadding: false,
         body: Padding(
           padding: EdgeInsets.only(top: 30.0),
           child: Column(
@@ -276,6 +277,66 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                           child: Text(value),
                                                         );
                                                       }).toList()),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            child: Expanded(
+                                              child: ListTile(
+                                                leading: Text(
+                                                  'تاريخ البداية',
+                                                  style: ksubBoldLabelTextStyle,
+                                                ),
+                                                title: DatePicker(
+                                                  validator: (value) {
+                                                    if (value.isEmpty ||
+                                                        value == null) {
+                                                      print('Field id empty');
+                                                    }
+                                                  },
+                                                  date: creationDate,
+                                                  onChanged: (value) {
+                                                    startDate =
+                                                        formatter.format(value);
+                                                    print('no data');
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            child: Expanded(
+                                              child: ListTile(
+                                                leading: Text(
+                                                  'تاريخ النهاية',
+                                                  style: ksubBoldLabelTextStyle,
+                                                ),
+                                                title: DatePicker(
+                                                  validator: (value) {
+                                                    if (value.isEmpty ||
+                                                        value == null) {
+                                                      print('Field id empty');
+                                                    }
+                                                  },
+                                                  date: creationDate,
+                                                  onChanged: (value) {
+                                                    if (value != null) {
+                                                      endDate = formatter
+                                                          .format(value);
+                                                      print('no data');
+                                                    } else {
+                                                      print('date not picked');
+                                                    }
+                                                  },
                                                 ),
                                               ),
                                             ),
@@ -412,7 +473,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                           return Column(
                             children: [
                               DrugInfoCard(
-                                drugName: checkDrugName(),
+                                drugName: tradeNameArabic.isEmpty
+                                    ? tradeName
+                                    : tradeNameArabic,
                                 pharmaceuticalForm: pharmaceuticalForm,
                                 strength: strength,
                                 strengthUnit: strengthUnit,
@@ -437,21 +500,21 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                       InfoRow(
                                         label_1: 'الجرعة',
                                         onChanged_1: (value) {
-                                          dose = value;
+                                          dose = int.parse(value);
                                         },
                                         label_2: 'الكمية',
                                         onChanged_2: (value) {
-                                          quantity = value;
+                                          quantity = int.parse(value);
                                         },
                                       ),
                                       InfoRow(
                                         label_1: 'اعادة \nالتعبئه',
                                         onChanged_1: (value) {
-                                          refill = value;
+                                          refill = int.parse(value);
                                         },
                                         label_2: 'يوم انتهاء\n الوصفة',
-                                        onTap_2: () {
-                                          dosingExpire = dose * refill;
+                                        onChanged_2: (value) {
+                                          dosingExpire = int.parse(value);
                                         },
                                       ),
                                       Divider(
@@ -535,10 +598,17 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                   style: ksubBoldLabelTextStyle,
                                                 ),
                                                 title: DatePicker(
+                                                  validator: (value) {
+                                                    if (value.isEmpty ||
+                                                        value == null) {
+                                                      print('Field id empty');
+                                                    }
+                                                  },
                                                   date: creationDate,
                                                   onChanged: (value) {
                                                     startDate =
                                                         formatter.format(value);
+                                                    print('date not picked');
                                                   },
                                                 ),
                                               ),
@@ -556,10 +626,21 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                   style: ksubBoldLabelTextStyle,
                                                 ),
                                                 title: DatePicker(
+                                                  validator: (value) {
+                                                    if (value.isEmpty ||
+                                                        value == null) {
+                                                      print('Field id empty');
+                                                    }
+                                                  },
                                                   date: creationDate,
                                                   onChanged: (value) {
-                                                    endDate = value;
-                                                    print(endDate);
+                                                    if (value != null) {
+                                                      endDate = formatter
+                                                          .format(value);
+                                                      print('no data');
+                                                    } else {
+                                                      print('date not picked');
+                                                    }
                                                   },
                                                 ),
                                               ),
@@ -709,32 +790,34 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                             color: kLightColor,
                           ),
                           onPressed: () {
-                            UserManagement().newPrescriptionSetUp(
-                                context,
-                                creationDate,
-                                startDate,
-                                endDate,
-                                widget.uid,
-                                scientificName,
-                                scientificNameArabic,
-                                tradeName,
-                                tradeNameArabic,
-                                strengthUnit,
-                                pharmaceuticalForm,
-                                administrationRoute,
-                                sizeUnit,
-                                storageConditions,
-                                strength,
-                                publicPrice,
-                                size,
-                                dose,
-                                quantity,
-                                refill,
-                                dosingExpire,
-                                dropdownValue,
-                                instructionNote,
-                                doctorNotes,
-                                FirebaseAuth.instance.currentUser.uid);
+                            UserManagement(currentPatient_uid: widget.uid)
+                                .newPrescriptionSetUp(
+                                    context,
+                                    registerNumber,
+                                    creationDate,
+                                    startDate,
+                                    endDate,
+                                    widget.uid,
+                                    scientificName,
+                                    scientificNameArabic,
+                                    tradeName,
+                                    tradeNameArabic,
+                                    strengthUnit,
+                                    pharmaceuticalForm,
+                                    administrationRoute,
+                                    sizeUnit,
+                                    storageConditions,
+                                    strength,
+                                    publicPrice,
+                                    size,
+                                    dose,
+                                    quantity,
+                                    refill,
+                                    dosingExpire,
+                                    dropdownValue,
+                                    instructionNote,
+                                    doctorNotes,
+                                    FirebaseAuth.instance.currentUser.uid);
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -775,7 +858,7 @@ class DrugInfoCard extends StatelessWidget {
   final String date;
   final String administrationRoute;
   final String storageCondition;
-  final int size;
+  final String size;
   final String sizeUnit;
   final String price;
 

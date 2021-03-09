@@ -26,7 +26,7 @@ class _PatientDetailsState extends State<PatientDetails>
   TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -98,7 +98,7 @@ class _PatientDetailsState extends State<PatientDetails>
                       child: Column(
                         children: [
                           DefaultTabController(
-                            length: 3,
+                            length: 4,
                             child: TabBar(
                               controller: _tabController,
                               labelStyle: TextStyle(
@@ -126,17 +126,23 @@ class _PatientDetailsState extends State<PatientDetails>
                                 Tab(
                                   text: "التاريخ الطبي",
                                 ),
+                                Tab(
+                                  text: "وصفات سابقة",
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: DefaultTabController(
-                              length: 3,
+                              length: 4,
                               child: TabBarView(
                                   controller: _tabController,
                                   children: [
                                     Prescriptions(
                                       uid: widget.uid,
+                                    ),
+                                    Center(
+                                      child: Text('hey'),
                                     ),
                                     Center(
                                       child: Text('hey'),
