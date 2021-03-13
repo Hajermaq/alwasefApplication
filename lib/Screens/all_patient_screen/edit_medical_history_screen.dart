@@ -13,7 +13,6 @@ import '../../constants.dart';
 import 'fill_medical_history_screen.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-
 class EditMedicalHistoryPage extends StatefulWidget {
   static const String id = 'edit_medical_history';
   // constructor
@@ -50,7 +49,6 @@ class EditMedicalHistoryPage extends StatefulWidget {
 //       initialValAllergies,
 //       initialValMedAllergies;
 
-
   @override
   _EditMedicalHistoryPageState createState() => _EditMedicalHistoryPageState();
 }
@@ -58,7 +56,7 @@ class EditMedicalHistoryPage extends StatefulWidget {
 class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   final authM = FirebaseAuth.instance;
   final fireM = FirebaseFirestore.instance;
-  final GlobalKey<FormState>_formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
 
   //TODO: Dlete this
@@ -77,10 +75,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   final TextEditingController allergCtrl = TextEditingController();
   final TextEditingController medAllergCtrl = TextEditingController();
 
-
   String initialValName = '';
-  dynamic
-      initialValGender,
+  dynamic initialValGender,
       initialValAge,
       initialValBirthDate,
       initialValWeight,
@@ -95,7 +91,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
       initialValAllergies,
       initialValMedAllergies;
 
-
   // this method returns a Future<Null> it is useless
   // void getValOfField(dynamic variable, String field) async {
   //   await FirebaseFirestore.instance.collection('Medical History')
@@ -104,7 +99,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   //     variable = value.get(field);
   //   });
   // }
-
 
   // void retrieveData1() async {
   //   try{
@@ -135,18 +129,20 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   //   }
   // }
 
-  retrieveData() async{
+  retrieveData() async {
     //value.get(field);
 
     // DocumentReference docR = FirebaseFirestore.instance.collection('/Medical History')
     //     .where('patientUID', isEqualTo: FirebaseAuth.instance.currentUser.uid).get();
-        //.doc(FirebaseAuth.instance.currentUser.uid);
+    //.doc(FirebaseAuth.instance.currentUser.uid);
 
-    FirebaseFirestore.instance.collection('/Medical History')
+    await FirebaseFirestore.instance
+        .collection('/Medical History')
         .doc(FirebaseAuth.instance.currentUser.uid)
-        .snapshots()
-        .forEach((doc) {
+        .get()
+        .then((doc) {
       initialValName = doc.get('full name');
+      setState(() {});
     });
 
     // DocumentSnapshot docS;
@@ -161,78 +157,81 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
     // });
     // return docS.get('full name');
 
-
-
-    final collection = await fireM.collection('Medical History').get();
-    for(var doc in collection.docs) {
-      if (doc.id == FirebaseAuth.instance.currentUser.uid){
-        initialValName = doc.get('full name');
-      }
-    }
+    // final collection = await fireM.collection('Medical History').get();
+    // for (var doc in collection.docs) {
+    //   if (doc.id == FirebaseAuth.instance.currentUser.uid) {
+    //     initialValName = doc.get('full name');
+    //   }
+    // }
   }
 
-
-  void iniState() {
-    retrieveData();
-    super.initState();
-  }
-
+  // void iniState() {
+  //   setState(() {
+  //     retrieveData();
+  //   });
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      retrieveData();
+    });
     return Scaffold(
         body: SafeArea(
-          child: Form(key: _formKey, child: ListView(
-            padding: EdgeInsets.all(8.0),
-            children: [
-
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'السجل الطبي للمريض ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 17),
-                ),
+      child: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.all(8.0),
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'السجل الطبي للمريض ',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 17),
               ),
+            ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Divider(
-                  height: 20,
-                  thickness: 10,
-                ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Divider(
+                height: 20,
+                thickness: 10,
               ),
+            ),
 
-              //الاسم
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    labelText: 'الاسم الكامل:',
-                    border: OutlineInputBorder(),
-                  ),
-                  //initialValue: retrieveData(),
-                  readOnly: true,
-
+            //الاسم
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  labelText: 'الاسم الكامل:',
+                  border: OutlineInputBorder(),
                 ),
+                //initialValue: retrieveData(),
+                controller: TextEditingController(text: '$initialValName'),
+                readOnly: true,
               ),
+            ),
 
-              RaisedButton(
+            RaisedButton(
                 child: Text('test'),
-                onPressed: (){
+                onPressed: () {
                   //print(retrieveData());
 
-                   // FirebaseFirestore.instance.collection('Medical History')
-                   //      .doc(FirebaseAuth.instance.currentUser.uid).get()
-                   //      .then((value) {
-                   //     print(value.get('full name'));
-                   //  });
-                   print('nonono');
-                   // final collection = await FirebaseFirestore.instance.collection('Medical History').get();
-                   //  for (var doc in collection.docs){
-                   //    if (doc.id == FirebaseAuth.instance.currentUser.uid){
-                   //      print(doc.get('full name'));
+                  FirebaseFirestore.instance
+                      .collection('Medical History')
+                      .doc(FirebaseAuth.instance.currentUser.uid)
+                      .get()
+                      .then((value) {
+                    print(value.get('full name'));
+                  });
+                  print('nonono');
+                  // final collection = await FirebaseFirestore.instance.collection('Medical History').get();
+                  //  for (var doc in collection.docs){
+                  //    if (doc.id == FirebaseAuth.instance.currentUser.uid){
+                  //      print(doc.get('full name'));
 
                   // FirebaseFirestore.instance
                   //     .collection('/Medical History')
@@ -258,393 +257,383 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                   // print(initialValChronicDisease);
                   // print(initialValAllergies);
                   // print(initialValMedAllergies);
+                }),
 
-
-                }
-              ),
-
-
-
-              //الجنس
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButtonFormField(
-                  dropdownColor: Colors.black,
-                  decoration: InputDecoration(
-                    labelText: 'الجنس:',
-                    border: OutlineInputBorder(),
-                  ),
-                  icon: Icon(Icons.arrow_drop_down),
-                  value: initialValGender,
-                  // items: genderList.map((item) {
-                  //   //to convert list items into dropdown menu items
-                  //   return DropdownMenuItem(
-                  //     child: Center(child: Text(item)),
-                  //     value: item,
-                  //   );
-                  // }).toList(),
-
+            //الجنس
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DropdownButtonFormField(
+                dropdownColor: Colors.black,
+                decoration: InputDecoration(
+                  labelText: 'الجنس:',
+                  border: OutlineInputBorder(),
                 ),
+                icon: Icon(Icons.arrow_drop_down),
+                value: initialValGender,
+                // items: genderList.map((item) {
+                //   //to convert list items into dropdown menu items
+                //   return DropdownMenuItem(
+                //     child: Center(child: Text(item)),
+                //     value: item,
+                //   );
+                // }).toList(),
               ),
+            ),
 
-              // تاريخ الميلاد
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DateTimeField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    labelText: 'تاريخ الميلاد:',
-                    border: OutlineInputBorder(),
-                  ),
-                  //initialValue: initialValBirthDate,
-                  readOnly: true,
+            // تاريخ الميلاد
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: DateTimeField(
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  labelText: 'تاريخ الميلاد:',
+                  border: OutlineInputBorder(),
                 ),
+                //initialValue: initialValBirthDate,
+                readOnly: true,
               ),
+            ),
 
-              //العمر
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'العمر :',
-                    border: OutlineInputBorder(),
-                  ),
-
-                  onChanged: (value) {
-                    //medicalHistory.age = int.parse(value);
-                    // age = Age.dateDifference(
-                    //     fromDate: birthDate, toDate: DateTime.now(), includeToDate: false) as int;
-                  },
-                  controller: ageCtrl,
+            //العمر
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'العمر :',
+                  border: OutlineInputBorder(),
                 ),
+                onChanged: (value) {
+                  //medicalHistory.age = int.parse(value);
+                  // age = Age.dateDifference(
+                  //     fromDate: birthDate, toDate: DateTime.now(), includeToDate: false) as int;
+                },
+                controller: ageCtrl,
               ),
+            ),
 
-              //الوزن
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'الوزن :',
-                    suffixText: 'كلجم',
-                    border: OutlineInputBorder(),
-                  ),
-                  //initialValue: initialValWeight.toString(),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'هذا الحقل مطلوب';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    fireM.doc(authM.currentUser.uid).update({
-                      'weight': value as double,
-                    });
-                  },
-                  controller: weightCtrl,
+            //الوزن
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'الوزن :',
+                  suffixText: 'كلجم',
+                  border: OutlineInputBorder(),
                 ),
+                //initialValue: initialValWeight.toString(),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'هذا الحقل مطلوب';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  fireM.doc(authM.currentUser.uid).update({
+                    'weight': value as double,
+                  });
+                },
+                controller: weightCtrl,
               ),
+            ),
 
-              //الطول
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'الطول :',
-                    suffixText: 'سم',
-                    border: OutlineInputBorder(),
-                  ),
-                  //initialValue: initialValHeight.toString(),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'هذا الحقل مطلوب';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    fireM.doc(authM.currentUser.uid).update({
-                      'height': value as double,
-                    });
-                  },
-                  controller: heightCtrl,
+            //الطول
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'الطول :',
+                  suffixText: 'سم',
+                  border: OutlineInputBorder(),
                 ),
+                //initialValue: initialValHeight.toString(),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'هذا الحقل مطلوب';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  fireM.doc(authM.currentUser.uid).update({
+                    'height': value as double,
+                  });
+                },
+                controller: heightCtrl,
               ),
+            ),
 
-              //الحالة الاجتماعية
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: DropdownButtonFormField(
-              //     dropdownColor: Colors.black,
-              //     decoration: InputDecoration(
-              //       labelText: 'الحالة الاجتماعية :',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     icon: Icon(Icons.arrow_drop_down),
-              //     value: medicalHistory.maritalStatus,
-              //     items: maritalStatusList.map((item) {
-              //       //to convert list items into dropdown menu items
-              //       return DropdownMenuItem(
-              //         child: Center(child: Text(item)),
-              //         value: item,
-              //       );
-              //     }).toList(),
-              //     validator: (value) =>
-              //     value == null
-              //         ? 'هذا الحقل مطلوب'
-              //         : null,
-              //     onChanged: (selectedValue) {
-              //       setState(() {
-              //         medicalHistory.maritalStatus = selectedValue;
-              //       });
-              //     },
-              //   ),
-              // ),
-              //
-              // //التدخين
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: DropdownButtonFormField(
-              //     dropdownColor: Colors.black,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل تدخن :',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     icon: Icon(Icons.arrow_drop_down),
-              //     value: medicalHistory.smoking,
-              //     items: smokingList.map((item) {
-              //       //to convert list items into dropdown menu items
-              //       return DropdownMenuItem(
-              //         child: Center(child: Text(item)),
-              //         value: item,
-              //       );
-              //     }).toList(),
-              //     validator: (value) =>
-              //     value == null
-              //         ? 'هذا الحقل مطلوب'
-              //         : null,
-              //     onChanged: (selectedValue) {
-              //       setState(() {
-              //         medicalHistory.smoking = selectedValue;
-              //       });
-              //     },
-              //   ),
-              // ),
-              //
-              // //الحمل
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: DropdownButtonFormField(
-              //     dropdownColor: Colors.black,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل هناك احتمال حمل :',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     value: medicalHistory.pregnancy,
-              //     items: yesNoAnswers.map((item) {
-              //       //to convert list items into dropdown menu items
-              //       return DropdownMenuItem(
-              //         child: Center(child: Text(item)),
-              //         value: item,
-              //       );
-              //     }).toList(),
-              //     validator: (value) =>
-              //     value == null
-              //         ? 'هذا الحقل مطلوب'
-              //         : null,
-              //     onChanged: (selectedValue) {
-              //       setState(() {
-              //         medicalHistory.pregnancy = selectedValue;
-              //       });
-              //     },
-              //   ),
-              // ),
+            //الحالة الاجتماعية
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: DropdownButtonFormField(
+            //     dropdownColor: Colors.black,
+            //     decoration: InputDecoration(
+            //       labelText: 'الحالة الاجتماعية :',
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     icon: Icon(Icons.arrow_drop_down),
+            //     value: medicalHistory.maritalStatus,
+            //     items: maritalStatusList.map((item) {
+            //       //to convert list items into dropdown menu items
+            //       return DropdownMenuItem(
+            //         child: Center(child: Text(item)),
+            //         value: item,
+            //       );
+            //     }).toList(),
+            //     validator: (value) =>
+            //     value == null
+            //         ? 'هذا الحقل مطلوب'
+            //         : null,
+            //     onChanged: (selectedValue) {
+            //       setState(() {
+            //         medicalHistory.maritalStatus = selectedValue;
+            //       });
+            //     },
+            //   ),
+            // ),
+            //
+            // //التدخين
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: DropdownButtonFormField(
+            //     dropdownColor: Colors.black,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل تدخن :',
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     icon: Icon(Icons.arrow_drop_down),
+            //     value: medicalHistory.smoking,
+            //     items: smokingList.map((item) {
+            //       //to convert list items into dropdown menu items
+            //       return DropdownMenuItem(
+            //         child: Center(child: Text(item)),
+            //         value: item,
+            //       );
+            //     }).toList(),
+            //     validator: (value) =>
+            //     value == null
+            //         ? 'هذا الحقل مطلوب'
+            //         : null,
+            //     onChanged: (selectedValue) {
+            //       setState(() {
+            //         medicalHistory.smoking = selectedValue;
+            //       });
+            //     },
+            //   ),
+            // ),
+            //
+            // //الحمل
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: DropdownButtonFormField(
+            //     dropdownColor: Colors.black,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل هناك احتمال حمل :',
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     value: medicalHistory.pregnancy,
+            //     items: yesNoAnswers.map((item) {
+            //       //to convert list items into dropdown menu items
+            //       return DropdownMenuItem(
+            //         child: Center(child: Text(item)),
+            //         value: item,
+            //       );
+            //     }).toList(),
+            //     validator: (value) =>
+            //     value == null
+            //         ? 'هذا الحقل مطلوب'
+            //         : null,
+            //     onChanged: (selectedValue) {
+            //       setState(() {
+            //         medicalHistory.pregnancy = selectedValue;
+            //       });
+            //     },
+            //   ),
+            // ),
 
-
-              //تنويم
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    labelText: 'هل سبق أن تم تنويمك في المستشفى :',
-                    hintText: 'اكتب كل سبب في سطر',
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: initialValHospitalization,
-                  onChanged: (value) {
-                    fireM.doc(authM.currentUser.uid).update({
-                      'hospitalization': value.split('\n'),
-                    });
-                  },
-                  controller: hospCtrl,
+            //تنويم
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  labelText: 'هل سبق أن تم تنويمك في المستشفى :',
+                  hintText: 'اكتب كل سبب في سطر',
+                  border: OutlineInputBorder(),
                 ),
+                initialValue: initialValHospitalization,
+                onChanged: (value) {
+                  fireM.doc(authM.currentUser.uid).update({
+                    'hospitalization': value.split('\n'),
+                  });
+                },
+                controller: hospCtrl,
               ),
+            ),
 
-              //جراحة
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    labelText: 'هل خضعت لأي عملية جراحية من قبل :',
-                    hintText: 'اكتب كل عملية في سطر',
-                    border: OutlineInputBorder(),
-                  ),
-                  //initialValue: initialValSurgery,
-                  onChanged: (value) {
-                    fireM.doc(authM.currentUser.uid).update({
-                      'surgery': value.split('\n'),
-                    });                  },
-                  controller: surgCtrl,
+            //جراحة
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  labelText: 'هل خضعت لأي عملية جراحية من قبل :',
+                  hintText: 'اكتب كل عملية في سطر',
+                  border: OutlineInputBorder(),
                 ),
+                //initialValue: initialValSurgery,
+                onChanged: (value) {
+                  fireM.doc(authM.currentUser.uid).update({
+                    'surgery': value.split('\n'),
+                  });
+                },
+                controller: surgCtrl,
               ),
+            ),
 
-              // //مرض مزمن
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل تعاني من أي أمراض مزمنة :',
-              //       hintText: 'اكتب كل مرض في سطر',
-              //       border:
-              //       OutlineInputBorder(),
-              //     ),
-              //     initialValue: initialValChronicDisease,
-              //     onChanged: (value) {
-              //       fireM.doc(authM.currentUser.uid).update({
-              //         'chronic disease': value.split('\n'),
-              //       });                  },
-              //     controller: chroDisCtrl,
-              //   ),
-              // ),
-              //
-              // //أدوية حالية
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل تتناول أي أدوية حاليا :',
-              //       hintText: 'اكتب كل دواء في سطر',
-              //       border:
-              //       OutlineInputBorder(),
-              //     ),
-              //     initialValue: initialValCurrentMed,
-              //     onChanged: (value) {
-              //       fireM.doc(authM.currentUser.uid).update({
-              //         'current medications': value.split('\n'),
-              //       });
-              //     },
-              //     controller: currMedCtrl,
-              //   ),
-              // ),
-              //
-              // //حساسية
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل تعاني من أي حساسية :',
-              //       hintText: 'اكتب كل حساسية في سطر',
-              //       border:
-              //       OutlineInputBorder(),
-              //     ),
-              //     initialValue: initialValAllergies,
-              //     onChanged: (value) {
-              //       fireM.doc(authM.currentUser.uid).update({
-              //         'allergies': value.split('\n'),
-              //       });                  },
-              //     controller: allergCtrl,
-              //   ),
-              // ),
-              //
-              // //حساسية دوائية
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
-              //       hintText: 'اكتب كل نوع في سطر',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     initialValue: initialValMedAllergies,
-              //     onChanged: (value) {
-              //       fireM.doc(authM.currentUser.uid).update({
-              //         'medication allergies': value.split('\n'),
-              //       });
-              //     },
-              //     controller: medAllergCtrl,
-              //   ),
-              // ),
+            // //مرض مزمن
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextFormField(
+            //     textAlign: TextAlign.center,
+            //     maxLines: 5,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل تعاني من أي أمراض مزمنة :',
+            //       hintText: 'اكتب كل مرض في سطر',
+            //       border:
+            //       OutlineInputBorder(),
+            //     ),
+            //     initialValue: initialValChronicDisease,
+            //     onChanged: (value) {
+            //       fireM.doc(authM.currentUser.uid).update({
+            //         'chronic disease': value.split('\n'),
+            //       });                  },
+            //     controller: chroDisCtrl,
+            //   ),
+            // ),
+            //
+            // //أدوية حالية
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextFormField(
+            //     textAlign: TextAlign.center,
+            //     maxLines: 5,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل تتناول أي أدوية حاليا :',
+            //       hintText: 'اكتب كل دواء في سطر',
+            //       border:
+            //       OutlineInputBorder(),
+            //     ),
+            //     initialValue: initialValCurrentMed,
+            //     onChanged: (value) {
+            //       fireM.doc(authM.currentUser.uid).update({
+            //         'current medications': value.split('\n'),
+            //       });
+            //     },
+            //     controller: currMedCtrl,
+            //   ),
+            // ),
+            //
+            // //حساسية
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextFormField(
+            //     textAlign: TextAlign.center,
+            //     maxLines: 5,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل تعاني من أي حساسية :',
+            //       hintText: 'اكتب كل حساسية في سطر',
+            //       border:
+            //       OutlineInputBorder(),
+            //     ),
+            //     initialValue: initialValAllergies,
+            //     onChanged: (value) {
+            //       fireM.doc(authM.currentUser.uid).update({
+            //         'allergies': value.split('\n'),
+            //       });                  },
+            //     controller: allergCtrl,
+            //   ),
+            // ),
+            //
+            // //حساسية دوائية
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: TextFormField(
+            //     textAlign: TextAlign.center,
+            //     maxLines: 5,
+            //     decoration: InputDecoration(
+            //       labelText: 'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
+            //       hintText: 'اكتب كل نوع في سطر',
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     initialValue: initialValMedAllergies,
+            //     onChanged: (value) {
+            //       fireM.doc(authM.currentUser.uid).update({
+            //         'medication allergies': value.split('\n'),
+            //       });
+            //     },
+            //     controller: medAllergCtrl,
+            //   ),
+            // ),
 
-              Divider(
-                height: 20,
-                thickness: 3,
-              ),
+            Divider(
+              height: 20,
+              thickness: 3,
+            ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 10.0),
-                child: Text(
-                    'تأكد من صحة المعلومات التي تقدمها لأن ذلك يحسن من الخدمة المقدة لك ',
-                    textAlign: TextAlign.center),
-              ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 10.0),
+              child: Text(
+                  'تأكد من صحة المعلومات التي تقدمها لأن ذلك يحسن من الخدمة المقدة لك ',
+                  textAlign: TextAlign.center),
+            ),
 
-
-              Center(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                          child: Text('تعديل'),
-                          onPressed: () {
-                            if (!_formKey.currentState.validate()) {
-                              return ;
-                            }
-                            _formKey.currentState.save();
-                            //saveMedicalHistoryForm();
-                            //Navigator.pop(context);
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                          child: Text('رجوع'),
-                          onPressed: () {
-                            ageCtrl.clear();
-                            weightCtrl.clear();
-                            heightCtrl.clear();
-                            hospCtrl.clear();
-                            surgCtrl.clear();
-                            currMedCtrl.clear();
-                            chroDisCtrl.clear();
-                            allergCtrl.clear();
-                            medAllergCtrl.clear();
-                            Navigator.pop(context);
+            Center(
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                        child: Text('تعديل'),
+                        onPressed: () {
+                          if (!_formKey.currentState.validate()) {
+                            return;
                           }
-                      ),
-                    ),
-                  ],
-                ),
+                          _formKey.currentState.save();
+                          //saveMedicalHistoryForm();
+                          //Navigator.pop(context);
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                        child: Text('رجوع'),
+                        onPressed: () {
+                          ageCtrl.clear();
+                          weightCtrl.clear();
+                          heightCtrl.clear();
+                          hospCtrl.clear();
+                          surgCtrl.clear();
+                          currMedCtrl.clear();
+                          chroDisCtrl.clear();
+                          allergCtrl.clear();
+                          medAllergCtrl.clear();
+                          Navigator.pop(context);
+                        }),
+                  ),
+                ],
               ),
-            ],
-          ),
-          ),
-        )
-    );
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 }

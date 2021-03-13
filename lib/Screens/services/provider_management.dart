@@ -26,6 +26,7 @@ class _PatientDataState extends State<PatientData> {
         .get()
         .then((doc) {
       hUID = doc.data()['hospital-uid'];
+      setState(() {});
     });
   }
 
