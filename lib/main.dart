@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/add_diagnosis.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
             DoctorMainPage.id: (context) => DoctorMainPage(),
             PatientDetails.id: (context) => PatientDetails(),
             AddPrescriptions.id: (context) => AddPrescriptions(),
+            AddDiagnosis.id: (context) => AddDiagnosis(),
             //Pharmacist Screens
             PharmacistMainPage.id: (context) => PharmacistMainPage(),
             //Patient Screens

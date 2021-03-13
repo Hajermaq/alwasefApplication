@@ -466,75 +466,23 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                         child: RaisedButton(
                           textColor: kButtonTextColor,
                           color: kGreyColor,
-                          child: Icon(
-                            Icons.done_outline_rounded,
-                            color: kLightColor,
+                          child: Text(
+                            'تحديث',
+                            style: TextStyle(
+                              color: Colors.white,
+                              // fontFamily: 'Montserrat',
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1,
+                            ),
                           ),
                           onPressed: () async {
-                            await FirebaseFirestore.instance
-                                .collection('/Patient')
-                                .doc(widget.uid)
-                                .collection('/Prescriptions')
-                                .doc(widget.documentID)
-                                .update(
-                              {
-                                // 'registerNumber': widget.registerNumber,
-                                // 'start-date': startDate,
-                                // 'end-date': endDate,
-                                // 'scientificName': widget.scientificName,
-                                // 'tradeName': widget.tradeName,
-                                // 'tradeNameArabic': widget.tradeNameArabic,
-                                // 'scientificNameArabic':
-                                //     widget.scientificNameArabic,
-                                // 'strength': widget.strength,
-                                // 'strength-unit': widget.strengthUnit,
-                                // 'pharmaceutical-form': widget.pharmaceuticalForm,
-                                // 'administration-route':
-                                //     widget.administrationRoute,
-                                // 'size': widget.size,
-                                // 'size-unit': widget.sizeUnit,
-                                // 'storage-conditions': widget.storageConditions,
-                                // 'price': widget.publicPrice,
-                                // 'dose': dose,
-                                // 'quantity': quantity,
-                                'refill': refill,
-                                // 'dosing-expire': dosingExpire,
-                                'frequency': dropdownValue,
-                                'instruction-note': instructionNote,
-                                // 'doctor-note': doctorNotes,
-                                // // 'prescriber': doctorUID,
-                                // 'prescription-creation-date': creationDate,
-                              },
-                            );
-                            print(widget.documentID);
+                            UserManagement(
+                                    documentId: widget.documentID,
+                                    currentPatient_uid: widget.uid)
+                                .prescriptionUpdate(context, instructionNote,
+                                    dropdownValue, refill);
                             Navigator.pop(context);
-                            // UserManagement().prescriptionUpdate(
-                            //     context,
-                            //     widget.documentID,
-                            //     creationDate,
-                            //     startDate,
-                            //     endDate,
-                            //     widget.uid,
-                            //     widget.scientificName,
-                            //     widget.scientificNameArabic,
-                            //     widget.tradeName,
-                            //     widget.tradeNameArabic,
-                            //     widget.strengthUnit,
-                            //     widget.pharmaceuticalForm,
-                            //     widget.administrationRoute,
-                            //     widget.sizeUnit,
-                            //     widget.storageConditions,
-                            //     widget.strength,
-                            //     widget.publicPrice,
-                            //     widget.size,
-                            //     dose,
-                            //     quantity,
-                            //     refill,
-                            //     dosingExpire,
-                            //     dropdownValue,
-                            //     instructionNote,
-                            //     doctorNotes,
-                            //     FirebaseAuth.instance.currentUser.uid);
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),

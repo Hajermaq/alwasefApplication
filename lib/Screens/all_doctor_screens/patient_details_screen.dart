@@ -1,3 +1,6 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
@@ -26,7 +29,7 @@ class _PatientDetailsState extends State<PatientDetails>
   TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     super.initState();
   }
 
@@ -98,7 +101,7 @@ class _PatientDetailsState extends State<PatientDetails>
                       child: Column(
                         children: [
                           DefaultTabController(
-                            length: 4,
+                            length: 5,
                             child: TabBar(
                               controller: _tabController,
                               labelStyle: TextStyle(
@@ -129,28 +132,33 @@ class _PatientDetailsState extends State<PatientDetails>
                                 Tab(
                                   text: "وصفات سابقة",
                                 ),
+                                Tab(
+                                  text: "التشخيصات سابقة",
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: DefaultTabController(
-                              length: 4,
+                              length: 5,
                               child: TabBarView(
                                   controller: _tabController,
                                   children: [
                                     Prescriptions(
                                       uid: widget.uid,
                                     ),
-                                    Center(
-                                      child: Text('hey'),
+                                    Diagnoses(
+                                      uid: widget.uid,
                                     ),
                                     Center(
                                       child: Text('hey'),
                                     ),
-                                    Center(
-                                      child: Text('hey'),
+                                    PastPrescriptions(
+                                      uid: widget.uid,
                                     ),
-
+                                    PastDiagnoses(
+                                      uid: widget.uid,
+                                    ),
                                     // add_diagnosis(),
                                     // view_medical_history(),
                                   ]),

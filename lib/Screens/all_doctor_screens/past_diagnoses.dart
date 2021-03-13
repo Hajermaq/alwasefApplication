@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import '../../constants.dart';
 import 'add_prescriptions.dart';
 
-class PastPrescriptions extends StatelessWidget {
-  PastPrescriptions({this.uid});
+class PastDiagnoses extends StatelessWidget {
+  PastDiagnoses({this.uid});
   final String uid;
 
   Widget buildBottomSheet(BuildContext context) {

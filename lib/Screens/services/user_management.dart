@@ -213,34 +213,42 @@ class UserManagement {
     }
   }
 
-  Future<void> newPrescriptionSetUp(
+  Future<void> newPrescriptionSetUp({
     context,
+    //id's
+    String patientId,
+    String prescriberId,
     String registerNumber,
+    //dates
     String creationDate,
     String startDate,
     String endDate,
-    String id,
+    //names
     String scientificName,
     String scientificNameArabic,
     String tradeName,
     String tradeNameArabic,
+    //units
+    String strength,
     String strengthUnit,
+    String size,
+    String sizeUnit,
+    // random
     String pharmaceuticalForm,
     String administrationRoute,
-    String sizeUnit,
     String storageConditions,
-    String strength,
     String publicPrice,
-    String size,
+    //Textfiels data
+    // integers
     int dose,
     int quantity,
     int refill,
     int dosingExpire,
+    // strings
     var frequency,
     String instructionNote,
     String doctorNotes,
-    String doctorUID,
-  ) async {
+  }) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
@@ -249,37 +257,45 @@ class UserManagement {
       String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
-        await collection.doc(id).collection('/Prescriptions').add(
+        await collection.doc(patientId).collection('/Prescriptions').add(
           {
+            // status
+            'status': 'pending',
+            //id's
+            'prescriber-id': prescriberId,
+            'pharmacist-id': '',
             'registerNumber': registerNumber,
-            // 'id': currentPatient_uid,
+            //dates
+            'prescription-creation-date': creationDate,
             'start-date': startDate,
             'end-date': endDate,
+            //names
             'scientificName': scientificName,
             'tradeName': tradeName,
             'tradeNameArabic': tradeNameArabic,
             'scientificNameArabic': scientificNameArabic,
+            //units
             'strength': strength,
             'strength-unit': strengthUnit,
-            'pharmaceutical-form': pharmaceuticalForm,
-            'administration-route': administrationRoute,
             'size': size,
             'size-unit': sizeUnit,
+            // random
+            'pharmaceutical-form': pharmaceuticalForm,
+            'administration-route': administrationRoute,
             'storage-conditions': storageConditions,
             'price': publicPrice,
+            // textfiles data
+            //integers
             'dose': dose,
             'quantity': quantity,
             'refill': refill,
             'dosing-expire': dosingExpire,
+            // strings
             'frequency': frequency,
             'instruction-note': instructionNote,
             'doctor-note': doctorNotes,
-            'prescriber': doctorUID,
-            'prescription-creation-date': creationDate,
           },
         ).then((value) {
-          print('document id :${value.id}');
-          documentId = value.id;
           Navigator.of(context).pop();
         }).catchError((e) {
           print(e);
@@ -292,31 +308,34 @@ class UserManagement {
 
   Future<void> prescriptionUpdate(
     context,
-    String documentID,
-    String registerNumber,
-    String creationDate,
-    String startDate,
-    String endDate,
-    String id,
-    String scientificName,
-    String scientificNameArabic,
-    String tradeName,
-    String tradeNameArabic,
-    String strengthUnit,
-    String pharmaceuticalForm,
-    String administrationRoute,
-    String sizeUnit,
-    String storageConditions,
-    String strength,
-    String publicPrice,
-    int size,
-    int dose,
-    int quantity,
-    int refill,
-    int dosingExpire,
-    var frequency,
     String instructionNote,
-    String doctorNotes,
+    var frequency,
+    int refill,
+    // String documentID,
+    // String registerNumber,
+    // String creationDate,
+    // String startDate,
+    // String endDate,
+    // String id,
+    // String scientificName,
+    // String scientificNameArabic,
+    // String tradeName,
+    // String tradeNameArabic,
+    // String strengthUnit,
+    // String pharmaceuticalForm,
+    // String administrationRoute,
+    // String sizeUnit,
+    // String storageConditions,
+    // String strength,
+    // String publicPrice,
+    // int size,
+    // int dose,
+    // int quantity,
+    // int refill,
+    // int dosingExpire,
+    // var frequency,
+    // String instructionNote,
+    // String doctorNotes,
     // String doctorUID,
   ) async {
     try {
@@ -328,36 +347,39 @@ class UserManagement {
 
       if (currentUser != null) {
         await collection
-            .doc(id)
+            .doc(currentPatient_uid)
             .collection('/Prescriptions')
-            .doc(documentID)
+            .doc(documentId)
             .set(
           {
-            'registerNumber': registerNumber,
-            'id': currentPatient_uid,
-            'start-date': startDate,
-            'end-date': endDate,
-            'scientificName': scientificName,
-            'tradeName': tradeName,
-            'tradeNameArabic': tradeNameArabic,
-            'scientificNameArabic': scientificNameArabic,
-            'strength': strength,
-            'strength-unit': strengthUnit,
-            'pharmaceutical-form': pharmaceuticalForm,
-            'administration-route': administrationRoute,
-            'size': size,
-            'size-unit': sizeUnit,
-            'storage-conditions': storageConditions,
-            'price': publicPrice,
-            'dose': dose,
-            'quantity': quantity,
-            'refill': refill,
-            'dosing-expire': dosingExpire,
             'frequency': frequency,
             'instruction-note': instructionNote,
-            'doctor-note': doctorNotes,
-            // 'prescriber': doctorUID,
-            'prescription-creation-date': creationDate,
+            'refill': refill,
+            // 'registerNumber': registerNumber,
+            // 'id': currentPatient_uid,
+            // 'start-date': startDate,
+            // 'end-date': endDate,
+            // 'scientificName': scientificName,
+            // 'tradeName': tradeName,
+            // 'tradeNameArabic': tradeNameArabic,
+            // 'scientificNameArabic': scientificNameArabic,
+            // 'strength': strength,
+            // 'strength-unit': strengthUnit,
+            // 'pharmaceutical-form': pharmaceuticalForm,
+            // 'administration-route': administrationRoute,
+            // 'size': size,
+            // 'size-unit': sizeUnit,
+            // 'storage-conditions': storageConditions,
+            // 'price': publicPrice,
+            // 'dose': dose,
+            // 'quantity': quantity,
+            // 'refill': refill,
+            // 'dosing-expire': dosingExpire,
+            // 'frequency': frequency,
+            // 'instruction-note': instructionNote,
+            // 'doctor-note': doctorNotes,
+            // // 'prescriber': doctorUID,
+            // 'prescription-creation-date': creationDate,
           },
           SetOptions(merge: true),
         ).then((_) {
@@ -373,31 +395,41 @@ class UserManagement {
 
   Future<void> PastPrescriptionsSetUp(
     context,
-    String id,
-    // String registerNumber,
-    // String creationDate,
+    // status
+    String status,
+    //id's
+    String patientId,
+    String prescriberId,
+    String registerNumber,
+    //dates
+    String creationDate,
     String startDate,
     String endDate,
-    // String scientificName,
-    // String scientificNameArabic,
-    // String tradeName,
-    // String tradeNameArabic,
-    // String strengthUnit,
-    // String pharmaceuticalForm,
-    // String administrationRoute,
-    // String sizeUnit,
-    // String storageConditions,
-    // String strength,
-    // String publicPrice,
-    // int size,
-    // int dose,
-    // int quantity,
+    //names
+    String scientificName,
+    String scientificNameArabic,
+    String tradeName,
+    String tradeNameArabic,
+    //units
+    String strength,
+    String strengthUnit,
+    String size,
+    String sizeUnit,
+    // random
+    String pharmaceuticalForm,
+    String administrationRoute,
+    String storageConditions,
+    String publicPrice,
+    //Textfiels data
+    // integers
+    int dose,
+    int quantity,
     int refill,
-    // int dosingExpire,
+    int dosingExpire,
+    // strings
     var frequency,
     String instructionNote,
-    // String doctorNotes,
-    // String doctorUID,
+    String doctorNotes,
   ) async {
     try {
       CollectionReference collection =
@@ -408,41 +440,98 @@ class UserManagement {
 
       if (currentUser != null) {
         await collection
-            .doc(id)
+            .doc(patientId)
             .collection('/PastPrescriptions')
             .add(
               {
-                // 'registerNumber': registerNumber,
-                'id': currentPatient_uid,
+                // status
+                'status': status,
+                //id's
+                'prescriber-id': prescriberId,
+                'pharmacist-id': '',
+                'registerNumber': registerNumber,
+                //dates
+                'prescription-creation-date': creationDate,
                 'start-date': startDate,
                 'end-date': endDate,
-                // 'scientificName': scientificName,
-                // 'tradeName': tradeName,
-                // 'tradeNameArabic': tradeNameArabic,
-                // 'scientificNameArabic': scientificNameArabic,
-                // 'strength': strength,
-                // 'strength-unit': strengthUnit,
-                // 'pharmaceutical-form': pharmaceuticalForm,
-                // 'administration-route': administrationRoute,
-                // 'size': size,
-                // 'size-unit': sizeUnit,
-                // 'storage-conditions': storageConditions,
-                // 'price': publicPrice,
-                // 'dose': dose,
-                // 'quantity': quantity,
+                //names
+                'scientificName': scientificName,
+                'tradeName': tradeName,
+                'tradeNameArabic': tradeNameArabic,
+                'scientificNameArabic': scientificNameArabic,
+                //units
+                'strength': strength,
+                'strength-unit': strengthUnit,
+                'size': size,
+                'size-unit': sizeUnit,
+                // random
+                'pharmaceutical-form': pharmaceuticalForm,
+                'administration-route': administrationRoute,
+                'storage-conditions': storageConditions,
+                'price': publicPrice,
+                // textfiles data
+                //integers
+                'dose': dose,
+                'quantity': quantity,
                 'refill': refill,
-                // 'dosing-expire': dosingExpire,
+                'dosing-expire': dosingExpire,
+                // strings
                 'frequency': frequency,
                 'instruction-note': instructionNote,
-                // 'doctor-note': doctorNotes,
-                // // 'prescriber': doctorUID,
-                // 'prescription-creation-date': creationDate,
+                'doctor-note': doctorNotes,
               },
             )
             .then((_) {})
             .catchError((e) {
               print(e);
             });
+      } // end of if
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> newDiagnosisSetUp(
+    context,
+    //id's
+    String patientId,
+    String prescriberId,
+    //dates
+    String creationDate,
+    String startDate,
+    String endDate,
+    String medicalDiagnosis,
+    String diagnosisDescription,
+    String medicalAdvice,
+  ) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('/Patient');
+
+      final currentUser = auth.currentUser;
+      String uid = currentUser.uid.toString();
+
+      if (currentUser != null) {
+        await collection.doc(patientId).collection('/Diagnoses').add(
+          {
+            //id's
+            'prescriber-id': prescriberId,
+            'pharmacist-id': '',
+            //dates
+            'diagnosis-creation-date': creationDate,
+            'start-date': startDate,
+            'end-date': endDate,
+            // textfiles data
+            // strings
+            'medical-diagnosis': medicalDiagnosis,
+            'diagnosis-description': diagnosisDescription,
+            'medical-advice': medicalAdvice,
+          },
+        ).then((_) {
+          Navigator.pop(context);
+        }).catchError((e) {
+          print(e);
+        });
       } // end of if
     } catch (e) {
       print(e);

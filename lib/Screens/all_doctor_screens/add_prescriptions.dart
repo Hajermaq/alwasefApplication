@@ -14,7 +14,7 @@ import 'dart:convert';
 
 class AddPrescriptions extends StatefulWidget {
   AddPrescriptions({this.uid});
-  String uid;
+  final String uid;
   static final String id = 'add_prescription_screen';
   @override
   _AddPrescriptionsState createState() => _AddPrescriptionsState();
@@ -35,6 +35,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   String sizeUnit = '...';
   String publicPrice = '...';
   String registerNumber = ' ';
+  String prescriberId = FirebaseAuth.instance.currentUser.uid;
   // formatted date
   static final DateTime now = DateTime.now();
   final String creationDate = formatter.format(now);
@@ -166,7 +167,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                     FutureBuilder(
                       future: fetchPrescription(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        final orientation = MediaQuery.of(context).orientation;
                         if (snapshot.data == null) {
                           return Column(
                             children: [
@@ -783,41 +783,48 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                       child: Container(
                         height: 50.0,
                         child: RaisedButton(
-                          textColor: kButtonTextColor,
+                          textColor: Colors.white54,
                           color: kGreyColor,
-                          child: Icon(
-                            Icons.done_outline_rounded,
-                            color: kLightColor,
+                          child: Text(
+                            'إرسال',
+                            style: TextStyle(
+                              color: Colors.white,
+                              // fontFamily: 'Montserrat',
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1,
+                            ),
                           ),
                           onPressed: () {
                             UserManagement(currentPatient_uid: widget.uid)
                                 .newPrescriptionSetUp(
-                                    context,
-                                    registerNumber,
-                                    creationDate,
-                                    startDate,
-                                    endDate,
-                                    widget.uid,
-                                    scientificName,
-                                    scientificNameArabic,
-                                    tradeName,
-                                    tradeNameArabic,
-                                    strengthUnit,
-                                    pharmaceuticalForm,
-                                    administrationRoute,
-                                    sizeUnit,
-                                    storageConditions,
-                                    strength,
-                                    publicPrice,
-                                    size,
-                                    dose,
-                                    quantity,
-                                    refill,
-                                    dosingExpire,
-                                    dropdownValue,
-                                    instructionNote,
-                                    doctorNotes,
-                                    FirebaseAuth.instance.currentUser.uid);
+                              context: context,
+                              patientId: widget.uid,
+                              prescriberId: prescriberId,
+                              registerNumber: registerNumber,
+                              creationDate: creationDate,
+                              startDate: startDate,
+                              endDate: endDate,
+                              scientificName: scientificName,
+                              scientificNameArabic: scientificNameArabic,
+                              tradeName: tradeName,
+                              tradeNameArabic: tradeNameArabic,
+                              strengthUnit: strengthUnit,
+                              strength: strength,
+                              pharmaceuticalForm: pharmaceuticalForm,
+                              administrationRoute: administrationRoute,
+                              size: size,
+                              sizeUnit: sizeUnit,
+                              storageConditions: storageConditions,
+                              publicPrice: publicPrice,
+                              dose: dose,
+                              quantity: quantity,
+                              refill: refill,
+                              dosingExpire: dosingExpire,
+                              frequency: dropdownValue,
+                              instructionNote: instructionNote,
+                              doctorNotes: doctorNotes,
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),

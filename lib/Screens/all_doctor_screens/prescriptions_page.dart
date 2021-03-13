@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/add_diagnosis.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
@@ -92,6 +93,7 @@ class Prescriptions extends StatelessWidget {
                                     size: 50,
                                   ),
                                   title: Text(
+                                    // TODO: change it to different names maybe?
                                     prescription.data()['tradeName'],
                                     style: kBoldLabelTextStyle,
                                   ),
@@ -324,42 +326,90 @@ class Prescriptions extends StatelessWidget {
                                                 ),
                                                 GestureDetector(
                                                   onTap: () async {
+                                                    String status = 'deleted';
                                                     UserManagement()
                                                         .PastPrescriptionsSetUp(
                                                       context,
+                                                      status,
                                                       uid,
-                                                      // registerNumber,
-                                                      // creationDate,
+                                                      prescription
+                                                          .data()[
+                                                              'prescriber-id']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'registerNumber']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'prescription-creation-date']
+                                                          .toString(),
                                                       prescription
                                                           .data()['start-date']
                                                           .toString(),
                                                       prescription
                                                           .data()['end-date']
                                                           .toString(),
-                                                      // scientificName,
-                                                      // scientificNameArabic,
-                                                      // tradeName,
-                                                      // tradeNameArabic,
-                                                      // strengthUnit,
-                                                      // pharmaceuticalForm,
-                                                      // administrationRoute,
-                                                      // sizeUnit,
-                                                      // storageConditions,
-                                                      // strength,
-                                                      // publicPrice,
-                                                      // size,
-                                                      // dose,
-                                                      // quantity,
+                                                      prescription
+                                                          .data()[
+                                                              'scientificName']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'scientificNameArabic']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['tradeName']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'tradeNameArabic']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['strength']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'strength-unit']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['size']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['size-unit']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'pharmaceutical-form']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'administration-route']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()[
+                                                              'storage-conditions']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['price']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['dose'],
+                                                      prescription
+                                                          .data()['quantity'],
                                                       prescription
                                                           .data()['refill'],
-                                                      // dosingExpire,
+                                                      prescription.data()[
+                                                          'dosing-expire'],
                                                       prescription
                                                           .data()['frequency'],
                                                       prescription
                                                           .data()[
                                                               'instruction-note']
                                                           .toString(),
-                                                      // doctorNotes
+                                                      prescription
+                                                          .data()['doctor-note']
+                                                          .toString(),
                                                     );
                                                     await FirebaseFirestore
                                                         .instance
@@ -369,6 +419,9 @@ class Prescriptions extends StatelessWidget {
                                                             '/Prescriptions')
                                                         .doc(prescription.id)
                                                         .delete();
+                                                    PastPrescriptions(
+                                                      uid: uid,
+                                                    );
                                                   },
                                                   child: Icon(
                                                     Icons.delete_outline,

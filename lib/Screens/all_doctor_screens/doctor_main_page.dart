@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/doctor_profile_info.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/components/round_text_fields.dart';
@@ -51,9 +52,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
               //search Page
               PatientData(),
               //Profile Page
-              Container(
-                child: Text('Home Page'),
-              ),
+              DoctorProfileInfo(),
             ], //end of pages
             items: [
               ScrollNavigationItem(

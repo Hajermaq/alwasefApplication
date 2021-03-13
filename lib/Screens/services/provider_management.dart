@@ -19,8 +19,8 @@ class _PatientDataState extends State<PatientData> {
   String searchValue = '';
   String hUID = '';
 
-  getHUID() {
-    FirebaseFirestore.instance
+  getHUID() async {
+    await FirebaseFirestore.instance
         .collection('/Doctors')
         .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
@@ -64,15 +64,14 @@ class _PatientDataState extends State<PatientData> {
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         //TODO
-                        return Text('has no data');
+                        return CircularProgressIndicator();
                       } else {
                         return ListView.builder(
                             physics: ScrollPhysics(),
                             itemCount: snapshot.data.docs.length,
-                            itemBuilder: (_, index) {
+                            itemBuilder: (context, index) {
                               DocumentSnapshot documentSnapshot =
                                   snapshot.data.docs[index];
-
                               String name =
                                   documentSnapshot.data()['patient-name'];
                               if (name
