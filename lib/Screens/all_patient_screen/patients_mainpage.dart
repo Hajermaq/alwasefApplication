@@ -331,6 +331,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
                                       IconButton(
                                         icon: Icon(Icons.edit_outlined),
                                         onPressed: (){
+
                                           Navigator.pushNamed(context, EditMedicalHistoryPage.id);
                                       },),
                                       ]

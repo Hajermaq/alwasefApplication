@@ -1,20 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MedicalHistory {
-  String patient;
+  String patientUID;
   String patientFullName,
       gender,
       maritalStatus,
       pregnancy,
-      smoking,
-      birthDate;
+      smoking;
+  DateTime birthDate;
   int age;
   double weight,
       height;
   List<String> hospitalizations,
       surgery,
-      currentMed,
       chronicDisease,
+      currentMed,
       allergies,
       medAllergies;
 
@@ -25,7 +26,7 @@ class MedicalHistory {
       CollectionReference collection =
       FirebaseFirestore.instance.collection('Medical History');
       await collection.doc(userID).set({
-        'patient': patient,
+        'uid': patientUID,
         'full name': patientFullName,
         'gender': gender,
         'birth date': birthDate,
@@ -37,14 +38,24 @@ class MedicalHistory {
         'smoking': smoking,
         'hospitalization': hospitalizations,
         'surgery': surgery,
-        'current medications': currentMed,
         'chronic disease': chronicDisease,
-        'medication allergies': medAllergies,
+        'current medications': currentMed,
         'allergies': allergies,
+        'medication allergies': medAllergies,
       });
     }catch (e) {
       print(e);
     }
   }
+
+ // Future<String> getFullName(String userID) async{
+ //   final snapshot = FirebaseFirestore.instance.collection('Medical History')
+ //       .
+ //    await FirebaseFirestore.instance.collection('Medical History')
+ //       .doc(FirebaseAuth.instance.currentUser.uid).get()
+ //       .then((value) {
+ //         return value.get('full name');
+ //   });
+ // }
 
 }

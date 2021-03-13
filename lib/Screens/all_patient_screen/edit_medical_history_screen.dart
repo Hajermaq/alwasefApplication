@@ -1,6 +1,5 @@
 import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
-import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/models/medical_history_model.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,15 +16,52 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class EditMedicalHistoryPage extends StatefulWidget {
   static const String id = 'edit_medical_history';
+  // constructor
+//   EditMedicalHistoryPage({
+//     this.initialValName,
+//     this.initialValGender,
+//     this.initialValAge,
+//     this.initialValBirthDate,
+//     this.initialValWeight,
+//     this.initialValHeight,
+//     this.initialValMaritalStatus,
+//     this.initialValPregnancy,
+//     this.initialValSmoking,
+//     this.initialValHospitalization,
+//     this.initialValSurgery,
+//     this.initialValCurrentMed,
+//     this.initialValChronicDisease,
+//     this.initialValAllergies,
+//     this.initialValMedAllergies,
+// });
+//   final dynamic initialValName,
+//       initialValGender,
+//       initialValAge,
+//       initialValBirthDate,
+//       initialValWeight,
+//       initialValHeight,
+//       initialValMaritalStatus,
+//       initialValPregnancy,
+//       initialValSmoking,
+//       initialValHospitalization,
+//       initialValSurgery,
+//       initialValCurrentMed,
+//       initialValChronicDisease,
+//       initialValAllergies,
+//       initialValMedAllergies;
+
+
   @override
   _EditMedicalHistoryPageState createState() => _EditMedicalHistoryPageState();
 }
 
 class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
-
+  final authM = FirebaseAuth.instance;
+  final fireM = FirebaseFirestore.instance;
   final GlobalKey<FormState>_formKey = GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
 
+  //TODO: Dlete this
   List<String> genderList = ['ذكر', 'أنثى'];
   List<String> maritalStatusList = ['أعزب', 'متزوج', 'غير ذلك'];
   List<String> yesNoAnswers = ['لا', 'نعم'];
@@ -41,10 +77,12 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   final TextEditingController allergCtrl = TextEditingController();
   final TextEditingController medAllergCtrl = TextEditingController();
 
-  dynamic initialValName,
+
+  String initialValName = '';
+  dynamic
       initialValGender,
-      initialValBirthDate,
       initialValAge,
+      initialValBirthDate,
       initialValWeight,
       initialValHeight,
       initialValMaritalStatus,
@@ -58,7 +96,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
       initialValMedAllergies;
 
 
-  // return a Future<Null> it is useless
+  // this method returns a Future<Null> it is useless
   // void getValOfField(dynamic variable, String field) async {
   //   await FirebaseFirestore.instance.collection('Medical History')
   //       .doc(FirebaseAuth.instance.currentUser.uid).get()
@@ -66,62 +104,77 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   //     variable = value.get(field);
   //   });
   // }
-  // void getValOfField(dynamic variable, String field) async {
-  //   final collection = await FirebaseFirestore.instance.collection('Medical History').get();
-  //   for (var doc in collection.docs){
-  //     if (doc.id == FirebaseAuth.instance.currentUser.uid){
-  //       variable = doc.get(field);
+
+
+  // void retrieveData1() async {
+  //   try{
+  //     //QuerySnapshot
+  //     final collection = await FirebaseFirestore.instance.collection('Medical History').get();
+  //     for (var doc in collection.docs){
+  //       if (doc.id == FirebaseAuth.instance.currentUser.uid){
+  //         initialValName = doc.get('full name');
+  //         // initialValGender = doc.get('gender');
+  //         // initialValBirthDate = doc.get('birth date').toString();
+  //         // initialValAge = doc.get('age');
+  //         // initialValWeight = doc.get('weight');
+  //         // initialValHeight = doc.get('height');
+  //         // initialValMaritalStatus = doc.get('marital status');
+  //         // initialValPregnancy = doc.get('pregnancy');
+  //         // initialValSmoking = doc.get('smoking');
+  //         // initialValHospitalization = doc.get('hospitalization');
+  //         // initialValSurgery = doc.get('surgery');
+  //         // initialValCurrentMed = doc.get('current medications');
+  //         // initialValChronicDisease = doc.get('chronic disease');
+  //         // initialValAllergies = doc.get('allergies');
+  //         // initialValMedAllergies = doc.get('medication allergies');
+  //
+  //       }
   //     }
+  //   } catch(e){
+  //     print(e);
   //   }
   // }
-  void retrieveData() async {
-    QuerySnapshot collection = await FirebaseFirestore.instance.collection('Medical History').get();
-    for (var doc in collection.docs){
+
+  retrieveData() async{
+    //value.get(field);
+
+    // DocumentReference docR = FirebaseFirestore.instance.collection('/Medical History')
+    //     .where('patientUID', isEqualTo: FirebaseAuth.instance.currentUser.uid).get();
+        //.doc(FirebaseAuth.instance.currentUser.uid);
+
+    FirebaseFirestore.instance.collection('/Medical History')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .snapshots()
+        .forEach((doc) {
+      initialValName = doc.get('full name');
+    });
+
+    // DocumentSnapshot docS;
+    // FirebaseFirestore.instance
+    //     .collection('/Medical History')
+    //     .doc(FirebaseAuth.instance.currentUser.uid)
+    //     .get()
+    //     .then((value) {
+    //       // return doc.data()['full name'].toString();
+    //       // initialValName = doc.data()['full name'];
+    //       docS = value;
+    // });
+    // return docS.get('full name');
+
+
+
+    final collection = await fireM.collection('Medical History').get();
+    for(var doc in collection.docs) {
       if (doc.id == FirebaseAuth.instance.currentUser.uid){
         initialValName = doc.get('full name');
-        initialValGender = doc.get('gender');
-        initialValBirthDate = doc.get('birth date').toString();
-        initialValAge = doc.get('age');
-        initialValWeight = doc.get('weight');
-        initialValHeight = doc.get('height');
-        initialValMaritalStatus = doc.get('marital status');
-        initialValPregnancy = doc.get('pregnancy');
-        initialValSmoking = doc.get('smoking');
-        initialValHospitalization = doc.get('hospitalization');
-        initialValSurgery = doc.get('surgery');
-        initialValCurrentMed = doc.get('current medications');
-        initialValChronicDisease = doc.get('chronic disease');
-        initialValAllergies = doc.get('allergies');
-        initialValMedAllergies = doc.get('medication allergies');
       }
     }
   }
 
 
-
-  //  void allGetValOfField(){
-  //    getValOfField(initialValName, 'full name');
-  //    getValOfField(initialValGender, 'gender');
-  //    getValOfField(initialValBirthDate, 'birth date');
-  //    getValOfField(initialValAge, 'age');
-  //    getValOfField(initialValWeight, 'weight');
-  //    getValOfField(initialValHeight, 'height');
-  //    getValOfField(initialValMaritalStatus, 'marital status');
-  //    getValOfField(initialValPregnancy, 'pregnancy');
-  //    getValOfField(initialValSmoking, 'smoking');
-  //    getValOfField(initialValHospitalization, 'hospitalization');
-  //    getValOfField(initialValSurgery, 'surgery');
-  //    getValOfField(initialValCurrentMed, 'current medications');
-  //    getValOfField(initialValChronicDisease, 'chronic disease');
-  //    getValOfField(initialValAllergies, 'allergies');
-  //    getValOfField(initialValMedAllergies, 'medication allergies');
-  //
-  //  }
-  //
-
   void iniState() {
-    super.initState();
     retrieveData();
+    super.initState();
   }
 
   @override
@@ -159,8 +212,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                     labelText: 'الاسم الكامل:',
                     border: OutlineInputBorder(),
                   ),
-                  initialValue: initialValName,
-                  enabled: false,
+                  //initialValue: retrieveData(),
+                  readOnly: true,
 
                 ),
               ),
@@ -168,28 +221,60 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               RaisedButton(
                 child: Text('test'),
                 onPressed: (){
-                  //retrieveData();
-                  
+                  //print(retrieveData());
+
+                   // FirebaseFirestore.instance.collection('Medical History')
+                   //      .doc(FirebaseAuth.instance.currentUser.uid).get()
+                   //      .then((value) {
+                   //     print(value.get('full name'));
+                   //  });
+                   print('nonono');
+                   // final collection = await FirebaseFirestore.instance.collection('Medical History').get();
+                   //  for (var doc in collection.docs){
+                   //    if (doc.id == FirebaseAuth.instance.currentUser.uid){
+                   //      print(doc.get('full name'));
+
+                  // FirebaseFirestore.instance
+                  //     .collection('/Medical History')
+                  //     .doc(FirebaseAuth.instance.currentUser.uid)
+                  //     .get()
+                  //     .then((doc) {
+                  // initialValName = doc.data()['full name'];});
+
                   print(initialValName);
-                  print(initialValGender);
-                  print(initialValBirthDate);
-                  print(initialValAge);
-                  print(initialValWeight);
-                  print(initialValHeight);
-
-                  print(initialValMaritalStatus);
-                  print(initialValPregnancy);
-                  print(initialValSmoking);
-
-                  print(initialValHospitalization);
-                  print(initialValSurgery);
-                  print(initialValCurrentMed);
-                  print(initialValChronicDisease);
-                  print(initialValAllergies);
-                  print(initialValMedAllergies);
+                  // print(initialValGender);
+                  // print(initialValBirthDate);
+                  // print(initialValAge);
+                  // print(initialValWeight);
+                  // print(initialValHeight);
+                  //
+                  // print(initialValMaritalStatus);
+                  // print(initialValPregnancy);
+                  // print(initialValSmoking);
+                  //
+                  // print(initialValHospitalization);
+                  // print(initialValSurgery);
+                  // print(initialValCurrentMed);
+                  // print(initialValChronicDisease);
+                  // print(initialValAllergies);
+                  // print(initialValMedAllergies);
 
 
                 }
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    labelText: 'الاسم الكامل:',
+                    border: OutlineInputBorder(),
+                  ),
+                  initialValue: initialValName,
+                  readOnly: true,
+
+                ),
               ),
 
               //الجنس
@@ -214,7 +299,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                 ),
               ),
 
-              // //تاريخ الميلاد
+              // تاريخ الميلاد
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DateTimeField(
@@ -223,85 +308,86 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                     labelText: 'تاريخ الميلاد:',
                     border: OutlineInputBorder(),
                   ),
-                  //initialValue: initialValBirthDate.toString(),
-                  enabled: false,
+                  //initialValue: initialValBirthDate,
+                  readOnly: true,
                 ),
               ),
 
-              // //العمر
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     keyboardType: TextInputType.number,
-              //     decoration: InputDecoration(
-              //       labelText: 'العمر :',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     validator: (value) {
-              //       if (value.isEmpty) {
-              //         return 'هذا الحقل مطلوب';
-              //       }
-              //       return null;
-              //     },
-              //     onChanged: (value) {
-              //       medicalHistory.age = int.parse(value);
-              //       // age = Age.dateDifference(
-              //       //     fromDate: birthDate, toDate: DateTime.now(), includeToDate: false) as int;
-              //     },
-              //     controller: ageCtrl,
-              //   ),
-              // ),
-              //
-              // //الوزن
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     keyboardType: TextInputType.number,
-              //     decoration: InputDecoration(
-              //       labelText: 'الوزن :',
-              //       suffixText: 'كلجم',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     validator: (value) {
-              //       if (value.isEmpty) {
-              //         return 'هذا الحقل مطلوب';
-              //       }
-              //       return null;
-              //     },
-              //     onChanged: (value) {
-              //       medicalHistory.weight = double.parse(value);
-              //     },
-              //     controller: weightCtrl,
-              //   ),
-              // ),
-              //
-              // //الطول
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     keyboardType: TextInputType.number,
-              //     decoration: InputDecoration(
-              //       labelText: 'الطول :',
-              //       suffixText: 'سم',
-              //       border: OutlineInputBorder(),
-              //     ),
-              //     validator: (value) {
-              //       if (value.isEmpty) {
-              //         return 'هذا الحقل مطلوب';
-              //       }
-              //       return null;
-              //     },
-              //     onChanged: (value) {
-              //       medicalHistory.height = double.parse(value);
-              //     },
-              //     controller: heightCtrl,
-              //   ),
-              // ),
-              //
-              // //الحالة الاجتماعية
+              //العمر
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'العمر :',
+                    border: OutlineInputBorder(),
+                  ),
+
+                  onChanged: (value) {
+                    //medicalHistory.age = int.parse(value);
+                    // age = Age.dateDifference(
+                    //     fromDate: birthDate, toDate: DateTime.now(), includeToDate: false) as int;
+                  },
+                  controller: ageCtrl,
+                ),
+              ),
+
+              //الوزن
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'الوزن :',
+                    suffixText: 'كلجم',
+                    border: OutlineInputBorder(),
+                  ),
+                  //initialValue: initialValWeight.toString(),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'هذا الحقل مطلوب';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    fireM.doc(authM.currentUser.uid).update({
+                      'weight': value as double,
+                    });
+                  },
+                  controller: weightCtrl,
+                ),
+              ),
+
+              //الطول
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'الطول :',
+                    suffixText: 'سم',
+                    border: OutlineInputBorder(),
+                  ),
+                  //initialValue: initialValHeight.toString(),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'هذا الحقل مطلوب';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    fireM.doc(authM.currentUser.uid).update({
+                      'height': value as double,
+                    });
+                  },
+                  controller: heightCtrl,
+                ),
+              ),
+
+              //الحالة الاجتماعية
               // Padding(
               //   padding: const EdgeInsets.all(8.0),
               //   child: DropdownButtonFormField(
@@ -389,45 +475,49 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               //     },
               //   ),
               // ),
-              //
-              // //تنويم
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل سبق أن تم تنويمك في المستشفى :',
-              //       hintText: 'اكتب كل سبب في سطر',
-              //       border:
-              //       OutlineInputBorder(),
-              //     ),
-              //     onChanged: (value) {
-              //       medicalHistory.hospitalizations = value.split('\n');
-              //     },
-              //     controller: hospCtrl,
-              //   ),
-              // ),
-              //
-              // //جراحة
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: TextFormField(
-              //     textAlign: TextAlign.center,
-              //     maxLines: 5,
-              //     decoration: InputDecoration(
-              //       labelText: 'هل خضعت لأي عملية جراحية من قبل :',
-              //       hintText: 'اكتب كل عملية في سطر',
-              //       border:
-              //       OutlineInputBorder(),
-              //     ),
-              //     onChanged: (value) {
-              //       medicalHistory.surgery = value.split('\n');
-              //     },
-              //     controller: surgCtrl,
-              //   ),
-              // ),
-              //
+
+
+              //تنويم
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    labelText: 'هل سبق أن تم تنويمك في المستشفى :',
+                    hintText: 'اكتب كل سبب في سطر',
+                    border: OutlineInputBorder(),
+                  ),
+                  initialValue: initialValHospitalization,
+                  onChanged: (value) {
+                    fireM.doc(authM.currentUser.uid).update({
+                      'hospitalization': value.split('\n'),
+                    });
+                  },
+                  controller: hospCtrl,
+                ),
+              ),
+
+              //جراحة
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    labelText: 'هل خضعت لأي عملية جراحية من قبل :',
+                    hintText: 'اكتب كل عملية في سطر',
+                    border: OutlineInputBorder(),
+                  ),
+                  //initialValue: initialValSurgery,
+                  onChanged: (value) {
+                    fireM.doc(authM.currentUser.uid).update({
+                      'surgery': value.split('\n'),
+                    });                  },
+                  controller: surgCtrl,
+                ),
+              ),
+
               // //مرض مزمن
               // Padding(
               //   padding: const EdgeInsets.all(8.0),
@@ -440,9 +530,11 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               //       border:
               //       OutlineInputBorder(),
               //     ),
+              //     initialValue: initialValChronicDisease,
               //     onChanged: (value) {
-              //       medicalHistory.chronicDisease = value.split('\n');
-              //     },
+              //       fireM.doc(authM.currentUser.uid).update({
+              //         'chronic disease': value.split('\n'),
+              //       });                  },
               //     controller: chroDisCtrl,
               //   ),
               // ),
@@ -459,8 +551,11 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               //       border:
               //       OutlineInputBorder(),
               //     ),
+              //     initialValue: initialValCurrentMed,
               //     onChanged: (value) {
-              //       medicalHistory.currentMed = value.split('\n');
+              //       fireM.doc(authM.currentUser.uid).update({
+              //         'current medications': value.split('\n'),
+              //       });
               //     },
               //     controller: currMedCtrl,
               //   ),
@@ -478,9 +573,11 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               //       border:
               //       OutlineInputBorder(),
               //     ),
+              //     initialValue: initialValAllergies,
               //     onChanged: (value) {
-              //       medicalHistory.allergies = value.split('\n');
-              //     },
+              //       fireM.doc(authM.currentUser.uid).update({
+              //         'allergies': value.split('\n'),
+              //       });                  },
               //     controller: allergCtrl,
               //   ),
               // ),
@@ -496,69 +593,66 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               //       hintText: 'اكتب كل نوع في سطر',
               //       border: OutlineInputBorder(),
               //     ),
-              //     validator: (value) {
-              //       if (value.isEmpty) {
-              //         return 'هذا الحقل مطلوب';
-              //       }
-              //       return null;
-              //     },
+              //     initialValue: initialValMedAllergies,
               //     onChanged: (value) {
-              //       medicalHistory.medAllergies = value.split('\n');
+              //       fireM.doc(authM.currentUser.uid).update({
+              //         'medication allergies': value.split('\n'),
+              //       });
               //     },
               //     controller: medAllergCtrl,
               //   ),
               // ),
-              //
-              // Divider(
-              //   height: 20,
-              //   thickness: 3,
-              // ),
-              //
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 10.0),
-              //   child: Text(
-              //       'تأكد من صحة المعلومات التي تقدمها لأن ذلك يحسن من الخدمة المقدة لك ',
-              //       textAlign: TextAlign.center),
-              // ),
-              //
-              //
-              // Center(
-              //   child: Row(
-              //     children: [
-              //       Padding(
-              //         padding: const EdgeInsets.all(8.0),
-              //         child: RaisedButton(
-              //             child: Text('تعديل'),
-              //             onPressed: () {
-              //               if (!_formKey.currentState.validate()) {
-              //                 return ;
-              //               }
-              //               _formKey.currentState.save();
-              //               saveMedicalHistoryForm();
-              //               //Navigator.pop(context);
-              //             }),
-              //       ),
-              //       Padding(
-              //         padding: const EdgeInsets.all(8.0),
-              //         child: RaisedButton(
-              //             child: Text('رجوع'),
-              //             onPressed: () {
-              //               ageCtrl.clear();
-              //               weightCtrl.clear();
-              //               heightCtrl.clear();
-              //               hospCtrl.clear();
-              //               surgCtrl.clear();
-              //               currMedCtrl.clear();
-              //               chroDisCtrl.clear();
-              //               allergCtrl.clear();
-              //               medAllergCtrl.clear();
-              //               Navigator.pop(context);
-              //             }
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+
+              Divider(
+                height: 20,
+                thickness: 3,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 10.0),
+                child: Text(
+                    'تأكد من صحة المعلومات التي تقدمها لأن ذلك يحسن من الخدمة المقدة لك ',
+                    textAlign: TextAlign.center),
+              ),
+
+
+              Center(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                          child: Text('تعديل'),
+                          onPressed: () {
+                            if (!_formKey.currentState.validate()) {
+                              return ;
+                            }
+                            _formKey.currentState.save();
+                            //saveMedicalHistoryForm();
+                            //Navigator.pop(context);
+                          }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                          child: Text('رجوع'),
+                          onPressed: () {
+                            ageCtrl.clear();
+                            weightCtrl.clear();
+                            heightCtrl.clear();
+                            hospCtrl.clear();
+                            surgCtrl.clear();
+                            currMedCtrl.clear();
+                            chroDisCtrl.clear();
+                            allergCtrl.clear();
+                            medAllergCtrl.clear();
+                            Navigator.pop(context);
+                          }
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           ),
