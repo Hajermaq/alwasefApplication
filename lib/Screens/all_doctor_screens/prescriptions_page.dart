@@ -1,4 +1,9 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
+import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/models/PrescriptionData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +13,27 @@ import 'add_prescriptions.dart';
 class Prescriptions extends StatelessWidget {
   Prescriptions({this.uid});
   final String uid;
+
+  Widget buildBottomSheet(BuildContext context) {
+    return Container(
+      color: Color(0xff757575),
+      child: Container(
+        decoration: BoxDecoration(
+          color: klighterColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50.0),
+            topRight: Radius.circular(50.0),
+          ),
+        ),
+        child: Column(
+          children: [
+            ListTile(),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,164 +59,338 @@ class Prescriptions extends StatelessWidget {
           },
         ),
         body: Center(
-          child: Consumer<PrescriptionData>(
-              builder: (context, prescriptionData, index) {
-            return ListView.builder(
-                itemCount: prescriptionData.prescriptionCount,
-                itemBuilder: (context, index) {
-                  final prescription = prescriptionData.prescriptions[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    color: kGreyColor,
-                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.build_circle_outlined,
-                            size: 50,
-                          ),
-                          title: Text(
-                            prescription.tradeName,
-                            style: kBoldLabelTextStyle,
-                          ),
-                          // subtitle: Text(
-                          //   '  $pharmaceuticalForm   -   $strength $strengthUnit ',
-                          //   style: TextStyle(
-                          //       color: Colors.black45,
-                          //       fontSize: 14.0,
-                          //       fontWeight: FontWeight.w500),
-                          // ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('/Patient')
+                  .doc(uid)
+                  .collection('/Prescriptions')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                } else {
+                  return ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot prescription =
+                            snapshot.data.docs[index];
+                        return GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                                context: context, builder: buildBottomSheet);
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            color: kGreyColor,
+                            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                             child: Column(
                               children: [
-                                Text(
-                                  'التاريخ',
-                                  style: TextStyle(fontSize: 15.0),
+                                ListTile(
+                                  leading: Icon(
+                                    Icons.build_circle_outlined,
+                                    size: 50,
+                                  ),
+                                  title: Text(
+                                    prescription.data()['tradeName'],
+                                    style: kBoldLabelTextStyle,
+                                  ),
+                                  // subtitle: Text(
+                                  //   '  ${prescription.data()['administration-route']}  -   ${prescription.data()['tradeName']} ${prescription.data()['tradeName']} ',
+                                  //   style: TextStyle(
+                                  //       color: Colors.black45,
+                                  //       fontSize: 14.0,
+                                  //       fontWeight: FontWeight.w500),
+                                  // ),
+
+                                  trailing: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text(
+                                        prescription.data()[
+                                            'prescription-creation-date'],
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 13.0),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 4,
+                                Divider(
+                                  color: klighterColor,
+                                  thickness: 0.9,
+                                  endIndent: 20,
+                                  indent: 20,
                                 ),
-                                Text(
-                                  prescription.creationDate,
-                                  style: TextStyle(fontSize: 17.0),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 100,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        // Row(
+                                        //   children: [
+                                        //     Text(
+                                        //       '',
+                                        //       style: ksubBoldLabelTextStyle,
+                                        //     ),
+                                        //     SizedBox(
+                                        //       width: 15.0,
+                                        //     ),
+                                        //     Text(
+                                        //       '${prescription.data()['start-date']}',
+                                        //       style: kValuesTextStyle,
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        // VerticalDivider(
+                                        //   indent: 20,
+                                        //   endIndent: 20.0,
+                                        //   color: kLightColor,
+                                        //   thickness: 1.5,
+                                        // ),
+                                        // Row(
+                                        //   children: [
+                                        //     Text(
+                                        //       ' نهاية الوصفة',
+                                        //       style: ksubBoldLabelTextStyle,
+                                        //     ),
+                                        //     SizedBox(
+                                        //       width: 15.0,
+                                        //     ),
+                                        //     Text(
+                                        //       '${prescription.data()['end-date']}',
+                                        //       style: kValuesTextStyle,
+                                        //     ),
+                                        //   ],
+                                        // ),
+                                        // VerticalDivider(
+                                        //   indent: 20,
+                                        //   endIndent: 20.0,
+                                        //   color: kLightColor,
+                                        //   thickness: 1.5,
+                                        // ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              ' التكرار',
+                                              style: ksubBoldLabelTextStyle,
+                                            ),
+                                            SizedBox(
+                                              width: 15.0,
+                                            ),
+                                            Text(
+                                              '${'${prescription.data()['frequency']}'}',
+                                              style: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // VerticalDivider(
+                                        //   indent: 20,
+                                        //   endIndent: 20.0,
+                                        //   color: kLightColor,
+                                        //   thickness: 1.5,
+                                        // ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'التعليمات',
+                                              style: ksubBoldLabelTextStyle,
+                                            ),
+                                            SizedBox(
+                                              width: 15.0,
+                                            ),
+                                            Text(
+                                              '${prescription.data()['instruction-note']}',
+                                              style: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'عدد مرات إعادة العبئة',
+                                                  style: ksubBoldLabelTextStyle,
+                                                ),
+                                                SizedBox(
+                                                  width: 15.0,
+                                                ),
+                                                Text(
+                                                  '${prescription.data()['refill']}',
+                                                  style: kValuesTextStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                GestureDetector(
+                                                  child: Icon(
+                                                    Icons.edit_outlined,
+                                                    color: Colors.black54,
+                                                  ),
+                                                  onTap: () {
+                                                    print(
+                                                        'this document id ${prescription.id}');
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            UpdatePrescription(
+                                                          documentID:
+                                                              prescription.id,
+                                                          registerNumber:
+                                                              prescription
+                                                                  .data()[
+                                                                      'registerNumber']
+                                                                  .toString(),
+                                                          uid: uid,
+                                                          scientificName:
+                                                              prescription
+                                                                  .data()[
+                                                                      'scientificName']
+                                                                  .toString(),
+                                                          scientificNameArabic:
+                                                              prescription
+                                                                  .data()[
+                                                                      'scientificNameArabic']
+                                                                  .toString(),
+                                                          tradeName: prescription
+                                                              .data()[
+                                                                  'tradeName']
+                                                              .toString(),
+                                                          tradeNameArabic:
+                                                              prescription
+                                                                  .data()[
+                                                                      'tradeNameArabic']
+                                                                  .toString(),
+                                                          strength: prescription
+                                                              .data()[
+                                                                  'strength']
+                                                              .toString(),
+                                                          strengthUnit: prescription
+                                                              .data()[
+                                                                  'strength-unit']
+                                                              .toString(),
+                                                          size: prescription
+                                                              .data()['size']
+                                                              .toString(),
+                                                          sizeUnit: prescription
+                                                              .data()[
+                                                                  'size-unit']
+                                                              .toString(),
+                                                          publicPrice:
+                                                              prescription
+                                                                  .data()[
+                                                                      'price']
+                                                                  .toString(),
+                                                          storageConditions:
+                                                              prescription
+                                                                  .data()[
+                                                                      'storage-conditions']
+                                                                  .toString(),
+                                                          pharmaceuticalForm:
+                                                              prescription
+                                                                  .data()[
+                                                                      'pharmaceutical-form']
+                                                                  .toString(),
+                                                          administrationRoute:
+                                                              prescription
+                                                                  .data()[
+                                                                      'administration-route']
+                                                                  .toString(),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  width: 10.0,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    UserManagement()
+                                                        .PastPrescriptionsSetUp(
+                                                      context,
+                                                      uid,
+                                                      // registerNumber,
+                                                      // creationDate,
+                                                      prescription
+                                                          .data()['start-date']
+                                                          .toString(),
+                                                      prescription
+                                                          .data()['end-date']
+                                                          .toString(),
+                                                      // scientificName,
+                                                      // scientificNameArabic,
+                                                      // tradeName,
+                                                      // tradeNameArabic,
+                                                      // strengthUnit,
+                                                      // pharmaceuticalForm,
+                                                      // administrationRoute,
+                                                      // sizeUnit,
+                                                      // storageConditions,
+                                                      // strength,
+                                                      // publicPrice,
+                                                      // size,
+                                                      // dose,
+                                                      // quantity,
+                                                      prescription
+                                                          .data()['refill'],
+                                                      // dosingExpire,
+                                                      prescription
+                                                          .data()['frequency'],
+                                                      prescription
+                                                          .data()[
+                                                              'instruction-note']
+                                                          .toString(),
+                                                      // doctorNotes
+                                                    );
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('/Patient')
+                                                        .doc(uid)
+                                                        .collection(
+                                                            '/Prescriptions')
+                                                        .doc(prescription.id)
+                                                        .delete();
+                                                  },
+                                                  child: Icon(
+                                                    Icons.delete_outline,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Divider(
-                          color: klighterColor,
-                          thickness: 0.9,
-                          endIndent: 20,
-                          indent: 20,
-                        ),
-                        Container(
-                          height: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'بداية الوصفة',
-                                    style: ksubBoldLabelTextStyle,
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Text(
-                                    '${prescription.startDate}',
-                                    style: kValuesTextStyle,
-                                  ),
-                                ],
-                              ),
-                              VerticalDivider(
-                                indent: 20,
-                                endIndent: 20.0,
-                                color: kLightColor,
-                                thickness: 1.5,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'اعادة التعبئة',
-                                    style: ksubBoldLabelTextStyle,
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Text(
-                                    '${prescription.refill}',
-                                    style: TextStyle(
-                                      color: Colors.black45,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              VerticalDivider(
-                                indent: 20,
-                                endIndent: 20.0,
-                                color: kLightColor,
-                                thickness: 1.5,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    ' التكرار',
-                                    style: ksubBoldLabelTextStyle,
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Text(
-                                    '${prescription.frequency}',
-                                    style: kValuesTextStyle,
-                                  ),
-                                ],
-                              ),
-                              VerticalDivider(
-                                indent: 20,
-                                endIndent: 20.0,
-                                color: kLightColor,
-                                thickness: 1.5,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'السعر',
-                                    style: ksubBoldLabelTextStyle,
-                                  ),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Text(
-                                    prescription.publicPrice,
-                                    style: kValuesTextStyle,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                });
-          }),
+                        );
+                      });
+                }
+                return SizedBox();
+              }),
         ));
   }
 }

@@ -263,19 +263,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                 }
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    labelText: 'الاسم الكامل:',
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: initialValName,
-                  readOnly: true,
 
-                ),
-              ),
 
               //الجنس
               Padding(

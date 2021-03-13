@@ -33,7 +33,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
       ),
       child: SafeArea(
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
+          // resizeToAvoidBottomPadding: false,
           body: ScrollNavigation(
             barStyle: NavigationBarStyle(
               background: Color(0xffBBC6E3),
