@@ -509,7 +509,6 @@ class UserManagement {
           FirebaseFirestore.instance.collection('/Patient');
 
       final currentUser = auth.currentUser;
-      String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
         await collection.doc(patientId).collection('/Diagnoses').add(

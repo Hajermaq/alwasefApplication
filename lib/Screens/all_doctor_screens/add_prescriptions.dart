@@ -1062,7 +1062,7 @@ class InfoRow extends StatelessWidget {
                     onTap: onTap_1,
                     onChanged: onChanged_1,
                     style: TextStyle(
-                      color: Colors.black54,
+                      color: kGreyColor,
                     ),
                     decoration: InputDecoration(
                       fillColor: Colors.white54,

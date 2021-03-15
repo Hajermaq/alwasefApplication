@@ -4,42 +4,68 @@ import '../constants.dart';
 
 class RoundTextFields extends StatelessWidget {
   final Function onChanged;
+  final Function onSaved;
+  final Function validator;
   final String hintMessage;
   final Color color;
+  final TextInputType textInputType;
+
 // <<<<<<< HEAD
   final bool isObscure;
   RoundTextFields(
-      {this.hintMessage, this.onChanged, this.color, this.isObscure});
+      {this.hintMessage,
+      this.onChanged,
+      this.color,
+      this.isObscure,
+      this.onSaved,
+      this.textInputType,
+      this.validator});
 // =======
   //final bool hiddenPass;
 
 // >>>>>>> 50793c904c9ea87e33850f0c1d542a79068dbf28
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-      margin: EdgeInsets.only(right: 50, left: 50),
-      height: 50.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: color,
-          style: BorderStyle.solid,
-          width: 4.0,
-        ),
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      child: TextField(
-        obscureText: isObscure,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: hintMessage,
-          hintStyle: kTextFieldHintStyle,
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
+      child: Container(
+        margin: EdgeInsets.only(right: 50, left: 50),
+        child: TextFormField(
+          onSaved: onSaved,
+          validator: validator,
+          keyboardType: textInputType,
+          obscureText: isObscure,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            errorStyle: TextStyle(
+              color: kRedColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: kRedColor,
+                width: 4.0,
+              ),
+              borderRadius: BorderRadius.circular(35.0),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kRedColor, width: 4.0),
+              borderRadius: BorderRadius.circular(35.0),
+            ),
+            hintText: hintMessage,
+            hintStyle: kTextFieldHintStyle,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kPinkColor, width: 4.0),
+              borderRadius: BorderRadius.circular(35.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kPinkColor, width: 4.0),
+              borderRadius: BorderRadius.circular(35.0),
+            ),
           ),
+          //obscureText: hiddenPass,
         ),
-        //obscureText: hiddenPass,
       ),
     );
   }

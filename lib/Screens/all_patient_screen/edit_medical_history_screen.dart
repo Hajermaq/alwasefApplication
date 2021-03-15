@@ -263,6 +263,11 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: DropdownButtonFormField(
+                items: [],
+                //كتبت دا عشان بيقولي required
+                onChanged: (value) {
+                  print(value);
+                },
                 dropdownColor: Colors.black,
                 decoration: InputDecoration(
                   labelText: 'الجنس:',
@@ -283,15 +288,15 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
             // تاريخ الميلاد
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: DateTimeField(
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  labelText: 'تاريخ الميلاد:',
-                  border: OutlineInputBorder(),
-                ),
-                //initialValue: initialValBirthDate,
-                readOnly: true,
-              ),
+              // child: DateTimeField(
+              //   textAlign: TextAlign.center,
+              //   decoration: InputDecoration(
+              //     labelText: 'تاريخ الميلاد:',
+              //     border: OutlineInputBorder(),
+              //   ),
+              //   //initialValue: initialValBirthDate,
+              //   readOnly: true,
+              // ),
             ),
 
             //العمر

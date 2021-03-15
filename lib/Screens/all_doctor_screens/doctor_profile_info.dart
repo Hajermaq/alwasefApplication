@@ -1,4 +1,11 @@
+import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
+import 'package:alwasef_app/components/round-button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../constants.dart';
 
 class DoctorProfileInfo extends StatefulWidget {
   @override
@@ -6,24 +13,709 @@ class DoctorProfileInfo extends StatefulWidget {
 }
 
 class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
+  //Variables
+  final currentUser = FirebaseAuth.instance.currentUser;
+  final auth = FirebaseAuth.instance;
+  String initialVal = '';
+  String password;
+  String updatedEmail;
+  String phoneNumber;
+  //functions
+
+  Future resetEmail(String newEmail, String password) async {
+    var authResult = await auth.signInWithEmailAndPassword(
+        email: currentUser.email, password: password);
+    await authResult.user.updateEmail(newEmail);
+    await FirebaseFirestore.instance
+        .collection('/Doctors')
+        .doc(authResult.user.uid)
+        .update({'email': newEmail});
+  }
+
+  Future<void> resetPassword(String email) async {
+    if (email == currentUser.email) {
+      await auth.sendPasswordResetEmail(email: email);
+      FirebaseFirestore.instance
+          .collection('/Doctors')
+          .doc(currentUser.uid)
+          .update({});
+    } else {
+      print('no such a user');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Center(
-                  child: Card(
-                    color: Colors.red,
-                  ),
-                ),
-              ],
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.grey,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(6.0),
+              bottomLeft: Radius.circular(6.0),
+            ),
+          ),
+          title: Text(
+            'الحساب الشخصي ',
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('/Doctors')
+                      .doc(currentUser.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    // DocumentReference user = snapshot;
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40.0),
+                        child: Column(
+                          children: [
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              margin: EdgeInsets.all(8.0),
+                              color: kGreyColor,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 20.0,
+                                    ),
+                                    title: Text(
+                                      'د.${snapshot.data.get('doctor-name')} ',
+                                      style: TextStyle(
+                                        fontSize: 29.0,
+                                      ),
+                                    ),
+                                    trailing: Icon(Icons.edit_outlined),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Card(
+                              elevation: 8.0,
+                              margin:
+                                  EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  ProfileListTile(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        // isScrollControlled: true,
+                                        builder: (context) {
+                                          return Container(
+                                            height: 600,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'تغيير البريد الإلكتروني الخاصة بك',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 30.0),
+                                                ),
+                                                Text(
+                                                  'أعد إدخال كلمة المرور الخاصة بك للمتابعة',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 50.0,
+                                                    right: 50.0,
+                                                  ),
+                                                  child: TextFormField(
+                                                    onChanged: (value) {
+                                                      password = value;
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      fillColor: kGreyColor,
+                                                      filled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide:
+                                                            BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'البريد الإلكتروني الجديد',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 50.0,
+                                                    right: 50.0,
+                                                  ),
+                                                  child: TextFormField(
+                                                    onChanged: (value) {
+                                                      updatedEmail = value;
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      fillColor: kGreyColor,
+                                                      filled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide:
+                                                            BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0,
+                                                      vertical: 20.0),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 50.0,
+                                                    child: RaisedButton(
+                                                      onPressed: () {
+                                                        resetEmail(updatedEmail,
+                                                                password)
+                                                            .then((value) =>
+                                                                Navigator.pop(
+                                                                    context));
+                                                      },
+                                                      color: kBlueColor,
+                                                      child: Text(
+                                                        'تحديث',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          // fontFamily: 'Montserrat',
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          letterSpacing: 1,
+                                                        ),
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    title: 'البريد الإلكتروني',
+                                    subtitle: currentUser.email,
+                                    icon_1: Icon(Icons.email_outlined),
+                                  ),
+                                  ListTileDivider(),
+                                  ProfileListTile(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        // isScrollControlled: true,
+                                        builder: (context) {
+                                          return Container(
+                                            height: 600,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'تغيير كلمة المرور الخاصة بك',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 30.0),
+                                                ),
+                                                Text(
+                                                  'أعد إدخال البريد الإلكتروني الخاصة بك للمتابعة',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 50.0,
+                                                    right: 50.0,
+                                                  ),
+                                                  child: TextFormField(
+                                                    keyboardType: TextInputType
+                                                        .emailAddress,
+                                                    onChanged: (value) {
+                                                      updatedEmail = value;
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      fillColor: kGreyColor,
+                                                      filled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide:
+                                                            BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0,
+                                                      vertical: 20.0),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 50.0,
+                                                    child: RaisedButton(
+                                                      onPressed: () {
+                                                        resetPassword(
+                                                                updatedEmail)
+                                                            .then((value) =>
+                                                                Navigator.pop(
+                                                                    context));
+                                                      },
+                                                      color: kBlueColor,
+                                                      child: Text(
+                                                        'تحديث',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          // fontFamily: 'Montserrat',
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          letterSpacing: 1,
+                                                        ),
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    title: 'كلمة المرور',
+                                    subtitle: '',
+                                    icon_1: Icon(Icons.lock_outline),
+                                  ),
+                                  ListTileDivider(),
+                                  ProfileListTile(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        // isScrollControlled: true,
+                                        builder: (context) {
+                                          return Container(
+                                            height: 600,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'تعيين رقم هاتف',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 30.0),
+                                                ),
+                                                Text(
+                                                  'أدخل رقم هاتفك',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 50.0,
+                                                    right: 50.0,
+                                                  ),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.phone,
+                                                    onChanged: (value) {
+                                                      phoneNumber = value;
+                                                    },
+                                                    decoration: InputDecoration(
+                                                      fillColor: kGreyColor,
+                                                      filled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide:
+                                                            BorderSide(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0,
+                                                      vertical: 20.0),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 50.0,
+                                                    child: RaisedButton(
+                                                      onPressed: () async {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                '/Doctors')
+                                                            .doc(
+                                                                currentUser.uid)
+                                                            .set(
+                                                                {
+                                                              'phoneNumber':
+                                                                  phoneNumber
+                                                            },
+                                                                SetOptions(
+                                                                    merge:
+                                                                        true)).then(
+                                                                (value) =>
+                                                                    Navigator.pop(
+                                                                        context));
+                                                      },
+                                                      color: kBlueColor,
+                                                      child: Text(
+                                                        'حفظ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          // fontFamily: 'Montserrat',
+                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          letterSpacing: 1,
+                                                        ),
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    title: 'رقم الهاتف',
+                                    subtitle: '',
+                                    icon_1: Icon(Icons.phone),
+                                  ),
+                                  ListTileDivider(),
+                                  ProfileListTile(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        // isScrollControlled: true,
+                                        builder: (context) {
+                                          return Container(
+                                            height: 600,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'تسجيل الخروج ',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 30.0),
+                                                ),
+                                                Text(
+                                                  'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0,
+                                                      vertical: 20.0),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 50.0,
+                                                    child: RaisedButton(
+                                                      onPressed: () async {
+                                                        await auth.signOut().then(
+                                                            (value) => Navigator
+                                                                .pushNamed(
+                                                                    context,
+                                                                    WelcomeScreen
+                                                                        .id));
+                                                      },
+                                                      color: kBlueColor,
+                                                      child: Text(
+                                                        'نعم',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          // fontFamily: 'Montserrat',
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          letterSpacing: 1,
+                                                        ),
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'إلغاء الامر',
+                                                    style: TextStyle(
+                                                        color: kGreyColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    title: 'تسجيل خروج',
+                                    subtitle: '',
+                                    icon_1: Icon(Icons.logout),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ListTileDivider extends StatelessWidget {
+  const ListTileDivider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey.shade300,
+    );
+  }
+}
+
+class ProfileListTile extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final Function onTap;
+  final Icon icon_1;
+
+  ProfileListTile({this.onTap, this.title, this.icon_1, this.subtitle});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: kGreyColor,
+        // borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: ListTile(
+        leading: icon_1,
+        title: Text(
+          title,
+          // textAlign: TextAlign.end,
+          style: TextStyle(color: Colors.white),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: TextStyle(letterSpacing: 2.0),
+        ),
+        trailing: Icon(Icons.keyboard_arrow_left),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class ProfileTextField extends StatelessWidget {
+  ProfileTextField(
+      {this.onTap, this.onChanged, this.label, this.initialVal, this.readOnly});
+  final Function onTap;
+  final Function onChanged;
+  final String label;
+  final String initialVal;
+  final bool readOnly;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ListTile(
+        leading: Text(
+          label,
+          style: ksubBoldLabelTextStyle,
+        ),
+        title: Container(
+          child: TextFormField(
+            readOnly: readOnly,
+            initialValue: initialVal,
+            onTap: onTap,
+            onChanged: onChanged,
+            style: TextStyle(
+              color: Colors.black54,
+            ),
+            decoration: InputDecoration(
+              fillColor: Colors.white54,
+              filled: true,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide(),
+              ),
+            ),
+          ),
+        ),
+        trailing: Icon(Icons.edit_outlined),
       ),
     );
   }

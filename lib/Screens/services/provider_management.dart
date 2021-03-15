@@ -26,7 +26,9 @@ class _PatientDataState extends State<PatientData> {
         .get()
         .then((doc) {
       hUID = doc.data()['hospital-uid'];
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -34,6 +36,12 @@ class _PatientDataState extends State<PatientData> {
   void initState() {
     getHUID();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    getHUID();
+    super.dispose();
   }
 
   @override

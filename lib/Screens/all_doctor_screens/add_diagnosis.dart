@@ -271,6 +271,7 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 100.0, vertical: 20.0),
                           child: Container(
+                            width: double.infinity,
                             height: 50.0,
                             child: RaisedButton(
                               textColor: Colors.white54,

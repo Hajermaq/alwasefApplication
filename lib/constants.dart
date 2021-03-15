@@ -50,12 +50,12 @@ const kMainHeadLinesStyle = TextStyle(
 
 //TextFields style
 const kTextFieldHintStyle = TextStyle(
-  color: kButtonTextColor,
+  color: Colors.white54,
   fontSize: 20.0,
   fontWeight: FontWeight.normal,
 );
 const kDropDownHintStyle = TextStyle(
-  color: kButtonTextColor,
+  color: Colors.white54,
   fontSize: 20.0,
   fontWeight: FontWeight.normal,
 );
