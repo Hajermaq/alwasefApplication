@@ -247,12 +247,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(
                               isExpanded: true,
-                              dropdownColor: kPinkColor,
+                              dropdownColor: kBlueColor,
                               style: kDropDownHintStyle,
                               hint: Text(
                                 'فضلا اختر مستشفى',
                                 style: GoogleFonts.almarai(
-                                  color: kButtonTextColor,
+                                  color: Colors.white54,
                                 ),
                               ),
                               items: hospitalsNames,

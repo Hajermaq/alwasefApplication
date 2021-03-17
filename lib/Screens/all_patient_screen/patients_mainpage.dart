@@ -13,8 +13,6 @@ import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
 import 'patient_profile_info.dart';
 
-
-
 class PatientMainPage extends StatefulWidget {
   static const String id = 'patient_screen';
   @override
@@ -23,9 +21,27 @@ class PatientMainPage extends StatefulWidget {
 
 class _PatientMainPageState extends State<PatientMainPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
+  String name = ' ';
+
+  getName() async {
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      name = doc.data()['patient-name'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getName();
+    });
+
     return Theme(
       data: Theme.of(context).copyWith(
         scaffoldBackgroundColor: Color(0xffE4E8F4),
@@ -53,9 +69,9 @@ class _PatientMainPageState extends State<PatientMainPage> {
               ),
               //Profile Page
               PatientProfileInfo(
-                uid: currentUser.uid,
-                email: currentUser.email,
-                name: currentUser.displayName,
+                uid: currentUser.uid.toString(),
+                email: currentUser.email.toString(),
+                name: name.toString(),
               ),
             ], //end of pages
             items: [
@@ -73,7 +89,5 @@ class _PatientMainPageState extends State<PatientMainPage> {
         ),
       ),
     );
-
   }
-
 }

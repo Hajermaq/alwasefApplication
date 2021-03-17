@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'package:alwasef_app/components/round-button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -61,9 +62,19 @@ class _VerifiyPageState extends State<VerifiyPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('شكرا على التسجيل! انتقل إلى البريد وتحقق من حسابك'),
+              Text(
+                'شكرا على التسجيل! انتقل إلى البريد وتحقق من حسابك',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              SizedBox(
+                height: 40.0,
+              ),
               lodaing ? Icon(Icons.check) : CircularProgressIndicator(),
-              RaisedButton(
+              SizedBox(
+                height: 40.0,
+              ),
+              RoundRaisedButton(
+                text: 'تم التحقق',
                 onPressed: () async {
                   setState(() {
                     if (isVerified) {
@@ -101,7 +112,6 @@ class _VerifiyPageState extends State<VerifiyPage> {
                     }
                   });
                 },
-                child: Text('تم'),
               ),
             ],
           ),

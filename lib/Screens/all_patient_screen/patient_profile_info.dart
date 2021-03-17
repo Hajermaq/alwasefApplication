@@ -6,6 +6,7 @@ import 'package:alwasef_app/Screens/all_patient_screen/past_diagnoses_page_for_p
 import 'package:alwasef_app/Screens/all_patient_screen/past_prescriptions_page_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_page_for_patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
@@ -24,16 +25,14 @@ class PatientProfileInfo extends StatefulWidget {
 }
 
 class _PatientProfileInfoState extends State<PatientProfileInfo>
-  with TickerProviderStateMixin {
-
+    with TickerProviderStateMixin {
   @override
   TabController _tabController;
   @override
   void initState() {
-  _tabController = TabController(length: 5, vsync: this);
-  super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+    super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +71,16 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(widget.name,
+                              Text(
+                                widget.name,
                                 style: TextStyle(
                                     color: kBlueColor, fontSize: 30.0),
                               ),
                               SizedBox(
                                 height: 7.0,
                               ),
-                              Text(widget.email,
+                              Text(
+                                widget.email,
                                 style: TextStyle(
                                     color: kBlueColor, fontSize: 20.0),
                               ),
@@ -105,20 +106,20 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                             child: TabBar(
                               controller: _tabController,
                               labelStyle: TextStyle(
-                                //up to your taste
+                                  //up to your taste
                                   fontWeight: FontWeight.w700),
                               indicatorSize:
-                              TabBarIndicatorSize.label, //makes it better
+                                  TabBarIndicatorSize.label, //makes it better
                               labelColor: kBlueColor, //Google's sweet blue
                               unselectedLabelColor: kGreyColor, //niceish grey
                               isScrollable: true, //up to your taste
                               indicator: MD2Indicator(
-                                //it begins here
+                                  //it begins here
                                   indicatorHeight: 3,
                                   indicatorColor: kBlueColor,
                                   indicatorSize: MD2IndicatorSize
                                       .normal //3 different modes tiny-normal-full
-                              ),
+                                  ),
                               tabs: <Widget>[
                                 Tab(
                                   text: "الوصفات الطبية",
@@ -161,45 +162,48 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                             if (!snapshot.hasData) {
                                               return ListTile(
                                                 leading: Icon(Icons.animation),
-                                                title: Text('السجل الطبي للمريض'),
-                                                subtitle: Text('قم بتعبئة سجلك الطبي'),
+                                                title:
+                                                    Text('السجل الطبي للمريض'),
+                                                subtitle: Text(
+                                                    'قم بتعبئة سجلك الطبي'),
                                                 trailing: IconButton(
-                                                  icon: Icon(Icons.insert_drive_file_outlined),
-                                                  onPressed: (){
-                                                    Navigator.push( context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                FillMedicalHistoryPage(
-                                                                  uid: widget.uid,
-                                                                )
-                                                        )
-                                                    );
-                                                  }
-                                                ),
+                                                    icon: Icon(Icons
+                                                        .insert_drive_file_outlined),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  FillMedicalHistoryPage(
+                                                                    uid: widget
+                                                                        .uid,
+                                                                  )));
+                                                    }),
                                               );
                                             } else {
                                               return ListTile(
                                                 //TODO: drug icon
                                                 leading: Icon(Icons.animation),
-                                                title: Text('السجل الطبي للمريض'),
-                                                subtitle: Text('قم بتحديث سجلك الطبي بشكل دوري'),
+                                                title:
+                                                    Text('السجل الطبي للمريض'),
+                                                subtitle: Text(
+                                                    'قم بتحديث سجلك الطبي بشكل دوري'),
                                                 trailing: IconButton(
-                                                    icon: Icon(Icons.edit_outlined),
-                                                    onPressed: (){
-                                                      Navigator.push( context,
+                                                    icon: Icon(
+                                                        Icons.edit_outlined),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   EditMedicalHistoryPage(
-                                                                    uid: widget.uid,
-                                                                  )
-                                                          )
-                                                      );
-                                                    }
-                                                ),
+                                                                    uid: widget
+                                                                        .uid,
+                                                                  )));
+                                                    }),
                                               );
                                             }
-                                        }
-                                      ),
+                                          }),
                                     ),
                                     PatientPastPrescriptions(
                                       uid: widget.uid,

@@ -30,10 +30,10 @@ class _LogInScreenState extends State<LogInScreen> {
   String password;
   String role;
   String selectedRadio = '';
-  String dbDoctorRole;
-  String dbPatientRole;
-  String dbPharmacistRole;
-  String dbHospitalRole;
+  String dbDoctorRole = '';
+  String dbPatientRole = '';
+  String dbPharmacistRole = '';
+  String dbHospitalRole = '';
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
@@ -284,59 +284,60 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 RoundRaisedButton(
-                    text: ' إذهب',
-                    onPressed: () async {
-                      if (_key.currentState.validate()) {
-                        //there is no error
-                        _key.currentState.save();
-                        // Doctor
-                        if (hUID == 'طبيب') {
-                          await auth
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password)
-                              .then((value) {
-                            Navigator.pushNamed(context, DoctorMainPage.id);
-                          }).catchError((e) {
-                            print(e);
-                          });
+                  text: ' إذهب',
+                  onPressed: () async {
+                    if (_key.currentState.validate()) {
+                      //there is no error
+                      _key.currentState.save();
+                      // Doctor
+                      if (dbDoctorRole == role) {
+                        await auth
+                            .signInWithEmailAndPassword(
+                                email: email, password: password)
+                            .then((value) {
+                          Navigator.pushNamed(context, DoctorMainPage.id);
+                        }).catchError((e) {
+                          print(e);
+                        });
 //patient
-                        } else if (hUID == 'مريض') {
-                          await auth
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password)
-                              .then((value) {
-                            Navigator.pushNamed(context, PatientMainPage.id);
-                          }).catchError((e) {
-                            print(e);
-                          });
-                        }
-//pharamacist
-                        else if (hUID == 'صيدلي') {
-                          await auth
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password)
-                              .then((value) {
-                            Navigator.pushNamed(context, PharmacistMainPage.id);
-                          }).catchError((e) {
-                            print(e);
-                          });
-                        } else {
-                          await auth
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password)
-                              .then((value) {
-                            Navigator.pushNamed(context, AdminScreen.id);
-                          }).catchError((e) {
-                            print(e);
-                          });
-                        }
-                      } else {
-                        // there is an error
-                        setState(() {
-                          autovalidateMode = AutovalidateMode.always;
+                      } else if (dbPatientRole == role) {
+                        await auth
+                            .signInWithEmailAndPassword(
+                                email: email, password: password)
+                            .then((value) {
+                          Navigator.pushNamed(context, PatientMainPage.id);
+                        }).catchError((e) {
+                          print(e);
                         });
                       }
-                    }),
+//pharamacist
+                      else if (dbPharmacistRole == role) {
+                        await auth
+                            .signInWithEmailAndPassword(
+                                email: email, password: password)
+                            .then((value) {
+                          Navigator.pushNamed(context, PharmacistMainPage.id);
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      } else {
+                        await auth
+                            .signInWithEmailAndPassword(
+                                email: email, password: password)
+                            .then((value) {
+                          Navigator.pushNamed(context, AdminScreen.id);
+                        }).catchError((e) {
+                          print(e);
+                        });
+                      }
+                    } else {
+                      // there is an error
+                      setState(() {
+                        autovalidateMode = AutovalidateMode.always;
+                      });
+                    }
+                  },
+                ),
                 Container(
                   // TODO write this code
                   padding: EdgeInsets.all(10.0),

@@ -61,7 +61,7 @@ class PastDiagnoses extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('/Patient')
                   .doc(uid)
-                  .collection('/PastPrescriptions')
+                  .collection('/Pas')
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
