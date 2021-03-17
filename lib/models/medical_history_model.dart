@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MedicalHistory {
   String patientUID;
   String patientFullName,
       gender,
+      birthDate,
       maritalStatus,
       pregnancy,
       smoking;
-  DateTime birthDate;
   int age;
   double weight,
       height;
@@ -19,13 +18,19 @@ class MedicalHistory {
       allergies,
       medAllergies;
 
+  dynamic checkListNull(dynamic value){
+    if (value == null){
+      return [];
+    }
+  }
+
 
   void saveMedicalHistoryForm(String userID) async {
 
     try{
       CollectionReference collection =
-      FirebaseFirestore.instance.collection('Medical History');
-      await collection.doc(userID).set({
+      FirebaseFirestore.instance.collection('/Patient');
+      await collection.doc(userID).collection('/Medical History').add({
         'uid': patientUID,
         'full name': patientFullName,
         'gender': gender,
@@ -36,26 +41,17 @@ class MedicalHistory {
         'marital status': maritalStatus,
         'pregnancy': pregnancy,
         'smoking': smoking,
-        'hospitalization': hospitalizations,
-        'surgery': surgery,
-        'chronic disease': chronicDisease,
-        'current medications': currentMed,
-        'allergies': allergies,
-        'medication allergies': medAllergies,
+        'hospitalization': checkListNull(hospitalizations),
+        'surgery': checkListNull(surgery),
+        'chronic disease': checkListNull(chronicDisease),
+        'current medications': checkListNull(currentMed),
+        'allergies': checkListNull(allergies),
+        'medication allergies': checkListNull(medAllergies),
       });
     }catch (e) {
       print(e);
     }
   }
 
- // Future<String> getFullName(String userID) async{
- //   final snapshot = FirebaseFirestore.instance.collection('Medical History')
- //       .
- //    await FirebaseFirestore.instance.collection('Medical History')
- //       .doc(FirebaseAuth.instance.currentUser.uid).get()
- //       .then((value) {
- //         return value.get('full name');
- //   });
- // }
 
 }

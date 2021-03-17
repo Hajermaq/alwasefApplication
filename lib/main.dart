@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
 import 'Screens/all_patient_screen/edit_medical_history_screen.dart';
+import 'Screens/all_patient_screen/edit_medical_history_screen.dart';
 import 'Screens/all_patient_screen/fill_medical_history_screen.dart';
 import 'Screens/services/provider_management.dart';
 import 'constants.dart';

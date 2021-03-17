@@ -1,4 +1,5 @@
-import 'file:///C:/Users/hajer/AndroidStudioProjects/alwasef_app/lib/models/prescription_model.dart';
+// import ''/AndroidStudioProjects/alwasef_app/lib/models/prescription_model.dart';
+import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
