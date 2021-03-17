@@ -1,5 +1,6 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/add_diagnosis.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
+import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
@@ -77,6 +78,7 @@ class MyApp extends StatelessWidget {
             RegisterScreen.id: (context) => RegisterScreen(),
             RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
             ResetPassword.id: (context) => ResetPassword(),
+            VerifiyPage.id: (context) => VerifiyPage(),
             //Admin Screens
             AdminScreen.id: (context) => AdminScreen(),
             //Doctor Screens

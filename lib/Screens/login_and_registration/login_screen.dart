@@ -1,3 +1,6 @@
+import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
+import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
+
 import '../all_patient_screen/patients_mainpage.dart';
 import '../all_pharmacist_screens/pharamacists_mainpage.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
@@ -22,17 +25,67 @@ class _LogInScreenState extends State<LogInScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
   //Variables
+  String hUID = '';
   String email;
   String password;
   String role;
-  String selectedRadio;
+  String selectedRadio = '';
   String dbDoctorRole;
   String dbPatientRole;
   String dbPharmacistRole;
   String dbHospitalRole;
+  //Form requirements
+  GlobalKey<FormState> _key = GlobalKey();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  getRole() async {
+    if (auth.currentUser.email == email) {
+      await FirebaseFirestore.instance
+          .collection('/Doctors')
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .get()
+          .then((doc) {
+        hUID = doc.data()['role'];
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
+
+    await FirebaseFirestore.instance
+        .collection('/Hospital')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      hUID = doc.data()['role'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      hUID = doc.data()['role'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    await FirebaseFirestore.instance
+        .collection('/Pharmacist')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      hUID = doc.data()['role'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   @override
   void initState() {
+    getRole();
     super.initState();
     UserManagement().getDoctor(role).then((QuerySnapshot documents) {
       if (documents.docs.isNotEmpty) {
@@ -55,6 +108,13 @@ class _LogInScreenState extends State<LogInScreen> {
         }
       }
     });
+    UserManagement().getHospital(role).then((QuerySnapshot documents) {
+      if (documents.docs.isNotEmpty) {
+        for (int i = 0; i < documents.docs.length; i++) {
+          dbHospitalRole = documents.docs[i].get('role');
+        }
+      }
+    });
   }
 
   setSelectedRadio(String val) {
@@ -65,184 +125,233 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
-            height: 200.0,
-            width: 200.0,
-            child: SvgPicture.asset(
-              'assets/images/password.svg',
-              color: kSVGcolor,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Text(
-              'لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا  ',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25.0,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-          RoundTextFields(
-            isObscure: false,
-            color: kButtonColor,
-            hintMessage: 'ايميل',
-            onChanged: (value) {
-              email = value;
-            },
-            //hiddenPass: false,
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          RoundTextFields(
-            isObscure: true,
-            color: kButtonColor,
-            hintMessage: 'كلمة المرور',
-            onChanged: (value) {
-              password = value;
-            },
-            //hiddenPass: true,
-          ),
-          Container(
-            child: Row(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: false,
+        body: SingleChildScrollView(
+          child: Form(
+            key: _key,
+            autovalidateMode: autovalidateMode,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Radio(
-                  value: 'مريض',
-                  groupValue: role,
-                  onChanged: (selectedRole) {
-                    setState(() {
-                      role = selectedRole;
-                    });
+                Container(
+                  padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
+                  height: 200.0,
+                  width: 200.0,
+                  child: SvgPicture.asset(
+                    'assets/images/password.svg',
+                    color: kSVGcolor,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
+                  child: Text(
+                    'لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا  ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 25.0,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                RoundTextFields(
+                  validator: Validation().validateEmail,
+                  isObscure: false,
+                  color: kButtonColor,
+                  hintMessage: 'ايميل',
+                  // onSaved: (value) {
+                  //   email = value;
+                  // },
+                  onChanged: (value) {
+                    email = value;
                   },
+                  textInputType: TextInputType.emailAddress,
+                  //hiddenPass: false,
                 ),
-                Text(
-                  'مريض',
+                SizedBox(
+                  height: 20.0,
                 ),
-                Radio(
-                  value: 'طبيب',
-                  groupValue: role,
-                  onChanged: (selectedRole) {
-                    setState(() {
-                      role = selectedRole;
-                    });
+                RoundTextFields(
+                  validator: Validation().validatePasswordLogin,
+                  isObscure: true,
+                  color: kButtonColor,
+                  hintMessage: 'كلمة المرور',
+                  // onSaved: (value) {
+                  //   password = value;
+                  // },
+                  onChanged: (value) {
+                    password = value;
                   },
+                  textInputType: TextInputType.text,
+                  //hiddenPass: true,
                 ),
-                Text('طبيب'),
-                Radio(
-                  value: 'صيدلي',
-                  groupValue: role,
-                  onChanged: (selectedRole) {
-                    setState(() {
-                      role = selectedRole;
-                    });
-                  },
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Radio(
+                        value: 'مريض',
+                        groupValue: role,
+                        onChanged: (selectedRole) {
+                          setState(() {
+                            role = selectedRole;
+                            print(role);
+                          });
+                        },
+                      ),
+                      Text(
+                        'مريض',
+                      ),
+                      Radio(
+                        value: 'طبيب',
+                        groupValue: role,
+                        onChanged: (selectedRole) {
+                          setState(() {
+                            role = selectedRole;
+                            print(role);
+                          });
+                        },
+                      ),
+                      Text('طبيب'),
+                      Radio(
+                        value: 'صيدلي',
+                        groupValue: role,
+                        onChanged: (selectedRole) {
+                          setState(() {
+                            role = selectedRole;
+                          });
+                        },
+                      ),
+                      Text('صيدلي'),
+                      Radio(
+                        value: 'موظف استقبال',
+                        groupValue: role,
+                        onChanged: (selectedRole) {
+                          setState(() {
+                            role = selectedRole;
+                          });
+                        },
+                      ),
+                      Text('موظف استقبال'),
+                      // Flexible(
+                      //   child: ListTile(
+                      //     title: Text('طبيب'),
+                      //     trailing: Radio(
+                      //       value: 'طبيب',
+                      //       groupValue: role,
+                      //       onChanged: (selectedRole) {
+                      //         setState(() {
+                      //           role = selectedRole;
+                      //         });
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
+                      // Flexible(
+                      //   child: ListTile(
+                      //     title: Text('صيدلي'),
+                      //     trailing: Radio(
+                      //       value: 'صيدلي',
+                      //       groupValue: role,
+                      //       onChanged: (selectedRole) {
+                      //         setState(() {
+                      //           role = selectedRole;
+                      //         });
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
+                      // Flexible(
+                      //   child: ListTile(
+                      //     title: Text('مريض'),
+                      //     trailing: Radio(
+                      //       value: 'مريض',
+                      //       groupValue: role,
+                      //       onChanged: (selectedRole) {
+                      //         setState(() {
+                      //           role = selectedRole;
+                      //         });
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
-                Text('صيدلي'),
-                // Flexible(
-                //   child: ListTile(
-                //     title: Text('طبيب'),
-                //     trailing: Radio(
-                //       value: 'طبيب',
-                //       groupValue: role,
-                //       onChanged: (selectedRole) {
-                //         setState(() {
-                //           role = selectedRole;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
-                // Flexible(
-                //   child: ListTile(
-                //     title: Text('صيدلي'),
-                //     trailing: Radio(
-                //       value: 'صيدلي',
-                //       groupValue: role,
-                //       onChanged: (selectedRole) {
-                //         setState(() {
-                //           role = selectedRole;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
-                // Flexible(
-                //   child: ListTile(
-                //     title: Text('مريض'),
-                //     trailing: Radio(
-                //       value: 'مريض',
-                //       groupValue: role,
-                //       onChanged: (selectedRole) {
-                //         setState(() {
-                //           role = selectedRole;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
+                RoundRaisedButton(
+                    text: ' إذهب',
+                    onPressed: () async {
+                      if (_key.currentState.validate()) {
+                        //there is no error
+                        _key.currentState.save();
+                        // Doctor
+                        if (hUID == 'طبيب') {
+                          await auth
+                              .signInWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((value) {
+                            Navigator.pushNamed(context, DoctorMainPage.id);
+                          }).catchError((e) {
+                            print(e);
+                          });
+//patient
+                        } else if (hUID == 'مريض') {
+                          await auth
+                              .signInWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((value) {
+                            Navigator.pushNamed(context, PatientMainPage.id);
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        }
+//pharamacist
+                        else if (hUID == 'صيدلي') {
+                          await auth
+                              .signInWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((value) {
+                            Navigator.pushNamed(context, PharmacistMainPage.id);
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        } else {
+                          await auth
+                              .signInWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((value) {
+                            Navigator.pushNamed(context, AdminScreen.id);
+                          }).catchError((e) {
+                            print(e);
+                          });
+                        }
+                      } else {
+                        // there is an error
+                        setState(() {
+                          autovalidateMode = AutovalidateMode.always;
+                        });
+                      }
+                    }),
+                Container(
+                  // TODO write this code
+                  padding: EdgeInsets.all(10.0),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Text(
+                      'هل نسيت كلمة المرور؟',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          RoundRaisedButton(
-              text: ' إذهب',
-              onPressed: () async {
-// Doctor
-                if (dbDoctorRole == role) {
-                  await auth
-                      .signInWithEmailAndPassword(
-                          email: email, password: password)
-                      .then((value) {
-                    Navigator.pushNamed(context, DoctorMainPage.id);
-                  }).catchError((e) {
-                    print(e);
-                  });
-//patient
-                } else if (dbPatientRole == role) {
-                  await auth
-                      .signInWithEmailAndPassword(
-                          email: email, password: password)
-                      .then((value) {
-                    Navigator.pushNamed(context, PatientMainPage.id);
-                  }).catchError((e) {
-                    print(e);
-                  });
-                }
-//pharamacist
-                else {
-                  await auth
-                      .signInWithEmailAndPassword(
-                          email: email, password: password)
-                      .then((value) {
-                    Navigator.pushNamed(context, PharmacistMainPage.id);
-                  }).catchError((e) {
-                    print(e);
-                  });
-                }
-              }),
-          Container(
-            // TODO write this code
-            padding: EdgeInsets.all(10.0),
-            child: InkWell(
-              onTap: () {},
-              child: Text(
-                'هل نسيت كلمة المرور؟',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

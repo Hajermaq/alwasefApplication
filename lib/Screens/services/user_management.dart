@@ -62,39 +62,17 @@ class UserManagement {
         .get();
   }
 
+  getHospital(String role) {
+    return FirebaseFirestore.instance
+        .collection('/Hospital')
+        .where(
+          'role',
+          isEqualTo: role,
+        )
+        .get();
+  }
+
   // setUps
-  Future<void> newHospitalSetUp(
-    context,
-    String password,
-    String hospitalName,
-  ) async {
-    try {
-      CollectionReference collection =
-          FirebaseFirestore.instance.collection('/Hospital');
-
-      final currentUser = auth.currentUser;
-
-      if (currentUser != null) {
-        String uid = currentUser.uid.toString();
-        String email = currentUser.email.toString();
-
-        await collection.doc(uid).set({
-          'uid': uid,
-          'hospital-name': hospitalName,
-          'email': email,
-          'password': password
-        }).then((_) {
-          print('collection is created');
-          Navigator.of(context).pop();
-          Navigator.pushNamed(context, AdminScreen.id);
-        }).catchError((_) {
-          print(" an error occured");
-        });
-      } // end of if
-    } catch (e) {
-      print(e);
-    }
-  } //end of method
 
   //===============================================================================
 
@@ -200,6 +178,43 @@ class UserManagement {
           'role': role,
           'hospital-uid': hospitalUID,
           'doctor-uid': doctorUID,
+        }).then((_) {
+          print('collection is created');
+          Navigator.of(context).pop();
+          Navigator.pushNamed(context, AdminScreen.id);
+        }).catchError((_) {
+          print(" an error occured");
+        });
+      } // end of if
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> newHospitalSetUp({
+    context,
+    String role,
+    String hospitalName,
+    String doctorUID,
+    String pharmacistUID,
+  }) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('/Hospital');
+
+      final currentUser = auth.currentUser;
+
+      if (currentUser != null) {
+        String uid = currentUser.uid.toString();
+        String email = currentUser.email.toString();
+
+        await collection.doc(uid).set({
+          'hospital-name': hospitalName,
+          'hospital-id': uid,
+          'email': email,
+          'role': role,
+          'doctor-uid': doctorUID,
+          'pharmacist-uid': pharmacistUID,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
