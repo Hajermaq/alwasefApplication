@@ -160,25 +160,28 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                               .snapshots(),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return ListTile(
-                                                leading: Icon(Icons.animation),
-                                                title:
-                                                    Text('السجل الطبي للمريض'),
-                                                subtitle: Text(
-                                                    'قم بتعبئة سجلك الطبي'),
-                                                trailing: IconButton(
-                                                    icon: Icon(Icons
-                                                        .insert_drive_file_outlined),
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  FillMedicalHistoryPage(
-                                                                    uid: widget
-                                                                        .uid,
-                                                                  )));
-                                                    }),
+                                              return Container(
+                                                color: kGreyColor,
+                                                child: ListTile(
+                                                  leading: Icon(Icons.animation),
+                                                  title:
+                                                      Text('السجل الطبي للمريض'),//, style: TextStyle(fontSize: 15, color: Color(Colors.black))),
+                                                  subtitle: Text(
+                                                      'قم بتعبئة سجلك الطبي'),
+                                                  trailing: IconButton(
+                                                      icon: Icon(Icons
+                                                          .insert_drive_file_outlined),
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    FillMedicalHistoryPage(
+                                                                      uid: widget
+                                                                          .uid,
+                                                                    )));
+                                                      }),
+                                                ),
                                               );
                                             } else {
                                               return ListTile(
