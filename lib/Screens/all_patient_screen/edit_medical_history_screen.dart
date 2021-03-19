@@ -40,6 +40,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
 
   bool somethingChanged = false;
   Function eq = const ListEquality().equals;
+  Widget yesButton;
+  Widget noButton;
 
   // TextEditingController weightCtrl,
   //     heightCtrl;
@@ -50,7 +52,22 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   //   // heightCtrl = TextEditingController();
   //
   // }
-  String first;
+
+  Widget showAlertDialog(){
+    return AlertDialog(
+      title: Text('هل أنت متأكد من حذف السجل الصحي؟'),
+      titleTextStyle: TextStyle(fontSize: 15),
+      content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
+      actions: [
+
+      ],
+      shape: RoundedRectangleBorder(),
+      elevation: 24.0,
+      backgroundColor: kGreyColor,
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,13 +111,65 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Column( children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'السجل الطبي للمريض ',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 17),
-                              ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                    'السجل الطبي للمريض ',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                Theme(
+                                  data: Theme.of(context).copyWith(
+                                    cardColor: Colors.black,
+                                  ),
+                                  child: PopupMenuButton<String>(
+                                    offset: Offset(30,50),
+                                    itemBuilder: (BuildContext context) {
+                                      return ['حذف السجل الطبي'].map((e)  {
+                                        return PopupMenuItem<String>(
+                                          value: e,
+                                          child: Text(e),
+                                        );
+                                      }).toList();
+                                    },
+                                    onSelected:(value) {
+                                       showDialog(
+                                         context: context,
+                                         builder: (BuildContext context) {
+                                           yesButton = FlatButton(
+                                               onPressed:() {
+                                                 medicalHistory.reference.delete();
+                                               },
+                                               child: Text('نعم'));
+                                           noButton = FlatButton(
+                                               onPressed:() {
+                                                 Navigator.pop(context);
+                                               },
+                                               child: Text('لا'));
+
+                                           return AlertDialog(
+                                             title: Text('هل أنت متأكد من حذف السجل الصحي؟', textAlign: TextAlign.center),
+                                             titleTextStyle: TextStyle(fontSize: 22),
+                                             content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
+                                             actions: [
+                                               yesButton,
+                                               noButton
+                                             ],
+                                             shape: RoundedRectangleBorder(
+                                                 borderRadius: BorderRadius.all(Radius.circular(25)),
+                                             ),
+                                             elevation: 24.0,
+                                             backgroundColor: Colors.black,
+                                           );
+                                         }
+                                       );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -267,8 +336,12 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 }).toList(),
                                 onChanged: (selectedValue) {},
                                 onSaved: (selectedValue) {
-                                  medicalHistory.reference.update({'smoking': selectedValue});
-                                  somethingChanged = true;
+                                  if (smokingVal != selectedValue){
+                                    setState(() {
+                                      medicalHistory.reference.update({'smoking': selectedValue});
+                                      somethingChanged = true;
+                                    });
+                                  }
                                 },
                               ),
                             ),
@@ -300,7 +373,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 },
                               ),
                             ),
-                            //التنويم
+                            // التنويم
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
@@ -312,15 +385,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 ),
                                 initialValue: hospVal.join('\n'),
                                 onSaved: (value) {
-                                  print('-----------');
-                                  print(hospVal); //list of initial value
-                                  print(value);
-                                  print(value.split('\n'));  //list of value
-
-                                  //TODO: remove empty string from value
-                                  var valueAsList = value.split('\n');  //
-                                  //listValue.remo;
-                                  if (eq(valueAsList, hospVal)){
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, hospVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'hospitalization': valueAsList});
                                       somethingChanged = true;
@@ -331,122 +398,129 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 //controller: hospCtrl,
                               ),
                             ),
-                            // //جراحة
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: TextFormField(
-                            //     maxLines: 5,
-                            //     decoration: InputDecoration(
-                            //       labelText: 'هل خضعت لأي عملية جراحية من قبل :',
-                            //       hintText: 'اكتب كل عملية في سطر',
-                            //       border: OutlineInputBorder(),
-                            //     ),
-                            //     initialValue: surgeryVal.join('\n'),
-                            //     onSaved: (value) {
-                            //       var listValue = value.split('\n'); //save as a list
-                            //       if (surgeryVal != listValue){
-                            //         setState(() {
-                            //           medicalHistory.reference.update({'surgery': value.split('\n')});
-                            //           somethingChanged = true;
-                            //         });
-                            //       }
-                            //     },
-                            //     //controller: surgCtrl,
-                            //   ),
-                            // ),
-                            // // //مرض مزمن
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: TextFormField(
-                            //     maxLines: 5,
-                            //     decoration: InputDecoration(
-                            //       labelText: 'هل تعاني من أي أمراض مزمنة :',
-                            //       hintText: 'اكتب كل مرض في سطر',
-                            //       border: OutlineInputBorder(),
-                            //     ),
-                            //     initialValue: chronicDisVal.join('\n'),
-                            //     onSaved: (value) {
-                            //       var listValue = value.split('\n'); //save as a list
-                            //       if (chronicDisVal != listValue){
-                            //         setState(() {
-                            //           medicalHistory.reference.update({'chronic disease': value.split('\n')});
-                            //           somethingChanged = true;
-                            //         });
-                            //       }
-                            //     },
-                            //     //controller: chroDisCtrl,
-                            //   ),
-                            // ),
-                            // // //أدوية حالية
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: TextFormField(
-                            //     maxLines: 5,
-                            //     decoration: InputDecoration(
-                            //       labelText: 'هل تتناول أي أدوية حاليا :',
-                            //       hintText: 'اكتب كل دواء في سطر',
-                            //       border: OutlineInputBorder(),
-                            //     ),
-                            //     initialValue: currentMedVal.join('\n'),
-                            //     onSaved: (value) {
-                            //       var listValue = value.split('\n'); //save as a list
-                            //       if (currentMedVal != listValue){
-                            //         setState(() {
-                            //           medicalHistory.reference.update({'current medications': value.split('\n')});
-                            //           somethingChanged = true;
-                            //         });
-                            //       }
-                            //     },
-                            //     //controller: currMedCtrl,
-                            //   ),
-                            // ),
-                            // //حساسية
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: TextFormField(
-                            //     maxLines: 5,
-                            //     decoration: InputDecoration(
-                            //       labelText: 'هل تعاني من أي حساسية :',
-                            //       hintText: 'اكتب كل حساسية في سطر',
-                            //       border: OutlineInputBorder(),
-                            //     ),
-                            //     initialValue: allergyVal.join('\n'),
-                            //     onSaved: (value) {
-                            //       var listValue = value.split('\n'); //save as a list
-                            //       if (allergyVal != listValue){
-                            //         setState(() {
-                            //           medicalHistory.reference.update({'allergies': value.split('\n')});
-                            //           somethingChanged = true;
-                            //         });
-                            //       }
-                            //     },
-                            //     //controller: allergCtrl,
-                            //   ),
-                            // ),
-                            // //حساسية دوائية
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: TextFormField(
-                            //     maxLines: 5,
-                            //     decoration: InputDecoration(
-                            //       labelText:
-                            //           'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
-                            //       hintText: 'اكتب كل نوع في سطر',
-                            //       border: OutlineInputBorder(),
-                            //     ),
-                            //     initialValue: medAllergyVal.join('\n'),
-                            //     onSaved: (value) {
-                            //       var listValue = value.split('\n'); //save as a list
-                            //       if (medAllergyVal != listValue){
-                            //         setState(() {
-                            //           medicalHistory.reference.update({'medication allergies': value.split('\n')});
-                            //           somethingChanged = true;
-                            //         });
-                            //       }
-                            //     },
-                            //     //controller: medAllergCtrl,
-                            //   ),
-                            // ),
+                            //جراحة
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  labelText: 'هل خضعت لأي عملية جراحية من قبل :',
+                                  hintText: 'اكتب كل عملية في سطر',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: surgeryVal.join('\n'),
+                                onSaved: (value) {
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, surgeryVal) == false){
+                                    setState(() {
+                                      medicalHistory.reference.update({'surgery': valueAsList});
+                                      somethingChanged = true;
+                                    });
+                                  }
+                                },
+                                //controller: surgCtrl,
+                              ),
+                            ),
+                            // //مرض مزمن
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  labelText: 'هل تعاني من أي أمراض مزمنة :',
+                                  hintText: 'اكتب كل مرض في سطر',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: chronicDisVal.join('\n'),
+                                onSaved: (value) {
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, chronicDisVal) == false){
+                                    setState(() {
+                                      medicalHistory.reference.update({'chronic disease': valueAsList});
+                                      somethingChanged = true;
+                                    });
+                                  }
+                                },
+                                //controller: chroDisCtrl,
+                              ),
+                            ),
+                            // //أدوية حالية
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  labelText: 'هل تتناول أي أدوية حاليا :',
+                                  hintText: 'اكتب كل دواء في سطر',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: currentMedVal.join('\n'),
+                                onSaved: (value) {
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, currentMedVal) == false){
+                                    setState(() {
+                                      medicalHistory.reference.update({'current medications': valueAsList});
+                                      somethingChanged = true;
+                                      print('current');
+                                    });
+                                  }
+                                },
+                                //controller: currMedCtrl,
+                              ),
+                            ),
+                            //حساسية
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  labelText: 'هل تعاني من أي حساسية :',
+                                  hintText: 'اكتب كل حساسية في سطر',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: allergyVal.join('\n'),
+                                onSaved: (value) {
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, allergyVal) == false){
+                                    setState(() {
+                                      medicalHistory.reference.update({'allergies': valueAsList});
+                                      somethingChanged = true;
+                                      print('allerg');
+                                    });
+                                  }
+                                },
+                                //controller: allergCtrl,
+                              ),
+                            ),
+                            //حساسية دوائية
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                maxLines: 5,
+                                decoration: InputDecoration(
+                                  labelText:
+                                      'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
+                                  hintText: 'اكتب كل نوع في سطر',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: medAllergyVal.join('\n'),
+                                onSaved: (value) {
+                                  var valueAsList = value.split('\n');  //save value as a list
+                                  valueAsList.removeWhere((item) => item == '');  //remove ''
+                                  if (eq(valueAsList, medAllergyVal) == false){
+                                    setState(() {
+                                      medicalHistory.reference.update({'medication allergies': valueAsList});
+                                      somethingChanged = true;
+                                    });
+                                  }
+                                },
+                                //controller: medAllergCtrl,
+                              ),
+                            ),
 
                             Container(
                               child: Row(
@@ -460,15 +534,14 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                           if (!_formKey2.currentState.validate()) {
                                             return ;
                                           }
-                                          // print(somethingChanged);
+
                                           _formKey2.currentState.save();
-                                          // print(somethingChanged);
-                                          //
-                                          // if (somethingChanged){
-                                          //   Scaffold.of(context).showSnackBar(snackBar);
-                                            // somethingChanged = false;
-                                          // }
-                                          //Navigator.pop(context);
+
+                                          if (somethingChanged){
+                                            Scaffold.of(context).showSnackBar(snackBar);
+                                            somethingChanged = false;
+                                          }
+                                          Navigator.pop(context);
                                         }),
                                   ),
                                   Padding(
@@ -479,7 +552,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                           somethingChanged = false;
                                           //resets the form to its initial value before the changes
                                           _formKey2.currentState.reset();
-                                          //Navigator.pop(context);
+                                          Navigator.pop(context);
                                         }),
                                   ),
                                 ],

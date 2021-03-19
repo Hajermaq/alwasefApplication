@@ -407,8 +407,8 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     OutlineInputBorder(),
                   ),
                   onChanged: (value) {
-                    // List<Strig> temp = value.split('\n');
-                    // temp.remomoveWhere
+                    List<String> valueAsList = value.split('\n'); // save it as a list
+                    valueAsList.removeWhere((item) => item == ''); // remove ''
                     medicalHistory.hospitalizations = value.split('\n');
                     //TODO: remove empty string values from list before saving it.
                   },
