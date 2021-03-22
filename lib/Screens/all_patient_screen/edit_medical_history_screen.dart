@@ -68,7 +68,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               } else {
                 DocumentSnapshot medicalHistory = snapshot.data;
                 final age = Age.dateDifference(
-                    fromDate: DateTime.parse(medicalHistory.get('birth date')),
+                    fromDate:
+                        DateTime.parse(medicalHistory.data()['bith date']),
                     toDate: DateTime.now(),
                     includeToDate: false);
                 var maritalStatusVal = medicalHistory.data()['marital status'];

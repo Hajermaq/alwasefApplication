@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
@@ -9,6 +10,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -56,6 +58,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   String startDate;
   // end date
   String endDate;
+  //Form requirements
+  GlobalKey<FormState> _key = GlobalKey();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   //Lists
   static List<Prescription> drugsForDisplay = List<Prescription>();
@@ -168,10 +173,191 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                       future: fetchPrescription(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.data == null) {
-                          return Column(
-                            children: [
-                              DrugInfoCard(
-                                  drugName: tradeName,
+                          return Form(
+                            key: _key,
+                            autovalidateMode: autovalidateMode,
+                            child: Column(
+                              children: [
+                                DrugInfoCard(
+                                    drugName: tradeName,
+                                    pharmaceuticalForm: pharmaceuticalForm,
+                                    strength: strength,
+                                    strengthUnit: strengthUnit,
+                                    date: creationDate,
+                                    administrationRoute: administrationRoute,
+                                    storageCondition: storageConditions,
+                                    size: size,
+                                    sizeUnit: sizeUnit,
+                                    price: publicPrice),
+                                Card(
+                                  color: kGreyColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  margin:
+                                      EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            dose = int.parse(value);
+                                          },
+                                          labelText: 'الجرعة',
+                                        ),
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            quantity = int.parse(value);
+                                          },
+                                          labelText: 'الكمية',
+                                        ),
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            refill = int.parse(value);
+                                          },
+                                          labelText: 'إعادة التعبئة',
+                                        ),
+                                        Divider(
+                                          color: klighterColor,
+                                          thickness: 0.9,
+                                          endIndent: 20,
+                                          indent: 20,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20.0, 8.0, 20.0, 8.0),
+                                          child: DropdownButtonFormField<
+                                                  String>(
+                                              decoration: InputDecoration(
+                                                fillColor: Colors.white54,
+                                                filled: true,
+                                                labelText: 'التكرار',
+                                                labelStyle: GoogleFonts.almarai(
+                                                    color: kBlueColor,
+                                                    fontSize: 25.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Colors.transparent),
+                                                ),
+                                              ),
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                              ),
+                                              value: dropdownValue,
+                                              icon: Icon(Icons.arrow_drop_down),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  dropdownValue = newValue;
+                                                });
+                                              },
+                                              items: <String>[
+                                                'مرة في اليوم (QD)',
+                                                'مرتين في اليوم (BID)',
+                                                'ثلاث مرات في اليوم (TID)',
+                                                'أربع مرات في اليوم (QID)',
+                                                'خمس مرات في اليوم (PID)',
+                                                'حسب الحاجة (PRN)',
+                                                'قبل النوم (QHS)',
+                                                'مرة في الأسبوع (Qweek)',
+                                                'مرة في الشهر (Qmonth)',
+                                                'مرة كل يومين (QOD)',
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList()),
+                                        ),
+                                        DatePicker(
+                                          initialValue: DateTime.now(),
+                                          labelText: 'تاريخ البداية',
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'التاريخ مطلوب';
+                                            }
+                                            return null;
+                                          },
+                                          date: creationDate,
+                                          onSaved: (value) {
+                                            startDate = formatter.format(value);
+                                          },
+                                          onChanged: (value) {
+                                            _key.currentState.validate();
+                                          },
+                                        ),
+                                        DatePicker(
+                                          initialValue: DateTime.now(),
+                                          labelText: 'تاريخ النهاية',
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'التاريخ مطلوب';
+                                            }
+                                            return null;
+                                          },
+                                          date: creationDate,
+                                          onSaved: (value) {
+                                            endDate = formatter.format(value);
+                                          },
+                                          onChanged: (value) {
+                                            _key.currentState.validate();
+                                          },
+                                        ),
+                                        Divider(
+                                          color: klighterColor,
+                                          thickness: 0.9,
+                                          endIndent: 20,
+                                          indent: 20,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(12),
+                                          height: maxLines * 24.0,
+                                          child: TextField_1(
+                                            initialValue: ' ',
+                                            labelText: 'تعليمات للمريض',
+                                            onChanged_1: (value) {
+                                              instructionNote = value;
+                                            },
+                                            maxLines: maxLines,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(12),
+                                          height: maxLines * 24.0,
+                                          child: TextField_1(
+                                            initialValue: ' ',
+                                            labelText: 'ملاحظات للصيدلي',
+                                            onChanged_1: (value) {
+                                              doctorNotes = value;
+                                            },
+                                            maxLines: maxLines,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Form(
+                            key: _key,
+                            autovalidateMode: autovalidateMode,
+                            child: Column(
+                              children: [
+                                DrugInfoCard(
+                                  drugName: tradeNameArabic.isEmpty
+                                      ? tradeName
+                                      : tradeNameArabic,
                                   pharmaceuticalForm: pharmaceuticalForm,
                                   strength: strength,
                                   strengthUnit: strengthUnit,
@@ -180,599 +366,167 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                   storageCondition: storageConditions,
                                   size: size,
                                   sizeUnit: sizeUnit,
-                                  price: publicPrice),
-                              Card(
-                                color: kGreyColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+                                  price: publicPrice,
                                 ),
-                                margin:
-                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      InfoRow(
-                                        label_1: 'الجرعة',
-                                        onChanged_1: (value) {
-                                          dose = int.parse(value);
-                                        },
-                                        label_2: 'الكمية',
-                                        onChanged_2: (value) {
-                                          quantity = int.parse(value);
-                                        },
-                                      ),
-                                      InfoRow(
-                                        label_1: 'اعادة \nالتعبئه',
-                                        onChanged_1: (value) {
-                                          refill = int.parse(value);
-                                        },
-                                        label_2: 'يوم انتهاء\n الوصفة',
-                                        onChanged_2: (value) {
-                                          dosingExpire = int.parse(value);
-                                        },
-                                      ),
-                                      Divider(
-                                        color: klighterColor,
-                                        thickness: 0.9,
-                                        endIndent: 20,
-                                        indent: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'التكرار',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 5),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white54,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-
-                                                  // dropdown below..
-                                                  child: DropdownButton<String>(
-                                                      style: TextStyle(
-                                                        color: Colors.black54,
-                                                      ),
-                                                      isExpanded: true,
-                                                      value: dropdownValue,
-                                                      icon: Icon(Icons
-                                                          .arrow_drop_down),
-                                                      iconSize: 42,
-                                                      underline: SizedBox(),
-                                                      onChanged:
-                                                          (String newValue) {
-                                                        setState(() {
-                                                          dropdownValue =
-                                                              newValue;
-                                                        });
-                                                      },
-                                                      items: <String>[
-                                                        'مرة في اليوم (QD)',
-                                                        'مرتين في اليوم (BID)',
-                                                        'ثلاث مرات في اليوم (TID)',
-                                                        'أربع مرات في اليوم (QID)',
-                                                        'خمس مرات في اليوم (PID)',
-                                                        'حسب الحاجة (PRN)',
-                                                        'قبل النوم (QHS)',
-                                                        'مرة في الأسبوع (Qweek)',
-                                                        'مرة في الشهر (Qmonth)',
-                                                        'مرة كل يومين (QOD)',
-                                                      ].map<
-                                                              DropdownMenuItem<
-                                                                  String>>(
-                                                          (String value) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList()),
+                                Card(
+                                  color: kGreyColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  margin:
+                                      EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            dose = int.parse(value);
+                                          },
+                                          labelText: 'الجرعة',
+                                          initialValue: 'hry',
+                                        ),
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            quantity = int.parse(value);
+                                          },
+                                          labelText: 'الكمية',
+                                        ),
+                                        TextField_1(
+                                          onChanged_1: (value) {
+                                            refill = int.parse(value);
+                                          },
+                                          labelText: 'إعادة التعبئة',
+                                        ),
+                                        Divider(
+                                          color: klighterColor,
+                                          thickness: 0.9,
+                                          endIndent: 20,
+                                          indent: 20,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20.0, 8.0, 20.0, 8.0),
+                                          child: DropdownButtonFormField<
+                                                  String>(
+                                              decoration: InputDecoration(
+                                                fillColor: Colors.white54,
+                                                filled: true,
+                                                labelText: 'التكرار',
+                                                labelStyle: GoogleFonts.almarai(
+                                                    color: kBlueColor,
+                                                    fontSize: 25.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Colors.transparent),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تاريخ البداية',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: DatePicker(
-                                                  validator: (value) {
-                                                    if (value.isEmpty ||
-                                                        value == null) {
-                                                      print('Field id empty');
-                                                    }
-                                                  },
-                                                  date: creationDate,
-                                                  onChanged: (value) {
-                                                    startDate =
-                                                        formatter.format(value);
-                                                    print('no data');
-                                                  },
-                                                ),
+                                              style: TextStyle(
+                                                color: Colors.black54,
                                               ),
-                                            ),
+                                              value: dropdownValue,
+                                              icon: Icon(Icons.arrow_drop_down),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  dropdownValue = newValue;
+                                                });
+                                              },
+                                              items: <String>[
+                                                'مرة في اليوم (QD)',
+                                                'مرتين في اليوم (BID)',
+                                                'ثلاث مرات في اليوم (TID)',
+                                                'أربع مرات في اليوم (QID)',
+                                                'خمس مرات في اليوم (PID)',
+                                                'حسب الحاجة (PRN)',
+                                                'قبل النوم (QHS)',
+                                                'مرة في الأسبوع (Qweek)',
+                                                'مرة في الشهر (Qmonth)',
+                                                'مرة كل يومين (QOD)',
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList()),
+                                        ),
+                                        DatePicker(
+                                          initialValue: DateTime.now(),
+                                          labelText: 'تاريخ البداية',
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'التاريخ مطلوب';
+                                            }
+                                            return null;
+                                          },
+                                          date: creationDate,
+                                          onSaved: (value) {
+                                            startDate = formatter.format(value);
+                                          },
+                                          onChanged: (value) {
+                                            _key.currentState.validate();
+                                          },
+                                        ),
+                                        DatePicker(
+                                          initialValue: DateTime.now(),
+                                          labelText: 'تاريخ النهاية',
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'التاريخ مطلوب';
+                                            }
+                                            return null;
+                                          },
+                                          date: creationDate,
+                                          onSaved: (value) {
+                                            endDate = formatter.format(value);
+                                          },
+                                          onChanged: (value) {
+                                            _key.currentState.validate();
+                                          },
+                                        ),
+                                        Divider(
+                                          color: klighterColor,
+                                          thickness: 0.9,
+                                          endIndent: 20,
+                                          indent: 20,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(12),
+                                          height: maxLines * 24.0,
+                                          child: TextField_1(
+                                            initialValue: '',
+                                            labelText: 'تعليمات للمريض',
+                                            onChanged_1: (value) {
+                                              instructionNote = value;
+                                            },
+                                            maxLines: maxLines,
                                           ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تاريخ النهاية',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: DatePicker(
-                                                  validator: (value) {
-                                                    if (value.isEmpty ||
-                                                        value == null) {
-                                                      print('Field id empty');
-                                                    }
-                                                  },
-                                                  date: creationDate,
-                                                  onChanged: (value) {
-                                                    if (value != null) {
-                                                      endDate = formatter
-                                                          .format(value);
-                                                      print('no data');
-                                                    } else {
-                                                      print('date not picked');
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                            ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(12),
+                                          height: maxLines * 24.0,
+                                          child: TextField_1(
+                                            initialValue: '',
+                                            labelText: 'ملاحظات للصيدلي',
+                                            onChanged_1: (value) {
+                                              doctorNotes = value;
+                                            },
+                                            maxLines: maxLines,
                                           ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: klighterColor,
-                                        thickness: 0.9,
-                                        endIndent: 20,
-                                        indent: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تعليمات\n للمريض ',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  margin: EdgeInsets.all(12),
-                                                  height: maxLines * 24.0,
-                                                  child: TextField(
-                                                    onChanged: (value) {
-                                                      instructionNote = value;
-                                                    },
-                                                    style: TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
-                                                    maxLines: maxLines,
-                                                    decoration: InputDecoration(
-                                                      fillColor: Colors.white54,
-                                                      filled: true,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide:
-                                                            BorderSide(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'ملاحظات \n للصيدلي ',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  margin: EdgeInsets.all(12),
-                                                  height: maxLines * 24.0,
-                                                  child: TextField(
-                                                    onChanged: (value) {
-                                                      doctorNotes = value;
-                                                    },
-                                                    style: TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
-                                                    maxLines: maxLines,
-                                                    decoration: InputDecoration(
-                                                      fillColor: Colors.white54,
-                                                      filled: true,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide:
-                                                            BorderSide(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Column(
-                            children: [
-                              DrugInfoCard(
-                                drugName: tradeNameArabic.isEmpty
-                                    ? tradeName
-                                    : tradeNameArabic,
-                                pharmaceuticalForm: pharmaceuticalForm,
-                                strength: strength,
-                                strengthUnit: strengthUnit,
-                                date: creationDate,
-                                administrationRoute: administrationRoute,
-                                storageCondition: storageConditions,
-                                size: size,
-                                sizeUnit: sizeUnit,
-                                price: publicPrice,
-                              ),
-                              Card(
-                                color: kGreyColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                                margin:
-                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      InfoRow(
-                                        label_1: 'الجرعة',
-                                        onChanged_1: (value) {
-                                          dose = int.parse(value);
-                                        },
-                                        label_2: 'الكمية',
-                                        onChanged_2: (value) {
-                                          quantity = int.parse(value);
-                                        },
-                                      ),
-                                      InfoRow(
-                                        label_1: 'اعادة \nالتعبئه',
-                                        onChanged_1: (value) {
-                                          refill = int.parse(value);
-                                        },
-                                        label_2: 'يوم انتهاء\n الوصفة',
-                                        onChanged_2: (value) {
-                                          dosingExpire = int.parse(value);
-                                        },
-                                      ),
-                                      Divider(
-                                        color: klighterColor,
-                                        thickness: 0.9,
-                                        endIndent: 20,
-                                        indent: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'التكرار',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 5),
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white54,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-
-                                                  // dropdown below..
-                                                  child: DropdownButton<String>(
-                                                      style: TextStyle(
-                                                        color: Colors.black54,
-                                                      ),
-                                                      isExpanded: true,
-                                                      value: dropdownValue,
-                                                      icon: Icon(Icons
-                                                          .arrow_drop_down),
-                                                      iconSize: 42,
-                                                      underline: SizedBox(),
-                                                      onChanged:
-                                                          (String newValue) {
-                                                        setState(() {
-                                                          dropdownValue =
-                                                              newValue;
-                                                        });
-                                                      },
-                                                      items: <String>[
-                                                        'مرة في اليوم (QD)',
-                                                        'مرتين في اليوم (BID)',
-                                                        'ثلاث مرات في اليوم (TID)',
-                                                        'أربع مرات في اليوم (QID)',
-                                                        'خمس مرات في اليوم (PID)',
-                                                        'حسب الحاجة (PRN)',
-                                                        'قبل النوم (QHS)',
-                                                        'مرة في الأسبوع (Qweek)',
-                                                        'مرة في الشهر (Qmonth)',
-                                                        'مرة كل يومين (QOD)',
-                                                      ].map<
-                                                              DropdownMenuItem<
-                                                                  String>>(
-                                                          (String value) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList()),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تاريخ البداية',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: DatePicker(
-                                                  validator: (value) {
-                                                    if (value.isEmpty ||
-                                                        value == null) {
-                                                      print('Field id empty');
-                                                    }
-                                                  },
-                                                  date: creationDate,
-                                                  onChanged: (value) {
-                                                    startDate =
-                                                        formatter.format(value);
-                                                    print('date not picked');
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تاريخ النهاية',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: DatePicker(
-                                                  validator: (value) {
-                                                    if (value.isEmpty ||
-                                                        value == null) {
-                                                      print('Field id empty');
-                                                    }
-                                                  },
-                                                  date: creationDate,
-                                                  onChanged: (value) {
-                                                    if (value != null) {
-                                                      endDate = formatter
-                                                          .format(value);
-                                                      print('no data');
-                                                    } else {
-                                                      print('date not picked');
-                                                    }
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(
-                                        color: klighterColor,
-                                        thickness: 0.9,
-                                        endIndent: 20,
-                                        indent: 20,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'تعليمات\n للمريض ',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  margin: EdgeInsets.all(12),
-                                                  height: maxLines * 24.0,
-                                                  child: TextField(
-                                                    onChanged: (value) {
-                                                      instructionNote = value;
-                                                    },
-                                                    style: TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
-                                                    maxLines: maxLines,
-                                                    decoration: InputDecoration(
-                                                      fillColor: Colors.white54,
-                                                      filled: true,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide:
-                                                            BorderSide(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Container(
-                                            child: Expanded(
-                                              child: ListTile(
-                                                leading: Text(
-                                                  'ملاحظات \n للصيدلي ',
-                                                  style: ksubBoldLabelTextStyle,
-                                                ),
-                                                title: Container(
-                                                  margin: EdgeInsets.all(12),
-                                                  height: maxLines * 24.0,
-                                                  child: TextField(
-                                                    onChanged: (value) {
-                                                      doctorNotes = value;
-                                                    },
-                                                    style: TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
-                                                    maxLines: maxLines,
-                                                    decoration: InputDecoration(
-                                                      fillColor: Colors.white54,
-                                                      filled: true,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide:
-                                                            BorderSide(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         }
                       },
@@ -796,35 +550,43 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                             ),
                           ),
                           onPressed: () {
-                            UserManagement(currentPatient_uid: widget.uid)
-                                .newPrescriptionSetUp(
-                              context: context,
-                              patientId: widget.uid,
-                              prescriberId: prescriberId,
-                              registerNumber: registerNumber,
-                              creationDate: creationDate,
-                              startDate: startDate,
-                              endDate: endDate,
-                              scientificName: scientificName,
-                              scientificNameArabic: scientificNameArabic,
-                              tradeName: tradeName,
-                              tradeNameArabic: tradeNameArabic,
-                              strengthUnit: strengthUnit,
-                              strength: strength,
-                              pharmaceuticalForm: pharmaceuticalForm,
-                              administrationRoute: administrationRoute,
-                              size: size,
-                              sizeUnit: sizeUnit,
-                              storageConditions: storageConditions,
-                              publicPrice: publicPrice,
-                              dose: dose,
-                              quantity: quantity,
-                              refill: refill,
-                              dosingExpire: dosingExpire,
-                              frequency: dropdownValue,
-                              instructionNote: instructionNote,
-                              doctorNotes: doctorNotes,
-                            );
+                            if (_key.currentState.validate()) {
+                              _key.currentState.save();
+                              UserManagement(currentPatient_uid: widget.uid)
+                                  .newPrescriptionSetUp(
+                                context: context,
+                                patientId: widget.uid,
+                                prescriberId: prescriberId,
+                                registerNumber: registerNumber,
+                                creationDate: creationDate,
+                                startDate: startDate,
+                                endDate: endDate,
+                                scientificName: scientificName,
+                                scientificNameArabic: scientificNameArabic,
+                                tradeName: tradeName,
+                                tradeNameArabic: tradeNameArabic,
+                                strengthUnit: strengthUnit,
+                                strength: strength,
+                                pharmaceuticalForm: pharmaceuticalForm,
+                                administrationRoute: administrationRoute,
+                                size: size,
+                                sizeUnit: sizeUnit,
+                                storageConditions: storageConditions,
+                                publicPrice: publicPrice,
+                                dose: dose,
+                                quantity: quantity,
+                                refill: refill,
+                                dosingExpire: dosingExpire,
+                                frequency: dropdownValue,
+                                instructionNote: instructionNote,
+                                doctorNotes: doctorNotes,
+                              );
+                            } else {
+                              // there is an error
+                              setState(() {
+                                autovalidateMode = AutovalidateMode.always;
+                              });
+                            }
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -882,6 +644,7 @@ class DrugInfoCard extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.build_circle_outlined,
+              color: kBlueColor,
               size: 50,
             ),
             title: Text(
@@ -1024,104 +787,66 @@ class DrugInfoCard extends StatelessWidget {
   }
 }
 
-class InfoRow extends StatelessWidget {
-  InfoRow(
-      {this.label_1,
-      this.label_2,
-      this.value_1,
-      this.value_2,
+class TextField_1 extends StatelessWidget {
+  TextField_1(
+      {this.onTap_1,
       this.onChanged_1,
-      this.onChanged_2,
-      this.onTap_1,
-      this.onTap_2,
-      this.hintText});
-  final String label_1;
-  final String label_2;
-  final String value_1;
-  final String value_2;
-  final String hintText;
-  Function onChanged_1;
-  Function onChanged_2;
-  Function onTap_1;
-  Function onTap_2;
+      this.labelText,
+      this.initialValue,
+      this.maxLines,
+      this.validator});
+
+  final Function onTap_1;
+  final Function onChanged_1;
+  final Function validator;
+  final String labelText;
+  final String initialValue;
+  final int maxLines;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: Row(
-        children: [
-          Container(
-            child: Expanded(
-              child: ListTile(
-                leading: Text(
-                  label_1,
-                  style: ksubBoldLabelTextStyle,
-                ),
-                title: Container(
-                  child: TextField(
-                    onTap: onTap_1,
-                    onChanged: onChanged_1,
-                    style: TextStyle(
-                      color: kGreyColor,
-                    ),
-                    decoration: InputDecoration(
-                      fillColor: Colors.white54,
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
+      child: TextFormField(
+        validator: validator,
+        maxLines: maxLines,
+        initialValue: ' ',
+        onTap: onTap_1,
+        onChanged: onChanged_1,
+        style: TextStyle(
+          color: kGreyColor,
+        ),
+        decoration: InputDecoration(
+          fillColor: Colors.white54,
+          filled: true,
+          labelText: labelText,
+          labelStyle: GoogleFonts.almarai(
+              color: kBlueColor, fontSize: 25.0, fontWeight: FontWeight.bold),
+          errorStyle: TextStyle(
+            color: kRedColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 15.0,
           ),
-          Container(
-            child: Expanded(
-              child: ListTile(
-                leading: Text(
-                  label_2,
-                  style: ksubBoldLabelTextStyle,
-                ),
-                title: Container(
-                  child: TextField(
-                    onTap: onTap_2,
-                    onChanged: onChanged_2,
-                    style: TextStyle(
-                      color: Colors.black54,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: hintText,
-                      fillColor: Colors.white54,
-                      filled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: kRedColor,
+              width: 4.0,
             ),
+            borderRadius: BorderRadius.circular(35.0),
           ),
-        ],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide(color: kBlueColor, width: 3.0),
+          ),
+          // border: OutlineInputBorder(
+          //   borderRadius: BorderRadius.circular(10.0),
+          //   borderSide: BorderSide(color: kBlueColor),
+          // ),
+        ),
       ),
     );
   }

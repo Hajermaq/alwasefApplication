@@ -24,104 +24,16 @@ class _LogInScreenState extends State<LogInScreen> {
   //FireStore
   FirebaseAuth auth = FirebaseAuth.instance;
   User user;
+
   //Variables
   String hUID = '';
   String email;
   String password;
   String role;
-  String selectedRadio = '';
-  String dbDoctorRole = '';
-  String dbPatientRole = '';
-  String dbPharmacistRole = '';
-  String dbHospitalRole = '';
+
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  getRole() async {
-    if (auth.currentUser.email == email) {
-      await FirebaseFirestore.instance
-          .collection('/Doctors')
-          .doc(FirebaseAuth.instance.currentUser.uid)
-          .get()
-          .then((doc) {
-        hUID = doc.data()['role'];
-        if (mounted) {
-          setState(() {});
-        }
-      });
-    }
-
-    await FirebaseFirestore.instance
-        .collection('/Hospital')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((doc) {
-      hUID = doc.data()['role'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-    await FirebaseFirestore.instance
-        .collection('/Patient')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((doc) {
-      hUID = doc.data()['role'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-    await FirebaseFirestore.instance
-        .collection('/Pharmacist')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((doc) {
-      hUID = doc.data()['role'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    getRole();
-    super.initState();
-    UserManagement().getDoctor(role).then((QuerySnapshot documents) {
-      if (documents.docs.isNotEmpty) {
-        for (int i = 0; i < documents.docs.length; i++) {
-          dbDoctorRole = documents.docs[i].get('role');
-        }
-      }
-    });
-    UserManagement().getPatient(role).then((QuerySnapshot documents) {
-      if (documents.docs.isNotEmpty) {
-        for (int i = 0; i < documents.docs.length; i++) {
-          dbPatientRole = documents.docs[i].get('role');
-        }
-      }
-    });
-    UserManagement().getPharmacist(role).then((QuerySnapshot documents) {
-      if (documents.docs.isNotEmpty) {
-        for (int i = 0; i < documents.docs.length; i++) {
-          dbPharmacistRole = documents.docs[i].get('role');
-        }
-      }
-    });
-    UserManagement().getHospital(role).then((QuerySnapshot documents) {
-      if (documents.docs.isNotEmpty) {
-        for (int i = 0; i < documents.docs.length; i++) {
-          dbHospitalRole = documents.docs[i].get('role');
-        }
-      }
-    });
-  }
-
-  setSelectedRadio(String val) {
-    setState(() {
-      selectedRadio = val;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,99 +102,6 @@ class _LogInScreenState extends State<LogInScreen> {
                   textInputType: TextInputType.text,
                   //hiddenPass: true,
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Radio(
-                        value: 'مريض',
-                        groupValue: role,
-                        onChanged: (selectedRole) {
-                          setState(() {
-                            role = selectedRole;
-                            print(role);
-                          });
-                        },
-                      ),
-                      Text(
-                        'مريض',
-                      ),
-                      Radio(
-                        value: 'طبيب',
-                        groupValue: role,
-                        onChanged: (selectedRole) {
-                          setState(() {
-                            role = selectedRole;
-                            print(role);
-                          });
-                        },
-                      ),
-                      Text('طبيب'),
-                      Radio(
-                        value: 'صيدلي',
-                        groupValue: role,
-                        onChanged: (selectedRole) {
-                          setState(() {
-                            role = selectedRole;
-                          });
-                        },
-                      ),
-                      Text('صيدلي'),
-                      Radio(
-                        value: 'موظف استقبال',
-                        groupValue: role,
-                        onChanged: (selectedRole) {
-                          setState(() {
-                            role = selectedRole;
-                          });
-                        },
-                      ),
-                      Text('موظف استقبال'),
-                      // Flexible(
-                      //   child: ListTile(
-                      //     title: Text('طبيب'),
-                      //     trailing: Radio(
-                      //       value: 'طبيب',
-                      //       groupValue: role,
-                      //       onChanged: (selectedRole) {
-                      //         setState(() {
-                      //           role = selectedRole;
-                      //         });
-                      //       },
-                      //     ),
-                      //   ),
-                      // ),
-                      // Flexible(
-                      //   child: ListTile(
-                      //     title: Text('صيدلي'),
-                      //     trailing: Radio(
-                      //       value: 'صيدلي',
-                      //       groupValue: role,
-                      //       onChanged: (selectedRole) {
-                      //         setState(() {
-                      //           role = selectedRole;
-                      //         });
-                      //       },
-                      //     ),
-                      //   ),
-                      // ),
-                      // Flexible(
-                      //   child: ListTile(
-                      //     title: Text('مريض'),
-                      //     trailing: Radio(
-                      //       value: 'مريض',
-                      //       groupValue: role,
-                      //       onChanged: (selectedRole) {
-                      //         setState(() {
-                      //           role = selectedRole;
-                      //         });
-                      //       },
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
                 RoundRaisedButton(
                   text: ' إذهب',
                   onPressed: () async {
@@ -290,46 +109,75 @@ class _LogInScreenState extends State<LogInScreen> {
                       //there is no error
                       _key.currentState.save();
                       // Doctor
-                      if (dbDoctorRole == role) {
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
+                      await auth
+                          .signInWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((value) {
+                        FirebaseFirestore.instance
+                            .collection('/Doctors')
+                            .where('email', isEqualTo: value.user.email)
+                            .get()
                             .then((value) {
-                          Navigator.pushNamed(context, DoctorMainPage.id);
-                        }).catchError((e) {
-                          print(e);
+                          value.docs.forEach((element) {
+                            if ('طبيب' == element.data()['role']) {
+                              Navigator.pushNamed(context, DoctorMainPage.id);
+                            }
+                          });
                         });
-//patient
-                      } else if (dbPatientRole == role) {
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
+                      });
+                      //patient
+                      await auth
+                          .signInWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((value) {
+                        FirebaseFirestore.instance
+                            .collection('/Patient')
+                            .where('email', isEqualTo: value.user.email)
+                            .get()
                             .then((value) {
-                          Navigator.pushNamed(context, PatientMainPage.id);
-                        }).catchError((e) {
-                          print(e);
+                          value.docs.forEach((element) {
+                            if ('مريض' == element.data()['role']) {
+                              Navigator.pushNamed(context, PatientMainPage.id);
+                            }
+                          });
                         });
-                      }
-//pharamacist
-                      else if (dbPharmacistRole == role) {
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
+                      });
+                      //pharamacist
+                      await auth
+                          .signInWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((value) {
+                        FirebaseFirestore.instance
+                            .collection('/Pharmacist')
+                            .where('email', isEqualTo: value.user.email)
+                            .get()
                             .then((value) {
-                          Navigator.pushNamed(context, PharmacistMainPage.id);
-                        }).catchError((e) {
-                          print(e);
+                          value.docs.forEach((element) {
+                            if ('صيدلي' == element.data()['role']) {
+                              Navigator.pushNamed(
+                                  context, PharmacistMainPage.id);
+                            }
+                          });
                         });
-                      } else {
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
+                      });
+                      //Hospital
+                      await auth
+                          .signInWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((value) {
+                        FirebaseFirestore.instance
+                            .collection('/Hospital')
+                            .where('email', isEqualTo: value.user.email)
+                            .get()
                             .then((value) {
-                          Navigator.pushNamed(context, AdminScreen.id);
-                        }).catchError((e) {
-                          print(e);
+                          value.docs.forEach((element) {
+                            if ('موظف استقبال' == element.data()['role']) {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, AdminScreen.id);
+                            }
+                          });
                         });
-                      }
+                      });
                     } else {
                       // there is an error
                       setState(() {
