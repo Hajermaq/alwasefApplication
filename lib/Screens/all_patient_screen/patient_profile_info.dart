@@ -160,50 +160,74 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                               .snapshots(),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return Container(
-                                                color: kGreyColor,
-                                                child: ListTile(
-                                                  leading: Icon(Icons.animation),
-                                                  title:
-                                                      Text('السجل الطبي للمريض'),//, style: TextStyle(fontSize: 15, color: Color(Colors.black))),
-                                                  subtitle: Text(
-                                                      'قم بتعبئة سجلك الطبي'),
-                                                  trailing: IconButton(
-                                                      icon: Icon(Icons
-                                                          .insert_drive_file_outlined),
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    FillMedicalHistoryPage(
-                                                                      uid: widget
-                                                                          .uid,
-                                                                    )));
-                                                      }),
-                                                ),
+                                              return Center(child: CircularProgressIndicator());
+                                            }
+                                            if (snapshot.data.docs.length == 0) {
+                                              return Column(
+                                                children: [
+                                                  Card(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15.0),
+                                                    ),
+                                                    color: kGreyColor,
+                                                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                                    child: ListTile(
+                                                      leading: Icon(Icons.animation),
+                                                      title:
+                                                      Text('السجل الطبي للمريض',
+                                                      style: ksubBoldLabelTextStyle),
+                                                      subtitle: Text(
+                                                          'قم بتعبئة سجلك الطبي'),
+                                                      trailing: IconButton(
+                                                          icon: Icon(Icons
+                                                              .insert_drive_file_outlined),
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        FillMedicalHistoryPage(
+                                                                          uid: widget
+                                                                              .uid,
+                                                                        )));
+                                                          }),
+                                                    ),
+                                                  ),
+                                                ],
                                               );
                                             } else {
-                                              return ListTile(
-                                                //TODO: drug icon
-                                                leading: Icon(Icons.animation),
-                                                title:
-                                                    Text('السجل الطبي للمريض'),
-                                                subtitle: Text(
-                                                    'قم بتحديث سجلك الطبي بشكل دوري'),
-                                                trailing: IconButton(
-                                                    icon: Icon(
-                                                        Icons.edit_outlined),
-                                                    onPressed: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  EditMedicalHistoryPage(
-                                                                    uid: widget
-                                                                        .uid,
-                                                                  )));
-                                                    }),
+                                              return Column(
+                                                children: [
+                                                  Card(
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15.0),
+                                                    ),
+                                                    color: kGreyColor,
+                                                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                                    child: ListTile(
+                                                      //TODO: drug icon
+                                                      leading: Icon(Icons.animation),
+                                                      title:
+                                                      Text('السجل الطبي للمريض',
+                                                          style: ksubBoldLabelTextStyle),
+                                                      subtitle: Text(
+                                                          'قم بتحديث سجلك الطبي بشكل دوري'),
+                                                      trailing: IconButton(
+                                                          icon: Icon(
+                                                              Icons.edit_outlined),
+                                                          onPressed: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        EditMedicalHistoryPage(
+                                                                          uid: widget
+                                                                              .uid,
+                                                                        )));
+                                                          }),
+                                                    ),
+                                                  ),
+                                                ],
                                               );
                                             }
                                           }),
@@ -214,8 +238,6 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                     PatientPastDiagnoses(
                                       uid: widget.uid,
                                     ),
-                                    // add_diagnosis(),
-                                    // view_medical_history(),
                                   ]),
                             ),
                           ),

@@ -21,6 +21,8 @@ class _PrescriptionsCalendarState extends State<PrescriptionsCalendar> {
   CalendarController _calendarController;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _eventsName;
+
+
   @override
  void initState(){
    super.initState();
@@ -210,121 +212,142 @@ class _PrescriptionsCalendarState extends State<PrescriptionsCalendar> {
     return Scaffold(
       backgroundColor: kGreyColor,
       body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('/Patient')
-              .doc(widget.uid)
-              .collection('/Prescriptions')
-              .where('status', isEqualTo: 'مصروفة')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              DateTime selectedDay;
-              DateTime startDate;
-              DateTime endDate;
-              String tradeName;
-              Map<DateTime, List<dynamic>> events;
-              List<DateTime> listD;
-              snapshot.data.docs.forEach((doc){
-                // startDate = DateTime.parse(doc.data()['start-date']);
-                // endDate = DateTime.parse(doc.data()['end-date']);
-                // tradeName = doc.data()['tradename'];
-                // // for(int i=0; i <= endDate.difference(startDate).inDays; i++){
-                // //   events.addAll({startDate.add(Duration(days: i)): [tradeName]});
-                // // }
-                // // for(int i=0; i <= endDate.difference(startDate).inDays; i++){
-                // //   listD.add(startDate.add(Duration(days: i)));
-                // // }
-                // print(startDate);
-                // print(tradeName);
-              });
-
-              return Column(
-                children: [
-                  TableCalendar(
-                    locale: 'ar',
-                    //events: ,//{DateTime.now(): ['Asprin','vitamic C']},
-                    startingDayOfWeek: StartingDayOfWeek.sunday,
-                    weekendDays: [DateTime.friday, DateTime.saturday,],
-                    calendarController: _calendarController,
-                    calendarStyle: CalendarStyle(
-                      canEventMarkersOverflow: true, ///???
-                      todayColor: Colors.redAccent,
-                      selectedColor:  kBlueColor,
-                      weekdayStyle: TextStyle(color: Colors.black),
-                      weekendStyle: TextStyle(color: Colors.black),
-                    ),
-                    headerStyle: HeaderStyle(
-                      centerHeaderTitle: true,
-                      formatButtonShowsNext: false,
-                      titleTextStyle: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black
-                      ),
-                      formatButtonDecoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                    onDaySelected: (day, events, li){
-                      selectedDay = day;
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Divider(
-                      height: 20,
-                      thickness: 8,
-                    ),
-                  ),
-                  Text('الوصفات :', style: TextStyle(fontSize: 20)),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder( //seperated listview
-                          physics: ScrollPhysics(),
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) {
-                            if (snapshot.data.docs.length == 0) {
-                              return Text('ليس لديك أي وصفات طبية حاليا');
-                            } else {
-                              DocumentSnapshot docSnapshot = snapshot.data.docs[index];
-                              var startDate = DateTime.parse(docSnapshot.data()['start-date']);
-                              var endDate = DateTime.parse(docSnapshot.data()['start-date']);
-                              if (selectedDay.isAfter(startDate) & selectedDay.isBefore(endDate)){
-                                var tradename = docSnapshot.data()['tradename'];
-                                var frequency = docSnapshot.data()['frequency'];
-                                var dose = docSnapshot.data()['dose']; }
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(15.0),
-                                ),
-                                margin: EdgeInsets.fromLTRB(
-                                    10.0, 10.0, 10.0, 0),
-                                color: Color(0xfff0f2f7),
-                                child:  ListTile(
-                                  //TODO: drug icon
-                                  leading: Icon(Icons.animation),
-                                  title: Text('hello'),
-                                  subtitle: Text('dssofjisu'),
-                                  // title:  Text(docSnapshot.data()['scientificName']),
-                                  // subtitle: Text(docSnapshot.data()['dosage']),
-                                  // subtitle: Text(docSnapshot.data()['frequency']),
-                                  // subtitle: Text('endDate.difference(startDate).inDays'),
-                                ),
-                              );
-                            }
-                          }
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
+        stream: FirebaseFirestore.instance
+                  .collection('/Patient')
+                  .doc(widget.uid)
+                  .collection('/Prescriptions')
+                  .where('status', isEqualTo: 'مصروفة')
+                  .snapshots(),
+        builder: (context, snapshot){
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return Container();
+            // return showDateRangePicker(
+            //   context: contexts,
+            //   firstDate: DateTime.now(),
+            //   lastDate: (2050,1,1),
+            //
+            // );
           }
-      )
+        }
+      ),
+      // body: StreamBuilder(
+      //     stream: FirebaseFirestore.instance
+      //         .collection('/Patient')
+      //         .doc(widget.uid)
+      //         .collection('/Prescriptions')
+      //         .where('status', isEqualTo: 'مصروفة')
+      //         .snapshots(),
+      //     builder: (context, snapshot) {
+      //       if (!snapshot.hasData) {
+      //         return Center(child: CircularProgressIndicator());
+      //       } else {
+      //         DateTime selectedDay;
+      //         DateTime startDate;
+      //         DateTime endDate;
+      //         String tradeName;
+      //         Map<DateTime, List<dynamic>> events;
+      //         List<DateTime> listD;
+      //         snapshot.data.docs.forEach((doc){
+      //           // startDate = DateTime.parse(doc.data()['start-date']);
+      //           // endDate = DateTime.parse(doc.data()['end-date']);
+      //           // tradeName = doc.data()['tradename'];
+      //           // // for(int i=0; i <= endDate.difference(startDate).inDays; i++){
+      //           // //   events.addAll({startDate.add(Duration(days: i)): [tradeName]});
+      //           // // }
+      //           // // for(int i=0; i <= endDate.difference(startDate).inDays; i++){
+      //           // //   listD.add(startDate.add(Duration(days: i)));
+      //           // // }
+      //           // print(startDate);
+      //           // print(tradeName);
+      //         });
+      //
+      //         return Column(
+      //           children: [
+      //             TableCalendar(
+      //               locale: 'ar',
+      //               //events: ,//{DateTime.now(): ['Asprin','vitamic C']},
+      //               startingDayOfWeek: StartingDayOfWeek.sunday,
+      //               weekendDays: [DateTime.friday, DateTime.saturday,],
+      //               calendarController: _calendarController,
+      //               calendarStyle: CalendarStyle(
+      //                 canEventMarkersOverflow: true, ///???
+      //                 todayColor: Colors.redAccent,
+      //                 selectedColor:  kBlueColor,
+      //                 weekdayStyle: TextStyle(color: Colors.black),
+      //                 weekendStyle: TextStyle(color: Colors.black),
+      //               ),
+      //               headerStyle: HeaderStyle(
+      //                 centerHeaderTitle: true,
+      //                 formatButtonShowsNext: false,
+      //                 titleTextStyle: TextStyle(
+      //                     fontSize: 20.0,
+      //                     color: Colors.black
+      //                 ),
+      //                 formatButtonDecoration: BoxDecoration(
+      //                   color: Colors.redAccent,
+      //                   borderRadius: BorderRadius.circular(20.0),
+      //                 ),
+      //               ),
+      //               onDaySelected: (day, events, li){
+      //                 selectedDay = day;
+      //               },
+      //             ),
+      //             Padding(
+      //               padding: const EdgeInsets.all(8.0),
+      //               child: Divider(
+      //                 height: 20,
+      //                 thickness: 8,
+      //               ),
+      //             ),
+      //             Text('الوصفات :', style: TextStyle(fontSize: 20)),
+      //             Expanded(
+      //               child: Padding(
+      //                 padding: const EdgeInsets.all(8.0),
+      //                 child: ListView.builder( //seperated listview
+      //                     physics: ScrollPhysics(),
+      //                     itemCount: snapshot.data.docs.length,
+      //                     itemBuilder: (context, index) {
+      //                       if (snapshot.data.docs.length == 0) {
+      //                         return Text('ليس لديك أي وصفات طبية حاليا');
+      //                       } else {
+      //                         DocumentSnapshot docSnapshot = snapshot.data.docs[index];
+      //                         var startDate = DateTime.parse(docSnapshot.data()['start-date']);
+      //                         var endDate = DateTime.parse(docSnapshot.data()['start-date']);
+      //                         if (selectedDay.isAfter(startDate) & selectedDay.isBefore(endDate)){
+      //                           var tradename = docSnapshot.data()['tradename'];
+      //                           var frequency = docSnapshot.data()['frequency'];
+      //                           var dose = docSnapshot.data()['dose']; }
+      //                         return Card(
+      //                           shape: RoundedRectangleBorder(
+      //                             borderRadius:
+      //                             BorderRadius.circular(15.0),
+      //                           ),
+      //                           margin: EdgeInsets.fromLTRB(
+      //                               10.0, 10.0, 10.0, 0),
+      //                           color: Color(0xfff0f2f7),
+      //                           child:  ListTile(
+      //                             //TODO: drug icon
+      //                             leading: Icon(Icons.animation),
+      //                             title: Text('hello'),
+      //                             subtitle: Text('dssofjisu'),
+      //                             // title:  Text(docSnapshot.data()['scientificName']),
+      //                             // subtitle: Text(docSnapshot.data()['dosage']),
+      //                             // subtitle: Text(docSnapshot.data()['frequency']),
+      //                             // subtitle: Text('endDate.difference(startDate).inDays'),
+      //                           ),
+      //                         );
+      //                       }
+      //                     }
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         );
+      //       }
+      //     }
+      // )
     );
   }
 }

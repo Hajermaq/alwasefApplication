@@ -1,13 +1,8 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/add_diagnosis.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import '../../constants.dart';
 
 class PatientPrescriptions extends StatelessWidget {
@@ -25,9 +20,10 @@ class PatientPrescriptions extends StatelessWidget {
                   .collection('/Patient')
                   .doc(uid)
                   .collection('/Prescriptions')
-                  .snapshots(),
+                  .snapshots(), //TODO: where status equals
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
                 } else {
                   return ListView.builder(
                       itemCount: snapshot.data.docs.length,
@@ -206,7 +202,6 @@ class PatientPrescriptions extends StatelessWidget {
                       }
                   );
                 }
-                return SizedBox();
           }),
         )
     );

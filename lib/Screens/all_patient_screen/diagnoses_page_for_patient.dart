@@ -28,6 +28,7 @@ class PatientDiagnoses extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
                 } else {
                   return ListView.builder(
                       itemCount: snapshot.data.docs.length,
@@ -197,7 +198,6 @@ class PatientDiagnoses extends StatelessWidget {
                         );
                       });
                 }
-                return SizedBox();
               }),
         ));
   }

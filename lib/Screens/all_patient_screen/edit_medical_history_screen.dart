@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/all_patient_screen/patient_profile_info.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
 import 'package:alwasef_app/models/medical_history_model.dart';
@@ -36,7 +37,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   List<String> smokingList = ['لا أبدا', 'أحيانا', ' نعم دائما'];
 
   final snackBar = SnackBar(
-      content: Text('تم تعديل السجل الطبي الخاص بك'));
+      content: Text(' تم تعديل السجل الطبي الخاص بك بنجاح'));
 
   bool somethingChanged = false;
   Function eq = const ListEquality().equals;
@@ -52,20 +53,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   //   // heightCtrl = TextEditingController();
   //
   // }
-
-  Widget showAlertDialog(){
-    return AlertDialog(
-      title: Text('هل أنت متأكد من حذف السجل الصحي؟'),
-      titleTextStyle: TextStyle(fontSize: 15),
-      content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
-      actions: [
-
-      ],
-      shape: RoundedRectangleBorder(),
-      elevation: 24.0,
-      backgroundColor: kGreyColor,
-    );
-  }
 
 
 
@@ -86,7 +73,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   } else {
-                    DocumentSnapshot medicalHistory = snapshot.data.docs[0]; //TODO: gives error in nuha
+                    DocumentSnapshot medicalHistory = snapshot.data.docs[0];
                     final age = Age.dateDifference(
                         fromDate: DateTime.parse(medicalHistory.get('birth date')),
                         toDate: DateTime.now(),
@@ -112,6 +99,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                           scrollDirection: Axis.vertical,
                           child: Column( children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(12.0),
@@ -121,6 +109,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
+                                //Spacer(),
                                 Theme(
                                   data: Theme.of(context).copyWith(
                                     cardColor: Colors.black,
@@ -140,15 +129,26 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                          context: context,
                                          builder: (BuildContext context) {
                                            yesButton = FlatButton(
+                                               child: Text('نعم'),
                                                onPressed:() {
                                                  medicalHistory.reference.delete();
-                                               },
-                                               child: Text('نعم'));
+                                                 Navigator.pop(context);
+                                                 Navigator.pop(context);//TODO: test this
+                                                 Navigator.push(
+                                                     context,
+                                                     MaterialPageRoute(
+                                                         builder: (context) =>
+                                                             PatientProfileInfo(
+
+                                                             )));
+                                               }
+                                           );
                                            noButton = FlatButton(
+                                               child: Text('لا'),
                                                onPressed:() {
                                                  Navigator.pop(context);
                                                },
-                                               child: Text('لا'));
+                                           );
 
                                            return AlertDialog(
                                              title: Text('هل أنت متأكد من حذف السجل الصحي؟', textAlign: TextAlign.center),
@@ -516,7 +516,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                       medicalHistory.reference.update({'medication allergies': valueAsList});
                                       somethingChanged = true;
                                     });
-                                  }
+                                  } //TODO: try when user eraase
                                 },
                                 //controller: medAllergCtrl,
                               ),

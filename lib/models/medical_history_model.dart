@@ -18,8 +18,8 @@ class MedicalHistory {
       allergies,
       medAllergies;
 
-  dynamic checkListNull(dynamic value){
-    if (value == null){
+  List<String> checkListNull(List<String> list){
+    if (list == null){
       return [];
     }
   }
