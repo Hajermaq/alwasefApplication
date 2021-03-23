@@ -61,6 +61,38 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
     return Scaffold(
         //backgroundColor: kGreyColor,
         body: SafeArea(
+<<<<<<< HEAD
+      //backgroundColor: ,
+      child: Form(
+        key: _formKey2,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('/Patient')
+                .doc(widget.uid)
+                .collection('/Medical History')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                DocumentSnapshot medicalHistory = snapshot.data;
+                final age = Age.dateDifference(
+                    fromDate:
+                        DateTime.parse(medicalHistory.data()['bith date']),
+                    toDate: DateTime.now(),
+                    includeToDate: false);
+                var maritalStatusVal = medicalHistory.data()['marital status'];
+                var smokingVal = medicalHistory.data()['smoking'];
+                var pregnancyVal = medicalHistory.data()['pregnancy'];
+                var hospVal = medicalHistory.data()['hospitalization'];
+                var surgeryVal = medicalHistory.data()['surgery'];
+                var chronicDisVal = medicalHistory.data()['chronic disease'];
+                var currentMedVal =
+                    medicalHistory.data()['current medications'];
+                var allergyVal = medicalHistory.data()['allergies'];
+                var medAllergyVal =
+                    medicalHistory.data()['medication allergies'];
+=======
           child: Form(
             key: _formKey2,
             child: StreamBuilder(
@@ -521,6 +553,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 //controller: medAllergCtrl,
                               ),
                             ),
+>>>>>>> a0e0cdf04b9245f3a3ad1817a4fc436c9df59e5f
 
                             Container(
                               child: Row(

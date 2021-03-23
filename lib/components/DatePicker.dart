@@ -2,6 +2,7 @@ import 'package:alwasef_app/constants.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'my_flutter_app_icons.dart';
 
 final dateFormat = DateFormat("yyyy-MM-dd");
@@ -9,14 +10,18 @@ final dateFormat = DateFormat("yyyy-MM-dd");
 class DatePicker extends StatelessWidget {
   final Widget child;
   final Function onChanged;
+  final Function onSaved;
   final Function validator;
   final String labelText;
   final Color textColor;
   final Color borderColor;
   final Color labelColor;
   final String date;
+  final DateTime initialValue;
   // final String date;
   DatePicker({
+    this.onSaved,
+    this.initialValue,
     this.labelText,
     this.date,
     this.textColor = Colors.black54,
@@ -29,10 +34,12 @@ class DatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: 350,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
       child: DateTimeField(
+          onSaved: onSaved,
+          textAlign: TextAlign.center,
+          initialValue: initialValue,
           validator: validator,
           onChanged: onChanged,
           style: TextStyle(
@@ -46,17 +53,28 @@ class DatePicker extends StatelessWidget {
             hintText: date.toString(),
             fillColor: Colors.white54,
             filled: true,
+            labelText: labelText,
+            labelStyle: GoogleFonts.almarai(
+                color: kBlueColor, fontSize: 25.0, fontWeight: FontWeight.bold),
+            errorStyle: TextStyle(
+              color: kRedColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: kRedColor,
+                width: 4.0,
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide(color: Colors.transparent),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(color: Colors.transparent),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide(),
+              borderSide: BorderSide(color: kBlueColor, width: 3.0),
             ),
           ),
           format: dateFormat,

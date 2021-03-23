@@ -92,7 +92,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                             widget.name,
                             widget.role,
                             widget.hospital_UID);
-                      } else if ('موظف استقبال' == widget.role) {
+                      } else if ('مريض' == widget.role) {
                         UserManagement().newPatientSetUp(
                             context,
                             widget.password,
