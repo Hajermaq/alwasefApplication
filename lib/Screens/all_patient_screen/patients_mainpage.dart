@@ -1,5 +1,5 @@
 import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_calendar.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_reports.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_report.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';

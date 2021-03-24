@@ -5,12 +5,8 @@ class Report {
       completed,
       sideEffects,
       notes,
-      //prescriptionRefID,
-      prescriptionDocID;
+      prescriptionRefID;
 
-  // void me(String ref){
-  //   FirebaseFirestore.instance.collection('/Prescription').doc()
-  // }
 
   void saveReport(String uid) async {
     try{
@@ -21,9 +17,9 @@ class Report {
         'committed': committed,
         'side effects': sideEffects,
         'notes': notes,
-        'prescription-id': prescriptionDocID,
+        'prescription-id': prescriptionRefID,
       });
-    }catch (e) {
+    } catch (e) {
       print(e);
     }
   }
