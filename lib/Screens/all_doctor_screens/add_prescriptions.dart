@@ -1,4 +1,6 @@
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
+import 'package:alwasef_app/components/drug_info_card.dart';
+import 'package:alwasef_app/components/text_field_1.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:dropdownfield/dropdownfield.dart';
 import 'dart:convert';
 
 class AddPrescriptions extends StatefulWidget {
@@ -42,11 +45,12 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   static final DateTime now = DateTime.now();
   final String creationDate = formatter.format(now);
   //Data from TextFields
-  int dose;
+  double dose;
   int quantity;
   int refill;
   int dosingExpire;
-  var dropdownValue;
+  var frequency;
+  var doseUnit;
   String instructionNote;
   String doctorNotes;
   //Random Variables
@@ -189,161 +193,12 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                     size: size,
                                     sizeUnit: sizeUnit,
                                     price: publicPrice),
-                                Card(
-                                  color: kGreyColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  margin:
-                                      EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        TextField_1(
-                                          onChanged_1: (value) {
-                                            dose = int.parse(value);
-                                          },
-                                          labelText: 'الجرعة',
-                                        ),
-                                        TextField_1(
-                                          onChanged_1: (value) {
-                                            quantity = int.parse(value);
-                                          },
-                                          labelText: 'الكمية',
-                                        ),
-                                        TextField_1(
-                                          onChanged_1: (value) {
-                                            refill = int.parse(value);
-                                          },
-                                          labelText: 'إعادة التعبئة',
-                                        ),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 8.0, 20.0, 8.0),
-                                          child: DropdownButtonFormField<
-                                                  String>(
-                                              decoration: InputDecoration(
-                                                fillColor: Colors.white54,
-                                                filled: true,
-                                                labelText: 'التكرار',
-                                                labelStyle: GoogleFonts.almarai(
-                                                    color: kBlueColor,
-                                                    fontSize: 25.0,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.transparent),
-                                                ),
-                                              ),
-                                              style: TextStyle(
-                                                color: Colors.black54,
-                                              ),
-                                              value: dropdownValue,
-                                              icon: Icon(Icons.arrow_drop_down),
-                                              onChanged: (String newValue) {
-                                                setState(() {
-                                                  dropdownValue = newValue;
-                                                });
-                                              },
-                                              items: <String>[
-                                                'مرة في اليوم (QD)',
-                                                'مرتين في اليوم (BID)',
-                                                'ثلاث مرات في اليوم (TID)',
-                                                'أربع مرات في اليوم (QID)',
-                                                'خمس مرات في اليوم (PID)',
-                                                'حسب الحاجة (PRN)',
-                                                'قبل النوم (QHS)',
-                                                'مرة في الأسبوع (Qweek)',
-                                                'مرة في الشهر (Qmonth)',
-                                                'مرة كل يومين (QOD)',
-                                              ].map<DropdownMenuItem<String>>(
-                                                  (String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList()),
-                                        ),
-                                        DatePicker(
-                                          initialValue: DateTime.now(),
-                                          labelText: 'تاريخ البداية',
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'التاريخ مطلوب';
-                                            }
-                                            return null;
-                                          },
-                                          date: creationDate,
-                                          onSaved: (value) {
-                                            startDate = formatter.format(value);
-                                          },
-                                          onChanged: (value) {
-                                            _key.currentState.validate();
-                                          },
-                                        ),
-                                        DatePicker(
-                                          initialValue: DateTime.now(),
-                                          labelText: 'تاريخ النهاية',
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'التاريخ مطلوب';
-                                            }
-                                            return null;
-                                          },
-                                          date: creationDate,
-                                          onSaved: (value) {
-                                            endDate = formatter.format(value);
-                                          },
-                                          onChanged: (value) {
-                                            _key.currentState.validate();
-                                          },
-                                        ),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            initialValue: ' ',
-                                            labelText: 'تعليمات للمريض',
-                                            onChanged_1: (value) {
-                                              instructionNote = value;
-                                            },
-                                            maxLines: maxLines,
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            initialValue: ' ',
-                                            labelText: 'ملاحظات للصيدلي',
-                                            onChanged_1: (value) {
-                                              doctorNotes = value;
-                                            },
-                                            maxLines: maxLines,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                SizedBox(
+                                  height: 90,
+                                ),
+                                CircularProgressIndicator(),
+                                SizedBox(
+                                  height: 90,
                                 ),
                               ],
                             ),
@@ -379,23 +234,141 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-                                        TextField_1(
-                                          onChanged_1: (value) {
-                                            dose = int.parse(value);
-                                          },
-                                          labelText: 'الجرعة',
-                                          initialValue: 'hry',
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              20.0, 8.0, 0.0, 8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Expanded(
+                                                flex: 5,
+                                                child: TextField_1(
+                                                  validator: Validation()
+                                                      .validateDoubleNumber,
+                                                  textInputType: TextInputType
+                                                      .numberWithOptions(
+                                                          decimal: true),
+                                                  onSaved: (value) {
+                                                    dose = double.parse(value);
+                                                  },
+                                                  labelText: 'الجرعة',
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: DropdownButtonFormField<
+                                                        String>(
+                                                    isExpanded: true,
+                                                    decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.all(17.0),
+                                                      fillColor: Colors.white54,
+                                                      filled: true,
+                                                      labelStyle:
+                                                          GoogleFonts.almarai(
+                                                              color: kBlueColor,
+                                                              fontSize: 25.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                      errorStyle: TextStyle(
+                                                        color: kRedColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 15.0,
+                                                      ),
+                                                      errorBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: kRedColor,
+                                                            width: 3.0),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                        borderSide: BorderSide(
+                                                            color: Colors
+                                                                .transparent),
+                                                      ),
+                                                    ),
+                                                    style: TextStyle(
+                                                      color: Colors.black54,
+                                                    ),
+                                                    value: doseUnit,
+                                                    icon: Icon(
+                                                        Icons.arrow_drop_down),
+                                                    validator: Validation()
+                                                        .validateDropDownMenue,
+                                                    onChanged: (v) {},
+                                                    onSaved: (String newValue) {
+                                                      setState(() {
+                                                        doseUnit = newValue;
+                                                      });
+                                                    },
+                                                    hint: Text(
+                                                      'فضلا اختر ',
+                                                      style:
+                                                          GoogleFonts.almarai(
+                                                        color: Colors.black54,
+                                                      ),
+                                                    ),
+                                                    items: <String>[
+                                                      'µg',
+                                                      'mg',
+                                                      'g',
+                                                      'ml',
+                                                      'tbsp (15ml)',
+                                                      'tsp (5ml)',
+                                                      'gr',
+                                                      'capsule',
+                                                      'capsules',
+                                                      'Tablet ',
+                                                      'Tablets ',
+                                                    ].map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                        (String value) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: value,
+                                                        child: Text(
+                                                          value,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      );
+                                                    }).toList()),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         TextField_1(
-                                          onChanged_1: (value) {
+                                          textInputType:
+                                              TextInputType.numberWithOptions(
+                                                  decimal: false),
+                                          onSaved: (value) {
                                             quantity = int.parse(value);
                                           },
+                                          validator: Validation()
+                                              .validateIntegerNumber,
                                           labelText: 'الكمية',
                                         ),
                                         TextField_1(
-                                          onChanged_1: (value) {
+                                          textInputType:
+                                              TextInputType.numberWithOptions(
+                                                  decimal: false),
+                                          onSaved: (value) {
                                             refill = int.parse(value);
                                           },
+                                          validator: Validation()
+                                              .validateIntegerNumber,
                                           labelText: 'إعادة التعبئة',
                                         ),
                                         Divider(
@@ -415,9 +388,27 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                 labelText: 'التكرار',
                                                 labelStyle: GoogleFonts.almarai(
                                                     color: kBlueColor,
-                                                    fontSize: 25.0,
+                                                    fontSize: 20.0,
                                                     fontWeight:
                                                         FontWeight.bold),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: kRedColor,
+                                                    width: 4.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: kRedColor,
+                                                      width: 3.0),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
                                                 enabledBorder:
                                                     OutlineInputBorder(
                                                   borderRadius:
@@ -431,11 +422,14 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                               style: TextStyle(
                                                 color: Colors.black54,
                                               ),
-                                              value: dropdownValue,
+                                              value: frequency,
                                               icon: Icon(Icons.arrow_drop_down),
-                                              onChanged: (String newValue) {
+                                              validator: Validation()
+                                                  .validateDropDownMenue,
+                                              onChanged: (v) {},
+                                              onSaved: (String newValue) {
                                                 setState(() {
-                                                  dropdownValue = newValue;
+                                                  frequency = newValue;
                                                 });
                                               },
                                               items: <String>[
@@ -449,16 +443,19 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                 'مرة في الأسبوع (Qweek)',
                                                 'مرة في الشهر (Qmonth)',
                                                 'مرة كل يومين (QOD)',
+                                                'اخرى',
                                               ].map<DropdownMenuItem<String>>(
                                                   (String value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
-                                                  child: Text(value),
+                                                  child: Text(
+                                                    value,
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                                 );
                                               }).toList()),
                                         ),
                                         DatePicker(
-                                          initialValue: DateTime.now(),
                                           labelText: 'تاريخ البداية',
                                           validator: (value) {
                                             if (value == null) {
@@ -470,25 +467,12 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           onSaved: (value) {
                                             startDate = formatter.format(value);
                                           },
-                                          onChanged: (value) {
-                                            _key.currentState.validate();
-                                          },
                                         ),
                                         DatePicker(
-                                          initialValue: DateTime.now(),
                                           labelText: 'تاريخ النهاية',
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'التاريخ مطلوب';
-                                            }
-                                            return null;
-                                          },
                                           date: creationDate,
                                           onSaved: (value) {
                                             endDate = formatter.format(value);
-                                          },
-                                          onChanged: (value) {
-                                            _key.currentState.validate();
                                           },
                                         ),
                                         Divider(
@@ -501,10 +485,13 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           margin: EdgeInsets.all(12),
                                           height: maxLines * 24.0,
                                           child: TextField_1(
-                                            initialValue: '',
                                             labelText: 'تعليمات للمريض',
-                                            onChanged_1: (value) {
-                                              instructionNote = value;
+                                            validator:
+                                                Validation().validateMessage,
+                                            onSaved: (String newValue) {
+                                              setState(() {
+                                                instructionNote = newValue;
+                                              });
                                             },
                                             maxLines: maxLines,
                                           ),
@@ -513,10 +500,11 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           margin: EdgeInsets.all(12),
                                           height: maxLines * 24.0,
                                           child: TextField_1(
-                                            initialValue: '',
                                             labelText: 'ملاحظات للصيدلي',
-                                            onChanged_1: (value) {
-                                              doctorNotes = value;
+                                            onSaved: (String newValue) {
+                                              setState(() {
+                                                doctorNotes = newValue;
+                                              });
                                             },
                                             maxLines: maxLines,
                                           ),
@@ -577,7 +565,8 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                 quantity: quantity,
                                 refill: refill,
                                 dosingExpire: dosingExpire,
-                                frequency: dropdownValue,
+                                frequency: frequency,
+                                doseUnit: doseUnit,
                                 instructionNote: instructionNote,
                                 doctorNotes: doctorNotes,
                               );
@@ -599,253 +588,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class DrugInfoCard extends StatelessWidget {
-  const DrugInfoCard({
-    Key key,
-    @required this.drugName,
-    @required this.pharmaceuticalForm,
-    @required this.strength,
-    @required this.strengthUnit,
-    @required this.date,
-    @required this.administrationRoute,
-    @required this.storageCondition,
-    @required this.size,
-    @required this.sizeUnit,
-    @required this.price,
-  }) : super(key: key);
-
-  final String drugName;
-  final String pharmaceuticalForm;
-  final String strength;
-  final String strengthUnit;
-  final String date;
-  final String administrationRoute;
-  final String storageCondition;
-  final String size;
-  final String sizeUnit;
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: kGreyColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(
-              Icons.build_circle_outlined,
-              color: kBlueColor,
-              size: 50,
-            ),
-            title: Text(
-              drugName,
-              style: kBoldLabelTextStyle,
-            ),
-            subtitle: Text(
-              '  $pharmaceuticalForm   -   $strength $strengthUnit ',
-              style: TextStyle(
-                  color: Colors.black45,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w500),
-            ),
-            trailing: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text(
-                    'التاريخ',
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    date,
-                    style: TextStyle(fontSize: 17.0),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Divider(
-            color: klighterColor,
-            thickness: 0.9,
-            endIndent: 20,
-            indent: 20,
-          ),
-          Container(
-            height: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'الإستعمال',
-                      style: ksubBoldLabelTextStyle,
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text(
-                      administrationRoute,
-                      style: kValuesTextStyle,
-                    ),
-                  ],
-                ),
-                VerticalDivider(
-                  indent: 20,
-                  endIndent: 20.0,
-                  color: kLightColor,
-                  thickness: 1.5,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      ' ظروف التخزين',
-                      style: ksubBoldLabelTextStyle,
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text(
-                      storageCondition,
-                      style: TextStyle(
-                        color: Colors.black45,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                VerticalDivider(
-                  indent: 20,
-                  endIndent: 20.0,
-                  color: kLightColor,
-                  thickness: 1.5,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      ' الحجم',
-                      style: ksubBoldLabelTextStyle,
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text(
-                      '$size $sizeUnit',
-                      style: kValuesTextStyle,
-                    ),
-                  ],
-                ),
-                VerticalDivider(
-                  indent: 20,
-                  endIndent: 20.0,
-                  color: kLightColor,
-                  thickness: 1.5,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'السعر',
-                      style: ksubBoldLabelTextStyle,
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text(
-                      price,
-                      style: kValuesTextStyle,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TextField_1 extends StatelessWidget {
-  TextField_1(
-      {this.onTap_1,
-      this.onChanged_1,
-      this.labelText,
-      this.initialValue,
-      this.maxLines,
-      this.validator});
-
-  final Function onTap_1;
-  final Function onChanged_1;
-  final Function validator;
-  final String labelText;
-  final String initialValue;
-  final int maxLines;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
-      child: TextFormField(
-        validator: validator,
-        maxLines: maxLines,
-        initialValue: ' ',
-        onTap: onTap_1,
-        onChanged: onChanged_1,
-        style: TextStyle(
-          color: kGreyColor,
-        ),
-        decoration: InputDecoration(
-          fillColor: Colors.white54,
-          filled: true,
-          labelText: labelText,
-          labelStyle: GoogleFonts.almarai(
-              color: kBlueColor, fontSize: 25.0, fontWeight: FontWeight.bold),
-          errorStyle: TextStyle(
-            color: kRedColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 15.0,
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: kRedColor,
-              width: 4.0,
-            ),
-            borderRadius: BorderRadius.circular(35.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: kBlueColor, width: 3.0),
-          ),
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(10.0),
-          //   borderSide: BorderSide(color: kBlueColor),
-          // ),
         ),
       ),
     );

@@ -32,10 +32,10 @@ class DrugInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: kGreyColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      color: kGreyColor,
       margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
       child: Column(
         children: [

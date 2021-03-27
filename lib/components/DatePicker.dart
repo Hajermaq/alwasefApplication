@@ -50,12 +50,13 @@ class DatePicker extends StatelessWidget {
             color: Colors.black54,
           ),
           decoration: InputDecoration(
+            alignLabelWithHint: true,
             hintText: date.toString(),
             fillColor: Colors.white54,
             filled: true,
             labelText: labelText,
             labelStyle: GoogleFonts.almarai(
-                color: kBlueColor, fontSize: 25.0, fontWeight: FontWeight.bold),
+                color: kBlueColor, fontSize: 20.0, fontWeight: FontWeight.bold),
             errorStyle: TextStyle(
               color: kRedColor,
               fontWeight: FontWeight.bold,

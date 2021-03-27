@@ -83,7 +83,9 @@ class Prescriptions extends StatelessWidget {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ),
-                            color: kGreyColor,
+                            color: prescription.data()['status'] == 'pending'
+                                ? Colors.pinkAccent.withOpacity(0.3)
+                                : Colors.orangeAccent.shade100,
                             margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                             child: Column(
                               children: [
@@ -129,7 +131,6 @@ class Prescriptions extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    height: 100,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -179,6 +180,25 @@ class Prescriptions extends StatelessWidget {
                                         Row(
                                           children: [
                                             Text(
+                                              'الجرعة',
+                                              style: ksubBoldLabelTextStyle,
+                                            ),
+                                            SizedBox(
+                                              width: 15.0,
+                                            ),
+                                            Text(
+                                              '${prescription.data()['dose']} ${prescription.data()['dose-unit']}',
+                                              style: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
                                               ' التكرار',
                                               style: ksubBoldLabelTextStyle,
                                             ),
@@ -221,20 +241,39 @@ class Prescriptions extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
+                                          children: [
+                                            Text(
+                                              'عدد مرات إعادة العبئة',
+                                              style: ksubBoldLabelTextStyle,
+                                            ),
+                                            SizedBox(
+                                              width: 15.0,
+                                            ),
+                                            Text(
+                                              '${prescription.data()['refill']}',
+                                              style: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Row(
                                               children: [
                                                 Text(
-                                                  'عدد مرات إعادة العبئة',
+                                                  'الحالة',
                                                   style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 15.0,
                                                 ),
                                                 Text(
-                                                  '${prescription.data()['refill']}',
+                                                  '${prescription.data()['status']}',
                                                   style: kValuesTextStyle,
                                                 ),
                                               ],
@@ -247,8 +286,6 @@ class Prescriptions extends StatelessWidget {
                                                     color: Colors.black54,
                                                   ),
                                                   onTap: () {
-                                                    print(
-                                                        'this document id ${prescription.id}');
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
@@ -256,66 +293,7 @@ class Prescriptions extends StatelessWidget {
                                                             UpdatePrescription(
                                                           documentID:
                                                               prescription.id,
-                                                          registerNumber:
-                                                              prescription
-                                                                  .data()[
-                                                                      'registerNumber']
-                                                                  .toString(),
                                                           uid: uid,
-                                                          scientificName:
-                                                              prescription
-                                                                  .data()[
-                                                                      'scientificName']
-                                                                  .toString(),
-                                                          scientificNameArabic:
-                                                              prescription
-                                                                  .data()[
-                                                                      'scientificNameArabic']
-                                                                  .toString(),
-                                                          tradeName: prescription
-                                                              .data()[
-                                                                  'tradeName']
-                                                              .toString(),
-                                                          tradeNameArabic:
-                                                              prescription
-                                                                  .data()[
-                                                                      'tradeNameArabic']
-                                                                  .toString(),
-                                                          strength: prescription
-                                                              .data()[
-                                                                  'strength']
-                                                              .toString(),
-                                                          strengthUnit: prescription
-                                                              .data()[
-                                                                  'strength-unit']
-                                                              .toString(),
-                                                          size: prescription
-                                                              .data()['size']
-                                                              .toString(),
-                                                          sizeUnit: prescription
-                                                              .data()[
-                                                                  'size-unit']
-                                                              .toString(),
-                                                          publicPrice:
-                                                              prescription
-                                                                  .data()[
-                                                                      'price']
-                                                                  .toString(),
-                                                          storageConditions:
-                                                              prescription
-                                                                  .data()[
-                                                                      'storage-conditions']
-                                                                  .toString(),
-                                                          pharmaceuticalForm:
-                                                              prescription
-                                                                  .data()[
-                                                                      'pharmaceutical-form']
-                                                                  .toString(),
-                                                          administrationRoute:
-                                                              prescription
-                                                                  .data()[
-                                                                      'administration-route']
-                                                                  .toString(),
                                                         ),
                                                       ),
                                                     );

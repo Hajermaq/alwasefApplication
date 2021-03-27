@@ -32,6 +32,44 @@ class Validation {
     return null;
   }
 
+  String validateMessage(String value) {
+    if (value.length == 0) {
+      return ' \u26A0 البريد الإلكتروني مطلوب';
+    }
+    return null;
+  }
+
+  String validateDoubleNumber(String value) {
+    // regular expression for integer or double numbers only
+    String pattern = r'[0-9.,]+';
+    RegExp regExp = RegExp(pattern);
+    if (value.length == 0) {
+      return ' \u26A0 الخانة مطلوبة';
+    } else if (!regExp.hasMatch(value)) {
+      return ' \u26A0 القيمة غير صالحة';
+    }
+    return null;
+  }
+
+  String validateIntegerNumber(String value) {
+    // regular expression for integer numbers only
+    String pattern = r'^[0-9]+$';
+    RegExp regExp = RegExp(pattern);
+    if (value.length == 0) {
+      return ' \u26A0 الخانة مطلوبة';
+    } else if (!regExp.hasMatch(value)) {
+      return ' \u26A0 القيمة غير صالحة';
+    }
+    return null;
+  }
+
+  String validateDropDownMenue(String value) {
+    if (value == null) {
+      return ' \u26A0 الخانة مطلوبة';
+    }
+    return null;
+  }
+
   String validateEmailLogin(String value) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
