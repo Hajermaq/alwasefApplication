@@ -1,5 +1,6 @@
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_calendar.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_report.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/bar_prescription_calendar.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/zz_test_prescriptions_calendar.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/bar_prescriptions_reports.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
-import 'patient_profile_info.dart';
+import 'bar_patient_profile_info.dart';
 
 class PatientMainPage extends StatefulWidget {
   static const String id = 'patient_screen';
@@ -64,7 +65,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
                 uid: FirebaseAuth.instance.currentUser.uid,
               ),
               //search Page
-              PrescriptionsCalendar(
+              PrescriptionsCalendar2(
                 uid: FirebaseAuth.instance.currentUser.uid,
               ),
               //Profile Page

@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Report {
   String committed,
       completed,
-      sideEffects,
       notes,
       prescriptionRefID;
+  List<dynamic> sideEffects;
 
 
   void saveReport(String uid) async {

@@ -41,13 +41,16 @@ dependencies:
   date_time_picker: "^1.1.1"
   datetime_picker_formfield: ^1.0.0
   table_calendar: ^2.3.3
-  age: ^0.0.1
   intl: ^0.16.1
+  flushbar: ^1.10.4
+  age: ^0.0.1
+  #shared_preferences: ^2.0.5
   #material_design_icons_flutter: 1.0.0
   flutter_mobx: ^1.1.0+2
   flutter_calendar_carousel: ^1.5.3
   some_calendar: ^1.2.6
   dropdownfield: ^1.0.3
+
 
 
 #  flutter_localizations:

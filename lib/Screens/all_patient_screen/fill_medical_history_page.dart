@@ -1,17 +1,12 @@
-import 'package:alwasef_app/Screens/all_patient_screen/edit_medical_history_screen.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
-import 'package:alwasef_app/components/DatePicker.dart';
-import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/models/medical_history_model.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:age/age.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import '../../constants.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
@@ -29,16 +24,12 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   MedicalHistory medicalHistory = MedicalHistory();
   final GlobalKey<FormState>_formKey = new GlobalKey<FormState>();
   final dateFormat = DateFormat('yyyy-MM-dd');
-  DateTime tempBirthDate;
-  //var tempAge;
 
   List<String> genderList = ['ذكر', 'أنثى'];
   List<String> maritalStatusList = ['أعزب', 'متزوج', 'غير ذلك'];
   List<String> yesNoAnswers = ['لا', 'نعم'];
   List<String> smokingList = ['لا أبدا', 'أحيانا', ' نعم دائما'];
 
-  final snackBar = SnackBar(
-      content: Text('تم إنشاء السجل الطبي الخاص بك بنجاح'));
 
   // TextEditingController nameCtrl,
   //     birthDateCtrl,
@@ -85,8 +76,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Builder(
-          builder: (context) => SafeArea(
+        body: SafeArea(
             minimum: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
             child: Form(
               key: _formKey,
@@ -543,23 +533,29 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                             child: RaisedButton(
                                 child: Text('حفظ'),
                                 onPressed: () {
-                                  setState((){
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
-                                      medicalHistory.saveMedicalHistoryForm(authM.currentUser.uid);
-                                      Scaffold.of(context).showSnackBar(snackBar);
-                                      Navigator.pop(context);
-                                    }
-                                  });
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    medicalHistory.saveMedicalHistoryForm(authM.currentUser.uid);
+                                    Flushbar(
+                                      backgroundColor: kLightColor,
+                                      borderRadius: 4.0,
+                                      margin: EdgeInsets.all(8.0),
+                                      duration: Duration(seconds: 3),
+                                      messageText: Text(' تم إنشاء السجل الطبي الخاص بك بنجاح',
+                                        style: TextStyle(color: kBlueColor, fontFamily: 'Almarai', ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )..show(context).then((r) => Navigator.pop(context));
+                                  }
                                 }),
                           ),
+
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: RaisedButton(
                                 child: Text('إلغاء'),
                                 onPressed: () {
                                   _formKey.currentState.reset();
-                                  tempBirthDate = null;
                                   Navigator.pop(context);
                                 }
                             ),
@@ -574,7 +570,6 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
               ),
             ),
           ),
-        )
     );
   }
 

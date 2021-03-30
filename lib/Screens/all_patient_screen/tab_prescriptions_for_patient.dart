@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../../constants.dart';
-import 'add_report_from_prescription.dart';
+import 'fill_report_page.dart';
 
 class PatientPrescriptions extends StatefulWidget {
   PatientPrescriptions({this.uid});
@@ -25,7 +25,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                   .collection('/Patient')
                   .doc(widget.uid)
                   .collection('/Prescriptions')
-                  .snapshots(), //TODO: where status equals
+                  .snapshots(), //TODO: where status equals dispensed (after creating pharmacicst)
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
@@ -36,11 +36,12 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                         DocumentSnapshot prescription =
                         snapshot.data.docs[index];
                           return InkWell(
-                            splashColor: Colors.grey,
+                            splashColor: Colors.grey, //TODO: this does not work
                             onTap:() {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
+                                      fullscreenDialog: true,
                                       builder: (context) =>
                                           CreateReportPage(
                                             uid: widget.uid,

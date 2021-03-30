@@ -1,20 +1,13 @@
-import 'package:alwasef_app/Screens/all_patient_screen/patient_profile_info.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
-import 'package:alwasef_app/components/DatePicker.dart';
-import 'package:alwasef_app/models/medical_history_model.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/bar_patient_profile_info.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:age/age.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
-import 'fill_medical_history_screen.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:age/age.dart';
-import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
 //import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 // import 'package:flutter_mobx/flutter_mobx.dart';
@@ -36,13 +29,13 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   List<String> yesNoAnswers = ['لا', 'نعم'];
   List<String> smokingList = ['لا أبدا', 'أحيانا', ' نعم دائما'];
 
-  final snackBar = SnackBar(
-      content: Text(' تم تعديل السجل الطبي الخاص بك بنجاح'));
+
 
   bool somethingChanged = false;
   Function eq = const ListEquality().equals;
   Widget yesButton;
   Widget noButton;
+  String name = ' ';
 
   // TextEditingController weightCtrl,
   //     heightCtrl;
@@ -55,9 +48,26 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   // }
 
 
+  getName() async {
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      name = doc.data()['patient-name'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      getName();
+    });
     return Scaffold(
         //backgroundColor: kGreyColor,
         body: SafeArea(
@@ -133,9 +143,10 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                                child: Text('نعم'),
                                                onPressed:() {
                                                  medicalHistory.reference.delete();
+                                                 Navigator.pop(context); //TODO: gives error in previous page
                                                  Navigator.pop(context);
-                                                 Navigator.pop(context);
-                                                 //TODO: replace with material route
+                                                 //Navigator.popUntil(context, ModalRoute.withName('/PatientMainPage'));
+
 
                                                }
                                            );
@@ -147,8 +158,10 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                            );
 
                                            return AlertDialog(
-                                             title: Text('هل أنت متأكد من حذف السجل الصحي؟', textAlign: TextAlign.center),
-                                             titleTextStyle: TextStyle(fontSize: 22),
+                                             title: Text('هل أنت متأكد من حذف السجل الصحي؟',
+                                                 style: TextStyle(fontFamily: 'Almarai',),
+                                                 textAlign: TextAlign.center),
+                                             titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                              content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
                                              actions: [
                                                yesButton,
@@ -214,7 +227,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               ),
                             ),
                             //العمر
-                            Padding(
+                            Padding( //TODO: How to update age in database?
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 keyboardType: TextInputType.number,
@@ -528,17 +541,22 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     child: RaisedButton(
                                         child: Text('حفظ التعديلات'),
                                         onPressed: () {
-                                          if (!_formKey2.currentState.validate()) {
-                                            return ;
+                                          if (_formKey2.currentState.validate()) {
+                                            _formKey2.currentState.save();
                                           }
-
-                                          _formKey2.currentState.save();
-
                                           if (somethingChanged){
-                                            Scaffold.of(context).showSnackBar(snackBar);
                                             somethingChanged = false;
+                                            Flushbar(
+                                              backgroundColor: kLightColor,
+                                              borderRadius: 4.0,
+                                              margin: EdgeInsets.all(8.0),
+                                              duration: Duration(seconds: 3),
+                                              messageText: Text(' تم تعديل السجل الطبي الخاص بك بنجاح',
+                                                style: TextStyle(color: kBlueColor, fontFamily: 'Almarai', ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )..show(context).then((r) => Navigator.pop(context));
                                           }
-                                          Navigator.pop(context);
                                         }),
                                   ),
                                   Padding(
