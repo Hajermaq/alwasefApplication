@@ -255,12 +255,13 @@ class UserManagement {
     String publicPrice,
     //Textfiels data
     // integers
-    int dose,
+    double dose,
     int quantity,
     int refill,
     int dosingExpire,
     // strings
     var frequency,
+    var doseUnit,
     String instructionNote,
     String doctorNotes,
   }) async {
@@ -277,6 +278,7 @@ class UserManagement {
             // status
             'status': 'pending',
             //id's
+
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
             'registerNumber': registerNumber,
@@ -307,6 +309,7 @@ class UserManagement {
             'dosing-expire': dosingExpire,
             // strings
             'frequency': frequency,
+            'dose-unit': doseUnit,
             'instruction-note': instructionNote,
             'doctor-note': doctorNotes,
           },
@@ -321,38 +324,41 @@ class UserManagement {
     }
   }
 
-  Future<void> prescriptionUpdate(
+  Future<void> prescriptionUpdate({
     context,
-    String instructionNote,
-    var frequency,
+    //id's
+    String patientId,
+    String prescriberId,
+    String registerNumber,
+    //dates
+    String creationDate,
+    String startDate,
+    String endDate,
+    //names
+    String tradeName,
+    String tradeNameArabic,
+    //units
+    String strength,
+    String strengthUnit,
+    String size,
+    String sizeUnit,
+    // random
+    String pharmaceuticalForm,
+    String administrationRoute,
+    String storageConditions,
+    String publicPrice,
+    //Textfiels data
+    // integers
+    double dose,
+    int quantity,
     int refill,
-    // String documentID,
-    // String registerNumber,
-    // String creationDate,
-    // String startDate,
-    // String endDate,
-    // String id,
-    // String scientificName,
-    // String scientificNameArabic,
-    // String tradeName,
-    // String tradeNameArabic,
-    // String strengthUnit,
-    // String pharmaceuticalForm,
-    // String administrationRoute,
-    // String sizeUnit,
-    // String storageConditions,
-    // String strength,
-    // String publicPrice,
-    // int size,
-    // int dose,
-    // int quantity,
-    // int refill,
-    // int dosingExpire,
-    // var frequency,
-    // String instructionNote,
-    // String doctorNotes,
-    // String doctorUID,
-  ) async {
+    int dosingExpire,
+    // strings
+    var frequency,
+    var doseUnit,
+    String instructionNote,
+    String doctorNotes,
+  }) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
@@ -367,34 +373,42 @@ class UserManagement {
             .doc(documentId)
             .set(
           {
-            'frequency': frequency,
-            'instruction-note': instructionNote,
+            // status
+            'status': 'updated',
+            //id's
+            'prescriber-id': prescriberId,
+            'pharmacist-id': '',
+            'registerNumber': registerNumber,
+            //dates
+            'prescription-creation-date': creationDate,
+            'start-date': startDate,
+            'end-date': endDate,
+            //names
+
+            'tradeName': tradeName,
+            'tradeNameArabic': tradeNameArabic,
+
+            //units
+            'strength': strength,
+            'strength-unit': strengthUnit,
+            'size': size,
+            'size-unit': sizeUnit,
+            // random
+            'pharmaceutical-form': pharmaceuticalForm,
+            'administration-route': administrationRoute,
+            'storage-conditions': storageConditions,
+            'price': publicPrice,
+            // textfiles data
+            //integers
+            'dose': dose,
+            'quantity': quantity,
             'refill': refill,
-            // 'registerNumber': registerNumber,
-            // 'id': currentPatient_uid,
-            // 'start-date': startDate,
-            // 'end-date': endDate,
-            // 'scientificName': scientificName,
-            // 'tradeName': tradeName,
-            // 'tradeNameArabic': tradeNameArabic,
-            // 'scientificNameArabic': scientificNameArabic,
-            // 'strength': strength,
-            // 'strength-unit': strengthUnit,
-            // 'pharmaceutical-form': pharmaceuticalForm,
-            // 'administration-route': administrationRoute,
-            // 'size': size,
-            // 'size-unit': sizeUnit,
-            // 'storage-conditions': storageConditions,
-            // 'price': publicPrice,
-            // 'dose': dose,
-            // 'quantity': quantity,
-            // 'refill': refill,
-            // 'dosing-expire': dosingExpire,
-            // 'frequency': frequency,
-            // 'instruction-note': instructionNote,
-            // 'doctor-note': doctorNotes,
-            // // 'prescriber': doctorUID,
-            // 'prescription-creation-date': creationDate,
+            'dosing-expire': dosingExpire,
+            // strings
+            'frequency': frequency,
+            'dose-unit': doseUnit,
+            'instruction-note': instructionNote,
+            'doctor-note': doctorNotes,
           },
           SetOptions(merge: true),
         ).then((_) {
@@ -437,7 +451,7 @@ class UserManagement {
     String publicPrice,
     //Textfiels data
     // integers
-    int dose,
+    double dose,
     int quantity,
     int refill,
     int dosingExpire,
