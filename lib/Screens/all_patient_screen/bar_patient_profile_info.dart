@@ -2,18 +2,18 @@ import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/past_diagnoses_page_for_patient.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/past_prescriptions_page_for_patient.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_page_for_patient.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_for_patient.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_prescriptions_for_patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 
 import '../../constants.dart';
-import 'diagnoses_page_for_patient.dart';
-import 'edit_medical_history_screen.dart';
-import 'fill_medical_history_screen.dart';
+import 'tab_diagnoses_for_patient.dart';
+import 'edit_medical_history_page.dart';
+import 'fill_medical_history_page.dart';
 
 class PatientProfileInfo extends StatefulWidget {
   final String name;
@@ -26,7 +26,7 @@ class PatientProfileInfo extends StatefulWidget {
 
 class _PatientProfileInfoState extends State<PatientProfileInfo>
     with TickerProviderStateMixin {
-  @override
+
   TabController _tabController;
   @override
   void initState() {
@@ -148,6 +148,7 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                     PatientPrescriptions(
                                       uid: widget.uid,
                                     ),
+                                    //Container(child: Icon(Icons.person)),
                                     PatientDiagnoses(
                                       uid: widget.uid,
                                     ),

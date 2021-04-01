@@ -1,0 +1,401 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../constants.dart';
+
+
+class PrescriptionsReports extends StatefulWidget {
+  final String uid;
+  PrescriptionsReports({this.uid});
+  @override
+  _PrescriptionsReportsState createState() => _PrescriptionsReportsState();
+}
+
+class _PrescriptionsReportsState extends State<PrescriptionsReports> {
+  Widget yesButton;
+  Widget noButton;
+
+  Future displayReportPrescription(String prescriptionID){
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('/Patient')
+              .doc(widget.uid)
+              .collection('/Prescriptions')
+              .doc(prescriptionID)
+              .get(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center( child: CircularProgressIndicator());
+            } else {
+              DocumentSnapshot prescription = snapshot.data;
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                color: kGreyColor,
+                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(
+                        Icons.build_circle_outlined,
+                        size: 50,
+                      ),
+                      title: Text(
+                        // TODO: change it to different names maybe?
+                        prescription.data()['tradeName'],
+                        style: kBoldLabelTextStyle,
+                      ),
+                      // subtitle: Text(
+                      //   '  ${prescription.data()['administration-route']}  -   ${prescription.data()['tradeName']} ${prescription.data()['tradeName']} ',
+                      //   style: TextStyle(
+                      //       color: Colors.black45,
+                      //       fontSize: 14.0,
+                      //       fontWeight: FontWeight.w500),
+                      // ),
+
+                      trailing: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            prescription.data()[
+                            'prescription-creation-date'],
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 13.0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: klighterColor,
+                      thickness: 0.9,
+                      endIndent: 20,
+                      indent: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 100,
+                        child: Column(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       '',
+                            //       style: ksubBoldLabelTextStyle,
+                            //     ),
+                            //     SizedBox(
+                            //       width: 15.0,
+                            //     ),
+                            //     Text(
+                            //       '${prescription.data()['start-date']}',
+                            //       style: kValuesTextStyle,
+                            //     ),
+                            //   ],
+                            // ),
+                            // VerticalDivider(
+                            //   indent: 20,
+                            //   endIndent: 20.0,
+                            //   color: kLightColor,
+                            //   thickness: 1.5,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     Text(
+                            //       ' نهاية الوصفة',
+                            //       style: ksubBoldLabelTextStyle,
+                            //     ),
+                            //     SizedBox(
+                            //       width: 15.0,
+                            //     ),
+                            //     Text(
+                            //       '${prescription.data()['end-date']}',
+                            //       style: kValuesTextStyle,
+                            //     ),
+                            //   ],
+                            // ),
+                            // VerticalDivider(
+                            //   indent: 20,
+                            //   endIndent: 20.0,
+                            //   color: kLightColor,
+                            //   thickness: 1.5,
+                            // ),
+                            Row(
+                              children: [
+                                Text(
+                                  ' التكرار',
+                                  style: ksubBoldLabelTextStyle,
+                                ),
+                                SizedBox(
+                                  width: 15.0,
+                                ),
+                                Text(
+                                  '${'${prescription.data()['frequency']}'}',
+                                  style: TextStyle(
+                                    color: Colors.black45,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // VerticalDivider(
+                            //   indent: 20,
+                            //   endIndent: 20.0,
+                            //   color: kLightColor,
+                            //   thickness: 1.5,
+                            // ),
+                            Row(
+                              children: [
+                                Text(
+                                  'التعليمات',
+                                  style: ksubBoldLabelTextStyle,
+                                ),
+                                SizedBox(
+                                  width: 15.0,
+                                ),
+                                Text(
+                                  '${prescription.data()['instruction-note']}',
+                                  style: TextStyle(
+                                    color: Colors.black45,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'عدد مرات إعادة العبئة',
+                                      style: ksubBoldLabelTextStyle,
+                                    ),
+                                    SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Text(
+                                      '${prescription.data()['refill']}',
+                                      style: kValuesTextStyle,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
+        );
+      }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      minimum: EdgeInsets.only(left: 7.0, right: 7.0, top: 7.0),
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.grey,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(6.0),
+              bottomLeft: Radius.circular(6.0),
+            ),
+          ),
+          title: Text('التقارير الحالية',
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
+          ),
+        ),
+        body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('/Patient')
+                .doc(widget.uid)
+                .collection('/Reports')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Center( child: CircularProgressIndicator());
+              } if (snapshot.data.docs.length == 0) {
+                return Container(child: Text('لم تقم بكاتبة أي تقرير حتى الان', style: TextStyle(color: Colors.black)));
+              } else {
+                return ListView.builder(
+                  //padding: ,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot report =
+                      snapshot.data.docs[index];
+                      String prescriptionRefID = report.data()['prescription-id'];
+                      String completed = report.data()['completed'];
+                      String committed = report.data()['committed'];
+                      String sideEffects = report.data()['side effects'].join('\n');
+                      String notes = report.data()['notes'];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        color: kGreyColor,
+                        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ListTile(
+                                leading: Icon(Icons.assignment_rounded),
+                                title: Text('التقرير رقم $index', style: TextStyle(fontSize: 26)),
+                                trailing: Theme(
+                                  data: Theme.of(context).copyWith(
+                                    cardColor: Colors.black,
+                                  ),
+                                  child: PopupMenuButton(
+                                      itemBuilder: (BuildContext context){
+                                        return ['عرض الوصفة الخاصة بهذا التقرير', 'حذف التقرير'].map((e) {
+                                          return PopupMenuItem<String>(
+                                            value: e,
+                                            child: Text(e),
+                                          );
+                                        }).toList();
+                                      },
+                                      onSelected: (item){
+                                        if (item == 'حذف التقرير'){
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                yesButton = FlatButton(
+                                                    child: Text('نعم'),
+                                                    onPressed:() {
+                                                      report.reference.delete();
+                                                      Navigator.pop(context);
+                                                    }
+                                                );
+                                                noButton = FlatButton(
+                                                  child: Text('لا'),
+                                                  onPressed:() {
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+
+                                                return AlertDialog(
+                                                  title: Text('هل أنت متأكد من حذف التقرير؟', textAlign: TextAlign.center),
+                                                  titleTextStyle: TextStyle(fontSize: 22),
+                                                  content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك ', style: TextStyle(fontFamily: 'Almarai',)),
+                                                  actions: [
+                                                    yesButton,
+                                                    noButton
+                                                  ],
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                  ),
+                                                  elevation: 24.0,
+                                                  backgroundColor: Colors.black,
+                                                );
+                                              }
+                                          );
+                                          report.reference.delete();
+                                        } else {
+                                          displayReportPrescription(prescriptionRefID); //TODO: test display prescription of this report
+                                          // Navigator.push( context,
+                                          //           //     MaterialPageRoute(
+                                          //           //         builder: (context) =>
+                                          //           //             EditMedicalHistoryPage(
+                                          //           //               uid: widget.uid,
+                                          //           //             )));
+                                        }
+                                      }
+                                  ),
+                                ), //weather delete or display prescription
+                              ),
+                              Divider(
+                                color: klighterColor,
+                                thickness: 0.9,
+                                endIndent: 20,
+                                indent: 20,
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.fromLTRB(10.0, 7.0, 10.0, 10),
+                                  child: Container(
+                                    //height: 100,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'تم الانتهاء من الوصفة: ',
+                                              style: ksubBoldLabelTextStyle,
+                                            ),
+                                            SizedBox(width: 15.0,),
+                                            Text('$completed',
+                                            style: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                          ]
+                                        ),
+                                        SizedBox(height: 15.0,),
+                                        Row(
+                                            children: [
+                                              Text('تم الالتزام بالوصفة: '),
+                                              SizedBox(width: 15.0,),
+                                              Text('$committed'),
+                                            ]
+                                        ),
+                                        SizedBox(height: 15.0,),
+                                        Row(
+                                            children: [
+                                              Text('الأعراض الجانبية: '),
+                                              SizedBox(width: 15.0,),
+                                              Text('$sideEffects'),
+                                            ]
+                                        ),
+                                        SizedBox(height: 15.0,),
+                                        Row(
+                                            children: [
+                                              Text('ملاحظات: '),
+                                              SizedBox(width: 15.0,),
+                                              Text('$notes'),
+                                            ]
+                                        ),
+                                        SizedBox(height: 15.0,),
+                                      ],
+                                    ),
+                                  ),
+                              ),
+                          ]
+                        ),
+                      );
+                    }
+                );
+              }
+            }
+        ),
+      ),
+    );
+  }
+}
+
+
+
