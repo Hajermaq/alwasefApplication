@@ -14,7 +14,7 @@ class PatientMedicalHistory extends StatefulWidget {
 }
 
 class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
-  List<Widget> getArratinfo(List list, String label) {
+  List<Widget> getArraytinfo(List list, String label) {
     List<Widget> listofWidgets = [];
     for (var i in list) {
       listofWidgets.add(
@@ -69,9 +69,9 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               List currentMedicationList =
                   medicalHistory.data()['current medications'];
               //BMI related
-              double heightInCm = double.parse(medicalHistory.data()['height']);
+              double heightInCm = medicalHistory.data()['height'];
               double heightInM = heightInCm / 100;
-              double weight = double.parse(medicalHistory.data()['weight']);
+              double weight = medicalHistory.data()['weight'];
               String BMI = (weight / pow(heightInM, 2)).toStringAsFixed(2);
 
               return ListView(
@@ -133,14 +133,14 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                         ),
                         MedicalHistoyListTile(
                           titleText: 'الطول',
-                          dataText: '${medicalHistory.data()['height']} سم',
+                          dataText: '$heightInCm سم',
                         ),
                         ListTileDivider(
                           color: Colors.black26,
                         ),
                         MedicalHistoyListTile(
                           titleText: 'الوزن',
-                          dataText: '${medicalHistory.data()['weight']} كجم',
+                          dataText: '$weight كجم',
                         ),
                         ListTileDivider(
                           color: Colors.black26,
@@ -160,7 +160,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                         ),
                         Column(
                           children:
-                              getArratinfo(chronicdiseasesList, 'مرض مزمن'),
+                              getArraytinfo(chronicdiseasesList, 'مرض مزمن'),
                         ),
                         SizedBox(
                           height: 10,
@@ -172,7 +172,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           color: Colors.black,
                         ),
                         Column(
-                          children: getArratinfo(allergiesList, 'حساسية'),
+                          children: getArraytinfo(allergiesList, 'حساسية'),
                         ),
                         SizedBox(
                           height: 10,
@@ -184,7 +184,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           color: Colors.black,
                         ),
                         Column(
-                          children: getArratinfo(
+                          children: getArraytinfo(
                               medicationAllergiesList, 'حساسية من'),
                         ),
                         SizedBox(
@@ -197,7 +197,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           color: Colors.black,
                         ),
                         Column(
-                          children: getArratinfo(surgeriesList, 'عملية'),
+                          children: getArraytinfo(surgeriesList, 'عملية'),
                         ),
                         SizedBox(
                           height: 10,
@@ -210,7 +210,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                         ),
                         Column(
                           children:
-                              getArratinfo(currentMedicationList, 'الدواء'),
+                              getArraytinfo(currentMedicationList, 'الدواء'),
                         ),
                       ],
                     ),

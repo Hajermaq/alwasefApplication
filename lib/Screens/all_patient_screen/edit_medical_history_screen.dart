@@ -66,7 +66,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
               if (!snapshot.hasData) {
                 return Center(child: CircularProgressIndicator());
               } else {
-                DocumentSnapshot medicalHistory = snapshot.data;
+                DocumentSnapshot medicalHistory = snapshot.data.docs[0];
                 final age = Age.dateDifference(
                     fromDate:
                         DateTime.parse(medicalHistory.data()['bith date']),

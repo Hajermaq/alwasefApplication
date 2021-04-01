@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 
 
-class PrescriptionsReports extends StatefulWidget {
+class PrescriptionsReports1 extends StatefulWidget {
   final String uid;
-  PrescriptionsReports({this.uid});
+  PrescriptionsReports1({this.uid});
   @override
-  _PrescriptionsReportsState createState() => _PrescriptionsReportsState();
+  _PrescriptionsReports1State createState() => _PrescriptionsReports1State();
 }
 
 final GlobalKey<FormState>_formKey = new GlobalKey<FormState>();
@@ -19,7 +19,7 @@ List<String> yesNoAnswers = ['لا', 'نعم'];
 
 
 
-class _PrescriptionsReportsState extends State<PrescriptionsReports> {
+class _PrescriptionsReports1State extends State<PrescriptionsReports1> {
   // @override
   // Widget build(BuildContext context) {
   //   //display prescriptions list with an add report icon button
@@ -331,7 +331,7 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                       ),
                                       onTap: () {
                                         //report.prescriptionID = prescription.data()['prescription-id'];
-                                        report.prescriptionDocID = prescription.reference.id;
+                                        report.prescriptionRefID = prescription.reference.id;
                                         Navigator.of(context).push(new MaterialPageRoute(
                                             fullscreenDialog: true,
                                             builder: (context) {

@@ -14,8 +14,10 @@ class UserManagement {
 
   String currentPatient_uid;
   String documentId;
+
   //FireStore
   FirebaseAuth auth = FirebaseAuth.instance;
+
   // String documentName = FirebaseAuth.instance.currentUser.uid;
   var db = FirebaseFirestore.instance;
 
@@ -191,6 +193,7 @@ class UserManagement {
     }
   }
 
+  //===============================================================================
   Future<void> newHospitalSetUp({
     context,
     String role,
@@ -228,6 +231,7 @@ class UserManagement {
     }
   }
 
+  //===============================================================================
   Future<void> newPrescriptionSetUp({
     context,
     //id's
@@ -324,6 +328,7 @@ class UserManagement {
     }
   }
 
+  //===============================================================================
   Future<void> prescriptionUpdate({
     context,
     //id's
@@ -422,10 +427,59 @@ class UserManagement {
     }
   }
 
+  //===============================================================================
+  Future<void> diagnosisUpdate({
+    context,
+    //id's
+    String patientId,
+    String prescriberId,
+    //dates
+    String creationDate,
+    String medicalDiagnosis,
+    String diagnosisDescription,
+    String medicalAdvice,
+  }) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('/Patient');
+
+      final currentUser = auth.currentUser;
+
+      if (currentUser != null) {
+        await collection
+            .doc(currentPatient_uid)
+            .collection('/Diagnoses')
+            .doc(documentId)
+            .set(
+          {
+            //status
+            'status': 'updated',
+            //id's
+            'prescriber-id': prescriberId,
+            'pharmacist-id': '',
+            //dates
+            'diagnosis-creation-date': creationDate,
+            // textfiles data
+            // strings
+            'medical-diagnosis': medicalDiagnosis,
+            'diagnosis-description': diagnosisDescription,
+            'medical-advice': medicalAdvice,
+          },
+          SetOptions(merge: true),
+        ).then((_) {
+          Navigator.pop(context);
+        }).catchError((e) {
+          print(e);
+        });
+      } // end of if
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //===============================================================================
   Future<void> PastPrescriptionsSetUp(
     context,
-    // status
-    String status,
     //id's
     String patientId,
     String prescriberId,
@@ -464,7 +518,7 @@ class UserManagement {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
 
-      final currentUser = auth.currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser;
       String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
@@ -474,7 +528,7 @@ class UserManagement {
             .add(
               {
                 // status
-                'status': status,
+                'status': 'deleted',
                 //id's
                 'prescriber-id': prescriberId,
                 'pharmacist-id': '',
@@ -520,15 +574,14 @@ class UserManagement {
     }
   }
 
-  Future<void> newDiagnosisSetUp(
+  //===============================================================================
+  Future<void> PastDiagnosisSetUp(
     context,
     //id's
     String patientId,
     String prescriberId,
     //dates
     String creationDate,
-    String startDate,
-    String endDate,
     String medicalDiagnosis,
     String diagnosisDescription,
     String medicalAdvice,
@@ -537,18 +590,67 @@ class UserManagement {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
 
-      final currentUser = auth.currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser;
+      String uid = currentUser.uid.toString();
+
+      if (currentUser != null) {
+        await collection
+            .doc(patientId)
+            .collection('/PastDiagnoses')
+            .add(
+              {
+                //status
+                'status': 'deleted',
+                //id's
+                'prescriber-id': prescriberId,
+                'pharmacist-id': '',
+                //dates
+                'diagnosis-creation-date': creationDate,
+                // textfiles data
+                // strings
+                'medical-diagnosis': medicalDiagnosis,
+                'diagnosis-description': diagnosisDescription,
+                'medical-advice': medicalAdvice,
+              },
+            )
+            .then((_) {})
+            .catchError((e) {
+              print(e);
+            });
+      } // end of if
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //===============================================================================
+  Future<void> newDiagnosisSetUp(
+    context,
+    //id's
+    String patientId,
+    String prescriberId,
+    //dates
+    String creationDate,
+    String medicalDiagnosis,
+    String diagnosisDescription,
+    String medicalAdvice,
+  ) async {
+    try {
+      CollectionReference collection =
+          FirebaseFirestore.instance.collection('/Patient');
+
+      final currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
         await collection.doc(patientId).collection('/Diagnoses').add(
           {
+            //status
+            'status': 'ongoing',
             //id's
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
             //dates
             'diagnosis-creation-date': creationDate,
-            'start-date': startDate,
-            'end-date': endDate,
             // textfiles data
             // strings
             'medical-diagnosis': medicalDiagnosis,

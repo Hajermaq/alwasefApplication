@@ -20,6 +20,7 @@ class FilledRoundTextFields extends StatelessWidget {
           borderRadius: BorderRadius.circular(30.0),
         ),
         child: TextField(
+          style: TextStyle(color: Colors.black54),
           onChanged: onChanged,
           decoration: InputDecoration(
             filled: true,

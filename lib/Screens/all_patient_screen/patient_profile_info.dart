@@ -1,5 +1,5 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/past_diagnoses_page_for_patient.dart';
@@ -160,22 +160,31 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                               .snapshots(),
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
-                                              return Center(child: CircularProgressIndicator());
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
                                             }
-                                            if (snapshot.data.docs.length == 0) {
+                                            if (snapshot.data.docs.length ==
+                                                0) {
                                               return Column(
                                                 children: [
                                                   Card(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15.0),
                                                     ),
                                                     color: kGreyColor,
-                                                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        10.0, 10.0, 10.0, 0),
                                                     child: ListTile(
-                                                      leading: Icon(Icons.animation),
-                                                      title:
-                                                      Text('السجل الطبي للمريض',
-                                                      style: ksubBoldLabelTextStyle),
+                                                      leading:
+                                                          Icon(Icons.animation),
+                                                      title: Text(
+                                                          'السجل الطبي للمريض',
+                                                          style:
+                                                              ksubBoldLabelTextStyle),
                                                       subtitle: Text(
                                                           'قم بتعبئة سجلك الطبي'),
                                                       trailing: IconButton(
@@ -185,11 +194,11 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        FillMedicalHistoryPage(
-                                                                          uid: widget
-                                                                              .uid,
-                                                                        )));
+                                                                    builder:
+                                                                        (context) =>
+                                                                            FillMedicalHistoryPage(
+                                                                              uid: widget.uid,
+                                                                            )));
                                                           }),
                                                     ),
                                                   ),
@@ -199,31 +208,37 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                               return Column(
                                                 children: [
                                                   Card(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15.0),
                                                     ),
                                                     color: kGreyColor,
-                                                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        10.0, 10.0, 10.0, 0),
                                                     child: ListTile(
                                                       //TODO: drug icon
-                                                      leading: Icon(Icons.animation),
-                                                      title:
-                                                      Text('السجل الطبي للمريض',
-                                                          style: ksubBoldLabelTextStyle),
+                                                      leading:
+                                                          Icon(Icons.animation),
+                                                      title: Text(
+                                                          'السجل الطبي للمريض',
+                                                          style:
+                                                              ksubBoldLabelTextStyle),
                                                       subtitle: Text(
                                                           'قم بتحديث سجلك الطبي بشكل دوري'),
                                                       trailing: IconButton(
-                                                          icon: Icon(
-                                                              Icons.edit_outlined),
+                                                          icon: Icon(Icons
+                                                              .edit_outlined),
                                                           onPressed: () {
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        EditMedicalHistoryPage(
-                                                                          uid: widget
-                                                                              .uid,
-                                                                        )));
+                                                                    builder:
+                                                                        (context) =>
+                                                                            EditMedicalHistoryPage(
+                                                                              uid: widget.uid,
+                                                                            )));
                                                           }),
                                                     ),
                                                   ),

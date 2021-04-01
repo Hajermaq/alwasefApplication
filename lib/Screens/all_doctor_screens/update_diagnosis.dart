@@ -15,15 +15,32 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class AddDiagnosis extends StatefulWidget {
-  AddDiagnosis({this.uid});
+class UpdateDiagnosis extends StatefulWidget {
+  UpdateDiagnosis(
+      {this.uid,
+      this.documentID,
+      this.medicalDiagnosis,
+      this.diagnosisDescription,
+      this.medicalAdvice,
+      this.creationDate,
+      this.endDate,
+      this.startDate});
+
   final String uid;
+  final String documentID;
+  String medicalDiagnosis = '';
+  String diagnosisDescription = '';
+  String medicalAdvice = '';
+  String startDate = '';
+  String endDate = '';
+  final String creationDate;
+
   static final String id = 'add_diagnosis_screen';
   @override
-  _AddDiagnosisState createState() => _AddDiagnosisState();
+  _UpdateDiagnosisState createState() => _UpdateDiagnosisState();
 }
 
-class _AddDiagnosisState extends State<AddDiagnosis> {
+class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
   //Data from Api with default value
 
   String prescriberId = FirebaseAuth.instance.currentUser.uid;
@@ -53,6 +70,8 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.medicalAdvice);
+    print(widget.documentID);
     print(widget.uid);
     return Theme(
       data: Theme.of(context).copyWith(
@@ -103,9 +122,10 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                         TextInputType.numberWithOptions(
                                             decimal: true),
                                     onSaved: (value) {
-                                      medicalDiagnosis = value;
+                                      widget.medicalDiagnosis = value;
                                     },
                                     labelText: 'التشخيص الصحي',
+                                    initialValue: widget.medicalDiagnosis,
                                   ),
                                   Divider(
                                     color: klighterColor,
@@ -117,14 +137,15 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                     margin: EdgeInsets.all(12),
                                     height: maxLines * 24.0,
                                     child: TextField_1(
-                                      labelText: 'تعليمات للمريض',
+                                      labelText: 'وصف التشخيص',
                                       validator: Validation().validateMessage,
                                       onSaved: (String value) {
                                         setState(() {
-                                          diagnosisDescription = value;
+                                          widget.diagnosisDescription = value;
                                         });
                                       },
                                       maxLines: maxLines,
+                                      initialValue: widget.diagnosisDescription,
                                     ),
                                   ),
                                   Divider(
@@ -141,10 +162,11 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                       validator: Validation().validateMessage,
                                       onSaved: (String value) {
                                         setState(() {
-                                          medicalAdvice = value;
+                                          widget.medicalAdvice = value;
                                         });
                                       },
                                       maxLines: maxLines,
+                                      initialValue: widget.medicalAdvice,
                                     ),
                                   ),
                                 ],
@@ -161,7 +183,7 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                 textColor: Colors.white54,
                                 color: kGreyColor,
                                 child: Text(
-                                  'إرسال',
+                                  'تحديث',
                                   style: TextStyle(
                                     color: Colors.white,
                                     // fontFamily: 'Montserrat',
@@ -173,14 +195,20 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                 onPressed: () {
                                   if (_key.currentState.validate()) {
                                     _key.currentState.save();
-                                    UserManagement().newDiagnosisSetUp(
-                                        context,
-                                        widget.uid,
-                                        prescriberId,
-                                        creationDate,
-                                        medicalDiagnosis,
-                                        diagnosisDescription,
-                                        medicalAdvice);
+                                    UserManagement(
+                                            currentPatient_uid: widget.uid,
+                                            documentId: widget.documentID)
+                                        .diagnosisUpdate(
+                                      medicalAdvice: widget.medicalAdvice,
+                                      medicalDiagnosis: widget.medicalDiagnosis,
+                                      diagnosisDescription:
+                                          widget.diagnosisDescription,
+                                      context: context,
+                                      prescriberId:
+                                          FirebaseAuth.instance.currentUser.uid,
+                                      patientId: widget.uid,
+                                      creationDate: creationDate,
+                                    );
                                   } else {
                                     // there is an error
                                     setState(() {

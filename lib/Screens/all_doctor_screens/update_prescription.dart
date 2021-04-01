@@ -32,19 +32,6 @@ class UpdatePrescription extends StatefulWidget {
 }
 
 class _UpdatePrescriptionState extends State<UpdatePrescription> {
-  //Data from Api with default value
-  // String tradeName = widget.tradeName;  String tradeNameArabic = '...';
-  // String scientificName = '...';
-  // String scientificNameArabic = '...';
-  // String pharmaceuticalForm = '...';
-  // String strength = '...';
-  // String strengthUnit = '...';
-  // String administrationRoute = '...';
-  // String storageConditions = '...';
-  // int size = 0;
-  // String sizeUnit = '...';
-  // String publicPrice = '...';
-
   // formatted date
   static final DateTime now = DateTime.now();
   final String creationDate = formatter.format(now);
@@ -74,48 +61,12 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
   static List<Prescription> drugsForDisplay = List<Prescription>();
   List<Prescription> _drugs = List<Prescription>();
   @override
-
-  //
-  // getId() {
-  //   FirebaseFirestore.instance
-  //       .collection("/Patient")
-  //       .doc(widget.uid)
-  //       .collection('/Prescriptions')
-  //       .add({
-  //     "name": "john",
-  //     "age": 50,
-  //   }).then((value) {
-  //     print(value.id);
-  //   });
-  // }
-
   _searchBar() {
     return FilledRoundTextFields(
       hintMessage: 'ابحث عن اسم الدواء هنا',
       fillColor: kGreyColor,
     );
   }
-
-  // Future<Null> _selectedDate(BuildContext context) async {
-  //   DateTime _datePicker = await showDatePicker(
-  //       context: context,
-  //       initialDate: _date,
-  //       firstDate: DateTime.now().subtract(Duration(days: 0)),
-  //       lastDate: DateTime(2050),
-  //       builder: (BuildContext context, Widget child) {
-  //         return Theme(
-  //             data: ThemeData(
-  //               primarySwatch: kBlueColor,
-  //             ),
-  //             child: child);
-  //       });
-  //
-  //   if (_datePicker != null && _datePicker != _date) {
-  //     setState(() {
-  //       _date = _datePicker;
-  //     });
-  //   }
-  // }
 
   // String checkDrugName() {
   //   if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
@@ -132,11 +83,6 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
 
   @override
   Widget build(BuildContext context) {
-    print(refill);
-    print(widget.documentID);
-
-    print(widget.uid);
-
     return Theme(
       data: Theme.of(context).copyWith(
         scaffoldBackgroundColor: kLightColor,
@@ -530,9 +476,6 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    print(refill);
-                                    print(instructionNote);
-                                    print(frequency);
                                     UserManagement(
                                             documentId: widget.documentID,
                                             currentPatient_uid: widget.uid)

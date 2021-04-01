@@ -9,14 +9,14 @@ import 'package:flutter/widgets.dart';
 import '../../constants.dart';
 import 'add_prescriptions.dart';
 
-class PastPrescriptions extends StatefulWidget {
-  PastPrescriptions({this.uid});
+class PastDiagnoses extends StatefulWidget {
+  PastDiagnoses({this.uid});
   final String uid;
   @override
-  _PastPrescriptionsState createState() => _PastPrescriptionsState();
+  _PastDiagnosesState createState() => _PastDiagnosesState();
 }
 
-class _PastPrescriptionsState extends State<PastPrescriptions> {
+class _PastDiagnosesState extends State<PastDiagnoses> {
   String searchValue = '';
   Widget buildBottomSheet(BuildContext context) {
     return Container(
@@ -78,7 +78,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                   stream: FirebaseFirestore.instance
                       .collection('/Patient')
                       .doc(widget.uid)
-                      .collection('/Prescriptions')
+                      .collection('/PastDiagnoses')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -86,24 +86,17 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            DocumentSnapshot prescription =
+                            DocumentSnapshot diagnoses =
                                 snapshot.data.docs[index];
-                            String status = prescription.data()['status'];
+                            String status = diagnoses.data()['status'];
                             //search by
-                            String tradeName = prescription.data()['tradeName'];
-                            String dose =
-                                prescription.data()['dose'].toString();
+                            String medicalDiagnosis =
+                                diagnoses.data()['medical-diagnosis'];
                             // search logic
-                            if (tradeName
+                            if (medicalDiagnosis
                                     .toLowerCase()
                                     .contains(searchValue.toLowerCase()) ||
-                                tradeName
-                                    .toUpperCase()
-                                    .contains(searchValue.toUpperCase()) ||
-                                dose
-                                    .toLowerCase()
-                                    .contains(searchValue.toLowerCase()) ||
-                                dose
+                                medicalDiagnosis
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
                               return GestureDetector(
@@ -123,15 +116,14 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                     children: [
                                       ListTile(
                                         title: Text(
-                                          // TODO: change it to different names maybe?
-                                          prescription.data()['tradeName'],
+                                          ' ${diagnoses.data()['medical-diagnosis']}',
                                           style: kBoldLabelTextStyle,
                                         ),
                                         subtitle: Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
-                                            prescription.data()[
-                                                'prescription-creation-date'],
+                                            diagnoses.data()[
+                                                'diagnosis-creation-date'],
                                             style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 15.0,
@@ -139,9 +131,9 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                           ),
                                         ),
                                         trailing: OutlinedButton.icon(
-                                          icon: status == 'pending'
+                                          icon: status == 'ongoing'
                                               ? Icon(
-                                                  Icons.hourglass_top_outlined,
+                                                  Icons.replay_circle_filled,
                                                   color: kBlueColor,
                                                 )
                                               : Icon(
@@ -149,7 +141,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                                   color: kBlueColor,
                                                 ),
                                           label: Text(
-                                            "${prescription.data()['status']}",
+                                            "${diagnoses.data()['status']}",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 17,
@@ -182,7 +174,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    'الجرعة',
+                                                    'وصف التشخيص',
                                                     style:
                                                         ksubBoldLabelTextStyle,
                                                   ),
@@ -190,7 +182,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                                     width: 15.0,
                                                   ),
                                                   Text(
-                                                    '${prescription.data()['dose']} ${prescription.data()['dose-unit']}',
+                                                    '${'${diagnoses.data()['diagnosis-description']}'}',
                                                     style: TextStyle(
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
@@ -203,7 +195,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    ' التكرار',
+                                                    'النصيحة الطبية',
                                                     style:
                                                         ksubBoldLabelTextStyle,
                                                   ),
@@ -211,49 +203,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                                                     width: 15.0,
                                                   ),
                                                   Text(
-                                                    '${'${prescription.data()['frequency']}'}',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'التعليمات',
-                                                    style:
-                                                        ksubBoldLabelTextStyle,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15.0,
-                                                  ),
-                                                  Text(
-                                                    '${prescription.data()['instruction-note']}',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'عدد مرات إعادة العبئة',
-                                                    style:
-                                                        ksubBoldLabelTextStyle,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15.0,
-                                                  ),
-                                                  Text(
-                                                    '${prescription.data()['refill']}',
+                                                    '${diagnoses.data()['medical-advice']}',
                                                     style: TextStyle(
                                                       color: Colors.black45,
                                                       fontSize: 15.0,

@@ -1,5 +1,5 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
