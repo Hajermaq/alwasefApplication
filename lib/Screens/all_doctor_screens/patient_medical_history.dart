@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:alwasef_app/components/medical_history_listTiles.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,14 +53,6 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               //Lists
               List chronicdiseasesList =
                   medicalHistory.data()['chronic disease'];
-              // FirebaseFirestore.instance
-              //     .collection('/Medical History')
-              //     .doc(widget.uid)
-              //     .update(
-              //       'chronic disease',
-              //       FieldValue.arrayUnion('hey'),
-              //     );
-
               List hospitalizationList =
                   medicalHistory.data()['hospitalization'];
               List allergiesList = medicalHistory.data()['allergies'];
@@ -222,57 +215,5 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
             return CircularProgressIndicator();
           }),
     ));
-  }
-}
-
-class MedicalHistoryHeadLine extends StatelessWidget {
-  MedicalHistoryHeadLine({this.label, this.onTap, this.wantIcon});
-  final String label;
-  final Function onTap;
-  final bool wantIcon;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-                fontSize: 26.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
-          ),
-          GestureDetector(
-            onTap: onTap,
-            child: wantIcon == false
-                ? SizedBox()
-                : Icon(
-                    Icons.add,
-                  ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class MedicalHistoyListTile extends StatelessWidget {
-  MedicalHistoyListTile({this.dataText, this.titleText});
-  final String titleText;
-  final String dataText;
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        titleText,
-        style: TextStyle(color: Colors.black),
-      ),
-      trailing: Text(
-        dataText,
-        style: TextStyle(color: Colors.black),
-      ),
-    );
   }
 }

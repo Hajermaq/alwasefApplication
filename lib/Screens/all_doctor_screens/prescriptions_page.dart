@@ -2,9 +2,12 @@ import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.d
 import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
+import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../constants.dart';
@@ -23,79 +26,101 @@ class Prescriptions extends StatefulWidget {
 }
 
 class _PrescriptionsState extends State<Prescriptions> {
-  final pdf = pw.Document();
+  //Variables
+  pw.Document pdf;
+
+  String newPath = "";
+  String filename = 'hey';
   bool loading = false;
-  writeToPdf() async {
-    pdf.addPage(
-      pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
-            return pw.Column(
-              children: [
-                pw.Header(
-                  level: 0,
-                  child: pw.Text('hey'),
-                ),
-                pw.Paragraph(
-                  text: 'heeeeeeeeeeeeeee',
-                ),
-                pw.Paragraph(
-                  text: 'heeeeeeeeeeeeeee',
-                ),
-                pw.Paragraph(
-                  text: 'heeeeeeeeeeeeeee',
-                ),
-                pw.Paragraph(
-                  text: 'heeeeeeeeeeeeeee',
-                ),
-              ],
-            );
-          }),
-    );
+  String searchValue = '';
+  String patientName = '';
+  String doctorName = '';
+  String hospitalName = '';
+  String age = '';
+  String gender = '';
+  String allergies = '';
+
+  //Functions
+
+  getPatientinfo() async {
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(widget.uid)
+        .collection('/Medical History')
+        .get()
+        .then((doc) {
+      var medicalHistory = doc.docs[0];
+      patientName = medicalHistory.data()['full name'];
+      age = medicalHistory.data()['age'].toString();
+      String g = medicalHistory.data()['gender'];
+      if (g.contains('أنثى')) {
+        gender = 'Female';
+      } else {
+        gender = 'Male';
+      }
+      print(gender);
+
+      List allergiesList = medicalHistory.data()['allergies'];
+
+      for (String i in allergiesList) {
+        allergies += i;
+        allergies += ' ';
+      }
+
+      print(allergies);
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
-  // @override
-  // void initState() {
-  //   writeToPdf();
-  // }
-
-  Future<bool> savePdfFile(String filename) async {
-    Directory directory;
-    try {
-      if (Platform.isAndroid) {
-        if (await _reguestPremission(Permission.storage)) {
-          directory = await getExternalStorageDirectory();
-
-          print(directory.path);
-          String newPath = "";
-          // /storage/emulated/0/Android/data/hajermaq.alwasef_app/files
-          List<String> folders = directory.path.split("/");
-          for (int x = 1; x < folders.length; x++) {
-            String folder = folders[x];
-            if (folder != "Android") {
-              newPath += "/" + folder;
-            } else {
-              break;
-            }
-          }
-          newPath = newPath + "/Download";
-          // newPath = " /storage/emulated/0/Android/RPSApp";
-          directory = Directory(newPath);
-          print(directory.path);
-          File file = File(directory.path + "/$filename");
-          file.writeAsBytes(await pdf.save());
-
-          // if (await file.exists()) {
-          //
-          // } else {}
-        } else {
-          return false;
-        }
+  getHospitalinfo() async {
+    String hospitalUid = '';
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(widget.uid)
+        .get()
+        .then((doc) {
+      hospitalUid = doc.data()['hospital-uid'];
+      print(hospitalUid);
+      if (mounted) {
+        setState(() {});
       }
-    } catch (e) {
-      print(e);
-    }
-    return false;
+    });
+
+    await FirebaseFirestore.instance
+        .collection('/Hospital')
+        .doc(hospitalUid)
+        .get()
+        .then((doc) {
+      hospitalName = doc.data()['hospital-name'];
+      print(hospitalName);
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  getDoctorinfo() async {
+    await FirebaseFirestore.instance
+        .collection('/Doctors')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      doctorName = doc.data()['doctor-name'];
+      print(doctorName);
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    getPatientinfo();
+    getHospitalinfo();
+    getDoctorinfo();
   }
 
   Future<bool> _reguestPremission(Permission permission) async {
@@ -111,30 +136,321 @@ class _PrescriptionsState extends State<Prescriptions> {
     }
   }
 
-  downloadPdf() async {
+  writeToPdf({
+    pw.Document pdf,
+    // header data
+    String hospitalName,
+    String doctorName,
+    String date,
+    String doctorSpeciality,
+    String hospitalPhoneNumber,
+    String prescriptionNo,
+    //patient data
+    String patientName,
+    String age,
+    String gender,
+    String allargies,
+    //patient data
+    String prescription,
+    String refill,
+    // footer
+    String doctorSignature,
+  }) async {
+    var data = await rootBundle.load("assets/fonts/Almarai-Regular.ttf");
+    var myFont = pw.Font.ttf(data);
+    var myStyle = TextStyle(fontFamily: myFont.toString());
+
+    pdf.addPage(
+      pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) {
+            return pw.Column(
+              children: [
+                pw.Header(
+                  level: 0,
+                  child: pw.Column(
+                    children: [
+                      pw.Row(
+                        children: [
+                          pw.Align(
+                            alignment: pw.Alignment.center,
+                            child: pw.Text(
+                              hospitalName,
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                font: myFont,
+                                fontSize: 50.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.SizedBox(
+                        height: 40,
+                      ),
+                      pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          'Dr. $doctorName',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                      pw.SizedBox(
+                        height: 20,
+                      ),
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text(
+                            doctorSpeciality,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              font: myFont,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          pw.Text(
+                            prescriptionNo,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              font: myFont,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.SizedBox(
+                        height: 15,
+                      ),
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text(
+                            hospitalPhoneNumber,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              font: myFont,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          pw.Text(
+                            date,
+                            textAlign: pw.TextAlign.left,
+                            style: pw.TextStyle(
+                              font: myFont,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      pw.SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                ),
+                pw.SizedBox(
+                  height: 30,
+                ),
+                pw.Column(
+                  children: [
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Patient Name: $patientName ',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        pw.Text(
+                          'Age : $age',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(
+                      height: 15,
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Gender : $gender',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        pw.Text(
+                          '',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(
+                      height: 15,
+                    ),
+                    pw.Row(
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Text(
+                          'Patient Allergies: $allargies',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        pw.Text(
+                          '',
+                          style: pw.TextStyle(
+                            font: myFont,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    pw.SizedBox(
+                      height: 15,
+                    ),
+                    pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Text(
+                        'Rx',
+                        style: pw.TextStyle(
+                          font: myFont,
+                          fontSize: 100.0,
+                        ),
+                      ),
+                    ),
+                    pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Paragraph(
+                        text: prescription,
+                        style: pw.TextStyle(
+                          font: myFont,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                    pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Paragraph(
+                        text: '',
+                        style: pw.TextStyle(
+                          font: myFont,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                    pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Paragraph(
+                        text: '    Refill: $refill',
+                        style: pw.TextStyle(
+                          font: myFont,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                    pw.SizedBox(height: 90),
+                    pw.Divider(),
+                    pw.Align(
+                      alignment: pw.Alignment.centerLeft,
+                      child: pw.Paragraph(
+                        text: "doctor's signature: $doctorSignature",
+                        style: pw.TextStyle(
+                          font: myFont,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
+    );
+  }
+
+  Future<String> viewPdf(pw.Document pdf) async {
+    //using this path so thet the path is not visible by the user
+    Directory directory = await getApplicationDocumentsDirectory();
+    if (await directory.exists()) {
+      print('im inside function ${directory.path}');
+      File file = File(directory.path + "/$filename");
+      file.writeAsBytes(await pdf.save());
+      return 'saved!';
+    }
+    return 'not saved!';
+  }
+
+  Future<bool> savePdfFile(String filename, pw.Document pdf) async {
     setState(() {
       loading = true;
     });
-    bool downloaded = await savePdfFile('hehe.pdf');
-    if (downloaded) {
-      print('File Downloaded');
-    } else {
-      print('Problem Downloading File');
+    Directory directory;
+    try {
+      if (Platform.isAndroid) {
+        if (await _reguestPremission(Permission.storage)) {
+          directory = await getExternalStorageDirectory();
+          print(directory.path);
+          // /storage/sdcard0/0/Android/data/hajermaq.alwasef_app/files
+          List<String> folders = directory.path.split("/");
+          for (int x = 1; x < folders.length; x++) {
+            String folder = folders[x];
+            if (folder != "Android") {
+              newPath += "/" + folder;
+            } else {
+              break;
+            }
+          }
+
+          newPath = newPath + "/Download";
+          directory = Directory(newPath);
+          print(directory.path);
+          // saving & saving the file
+          File file = File(directory.path + "/$filename");
+          file.writeAsBytes(await pdf.save());
+          newPath = '';
+          setState(() {
+            loading = true;
+          });
+        } else {
+          return false;
+        }
+      }
+    } catch (e) {
+      print(e);
     }
-    setState(() {
-      loading = false;
-    });
+    return false;
   }
 
-  // Future savePdfold() async {
-  //   Directory documentDirectory = await getApplicationDocumentsDirectory();
-  //   String documentPath = documentDirectory.path;
-  //   print(documentPath);
-  //   File file = File('$documentPath/example.pdf');
-  //   file.writeAsBytesSync(await pdf.save());
+  // downloadPdf() async {
+  //   setState(() {
+  //     loading = true;
+  //   });
+  //   bool downloaded = await savePdfFile('hehe.pdf');
+  //   if (downloaded) {
+  //     print('File Downloaded');
+  //   } else {
+  //     print('Problem Downloading File');
+  //   }
+  //   setState(() {
+  //     loading = false;
+  //   });
   // }
 
-  String searchValue = '';
   Widget buildBottomSheet(BuildContext context) {
     return Container(
       color: Color(0xff757575),
@@ -160,8 +476,6 @@ class _PrescriptionsState extends State<Prescriptions> {
     return Scaffold(
         backgroundColor: klighterColor,
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.note_add_outlined),
-          backgroundColor: kBlueColor,
           onPressed: () {
             // Navigator.pop(context);
             Navigator.push(
@@ -172,12 +486,9 @@ class _PrescriptionsState extends State<Prescriptions> {
                 ),
               ),
             );
-            // showModalBottomSheet(
-            //   isScrollControlled: true,
-            //   context: context,
-            //   builder: (context) => AddPrescriptions(),
-            // );
           },
+          child: Icon(Icons.note_add_outlined),
+          backgroundColor: kBlueColor,
         ),
         body: Column(
           children: [
@@ -417,7 +728,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         10)),
-                                                        child: Text("Edit"),
+                                                        child: Text("تعديل"),
                                                       ),
                                                       SizedBox(
                                                         width: 10.0,
@@ -539,35 +850,183 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         10)),
-                                                        child: Text("Delete"),
+                                                        child: Text("حذف"),
                                                       ),
                                                       SizedBox(
                                                         width: 10.0,
                                                       ),
                                                       RaisedButton(
                                                         onPressed: () async {
-                                                          writeToPdf();
-                                                          await savePdfFile(
-                                                              'example.pdf');
+                                                          showModalBottomSheet(
+                                                            isScrollControlled:
+                                                                true,
+                                                            context: context,
+                                                            builder: (context) =>
+                                                                SingleChildScrollView(
+                                                              child: Container(
+                                                                height: 115,
+                                                                child: Column(
+                                                                  children: [
+                                                                    ListTile(
+                                                                      onTap:
+                                                                          () async {
+                                                                        pdf = pw
+                                                                            .Document();
+                                                                        writeToPdf(
+                                                                          pdf:
+                                                                              pdf,
+                                                                          doctorSpeciality:
+                                                                              '',
+                                                                          prescriptionNo:
+                                                                              '',
+                                                                          hospitalPhoneNumber:
+                                                                              '',
+                                                                          doctorSignature:
+                                                                              '',
+                                                                          allargies:
+                                                                              allergies,
+                                                                          hospitalName:
+                                                                              hospitalName,
+                                                                          doctorName:
+                                                                              doctorName,
+                                                                          date:
+                                                                              prescription.data()['prescription-creation-date'],
+                                                                          patientName:
+                                                                              patientName,
+                                                                          gender:
+                                                                              gender,
+                                                                          age:
+                                                                              age,
+                                                                          prescription:
+                                                                              prescription.data()['tradeName'],
+                                                                          refill: prescription
+                                                                              .data()['refill']
+                                                                              .toString(),
+                                                                        );
+                                                                        await viewPdf(
+                                                                            pdf);
+                                                                        Directory
+                                                                            directory =
+                                                                            await getApplicationDocumentsDirectory();
+                                                                        String
+                                                                            documentPath =
+                                                                            directory.path;
 
-                                                          // Directory
-                                                          //     documentDirectory =
-                                                          //     await getApplicationDocumentsDirectory();
-                                                          // String documentPath =
-                                                          //     documentDirectory
-                                                          //         .path;
-                                                          // String fullPath =
-                                                          //     "$documentPath/example.pdf";
-                                                          // Navigator.push(
-                                                          //   context,
-                                                          //   MaterialPageRoute(
-                                                          //     builder: (context) =>
-                                                          //         PdfPreviewScreen(
-                                                          //       path: fullPath,
-                                                          //     ),
-                                                          //   ),
-                                                          // );
+                                                                        String
+                                                                            fullPath =
+                                                                            documentPath +
+                                                                                "/$filename";
+                                                                        print(
+                                                                            ' full path name $fullPath');
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                PdfPreviewScreen(
+                                                                              path: fullPath,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      title:
+                                                                          Text(
+                                                                        'عرض الوصفة الطبية بصيغة pdf',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              kBlueColor,
+                                                                          fontSize:
+                                                                              20.0,
+                                                                        ),
+                                                                      ),
+                                                                      trailing:
+                                                                          Icon(Icons
+                                                                              .keyboard_arrow_left),
+                                                                    ),
+                                                                    ListTileDivider(
+                                                                      color:
+                                                                          kGreyColor,
+                                                                    ),
+                                                                    ListTile(
+                                                                      onTap:
+                                                                          () {
+                                                                        pw.Document
+                                                                            pdf1 =
+                                                                            new pw.Document();
+                                                                        writeToPdf(
+                                                                          pdf:
+                                                                              pdf1,
+                                                                          doctorSpeciality:
+                                                                              '',
+                                                                          prescriptionNo:
+                                                                              '',
+                                                                          hospitalPhoneNumber:
+                                                                              '',
+                                                                          doctorSignature:
+                                                                              '',
+                                                                          allargies:
+                                                                              allergies,
+                                                                          hospitalName:
+                                                                              hospitalName,
+                                                                          doctorName:
+                                                                              doctorName,
+                                                                          date:
+                                                                              prescription.data()['prescription-creation-date'],
+                                                                          patientName:
+                                                                              patientName,
+                                                                          gender:
+                                                                              gender,
+                                                                          age:
+                                                                              age,
+                                                                          prescription:
+                                                                              prescription.data()['tradeName'],
+                                                                          refill: prescription
+                                                                              .data()['refill']
+                                                                              .toString(),
+                                                                        );
+                                                                        setState(
+                                                                            () {
+                                                                          savePdfFile(
+                                                                              '${prescription.data()['dose'].toString()}.pdf',
+                                                                              pdf1);
+                                                                        });
+
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                DownloadedPage(),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      title:
+                                                                          Text(
+                                                                        'تحميل الوصفة الطبية',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              kBlueColor,
+                                                                          fontSize:
+                                                                              20.0,
+                                                                        ),
+                                                                      ),
+                                                                      trailing:
+                                                                          Icon(Icons
+                                                                              .keyboard_arrow_left),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
+                                                        // onPressed: () async {
+                                                        //   writeToPdf();
+                                                        //   await savePdfFile(
+                                                        //       'example.pdf');
+
                                                         color: klighterColor,
                                                         shape: RoundedRectangleBorder(
                                                             side: BorderSide(
@@ -578,7 +1037,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         10)),
-                                                        child: Text("View"),
+                                                        child: Text("عرض"),
                                                       ),
                                                     ],
                                                   ),
@@ -603,3 +1062,47 @@ class _PrescriptionsState extends State<Prescriptions> {
         ));
   }
 }
+
+class DownloadedPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('تم تحميل الملف '),
+                SizedBox(
+                  height: 20,
+                ),
+                Text('اذهب الى '),
+                SizedBox(
+                  height: 20,
+                ),
+                Text('  <<  Files >> Show internal storage '),
+                Text(' AOSP on IA Emulator >> Download '),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// class ViewPDF extends StatelessWidget {
+//   ViewPDF({this.newPath, this.pdf});
+//   pw.Document pdf;
+//   String newPath;
+//   Directory directory;
+//   //Functions
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//
+//   }
+// }

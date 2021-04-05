@@ -42,14 +42,14 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   table_calendar: ^2.3.3
   intl: ^0.16.1
-<<<<<<< HEAD
+#<<<<<<< HEAD
   material_design_icons_flutter: ^2.3.50
-=======
+#=======
   flushbar: ^1.10.4
   age: ^0.0.1
   #shared_preferences: ^2.0.5
   #material_design_icons_flutter: 1.0.0
->>>>>>> db912c9c372681ed64221f13ea906859fbf9dbe3
+#>>>>>>> db912c9c372681ed64221f13ea906859fbf9dbe3
   flutter_mobx: ^1.1.0+2
   flutter_calendar_carousel: ^1.5.3
   some_calendar: ^1.2.6
@@ -109,3 +109,7 @@ flutter:
         - asset: assets/fonts/Almarai-Bold.ttf
         - asset: assets/fonts/Almarai-Light.ttf
         - asset: assets/fonts/Almarai-Regular.ttf
+    - family: Hacen Tunisia
+      fonts:
+        - asset: assets/fonts/Hacen Tunisia.ttf
+

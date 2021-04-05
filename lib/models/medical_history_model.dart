@@ -2,15 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MedicalHistory {
   String patientUID;
-  String patientFullName,
-      gender,
-      birthDate,
-      maritalStatus,
-      pregnancy,
-      smoking;
+  String patientFullName, gender, birthDate, maritalStatus, pregnancy, smoking;
   int age;
-  double weight,
-      height;
+  double weight, height;
   List<String> hospitalizations,
       surgery,
       chronicDisease,
@@ -18,13 +12,10 @@ class MedicalHistory {
       allergies,
       medAllergies;
 
-
-
   void saveMedicalHistoryForm(String userID) async {
-
-    try{
+    try {
       CollectionReference collection =
-      FirebaseFirestore.instance.collection('/Patient');
+          FirebaseFirestore.instance.collection('/Patient');
       await collection.doc(userID).collection('/Medical History').add({
         'uid': patientUID,
         'full name': patientFullName,
@@ -42,20 +33,15 @@ class MedicalHistory {
         'current medications': currentMed,
         'allergies': allergies,
         'medication allergies': medAllergies,
-<<<<<<< HEAD
         // 'hospitalization': checkListNull(hospitalizations),
         // 'surgery': checkListNull(surgery),
         // 'chronic disease': checkListNull(chronicDisease),
         // 'current medications': checkListNull(currentMed),
         // 'allergies': checkListNull(allergies),
         // 'medication allergies': checkListNull(medAllergies),
-=======
->>>>>>> db912c9c372681ed64221f13ea906859fbf9dbe3
       });
-    }catch (e) {
+    } catch (e) {
       print(e);
     }
   }
-
-
 }

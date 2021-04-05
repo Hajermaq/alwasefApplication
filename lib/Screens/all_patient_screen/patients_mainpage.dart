@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_calendar.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/prescriptions_report.dart';
-=======
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescription_calendar.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/zz_test_prescriptions_calendar.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescriptions_reports.dart';
->>>>>>> db912c9c372681ed64221f13ea906859fbf9dbe3
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';

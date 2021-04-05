@@ -78,7 +78,6 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                       .doc(currentUser.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
-                    // DocumentReference user = snapshot;
                     if (!snapshot.hasData) {
                       return CircularProgressIndicator();
                     } else {

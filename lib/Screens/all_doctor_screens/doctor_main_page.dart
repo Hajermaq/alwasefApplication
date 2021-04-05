@@ -10,6 +10,7 @@ import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 
 import '../../constants.dart';
+import 'doctor_home_page.dart';
 
 class DoctorMainPage extends StatefulWidget {
   static const String id = 'doctor_main_screen';
@@ -46,9 +47,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
             ),
             pages: [
               // Home page
-              Container(
-                child: Text('Home Page'),
-              ),
+              DoctorHomePage(),
               //search Page
               PatientData(),
               //Profile Page
