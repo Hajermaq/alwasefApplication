@@ -72,7 +72,7 @@ class _DiagnosesState extends State<Diagnoses> {
         body: Column(
           children: [
             FilledRoundTextFields(
-              hintMessage: 'ابحث عن الوصفة',
+              hintMessage: 'ابحث عن تشخيص',
               fillColor: kGreyColor,
               onChanged: (value) {
                 setState(() {

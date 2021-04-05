@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:age/age.dart';
+
 
 class PatientMedicalHistory extends StatefulWidget {
   PatientMedicalHistory({this.uid});
@@ -61,6 +63,12 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               List surgeriesList = medicalHistory.data()['surgery'];
               List currentMedicationList =
                   medicalHistory.data()['current medications'];
+              //age
+              final ageComplete = Age.dateDifference(
+                  fromDate: DateTime.parse(medicalHistory.data()['birth date']),
+                  toDate: DateTime.now(),
+                  includeToDate: false);
+              var age = ageComplete.years;
               //BMI related
               double heightInCm = medicalHistory.data()['height'];
               double heightInM = heightInCm / 100;
@@ -97,7 +105,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                         ),
                         MedicalHistoyListTile(
                           titleText: 'العمر',
-                          dataText: '${medicalHistory.data()['age']}',
+                          dataText: '$age',
                         ),
                         ListTileDivider(
                           color: Colors.black26,

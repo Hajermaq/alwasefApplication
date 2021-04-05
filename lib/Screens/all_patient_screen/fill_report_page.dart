@@ -9,8 +9,10 @@ import '../../constants.dart';
 
 class CreateReportPage extends StatefulWidget {
   final String uid;
-  final String prescriptionRefID;
-  CreateReportPage({this.uid, this.prescriptionRefID});
+  final String name;
+  final String prescriptionID;
+  final String prescriptionPrescriberID;
+  CreateReportPage({this.uid, this.prescriptionID, this.prescriptionPrescriberID, this.name});
   @override
   _CreateReportPageState createState() => _CreateReportPageState();
 }
@@ -72,7 +74,10 @@ class _CreateReportPageState extends State<CreateReportPage> {
                             : null,
                         onSaved: (selectedValue) {
                           setState(() {
-                            report.prescriptionRefID = widget.prescriptionRefID;
+                            report.patientID = widget.uid;
+                            report.patientName = widget.name;
+                            report.prescriptionID = widget.prescriptionID;
+                            report.prescriptionPrescriberID = widget.prescriptionPrescriberID;
                             report.completed  = selectedValue;
                           });
                         },

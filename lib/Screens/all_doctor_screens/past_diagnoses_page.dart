@@ -65,7 +65,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
         body: Column(
           children: [
             FilledRoundTextFields(
-              hintMessage: 'ابحث عن الوصفة',
+              hintMessage: 'ابحث عن تشخيص',
               fillColor: kGreyColor,
               onChanged: (value) {
                 setState(() {
@@ -147,7 +147,6 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                                 fontSize: 17,
                                                 color: kBlueColor),
                                           ),
-                                          onPressed: null,
                                           style: ElevatedButton.styleFrom(
                                             side: BorderSide(
                                                 width: 2.0, color: kBlueColor),

@@ -11,6 +11,7 @@ import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 
 import '../../constants.dart';
 import 'doctor_home_page.dart';
+import 'doctor_patients_reports.dart';
 
 class DoctorMainPage extends StatefulWidget {
   static const String id = 'doctor_main_screen';
@@ -37,19 +38,19 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
         child: Scaffold(
           // resizeToAvoidBottomPadding: false,
           body: ScrollNavigation(
+            showIdentifier: false,
             barStyle: NavigationBarStyle(
               background: Color(0xffBBC6E3),
               activeColor: kScaffoldBackGroundColor,
               verticalPadding: 15.0,
-            ),
-            identiferStyle: NavigationIdentiferStyle(
-              color: kScaffoldBackGroundColor,
             ),
             pages: [
               // Home page
               DoctorHomePage(),
               //search Page
               PatientData(),
+              // patients reports
+              PatientsReports(),
               //Profile Page
               DoctorProfileInfo(),
             ], //end of pages
@@ -59,6 +60,9 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
               ),
               ScrollNavigationItem(
                 icon: Icon(Icons.search_outlined),
+              ),
+              ScrollNavigationItem(
+                icon: Icon(Icons.receipt_outlined),
               ),
               ScrollNavigationItem(
                 icon: Icon(Icons.account_circle_outlined),
