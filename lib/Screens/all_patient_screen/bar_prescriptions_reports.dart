@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
@@ -232,22 +233,21 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('/Patient')
-                .doc(widget.uid)
-                .collection('/Reports')
+                .collection('/Report')
+                .where('patient-id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center( child: CircularProgressIndicator());
               } if (snapshot.data.docs.length == 0) {
-                return Container(child: Text('لم تقم بكاتبة أي تقرير حتى الان', style: TextStyle(color: Colors.black)));
+                return Center(child: Text('لم تقم بكاتبة أي تقرير حتى الان', style: TextStyle(color: Colors.black)));
               } else {
                 return ListView.builder(
                   //padding: ,
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot report =
-                      snapshot.data.docs[index];
+                        snapshot.data.docs[index];
                       String prescriptionRefID = report.data()['prescription-id'];
                       String completed = report.data()['completed'];
                       String committed = report.data()['committed'];
@@ -285,8 +285,11 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                               builder: (BuildContext context) {
                                                 yesButton = FlatButton(
                                                     child: Text('نعم'),
-                                                    onPressed:() {
-                                                      report.reference.delete();
+                                                    onPressed:() async{
+                                                      await FirebaseFirestore.instance
+                                                          .collection('/Report')
+                                                          .doc(report.id)
+                                                          .delete();
                                                       Navigator.pop(context);
                                                     }
                                                 );
@@ -313,15 +316,8 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                                 );
                                               }
                                           );
-                                          report.reference.delete();
                                         } else {
-                                          displayReportPrescription(prescriptionRefID); //TODO: test display prescription of this report
-                                          // Navigator.push( context,
-                                          //           //     MaterialPageRoute(
-                                          //           //         builder: (context) =>
-                                          //           //             EditMedicalHistoryPage(
-                                          //           //               uid: widget.uid,
-                                          //           //             )));
+                                          //TODO: test display prescription of this report
                                         }
                                       }
                                   ),
@@ -357,26 +353,47 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                         ),
                                         SizedBox(height: 15.0,),
                                         Row(
-                                            children: [
-                                              Text('تم الالتزام بالوصفة: '),
-                                              SizedBox(width: 15.0,),
-                                              Text('$committed'),
+                                          children: [
+                                            Text('تم الالتزام بالوصفة: ',
+                                                style: ksubBoldLabelTextStyle
+                                            ),
+                                            SizedBox(width: 15.0,),
+                                            Text('$committed',
+                                              style: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
                                             ]
                                         ),
                                         SizedBox(height: 15.0,),
                                         Row(
                                             children: [
-                                              Text('الأعراض الجانبية: '),
+                                              Text('الأعراض الجانبية: ',
+                                                  style: ksubBoldLabelTextStyle
+                                              ),
                                               SizedBox(width: 15.0,),
-                                              Text('$sideEffects'),
+                                              Text('$sideEffects',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                             ]
                                         ),
                                         SizedBox(height: 15.0,),
                                         Row(
                                             children: [
-                                              Text('ملاحظات: '),
+                                              Text('ملاحظات: ',
+                                                  style: ksubBoldLabelTextStyle
+                                              ),
                                               SizedBox(width: 15.0,),
-                                              Text('$notes'),
+                                              Text('$notes',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                             ]
                                         ),
                                         SizedBox(height: 15.0,),

@@ -1,18 +1,14 @@
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescription_calendar.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/zz_test_prescriptions_calendar.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescriptions_reports.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:alwasef_app/Screens/services/provider_management.dart';
-import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
-import 'bar_patient_profile_info.dart';
+import 'bar_patient_medical_info.dart';
+import 'bar_patient_profile.dart';
 
 class PatientMainPage extends StatefulWidget {
   static const String id = 'patient_screen';
@@ -51,40 +47,48 @@ class _PatientMainPageState extends State<PatientMainPage> {
         child: Scaffold(
           // resizeToAvoidBottomPadding: false,
           body: ScrollNavigation(
+            showIdentifier: false,
             barStyle: NavigationBarStyle(
               background: Color(0xffBBC6E3),
               activeColor: kScaffoldBackGroundColor,
               verticalPadding: 15.0,
             ),
-            identiferStyle: NavigationIdentiferStyle(
-              color: kScaffoldBackGroundColor,
-            ),
             pages: [
-              // Home page
-              PrescriptionsReports(
-                uid: FirebaseAuth.instance.currentUser.uid,
-              ),
-              //search Page
-              PrescriptionsCalendar2(
-                uid: FirebaseAuth.instance.currentUser.uid,
-              ),
               //Profile Page
-              PatientProfileInfo(
+              PatientProfile(
                 uid: currentUser.uid.toString(),
                 email: currentUser.email.toString(),
                 name: name.toString(),
               ),
+              //medical info page
+              PatientMedicalInfo(
+                uid: currentUser.uid.toString(),
+                email: currentUser.email.toString(),
+                name: name.toString(),
+              ),
+              //calendar Page
+              PrescriptionsCalendar2(
+                uid: FirebaseAuth.instance.currentUser.uid,
+              ),
+              // Home page
+              PrescriptionsReports(
+                uid: FirebaseAuth.instance.currentUser.uid,
+              ),
             ], //end of pages
             items: [
               ScrollNavigationItem(
-                icon: Icon(Icons.receipt_outlined),
+                icon: Icon(Icons.account_circle_outlined),
+              ),
+              ScrollNavigationItem(
+                icon: Icon(Icons.animation),
               ),
               ScrollNavigationItem(
                 icon: Icon(Icons.calendar_today),
               ),
               ScrollNavigationItem(
-                icon: Icon(Icons.account_circle_outlined),
+                icon: Icon(Icons.receipt_outlined),
               ),
+
             ], // end of items
           ),
         ),

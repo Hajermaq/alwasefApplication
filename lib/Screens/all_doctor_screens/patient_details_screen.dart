@@ -131,7 +131,7 @@ class _PatientDetailsState extends State<PatientDetails>
                                   text: "التاريخ الطبي",
                                 ),
                                 Tab(
-                                  text: "وصفات سابقة",
+                                  text: "الوصفات السابقة",
                                 ),
                                 Tab(
                                   text: "التشخيصات سابقة",

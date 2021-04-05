@@ -1,16 +1,14 @@
-import 'package:alwasef_app/Screens/all_patient_screen/bar_patient_profile_info.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:age/age.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
 import 'package:collection/collection.dart';
-//import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-// import 'package:flutter_mobx/flutter_mobx.dart';
+import 'dart:math';
+
 
 class EditMedicalHistoryPage extends StatefulWidget {
   final String uid;
@@ -35,7 +33,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   Function eq = const ListEquality().equals;
   Widget yesButton;
   Widget noButton;
-  String name = ' ';
 
   // TextEditingController weightCtrl,
   //     heightCtrl;
@@ -48,26 +45,10 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   // }
 
 
-  getName() async {
-    await FirebaseFirestore.instance
-        .collection('/Patient')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((doc) {
-      name = doc.data()['patient-name'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
 
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      getName();
-    });
     return Scaffold(
         //backgroundColor: kGreyColor,
         body: SafeArea(
@@ -80,7 +61,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                     .doc(widget.uid)
                     .collection('/Medical History')
                     .snapshots(),
-                builder: (context, snapshot) {
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   } else {
@@ -89,11 +70,15 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         fromDate: DateTime.parse(medicalHistory.get('birth date')),
                         toDate: DateTime.now(),
                         includeToDate: false);
-                    var weightVal = medicalHistory.data()['weight'].toString();
-                    var heightVal = medicalHistory.data()['height'].toString();
+                    String weightVal = medicalHistory.data()['weight'].toString();
+                    String heightVal = medicalHistory.data()['height'].toString();
+                    double heightInM = double.parse(heightVal) / 100;
+                    String BMI = (double.parse(weightVal) / pow(heightInM, 2)).toStringAsFixed(2);
+
                     var maritalStatusVal = medicalHistory.data()['marital status'];
                     var smokingVal = medicalHistory.data()['smoking'];
                     var pregnancyVal = medicalHistory.data()['pregnancy'];
+                    //Lists
                     var hospVal = medicalHistory.data()['hospitalization'];
                     var surgeryVal = medicalHistory.data()['surgery'];
                     var chronicDisVal = medicalHistory.data()['chronic disease'];
@@ -141,11 +126,17 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                          builder: (BuildContext context) {
                                            yesButton = FlatButton(
                                                child: Text('نعم'),
-                                               onPressed:() {
-                                                 medicalHistory.reference.delete();
+                                               onPressed:() async {
+                                                 await FirebaseFirestore.instance
+                                                     .collection('/Patient')
+                                                     .doc(widget.uid)
+                                                     .collection('/Medical History')
+                                                     .doc(medicalHistory.id)
+                                                     .delete();
                                                  Navigator.pop(context); //TODO: gives error in previous page
                                                  Navigator.pop(context);
                                                  //Navigator.popUntil(context, ModalRoute.withName('/PatientMainPage'));
+                                                 //Navigator.pushNamed(context,WelcomeScreen.id);
 
 
                                                }
@@ -260,8 +251,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 onSaved: (value) {
                                   if (weightVal != value){
                                     setState(() {
-                                      medicalHistory.reference.update({'weight': value});
-                                      somethingChanged = true;
+                                      medicalHistory.reference.update({'weight': double.parse(value)});
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -289,12 +280,27 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 onSaved: (value) {
                                   if (heightVal != value){
                                     setState(() {
-                                      medicalHistory.reference.update({'height': value});
-                                      somethingChanged = true;
+                                      medicalHistory.reference.update({'height': double.parse(value)});
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
                                 //controller: heightCtrl,
+                              ),
+                            ),
+                            //مؤشر كتلة الجسم
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: 'مؤشر كتلة الجسم :',
+                                  suffixText: 'كجم/ متر2',
+                                  border: OutlineInputBorder(),
+                                ),
+                                initialValue: BMI,
+                                readOnly: true,
                               ),
                             ),
                             //الحالة الاجتماعية
@@ -320,7 +326,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (maritalStatusVal != selectedValue){
                                     setState(() {
                                       medicalHistory.reference.update({'marital status': selectedValue});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -349,7 +355,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (smokingVal != selectedValue){
                                     setState(() {
                                       medicalHistory.reference.update({'smoking': selectedValue});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -377,7 +383,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (pregnancyVal != selectedValue){
                                     setState(() {
                                       medicalHistory.reference.update({'pregnancy': selectedValue});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -400,7 +406,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, hospVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'hospitalization': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -425,7 +431,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, surgeryVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'surgery': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -449,7 +455,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, chronicDisVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'chronic disease': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
                                   }
                                 },
@@ -473,7 +479,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, currentMedVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'current medications': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                       print('current');
                                     });
                                   }
@@ -498,7 +504,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, allergyVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'allergies': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                       print('allerg');
                                     });
                                   }
@@ -524,9 +530,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   if (eq(valueAsList, medAllergyVal) == false){
                                     setState(() {
                                       medicalHistory.reference.update({'medication allergies': valueAsList});
-                                      somethingChanged = true;
+                                      this.somethingChanged = true;
                                     });
-                                  } //TODO: try when user eraase
+                                  }
                                 },
                                 //controller: medAllergCtrl,
                               ),
@@ -545,7 +551,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                             _formKey2.currentState.save();
                                           }
                                           if (somethingChanged){
-                                            somethingChanged = false;
+                                            this.somethingChanged = false;
                                             Flushbar(
                                               backgroundColor: kLightColor,
                                               borderRadius: 4.0,
@@ -564,7 +570,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     child: RaisedButton(
                                         child: Text('تراجع'),
                                         onPressed: () {
-                                          somethingChanged = false;
+                                          this.somethingChanged = false;
                                           //resets the form to its initial value before the changes
                                           _formKey2.currentState.reset();
                                           Navigator.pop(context);

@@ -15,16 +15,16 @@ import 'tab_diagnoses_for_patient.dart';
 import 'edit_medical_history_page.dart';
 import 'fill_medical_history_page.dart';
 
-class PatientProfileInfo extends StatefulWidget {
+class PatientMedicalInfo extends StatefulWidget {
   final String name;
   final String email;
   final String uid;
-  PatientProfileInfo({this.uid, this.name, this.email});
+  PatientMedicalInfo({this.uid, this.name, this.email});
   @override
-  _PatientProfileInfoState createState() => _PatientProfileInfoState();
+  _PatientMedicalInfoState createState() => _PatientMedicalInfoState();
 }
 
-class _PatientProfileInfoState extends State<PatientProfileInfo>
+class _PatientMedicalInfoState extends State<PatientMedicalInfo>
     with TickerProviderStateMixin {
 
   TabController _tabController;
@@ -44,53 +44,53 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  height: 150,
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                    color: klighterColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 30.0,
-                            backgroundColor: kLightColor,
-                            child: Icon(
-                              Icons.person,
-                              color: kBlueColor,
-                              size: 50,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.name,
-                                style: TextStyle(
-                                    color: kBlueColor, fontSize: 30.0),
-                              ),
-                              SizedBox(
-                                height: 7.0,
-                              ),
-                              Text(
-                                widget.email,
-                                style: TextStyle(
-                                    color: kBlueColor, fontSize: 20.0),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   height: 150,
+                //   child: Card(
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(15.0),
+                //     ),
+                //     margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                //     color: klighterColor,
+                //     child: Padding(
+                //       padding: const EdgeInsets.all(10.0),
+                //       child: Row(
+                //         children: [
+                //           CircleAvatar(
+                //             radius: 30.0,
+                //             backgroundColor: kLightColor,
+                //             child: Icon(
+                //               Icons.person,
+                //               color: kBlueColor,
+                //               size: 50,
+                //             ),
+                //           ),
+                //           SizedBox(
+                //             width: 20.0,
+                //           ),
+                //           Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Text(
+                //                 widget.name,
+                //                 style: TextStyle(
+                //                     color: kBlueColor, fontSize: 30.0),
+                //               ),
+                //               SizedBox(
+                //                 height: 7.0,
+                //               ),
+                //               Text(
+                //                 widget.email,
+                //                 style: TextStyle(
+                //                     color: kBlueColor, fontSize: 20.0),
+                //               ),
+                //             ],
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Expanded(
                   child: Container(
                     child: Card(
@@ -131,7 +131,7 @@ class _PatientProfileInfoState extends State<PatientProfileInfo>
                                   text: "التاريخ الطبي",
                                 ),
                                 Tab(
-                                  text: "الوصفات سابقة",
+                                  text: "الوصفات السابقة",
                                 ),
                                 Tab(
                                   text: "التشخيصات السابقة",
