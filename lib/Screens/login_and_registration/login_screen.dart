@@ -1,10 +1,8 @@
 import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
-
 import '../all_patient_screen/patients_mainpage.dart';
 import '../all_pharmacist_screens/pharamacists_mainpage.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -120,7 +118,13 @@ class _LogInScreenState extends State<LogInScreen> {
                             .then((value) {
                           value.docs.forEach((element) {
                             if ('طبيب' == element.data()['role']) {
-                              Navigator.pushNamed(context, DoctorMainPage.id);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      DoctorMainPage(),
+                                ),
+                              );
                             }
                           });
                         });
@@ -137,7 +141,13 @@ class _LogInScreenState extends State<LogInScreen> {
                             .then((value) {
                           value.docs.forEach((element) {
                             if ('مريض' == element.data()['role']) {
-                              Navigator.pushNamed(context, PatientMainPage.id);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PatientMainPage(),
+                                ),
+                              );
                             }
                           });
                         });
@@ -154,8 +164,13 @@ class _LogInScreenState extends State<LogInScreen> {
                             .then((value) {
                           value.docs.forEach((element) {
                             if ('صيدلي' == element.data()['role']) {
-                              Navigator.pushNamed(
-                                  context, PharmacistMainPage.id);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PharmacistMainPage(),
+                                ),
+                              );
                             }
                           });
                         });
@@ -172,8 +187,13 @@ class _LogInScreenState extends State<LogInScreen> {
                             .then((value) {
                           value.docs.forEach((element) {
                             if ('موظف استقبال' == element.data()['role']) {
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, AdminScreen.id);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      AdminScreen(),
+                                ),
+                              );
                             }
                           });
                         });

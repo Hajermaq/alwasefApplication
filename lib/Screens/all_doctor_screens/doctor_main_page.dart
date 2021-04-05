@@ -1,14 +1,10 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_profile_info.dart';
 import 'package:alwasef_app/Screens/services/provider_management.dart';
-import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
-
 import '../../constants.dart';
 import 'doctor_home_page.dart';
 
@@ -37,6 +33,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
         child: Scaffold(
           // resizeToAvoidBottomPadding: false,
           body: ScrollNavigation(
+            showIdentifier: false,
             barStyle: NavigationBarStyle(
               background: Color(0xffBBC6E3),
               activeColor: kScaffoldBackGroundColor,

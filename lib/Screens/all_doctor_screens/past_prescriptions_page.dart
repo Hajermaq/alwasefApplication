@@ -78,7 +78,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                   stream: FirebaseFirestore.instance
                       .collection('/Patient')
                       .doc(widget.uid)
-                      .collection('/Prescriptions')
+                      .collection('/PastPrescriptions ')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

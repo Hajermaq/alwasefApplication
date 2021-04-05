@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PatientData extends StatefulWidget {
   @override
@@ -48,7 +49,25 @@ class _PatientDataState extends State<PatientData> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.grey,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(6.0),
+              bottomLeft: Radius.circular(6.0),
+            ),
+          ),
+          title: Text(
+            'البحث ',
+            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+          ),
+        ),
         body: Container(
           padding: EdgeInsets.all(10),
           child: Column(children: [

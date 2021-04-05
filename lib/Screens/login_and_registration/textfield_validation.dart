@@ -13,6 +13,17 @@ class Validation {
     return null;
   }
 
+  String validateMobile(String value) {
+    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.length == 0) {
+      return 'فضلا ادخل رقم هاتف';
+    } else if (!regExp.hasMatch(value)) {
+      return 'فضلا ادخل رقم هاتف صالح';
+    }
+    return null;
+  }
+
   String validateDate(String value) {
     if (value.length == 0) {
       return ' \u26A0 التاريخ مطلوب';

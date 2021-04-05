@@ -436,21 +436,6 @@ class _PrescriptionsState extends State<Prescriptions> {
     return false;
   }
 
-  // downloadPdf() async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //   bool downloaded = await savePdfFile('hehe.pdf');
-  //   if (downloaded) {
-  //     print('File Downloaded');
-  //   } else {
-  //     print('Problem Downloading File');
-  //   }
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
-
   Widget buildBottomSheet(BuildContext context) {
     return Container(
       color: Color(0xff757575),
@@ -735,8 +720,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                       ),
                                                       RaisedButton(
                                                         onPressed: () async {
-                                                          String status =
-                                                              'deleted';
                                                           UserManagement()
                                                               .PastPrescriptionsSetUp(
                                                             context,
@@ -991,15 +974,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                               '${prescription.data()['dose'].toString()}.pdf',
                                                                               pdf1);
                                                                         });
-
-                                                                        Navigator
-                                                                            .push(
-                                                                          context,
-                                                                          MaterialPageRoute(
-                                                                            builder: (context) =>
-                                                                                DownloadedPage(),
-                                                                          ),
-                                                                        );
                                                                       },
                                                                       title:
                                                                           Text(
@@ -1062,47 +1036,3 @@ class _PrescriptionsState extends State<Prescriptions> {
         ));
   }
 }
-
-class DownloadedPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('تم تحميل الملف '),
-                SizedBox(
-                  height: 20,
-                ),
-                Text('اذهب الى '),
-                SizedBox(
-                  height: 20,
-                ),
-                Text('  <<  Files >> Show internal storage '),
-                Text(' AOSP on IA Emulator >> Download '),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// class ViewPDF extends StatelessWidget {
-//   ViewPDF({this.newPath, this.pdf});
-//   pw.Document pdf;
-//   String newPath;
-//   Directory directory;
-//   //Functions
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//   }
-// }

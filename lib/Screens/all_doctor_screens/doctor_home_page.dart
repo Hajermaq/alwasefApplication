@@ -42,7 +42,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.grey,
+            color: kLightColor,
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -55,7 +55,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
           ),
           title: Text(
             'الصفحة الرئيسة ',
-            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(
+              color: kLightColor,
+              fontSize: 28.0,
+            ),
           ),
         ),
         backgroundColor: kGreyColor,
@@ -72,6 +75,9 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 30,
+                    ),
                     Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
