@@ -1,5 +1,6 @@
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -24,7 +25,6 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
   CalendarController _calendarController;
   final dateFormat = DateFormat('yyyy-MM-dd');
   List<dynamic> selectedDayEvents = [];
-  //SharedPreference pref;
 
   @override
   void initState(){
@@ -67,22 +67,23 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
           borderRadius: BorderRadius.circular(20.0),
         ),
       ),
-      onDaySelected: (day, events, li){
+      onDaySelected: (day, events, li) {
+        print(events);
         setState(() {
           selectedDayEvents = events;
         });
-
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       minimum: EdgeInsets.only(left: 7.0, right: 7.0, top: 7.0),
       child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBar(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
             iconTheme: IconThemeData(
               color: Colors.grey,
             ),
@@ -99,61 +100,133 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
               style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
             ),
           ),
-        body: Column(
-          children: [
-            StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('/Patient')
-                    .doc(widget.uid)
-                    .collection('/Prescriptions') //TODO: where status equals ...
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    Map<DateTime, List<dynamic>> allEventsMap = {};
-
-                    snapshot.data.docs.forEach((doc){
-
-                      String start = doc.data()['start-date'];
-                      var startDate = DateTime.tryParse(start);
-                      String prescriptionName = doc.data()['tradeNameArabic'];
-
-                      if (allEventsMap.containsKey(startDate)){
-                        allEventsMap[startDate].add(prescriptionName);
+        body: SingleChildScrollView(
+          child: Column(
+              children: [
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('/Patient')
+                        .doc(widget.uid)
+                        .collection('/Prescriptions') //TODO: where status equals dispensed
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
                       } else {
-                        allEventsMap.addAll({
-                          startDate: [prescriptionName]   });
-                      }
-                    });
 
-                    return theCalendar(allEventsMap);
-                  }
-                }
-            ),
-            Divider(
-              height: 20,
-              thickness: 3,
-            ),
-            Text('وصفاتك اليوم', style: TextStyle (color: Colors.black),),
-            //...selectedDayEvents.map((event) => ListTile(title: Text('$event'))),
-            // ListView.builder(
-            //     itemCount: selectedDayEvents.length,
-            //     itemBuilder: (context, index) {
-            //       print(selectedDayEvents.length);
-            //       return Container();
-            //     })
-            Builder(
-              builder: (context) {
-                if (selectedDayEvents.isNotEmpty) {
-                  return Container(color: Colors.black);
-                } else {
-                  return Container(color: Colors.yellow);
-                }
-              }
-            ),
-            ListTile(title: Text('heloo'), leading: Icon(Icons.build_circle_outlined)),
-          ]
+                        Map<DateTime, List<dynamic>> allEventsMap = {};
+                        snapshot.data.docs.forEach((doc){
+                          List <dynamic> prescriptionAllInfo = [];
+                          //map keys
+                          String start = doc.data()['start-date'];
+                          var startDate = DateTime.tryParse(start);
+                          //map values
+                          String prescriptionID = doc.id;
+                          String tradeName = doc.data()['tradeNameArabic'];
+                          String frequency = doc.data()['frequency'];
+                          //add to list
+                          prescriptionAllInfo.add(prescriptionID);
+                          prescriptionAllInfo.add(tradeName);
+                          prescriptionAllInfo.add(frequency);
+
+                          if (allEventsMap.containsKey(startDate)){
+                            allEventsMap[startDate].add(prescriptionAllInfo);
+                          } else {
+                            allEventsMap.addAll({
+                              startDate: [prescriptionAllInfo]   });
+                          }
+                        });
+
+                        return theCalendar(allEventsMap);
+                      }
+                    }
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 3,
+                ),
+                Text('وصفاتك اليوم', style: TextStyle (color: Colors.black),),
+                // ...me.forEach((id, info) {
+                //   return Padding(
+                //       padding: const EdgeInsets.all(8.0),
+                //       child: Card(
+                //         shape: RoundedRectangleBorder(
+                //           borderRadius: BorderRadius.circular(15.0),
+                //         ),
+                //         color: kGreyColor,
+                //         child: ListTile(
+                //           title: Text(info[0], style: TextStyle(color: Colors.black)),
+                //           subtitle: Text(info[1], style: TextStyle(color: Colors.black)),
+                //
+                //         ),
+                //       )
+                //   );
+                //
+                // }),
+                // ...me.forEach((id, info) {
+                //   return Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Card(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //       ),
+                //       color: kGreyColor,
+                //       child: ListTile(
+                //         title: Text(info[0], style: TextStyle(color: Colors.black)),
+                //         subtitle: Text(info[1], style: TextStyle(color: Colors.black)),
+                //       ),
+                //     ),
+                //   );
+                // }),
+                // ...selectedDayEvents.map((event) {
+                //   return Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Card(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(15.0),
+                //       ),
+                //       color: kGreyColor,
+                //       child: ListTile(
+                //         title: Text(name, style: TextStyle(color: Colors.black)),
+                //         subtitle: Text(frequency, style: TextStyle(color: Colors.black)),
+                //
+                //       ),
+                //     )
+                //   );
+                //
+                // }),
+                ...selectedDayEvents.map((event) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      color: kGreyColor,
+                      // child: Column(
+                      //   children: [
+                      //     Text(event[0], style: TextStyle(color: Colors.black)),
+                      //     Text(event[1], style: TextStyle(color: Colors.black)),
+                      //     Text(event[2], style: TextStyle(color: Colors.black)),
+                      //   ]
+                      // )
+                      child: ListTile(
+                        leading: Icon(Icons.post_add),
+                        title: Text(event[1], style: TextStyle(color: Colors.black)),
+                        subtitle: Text(event[2], style: TextStyle(color: Colors.black)),
+                        trailing: GestureDetector(
+                            child: Icon(
+                              Icons.post_add,
+                              color: Colors.black54,
+                            ),
+                            onTap: () {
+                              //display prescription using event[2]
+                            }
+                        )
+                      ),
+                    )
+                ),),
+              ]
+          )
         )
       ),
     );
