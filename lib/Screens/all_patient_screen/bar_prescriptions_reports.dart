@@ -16,7 +16,7 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
   Widget yesButton;
   Widget noButton;
 
-  Future displayReportPrescription(String prescriptionID){
+  Future displayReportPrescription(String prescriptionID){ //TODO: delete this
     return showModalBottomSheet(
       context: context,
       builder: (context) {
