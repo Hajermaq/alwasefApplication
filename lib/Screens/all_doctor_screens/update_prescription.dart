@@ -128,17 +128,12 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                           : snapshot.data.get('tradeName'),
                                   pharmaceuticalForm:
                                       snapshot.data.get('pharmaceutical-form'),
-                                  strength: snapshot.data.get('strength'),
-                                  strengthUnit:
-                                      snapshot.data.get('strength-unit'),
                                   date: snapshot.data
                                       .get('prescription-creation-date'),
                                   administrationRoute:
                                       snapshot.data.get('administration-route'),
                                   storageCondition:
                                       snapshot.data.get('storage-conditions'),
-                                  size: snapshot.data.get('size'),
-                                  sizeUnit: snapshot.data.get('size-unit'),
                                   price: snapshot.data.get('price'),
                                 ),
                                 Card(

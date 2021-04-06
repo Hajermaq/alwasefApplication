@@ -41,11 +41,12 @@ class MyApp extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        FocusScope.of(context).unfocus();
+        WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
       child: ChangeNotifierProvider(
         create: (context) => PrescriptionData(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           localizationsDelegates: [
             GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,

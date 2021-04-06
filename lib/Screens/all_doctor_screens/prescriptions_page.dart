@@ -592,6 +592,31 @@ class _PrescriptionsState extends State<Prescriptions> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
+                                              //here
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'الاسم العلمي',
+                                                    style:
+                                                        ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['scientificName']}',
+                                                    style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                               Row(
                                                 children: [
                                                   Text(
@@ -600,10 +625,22 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         ksubBoldLabelTextStyle,
                                                   ),
                                                   SizedBox(
-                                                    width: 15.0,
+                                                    width: 65.0,
                                                   ),
                                                   Text(
-                                                    '${prescription.data()['dose']} ${prescription.data()['dose-unit']}',
+                                                    '${prescription.data()['strength-unit']}',
+                                                    style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['strength']}',
                                                     style: TextStyle(
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
@@ -613,18 +650,21 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                   ),
                                                 ],
                                               ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                               Row(
                                                 children: [
                                                   Text(
-                                                    ' التكرار',
+                                                    'شكل الجرعة',
                                                     style:
                                                         ksubBoldLabelTextStyle,
                                                   ),
                                                   SizedBox(
-                                                    width: 15.0,
+                                                    width: 19.0,
                                                   ),
                                                   Text(
-                                                    '${'${prescription.data()['frequency']}'}',
+                                                    '${prescription.data()['pharmaceutical-form']}',
                                                     style: TextStyle(
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
@@ -634,18 +674,21 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                   ),
                                                 ],
                                               ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
                                               Row(
                                                 children: [
                                                   Text(
-                                                    'التعليمات',
+                                                    'التكرار',
                                                     style:
                                                         ksubBoldLabelTextStyle,
                                                   ),
                                                   SizedBox(
-                                                    width: 15.0,
+                                                    width: 65.0,
                                                   ),
                                                   Text(
-                                                    '${prescription.data()['instruction-note']}',
+                                                    '${prescription.data()['frequency']}',
                                                     style: TextStyle(
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
@@ -654,6 +697,9 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                     ),
                                                   ),
                                                 ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
                                               ),
                                               Row(
                                                 children: [

@@ -244,28 +244,24 @@ class UserManagement {
     String endDate,
     //names
     String scientificName,
-    String scientificNameArabic,
     String tradeName,
     String tradeNameArabic,
     //units
     String strength,
     String strengthUnit,
-    String size,
-    String sizeUnit,
+
     // random
+    String frequency,
+    String note1,
+    String note2,
     String pharmaceuticalForm,
     String administrationRoute,
     String storageConditions,
     String publicPrice,
     //Textfiels data
     // integers
-    double dose,
-    int quantity,
     int refill,
-    int dosingExpire,
     // strings
-    var frequency,
-    var doseUnit,
     String instructionNote,
     String doctorNotes,
   }) async {
@@ -294,26 +290,23 @@ class UserManagement {
             'scientificName': scientificName,
             'tradeName': tradeName,
             'tradeNameArabic': tradeNameArabic,
-            'scientificNameArabic': scientificNameArabic,
             //units
             'strength': strength,
             'strength-unit': strengthUnit,
-            'size': size,
-            'size-unit': sizeUnit,
             // random
+            'note_1': note1,
+            'note_2': note2,
             'pharmaceutical-form': pharmaceuticalForm,
             'administration-route': administrationRoute,
             'storage-conditions': storageConditions,
             'price': publicPrice,
             // textfiles data
             //integers
-            'dose': dose,
-            'quantity': quantity,
+
             'refill': refill,
-            'dosing-expire': dosingExpire,
+
             // strings
             'frequency': frequency,
-            'dose-unit': doseUnit,
             'instruction-note': instructionNote,
             'doctor-note': doctorNotes,
           },
