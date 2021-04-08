@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:age/age.dart';
 
-
 class PatientMedicalHistory extends StatefulWidget {
   PatientMedicalHistory({this.uid});
   final String uid;
@@ -49,7 +48,17 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               .collection('/Medical History')
               .snapshots(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data.docs.length == 0) {
+              return Center(
+                child: Text(
+                  'لم يقم المريض بتعبئة السجل الطبي.',
+                  style: TextStyle(color: Colors.black54, fontSize: 17),
+                ),
+              );
+            } else {
               //main variable
               DocumentSnapshot medicalHistory = snapshot.data.docs[0];
               //Lists
@@ -219,8 +228,6 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                 ],
               );
             }
-
-            return CircularProgressIndicator();
           }),
     ));
   }

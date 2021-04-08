@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/components/drug_info_card.dart';
 import 'package:alwasef_app/components/text_field_1.dart';
@@ -10,7 +12,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -63,12 +64,24 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  //to generate random number
+  Random rnd = new Random();
+  String s = '';
 
   //Lists
   static List<Prescription> drugsForDisplay = List<Prescription>();
   List<Prescription> _drugs = List<Prescription>();
 
-  //Methods
+  @override
+  void initState() {
+    var l = new List.generate(6, (_) => rnd.nextInt(10));
+    print(l);
+
+    for (var i in l) {
+      s = '$s' + i.toString();
+    }
+  } //Methods
+
   Future<List<Prescription>> fetchPrescription() async {
     String URL =
         "https://script.googleusercontent.com/macros/echo?user_content_key=cZjO7AxQnGr5mEQU49YQ-3MB88SmMHHlsnReCM8fc3VrB0Jmbp6gVSgTMbPyDazhEpcLWrPjyvkfh4NDqrIzSIdQYbaMdEOSm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOQBGUzymd9dmG3yxLUZhJsOi89FooeW3AOJmSEjWW9Tv86I0CPwvhEbPZSPmNd8uTjl2UHC3vVSohIuEUGeYk7e5IOKNOHuf9z9Jw9Md8uu&lib=MpUICE4vsIfJjj6VE8jMtH_aUQYat3_A-";
@@ -114,25 +127,18 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
     return FilledRoundTextFields(
       hintMessage: 'ابحث عن اسم الدواء هنا',
       onChanged: (text) {
-        stringFromTF = text.toLowerCase();
-        fetchPrescription();
+        setState(() {
+          if (!text.isEmpty) {
+            stringFromTF = text.toLowerCase();
+            fetchPrescription();
+          } else {
+            print('null');
+          }
+        });
       },
       fillColor: kGreyColor,
     );
   }
-
-  // String checkDrugName() {
-  //   if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
-  //     return scientificName;
-  //   else if ((scientificName == ' ' || scientificNameArabic == ' ') &&
-  //       tradeName != ' ')
-  //     return tradeName;
-  //   else if ((tradeName == ' ' || scientificName == ' ') &&
-  //       tradeNameArabic != ' ')
-  //     return tradeNameArabic;
-  //   else
-  //     return scientificNameArabic;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +320,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                 context: context,
                                 patientId: widget.uid,
                                 prescriberId: prescriberId,
-                                registerNumber: registerNumber,
+                                presciptionId: '[$s]',
                                 creationDate: creationDate,
                                 startDate: startDate,
                                 endDate: endDate,

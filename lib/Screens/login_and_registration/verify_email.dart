@@ -80,26 +80,36 @@ class _VerifiyPageState extends State<VerifiyPage> {
                     if (isVerified) {
                       if ('طبيب' == widget.role) {
                         UserManagement().newDoctorSetUp(
-                            context,
-                            widget.password,
-                            widget.name,
-                            widget.role,
-                            widget.hospital_UID);
+                          context: context,
+                          hospitalUID: widget.hospital_UID,
+                          password: widget.password,
+                          speciality: '',
+                          doctorName: widget.name,
+                          role: widget.role,
+                          phoneNumber: '',
+                          experienceYears: '',
+                        );
                       } else if ('صيدلي' == widget.role) {
                         UserManagement().newPharmacistSetUp(
-                            context,
-                            widget.password,
-                            widget.name,
-                            widget.role,
-                            widget.hospital_UID);
+                          context: context,
+                          hospitalUID: widget.hospital_UID,
+                          password: widget.password,
+                          pharmacistName: widget.name,
+                          role: widget.role,
+                        );
                       } else if ('مريض' == widget.role) {
                         UserManagement().newPatientSetUp(
-                            context,
-                            widget.password,
-                            widget.name,
-                            widget.role,
-                            widget.hospital_UID,
-                            '');
+                          context: context,
+                          hospitalUID: widget.hospital_UID,
+                          pharmacistUID: '',
+                          doctor1uid: '',
+                          doctor2uid: '',
+                          doctor3uid: '',
+                          doctor4uid: '',
+                          password: widget.password,
+                          role: widget.role,
+                          patientName: widget.name,
+                        );
                         //Hospital
                       } else {
                         UserManagement().newHospitalSetUp(

@@ -52,11 +52,13 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text(e.message, style: TextStyle(color: kBlueColor)),
+            title: new Text(
+                ' البريد الإلكتروني المدخل قيد الاستخدام من قبل حساب آخر.',
+                style: TextStyle(color: kBlueColor)),
             actions: <Widget>[
               FlatButton(
                 child: new Text(
-                  "OK",
+                  "حسنا",
                   style: TextStyle(color: kBlueColor),
                 ),
                 onPressed: () {

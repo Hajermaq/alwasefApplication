@@ -1,5 +1,7 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
+import 'package:alwasef_app/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
 import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,13 +80,16 @@ class UserManagement {
 
   //===============================================================================
 
-  Future<void> newDoctorSetUp(
+  Future<void> newDoctorSetUp({
     context,
     String password,
     String doctorName,
     String role,
     String hospitalUID,
-  ) async {
+    String speciality,
+    String phoneNumber,
+    String experienceYears,
+  }) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Doctors');
@@ -96,12 +101,20 @@ class UserManagement {
         String email = currentUser.email.toString();
 
         await collection.doc(uid).set({
+          //ids
           'uid': uid,
-          'doctor-name': doctorName,
-          'email': email,
-          'password': password,
-          'role': role,
           'hospital-uid': hospitalUID,
+          //names
+          'doctor-name': doctorName,
+          //email
+          'email': email,
+          //pass
+          'password': password,
+          //random
+          'doctor-speciality': speciality,
+          'role': role,
+          'phone-number': phoneNumber,
+          'experience-years': experienceYears,
         }).then((_) {
           print('collection is created');
           Navigator.pushNamed(context, DoctorMainPage.id);
@@ -115,13 +128,14 @@ class UserManagement {
   } //end of method
   //===============================================================================
 
-  Future<void> newPharmacistSetUp(
+  Future<void> newPharmacistSetUp({
     context,
     String password,
     String pharmacistName,
     String role,
     String hospitalUID,
-  ) async {
+    String phoneNumer,
+  }) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Pharmacist');
@@ -133,16 +147,22 @@ class UserManagement {
         String email = currentUser.email.toString();
 
         await collection.doc(uid).set({
+          //ids
           'uid': uid,
-          'Pharmacist-name': pharmacistName,
-          'email': email,
-          'password': password,
-          'role': role,
           'hospital-uid': hospitalUID,
+          //names
+          'pharmacist-name': pharmacistName,
+          //email
+          'email': email,
+          //pass
+          'password': password,
+          //random
+          'role': role,
+          'phone-number': phoneNumer,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
-          Navigator.pushNamed(context, AdminScreen.id);
+          Navigator.pushNamed(context, PharmacistMainPage.id);
         }).catchError((_) {
           print(" an error occured");
         });
@@ -154,14 +174,19 @@ class UserManagement {
 
   //===============================================================================
 
-  Future<void> newPatientSetUp(
+  Future<void> newPatientSetUp({
     context,
     String password,
     String patientName,
     String role,
     String hospitalUID,
-    String doctorUID,
-  ) async {
+    String pharmacistUID,
+    String doctor1uid,
+    String doctor2uid,
+    String doctor3uid,
+    String doctor4uid,
+    String phoneNumber,
+  }) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
@@ -173,17 +198,27 @@ class UserManagement {
         String email = currentUser.email.toString();
 
         await collection.doc(uid).set({
+          //ids
           'uid': uid,
-          'patient-name': patientName,
-          'email': email,
-          'password': password,
-          'role': role,
           'hospital-uid': hospitalUID,
-          'doctor-uid': doctorUID,
+          'pharmacist-uid': pharmacistUID,
+          'doctor1-uid': doctor1uid,
+          'doctor2-uid': doctor2uid,
+          'doctor3-uid': doctor3uid,
+          'doctor4-uid': doctor4uid,
+          //names
+          'patient-name': patientName,
+          //email
+          'email': email,
+          //password
+          'password': password,
+          //random
+          'role': role,
+          'phone-number': phoneNumber,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
-          Navigator.pushNamed(context, AdminScreen.id);
+          Navigator.pushNamed(context, PatientMainPage.id);
         }).catchError((_) {
           print(" an error occured");
         });
@@ -200,6 +235,7 @@ class UserManagement {
     String hospitalName,
     String doctorUID,
     String pharmacistUID,
+    String phoneNumer,
   }) async {
     try {
       CollectionReference collection =
@@ -212,12 +248,17 @@ class UserManagement {
         String email = currentUser.email.toString();
 
         await collection.doc(uid).set({
-          'hospital-name': hospitalName,
-          'hospital-id': uid,
-          'email': email,
-          'role': role,
+          //ids
           'doctor-uid': doctorUID,
           'pharmacist-uid': pharmacistUID,
+          'hospital-id': uid,
+          //name
+          'hospital-name': hospitalName,
+          //email
+          'email': email,
+          //random
+          'role': role,
+          'phone-number': phoneNumer,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
@@ -237,7 +278,7 @@ class UserManagement {
     //id's
     String patientId,
     String prescriberId,
-    String registerNumber,
+    String presciptionId,
     //dates
     String creationDate,
     String startDate,
@@ -281,7 +322,7 @@ class UserManagement {
 
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
-            'registerNumber': registerNumber,
+            'prescription-id': presciptionId,
             //dates
             'prescription-creation-date': creationDate,
             'start-date': startDate,
@@ -327,19 +368,17 @@ class UserManagement {
     //id's
     String patientId,
     String prescriberId,
-    String registerNumber,
     //dates
     String creationDate,
     String startDate,
     String endDate,
     //names
+    String scientificName,
     String tradeName,
     String tradeNameArabic,
     //units
     String strength,
     String strengthUnit,
-    String size,
-    String sizeUnit,
     // random
     String pharmaceuticalForm,
     String administrationRoute,
@@ -376,21 +415,18 @@ class UserManagement {
             //id's
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
-            'registerNumber': registerNumber,
+
             //dates
             'prescription-creation-date': creationDate,
             'start-date': startDate,
             'end-date': endDate,
             //names
-
             'tradeName': tradeName,
+            'scientificName': scientificName,
             'tradeNameArabic': tradeNameArabic,
-
             //units
             'strength': strength,
             'strength-unit': strengthUnit,
-            'size': size,
-            'size-unit': sizeUnit,
             // random
             'pharmaceutical-form': pharmaceuticalForm,
             'administration-route': administrationRoute,
@@ -398,13 +434,10 @@ class UserManagement {
             'price': publicPrice,
             // textfiles data
             //integers
-            'dose': dose,
             'quantity': quantity,
             'refill': refill,
-            'dosing-expire': dosingExpire,
             // strings
             'frequency': frequency,
-            'dose-unit': doseUnit,
             'instruction-note': instructionNote,
             'doctor-note': doctorNotes,
           },

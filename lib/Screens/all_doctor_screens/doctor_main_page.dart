@@ -1,5 +1,4 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_profile_info.dart';
-import 'package:alwasef_app/Screens/services/provider_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
 import 'doctor_home_page.dart';
 import 'doctor_patients_reports.dart';
+import 'doctor_search_page.dart';
 
 class DoctorMainPage extends StatefulWidget {
   static const String id = 'doctor_main_screen';

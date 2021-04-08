@@ -35,51 +35,98 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
   // formatted date
   static final DateTime now = DateTime.now();
   final String creationDate = formatter.format(now);
+  //Data from Api with default value
+  String tradeName = '...';
+  String tradeNameArabic = '...';
+  String scientificName = '...';
+  String pharmaceuticalForm = '...';
+  String strength = '...';
+  String strengthUnit = '...';
+  String administrationRoute = '...';
+  String storageConditions = '...';
+  String publicPrice = '...';
+  String registerNumber = ' ';
+  String frequency = '...';
+  String note1 = '...';
+  String note2 = '...';
   //Data from TextFields
-  double dose = 0.0;
-  int quantity = 0;
-  int refill = 0;
-  int dosingExpire = 0;
-  var frequency;
-  var doseUnit;
-  String instructionNote = ' ';
-  String doctorNotes = ' ';
-  String startDate = ' ';
-  String endDate = ' ';
-  String RegisterNumber = '';
+  var dropdownvalue;
+  int refill;
+  String instructionNote;
+  String doctorNotes;
   //Random Variables
   String stringFromTF;
   final maxLines = 5;
   // the creation on the prescription date
   static final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  // start date
+  String startDate;
+  // end date
+  String endDate;
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  //controller
-
   //Lists
   static List<Prescription> drugsForDisplay = List<Prescription>();
   List<Prescription> _drugs = List<Prescription>();
-  @override
+  Future<List<Prescription>> fetchPrescription() async {
+    String URL =
+        "https://script.googleusercontent.com/macros/echo?user_content_key=cZjO7AxQnGr5mEQU49YQ-3MB88SmMHHlsnReCM8fc3VrB0Jmbp6gVSgTMbPyDazhEpcLWrPjyvkfh4NDqrIzSIdQYbaMdEOSm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOQBGUzymd9dmG3yxLUZhJsOi89FooeW3AOJmSEjWW9Tv86I0CPwvhEbPZSPmNd8uTjl2UHC3vVSohIuEUGeYk7e5IOKNOHuf9z9Jw9Md8uu&lib=MpUICE4vsIfJjj6VE8jMtH_aUQYat3_A-";
+
+    http.Response response = await http.get(URL);
+
+    List<Prescription> allDrugs = List<Prescription>();
+
+    if (response.statusCode == 200) {
+      List jsonArray = json.decode(response.body);
+
+      for (var obj in jsonArray) {
+        for (var v in obj.values) {
+          var b = v.toString();
+          String tradename = obj['tradeName'].toLowerCase();
+          String scientificname = obj['scientificName'].toLowerCase();
+          String tradenamearabic = obj['tradeNameArabic'].toLowerCase();
+          if (scientificname.contains(stringFromTF) ||
+              tradename.contains(stringFromTF) ||
+              tradenamearabic.contains(stringFromTF)) {
+            registerNumber = obj['RegisterNumber'].toString();
+            tradeName = obj['tradeName'].toString();
+            scientificName = obj['scientificName'].toString();
+            tradeNameArabic = obj['tradeNameArabic'].toString();
+            pharmaceuticalForm = obj['PharmaceuticalForm'].toString();
+            strength = obj['Strength'].toString();
+            strengthUnit = obj['StrengthUnit'].toString();
+            administrationRoute = obj['AdministrationRoute'].toString();
+            storageConditions = obj['Storage conditions'].toString();
+            publicPrice = obj['Public price'].toString();
+            frequency = obj['Frequency'].toString();
+            note1 = obj['Note1'].toString();
+            note2 = obj['Note2'].toString();
+          }
+        }
+      }
+    }
+
+    return allDrugs;
+  }
+
   _searchBar() {
     return FilledRoundTextFields(
+      onPressed: () {
+        setState(() {});
+      },
       hintMessage: 'ابحث عن اسم الدواء هنا',
+      onChanged: (text) {
+        if (!text.isEmpty) {
+          stringFromTF = text.toLowerCase();
+          fetchPrescription();
+        } else {
+          print('null');
+        }
+      },
       fillColor: kGreyColor,
     );
   }
-
-  // String checkDrugName() {
-  //   if ((tradeName == ' ' || tradeNameArabic == ' ') && scientificName != ' ')
-  //     return scientificName;
-  //   else if ((scientificName == ' ' || scientificNameArabic == ' ') &&
-  //       tradeName != ' ')
-  //     return tradeName;
-  //   else if ((tradeName == ' ' || scientificName == ' ') &&
-  //       tradeNameArabic != ' ')
-  //     return tradeNameArabic;
-  //   else
-  //     return scientificNameArabic;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +153,36 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                       if (!snapshot.hasData) {
                         return CircularProgressIndicator();
                       } else {
-                        instructionNote = snapshot.data.get('instruction-note');
-                        frequency = snapshot.data.get('frequency');
-                        refill = snapshot.data.get('refill');
-                        dose = snapshot.data.get('dose');
-                        doseUnit = snapshot.data.get('dose-unit');
-                        quantity = snapshot.data.get('quantity');
-                        startDate = snapshot.data.get('start-date');
-                        endDate = snapshot.data.get('end-date');
-                        doctorNotes = snapshot.data.get('doctor-note');
+                        if (stringFromTF == null) {
+                          scientificName = snapshot.data.get('scientificName');
+                          pharmaceuticalForm =
+                              snapshot.data.get('pharmaceutical-form');
+                          instructionNote =
+                              snapshot.data.get('instruction-note');
+                          frequency = snapshot.data.get('frequency');
+                          refill = snapshot.data.get('refill');
+                          strength = snapshot.data.get('strength');
+                          strengthUnit = snapshot.data.get('strength-unit');
+                          startDate = snapshot.data.get('start-date');
+                          endDate = snapshot.data.get('end-date');
+                          doctorNotes = snapshot.data.get('doctor-note');
+                          note1 = snapshot.data.get('note_1');
+                          note2 = snapshot.data.get('note_2');
+                        } else {
+                          scientificName = scientificName;
+                          pharmaceuticalForm = pharmaceuticalForm;
+                          instructionNote = instructionNote;
+                          frequency = frequency;
+                          refill = refill;
+                          strength = strength;
+                          strengthUnit = strengthUnit;
+                          startDate = startDate;
+                          endDate = endDate;
+                          doctorNotes = doctorNotes;
+                          note1 = note1;
+                          note2 = note2;
+                        }
+
                         return ListView(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -122,20 +190,35 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                             Column(
                               children: [
                                 DrugInfoCard(
-                                  drugName:
-                                      snapshot.data.get('tradeName') == null
-                                          ? snapshot.data.get('tradeNameArabic')
-                                          : snapshot.data.get('tradeName'),
-                                  pharmaceuticalForm:
-                                      snapshot.data.get('pharmaceutical-form'),
-                                  date: snapshot.data
-                                      .get('prescription-creation-date'),
-                                  administrationRoute:
-                                      snapshot.data.get('administration-route'),
-                                  storageCondition:
-                                      snapshot.data.get('storage-conditions'),
-                                  price: snapshot.data.get('price'),
+                                  drugName: stringFromTF == null
+                                      ? snapshot.data.get('tradeNameArabic')
+                                      : tradeName,
+                                  pharmaceuticalForm: stringFromTF == null
+                                      ? snapshot.data.get('pharmaceutical-form')
+                                      : pharmaceuticalForm,
+                                  date: stringFromTF == null
+                                      ? snapshot.data
+                                          .get('prescription-creation-date')
+                                      : creationDate,
+                                  administrationRoute: stringFromTF == null
+                                      ? snapshot.data
+                                          .get('administration-route')
+                                      : administrationRoute,
+                                  storageCondition: stringFromTF == null
+                                      ? snapshot.data.get('storage-conditions')
+                                      : storageConditions,
+                                  price: stringFromTF == null
+                                      ? snapshot.data.get('price')
+                                      : publicPrice,
                                 ),
+                                DosageCard(
+                                    strength,
+                                    strengthUnit,
+                                    pharmaceuticalForm,
+                                    frequency,
+                                    note1,
+                                    note2,
+                                    scientificName),
                                 Card(
                                   color: kGreyColor,
                                   shape: RoundedRectangleBorder(
@@ -147,137 +230,6 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 8.0, 0.0, 8.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Expanded(
-                                                flex: 5,
-                                                child: TextField_1(
-                                                  validator: Validation()
-                                                      .validateDoubleNumber,
-                                                  textInputType: TextInputType
-                                                      .numberWithOptions(
-                                                          decimal: true),
-                                                  onChanged: (value) {
-                                                    dose = double.parse(value);
-                                                  },
-                                                  labelText: 'الجرعة',
-                                                  initialValue:
-                                                      '${snapshot.data.get('dose')}',
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 3,
-                                                child: DropdownButtonFormField<
-                                                        String>(
-                                                    isExpanded: true,
-                                                    decoration: InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.all(17.0),
-                                                      fillColor: Colors.white54,
-                                                      filled: true,
-                                                      labelStyle:
-                                                          GoogleFonts.almarai(
-                                                              color: kBlueColor,
-                                                              fontSize: 25.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                      errorStyle: TextStyle(
-                                                        color: kRedColor,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 15.0,
-                                                      ),
-                                                      errorBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: kRedColor,
-                                                            width: 3.0),
-                                                      ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .transparent),
-                                                      ),
-                                                    ),
-                                                    style: TextStyle(
-                                                      color: Colors.black54,
-                                                    ),
-                                                    value: snapshot.data
-                                                        .get('dose-unit'),
-                                                    icon: Icon(
-                                                        Icons.arrow_drop_down),
-                                                    validator: Validation()
-                                                        .validateDropDownMenue,
-                                                    onChanged:
-                                                        (String newValue) {
-                                                      setState(() {
-                                                        doseUnit = newValue;
-                                                      });
-                                                    },
-                                                    hint: Text(
-                                                      'فضلا اختر ',
-                                                      style:
-                                                          GoogleFonts.almarai(
-                                                        color: Colors.black54,
-                                                      ),
-                                                    ),
-                                                    items: <String>[
-                                                      'µg',
-                                                      'mg',
-                                                      'g',
-                                                      'ml',
-                                                      'tbsp (15ml)',
-                                                      'tsp (5ml)',
-                                                      'gr',
-                                                      'capsule',
-                                                      'capsules',
-                                                      'Tablet ',
-                                                      'Tablets ',
-                                                    ].map<
-                                                            DropdownMenuItem<
-                                                                String>>(
-                                                        (String value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value,
-                                                        child: Text(
-                                                          value,
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      );
-                                                    }).toList()),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        TextField_1(
-                                          textInputType:
-                                              TextInputType.numberWithOptions(
-                                                  decimal: false),
-                                          onChanged: (value) {
-                                            quantity = int.parse(value);
-                                          },
-                                          validator: Validation()
-                                              .validateIntegerNumber,
-                                          labelText: 'الكمية',
-                                          initialValue:
-                                              '${snapshot.data.get('quantity')}',
-                                        ),
                                         TextField_1(
                                           textInputType:
                                               TextInputType.numberWithOptions(
@@ -296,90 +248,6 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                           thickness: 0.9,
                                           endIndent: 20,
                                           indent: 20,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 8.0, 20.0, 8.0),
-                                          child: DropdownButtonFormField<
-                                                  String>(
-                                              decoration: InputDecoration(
-                                                fillColor: Colors.white54,
-                                                filled: true,
-                                                labelText: 'التكرار',
-                                                labelStyle: GoogleFonts.almarai(
-                                                    color: kBlueColor,
-                                                    fontSize: 20.0,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                errorBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: kRedColor,
-                                                    width: 4.0,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                focusedErrorBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: kRedColor,
-                                                      width: 3.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.transparent),
-                                                ),
-                                              ),
-                                              icon: Icon(Icons.arrow_drop_down),
-                                              style: TextStyle(
-                                                color: Colors.black54,
-                                              ),
-                                              value: snapshot.data
-                                                  .get('frequency'),
-                                              validator: Validation()
-                                                  .validateDropDownMenue,
-                                              onChanged: (String newValue) {
-                                                frequency = newValue;
-                                              },
-                                              // onChanged: (value) {},
-                                              // hint: Text(
-                                              //   '${snapshot.data.get('frequency')}',
-                                              //   style: GoogleFonts.almarai(
-                                              //     color: Colors.black54,
-                                              //   ),
-                                              // ),
-                                              items: <String>[
-                                                'مرة في اليوم (QD)',
-                                                'مرتين في اليوم (BID)',
-                                                'ثلاث مرات في اليوم (TID)',
-                                                'أربع مرات في اليوم (QID)',
-                                                'خمس مرات في اليوم (PID)',
-                                                'حسب الحاجة (PRN)',
-                                                'قبل النوم (QHS)',
-                                                'مرة في الأسبوع (Qweek)',
-                                                'مرة في الشهر (Qmonth)',
-                                                'مرة كل يومين (QOD)',
-                                                'اخرى',
-                                              ].map<DropdownMenuItem<String>>(
-                                                  (String value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: Center(
-                                                    child: Text(
-                                                      value,
-                                                    ),
-                                                  ),
-                                                );
-                                              }).toList()),
                                         ),
                                         DatePicker(
                                           initialValue: DateTime.parse(
@@ -475,35 +343,23 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                             documentId: widget.documentID,
                                             currentPatient_uid: widget.uid)
                                         .prescriptionUpdate(
+                                      scientificName: scientificName,
                                       context: context,
                                       patientId: widget.uid,
                                       prescriberId: '',
-                                      registerNumber:
-                                          snapshot.data.get('registerNumber'),
                                       creationDate: creationDate,
                                       startDate: startDate,
                                       endDate: endDate,
-                                      tradeName: snapshot.data.get('tradeName'),
-                                      tradeNameArabic:
-                                          snapshot.data.get('tradeNameArabic'),
-                                      strengthUnit:
-                                          snapshot.data.get('strength-unit'),
-                                      strength: snapshot.data.get('strength'),
-                                      pharmaceuticalForm: snapshot.data
-                                          .get('pharmaceutical-form'),
-                                      administrationRoute: snapshot.data
-                                          .get('administration-route'),
-                                      size: snapshot.data.get('size'),
-                                      sizeUnit: snapshot.data.get('size-unit'),
-                                      storageConditions: snapshot.data
-                                          .get('storage-conditions'),
-                                      publicPrice: snapshot.data.get('price'),
-                                      dose: dose,
-                                      quantity: quantity,
+                                      tradeName: tradeName,
+                                      tradeNameArabic: tradeNameArabic,
+                                      strengthUnit: strengthUnit,
+                                      strength: strength,
+                                      pharmaceuticalForm: pharmaceuticalForm,
+                                      administrationRoute: administrationRoute,
+                                      storageConditions: storageConditions,
+                                      publicPrice: publicPrice,
                                       refill: refill,
-                                      dosingExpire: dosingExpire,
                                       frequency: frequency,
-                                      doseUnit: doseUnit,
                                       instructionNote: instructionNote,
                                       doctorNotes: doctorNotes,
                                     );

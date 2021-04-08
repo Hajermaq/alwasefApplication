@@ -80,7 +80,7 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                       size: 40,
                                     ),
                                     title: Text(
-                                      'د.${snapshot.data.get('doctor-name')} ',
+                                      'د.${snapshot.data.get('doctor-name')}',
                                       style: TextStyle(
                                         fontSize: 20.0,
                                       ),
@@ -105,12 +105,14 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ChangeEmail(),
+                                          builder: (context) => ChangeEmail(
+                                            collectionName: 'Doctors',
+                                          ),
                                         ),
                                       );
                                     },
                                     title: 'البريد الإلكتروني',
-                                    subtitle: currentUser.email,
+                                    subtitle: "${snapshot.data.get('email')}",
                                     icon_1: Icon(Icons.email_outlined),
                                   ),
                                   ListTileDivider(),
@@ -119,8 +121,9 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ChangePassword(),
+                                          builder: (context) => ChangePassword(
+                                            collectionName: 'Doctors',
+                                          ),
                                         ),
                                       );
                                     },
@@ -135,13 +138,18 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              CreatePhoneNumber(),
+                                              CreatePhoneNumber(
+                                            collectionName: 'Doctors',
+                                          ),
                                         ),
                                       );
                                     },
                                     title: 'تعيين رقم هاتف',
-                                    subtitle:
-                                        '${snapshot.data.get('phoneNumber')}',
+                                    subtitle: snapshot.data
+                                                .get('phone-number') ==
+                                            ' '
+                                        ? ''
+                                        : '${snapshot.data.get('phone-number')}',
                                     icon_1: Icon(Icons.phone),
                                   ),
                                   ListTileDivider(),
@@ -151,7 +159,11 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              ChangePhoneNumber(),
+                                              ChangePhoneNumber(
+                                            currentphonenumber: snapshot.data
+                                                .get('phone-number'),
+                                            collectionName: 'Doctors',
+                                          ),
                                         ),
                                       );
                                     },

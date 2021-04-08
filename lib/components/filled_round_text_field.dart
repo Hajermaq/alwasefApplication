@@ -4,11 +4,16 @@ import '../constants.dart';
 
 class FilledRoundTextFields extends StatelessWidget {
   final Function onChanged;
+  final Function onPressed;
   final String hintMessage;
   final Color color;
   final Color fillColor;
   FilledRoundTextFields(
-      {this.hintMessage, this.onChanged, this.color, this.fillColor});
+      {this.hintMessage,
+      this.onChanged,
+      this.color,
+      this.fillColor,
+      this.onPressed});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,9 +31,9 @@ class FilledRoundTextFields extends StatelessWidget {
             filled: true,
             contentPadding: EdgeInsets.all(16),
             fillColor: fillColor,
-            icon: Icon(
-              Icons.search_outlined,
-              color: kBlueColor,
+            icon: IconButton(
+              icon: Icon(Icons.search_outlined),
+              onPressed: onPressed,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),

@@ -24,29 +24,51 @@ GlobalKey<FormState> _key4 = GlobalKey();
 AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 //functions
 
-Future resetEmail(String newEmail, String password) async {
+Future resetEmail(
+    String newEmail, String password, String collectionName) async {
+  print('collection name $collectionName');
   var authResult = await auth.signInWithEmailAndPassword(
       email: currentUser.email, password: password);
   await authResult.user.updateEmail(newEmail);
+  print(authResult.user.uid);
   await FirebaseFirestore.instance
-      .collection('/Doctors')
+      .collection('/$collectionName')
       .doc(authResult.user.uid)
-      .update({'email': newEmail});
+      .set({'email': newEmail}, SetOptions(merge: true));
 }
 
-Future<void> resetPassword(String email) async {
+Future<void> resetPassword(
+    String email, String collectionName, BuildContext context) async {
   if (email == currentUser.email) {
     await auth.sendPasswordResetEmail(email: email);
-    FirebaseFirestore.instance
-        .collection('/Doctors')
-        .doc(currentUser.uid)
-        .update({});
   } else {
-    print('no such a user');
+    print('no');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text('البريد الإلكتروني المدخل لا يطابق بريدك الإلكتروني.',
+              style: TextStyle(color: kBlueColor)),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text(
+                "حسنا",
+                style: TextStyle(color: kBlueColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
 class ChangeEmail extends StatefulWidget {
+  ChangeEmail({this.collectionName});
+  final String collectionName;
   @override
   _ChangeEmailState createState() => _ChangeEmailState();
 }
@@ -105,6 +127,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                   validator: Validation().validatePasswordLogin,
                   onSaved: (value) {
                     password = value;
+                    print(password);
                   },
                   decoration: InputDecoration(
                     hintText: 'كلمة المرور',
@@ -148,7 +171,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                   right: 50.0,
                 ),
                 child: TextFormField(
-                  validator: Validation().validateEmailLogin,
+                  validator: Validation().validateEmailReset,
                   onSaved: (value) {
                     updatedEmail = value;
                   },
@@ -192,7 +215,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
                       if (_key1.currentState.validate()) {
                         //there is no error
                         _key1.currentState.save();
-                        resetEmail(updatedEmail, password)
+                        resetEmail(
+                                updatedEmail, password, widget.collectionName)
                             .then((value) => Navigator.pop(context));
                         _key1.currentState.save();
                       } else {
@@ -227,6 +251,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
 }
 
 class ChangePassword extends StatefulWidget {
+  ChangePassword({this.collectionName});
+  final String collectionName;
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
 }
@@ -260,108 +286,113 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       backgroundColor: kLightColor,
       body: SingleChildScrollView(
-        child: Form(
-          key: _key2,
-          autovalidateMode: autovalidateMode,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 200,
-              ),
-              Text(
-                'أعد إدخال البريد الإلكتروني الخاصة بك للمتابعة',
-                style: TextStyle(color: kBlueColor, fontSize: 16.0),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 50.0,
-                  right: 50.0,
+        child: Builder(builder: (BuildContext context) {
+          return Form(
+            key: _key2,
+            autovalidateMode: autovalidateMode,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 200,
                 ),
-                child: TextFormField(
-                  keyboardType: TextInputType.emailAddress,
-                  validator: Validation().validateEmailLogin,
-                  onSaved: (value) {
-                    updatedEmail = value;
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'البريد الإلكتروني',
-                    fillColor: kGreyColor,
-                    filled: true,
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(
-                        color: kRedColor,
-                        width: 3.0,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(),
-                    ),
+                Text(
+                  'أعد إدخال البريد الإلكتروني الخاصة بك للمتابعة',
+                  style: TextStyle(color: kBlueColor, fontSize: 16.0),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 50.0,
+                    right: 50.0,
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 100.0, vertical: 20.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 50.0,
-                  child: RaisedButton(
-                    onPressed: () {
-                      if (_key2.currentState.validate()) {
-                        //there is no error
-                        _key2.currentState.save();
-                        resetPassword(updatedEmail)
-                            .then((value) => Navigator.pop(context));
-                        _key2.currentState.save();
-                      } else {
-                        setState(() {
-                          autovalidateMode = AutovalidateMode.always;
-                        });
-                      }
+                  child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    validator: Validation().validateEmailReset,
+                    onSaved: (value) {
+                      updatedEmail = value;
                     },
-                    color: kBlueColor,
-                    child: Text(
-                      'تحديث',
-                      style: TextStyle(
-                        color: Colors.white,
-                        // fontFamily: 'Montserrat',
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1,
+                    decoration: InputDecoration(
+                      hintText: 'البريد الإلكتروني',
+                      fillColor: kGreyColor,
+                      filled: true,
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: kRedColor,
+                          width: 3.0,
+                        ),
                       ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 100.0, vertical: 20.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        if (_key2.currentState.validate()) {
+                          //there is no error
+                          _key2.currentState.save();
+                          resetPassword(
+                                  updatedEmail, widget.collectionName, context)
+                              .then((value) => Navigator.pop(context));
+                          _key2.currentState.save();
+                        } else {
+                          setState(() {
+                            autovalidateMode = AutovalidateMode.always;
+                          });
+                        }
+                      },
+                      color: kBlueColor,
+                      child: Text(
+                        'تحديث',
+                        style: TextStyle(
+                          color: Colors.white,
+                          // fontFamily: 'Montserrat',
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 }
 
 class CreatePhoneNumber extends StatefulWidget {
+  CreatePhoneNumber({this.collectionName});
+  final String collectionName;
   @override
   _CreatePhoneNumberState createState() => _CreatePhoneNumberState();
 }
@@ -464,10 +495,10 @@ class _CreatePhoneNumberState extends State<CreatePhoneNumber> {
                         _key3.currentState.save();
 
                         await FirebaseFirestore.instance
-                            .collection('/Doctors')
+                            .collection('/${widget.collectionName}')
                             .doc(currentUser.uid)
                             .set({
-                          'phoneNumber': phoneNumber
+                          'phone-number': phoneNumber
                         }, SetOptions(merge: true)).then(
                                 (value) => Navigator.pop(context));
                         _key3.currentState.save();
@@ -503,6 +534,9 @@ class _CreatePhoneNumberState extends State<CreatePhoneNumber> {
 }
 
 class ChangePhoneNumber extends StatefulWidget {
+  ChangePhoneNumber({this.collectionName, this.currentphonenumber});
+  final String collectionName;
+  final String currentphonenumber;
   @override
   _ChangePhoneNumberState createState() => _ChangePhoneNumberState();
 }
@@ -558,6 +592,7 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                   right: 50.0,
                 ),
                 child: TextFormField(
+                  initialValue: widget.currentphonenumber,
                   validator: Validation().validateMobile,
                   keyboardType: TextInputType.phone,
                   onSaved: (value) {
@@ -604,10 +639,10 @@ class _ChangePhoneNumberState extends State<ChangePhoneNumber> {
                         _key4.currentState.save();
 
                         await FirebaseFirestore.instance
-                            .collection('/Doctors')
+                            .collection('/${widget.collectionName}')
                             .doc(currentUser.uid)
                             .set({
-                          'phoneNumber': updatedPhoneNumber
+                          'phone-number': updatedPhoneNumber
                         }, SetOptions(merge: true)).then(
                                 (value) => Navigator.pop(context));
                       } else {
