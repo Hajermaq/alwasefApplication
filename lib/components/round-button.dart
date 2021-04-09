@@ -9,7 +9,9 @@ class RoundRaisedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 50.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: 50.0,
+      ),
       child: Container(
         width: double.infinity,
         height: 50.0,

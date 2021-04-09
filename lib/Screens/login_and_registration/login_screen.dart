@@ -48,7 +48,7 @@ class _LogInScreenState extends State<LogInScreen> {
             key: _key,
             autovalidateMode: autovalidateMode,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
@@ -103,6 +103,9 @@ class _LogInScreenState extends State<LogInScreen> {
                   },
                   textInputType: TextInputType.text,
                   //hiddenPass: true,
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 RoundRaisedButton(
                   text: ' إذهب',
@@ -271,6 +274,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             },
                           );
                         } else {
+                          print(e);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -301,8 +305,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     }
                   },
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
                 Container(
-                  // TODO write this code
                   padding: EdgeInsets.all(10.0),
                   child: InkWell(
                     onTap: () {

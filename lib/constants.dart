@@ -19,7 +19,7 @@ const kTextFieldborderColor = Color(0xffabd1c6);
 
 // Headlines style
 const kRegisterHospitalHeadlineStyle = TextStyle(
-  fontSize: 40.0,
+  fontSize: 30.0,
   fontFamily: 'Almarai',
   fontWeight: FontWeight.bold,
 );
@@ -63,7 +63,7 @@ const kDropDownHintStyle = TextStyle(
 const kButtonTextStyle = TextStyle(
   color: kButtonTextColor,
   // fontFamily: 'Montserrat',
-  fontSize: 30,
+  fontSize: 25,
   fontWeight: FontWeight.w600,
   letterSpacing: 1,
 );

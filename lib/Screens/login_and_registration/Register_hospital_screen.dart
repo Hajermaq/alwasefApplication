@@ -8,6 +8,8 @@ import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:alwasef_app/components/round-button.dart';
 
+import 'login_screen.dart';
+
 class RegisterHospitalScreen extends StatefulWidget {
   static const String id = 'register_hospital_screen';
   @override
@@ -88,10 +90,13 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                  child: Text(
-                    'سجل مستشفى جديدة',
-                    textAlign: TextAlign.center,
-                    style: kRegisterHospitalHeadlineStyle,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40.0, bottom: 20.0),
+                    child: Text(
+                      'انشئ حساب لمستشفى',
+                      textAlign: TextAlign.center,
+                      style: kRegisterUsersHeadlineStyle,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -158,6 +163,24 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                         });
                       }
                     }),
+                Container(
+                  // TODO write this code
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LogInScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'تسجيل الدخول',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

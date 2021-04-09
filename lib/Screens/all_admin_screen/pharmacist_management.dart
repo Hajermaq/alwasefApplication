@@ -22,7 +22,6 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser.uid);
     print(widget.pharmacist_id);
     return SafeArea(
       child: Scaffold(
@@ -140,14 +139,16 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                                                   speciality = speciality;
 
                                                   print(speciality);
+                                                  print(widget.pharmacist_id);
 
                                                   FirebaseFirestore.instance
                                                       .collection('/Pharmacist')
                                                       .doc(widget.pharmacist_id)
-                                                      .update(
+                                                      .set(
                                                     {
                                                       'speciality': speciality,
                                                     },
+                                                    SetOptions(merge: true),
                                                   );
                                                 },
                                               );

@@ -96,6 +96,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                           password: widget.password,
                           pharmacistName: widget.name,
                           role: widget.role,
+                          speciality: '',
                         );
                       } else if ('مريض' == widget.role) {
                         UserManagement().newPatientSetUp(

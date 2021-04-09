@@ -1,3 +1,4 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -50,17 +51,17 @@ class RoundTextFields extends StatelessWidget {
               borderRadius: BorderRadius.circular(35.0),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kRedColor, width: 4.0),
+              borderSide: BorderSide(color: kRedColor, width: 3.0),
               borderRadius: BorderRadius.circular(35.0),
             ),
             hintText: hintMessage,
             hintStyle: kTextFieldHintStyle,
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kPinkColor, width: 4.0),
+              borderSide: BorderSide(color: kPinkColor, width: 3.0),
               borderRadius: BorderRadius.circular(35.0),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: kPinkColor, width: 4.0),
+              borderSide: BorderSide(color: kPinkColor, width: 3.0),
               borderRadius: BorderRadius.circular(35.0),
             ),
           ),
