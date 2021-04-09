@@ -20,12 +20,22 @@ class _PatientManagementState extends State<PatientManagement> {
   String doctor3_uid;
   String doctor4_uid;
   String pharmacist_uid;
+  String speciality;
+  var _selectedName;
   List<String> doctors = [];
+  getDoctorinfo() async {
+    await FirebaseFirestore.instance
+        .collection('/Doctors')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      speciality = doc.data()['speciality'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
-  String _selectedHeartDoctor;
-  String _selectedInternalDoctor;
-  String _selectedPsychiatricDoctor;
-  String _selectedFamilyDoctor;
   @override
   Widget build(BuildContext context) {
     print(FirebaseAuth.instance.currentUser.uid);
@@ -114,6 +124,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                       List<DropdownMenuItem> hospitalsNames =
                                           [];
                                       var documents = snapshot.data.docs;
+                                      var documentt = '';
                                       for (var document in documents) {
                                         hospitalsNames.add(
                                           DropdownMenuItem(
@@ -144,11 +155,23 @@ class _PatientManagementState extends State<PatientManagement> {
                                               ),
                                             ),
                                             items: hospitalsNames,
-                                            onChanged: (value) {
+                                            onTap: () {},
+                                            onChanged: (value) async {
                                               doctors.clear();
                                               doctor1_uid = value;
+                                              setState(() {
+                                                _selectedName = value;
+                                              });
+                                              await FirebaseFirestore.instance
+                                                  .collection('/Doctors')
+                                                  .doc(doctor1_uid)
+                                                  .get()
+                                                  .then((doc) {
+                                                documentt = doc
+                                                    .data()['doctor-name']
+                                                    .toString();
+                                              });
                                               doctors.add(doctor1_uid);
-
                                               FirebaseFirestore.instance
                                                   .collection('/Patient')
                                                   .doc(widget.patient_id)
@@ -158,6 +181,9 @@ class _PatientManagementState extends State<PatientManagement> {
                                                 },
                                               );
                                             },
+                                            value: _selectedName == ''
+                                                ? documentt
+                                                : _selectedName,
                                           ),
                                         ),
                                       );

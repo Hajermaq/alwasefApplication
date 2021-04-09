@@ -1,4 +1,5 @@
 import 'package:alwasef_app/Screens/all_admin_screen/patient_management.dart';
+import 'package:alwasef_app/Screens/all_admin_screen/pharmacist_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -86,7 +87,7 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                   children: [
                                     ListTile(
                                       title: Text(
-                                        '${document.data()['Pharmacist-name']}',
+                                        '${document.data()['pharmacist-name']}',
                                         // textAlign: TextAlign.end,
                                         style: TextStyle(
                                             color: Colors.black54,
@@ -101,16 +102,16 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                       ),
                                       trailing: Icon(Icons.keyboard_arrow_left),
                                       onTap: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         PatientManagement(
-                                        //           patient_id:
-                                        //           document.data()['uid'],
-                                        //         ),
-                                        //   ),
-                                        // );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                PharmacistManagement(
+                                              pharmacist_id: document
+                                                  .data()['pharmacist-name'],
+                                            ),
+                                          ),
+                                        );
                                       },
                                     ),
                                     ListTileDivider(

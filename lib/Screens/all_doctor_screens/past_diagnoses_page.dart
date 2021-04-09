@@ -137,6 +137,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                           ),
                                         ),
                                         trailing: OutlinedButton.icon(
+                                          onPressed: () {},
                                           icon: status == 'ongoing'
                                               ? Icon(
                                                   Icons.replay_circle_filled,

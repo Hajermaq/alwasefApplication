@@ -184,6 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
+                          value: _selectedSpeciality,
                           isExpanded: true,
                           dropdownColor: kBlueColor,
                           style: kDropDownHintStyle,
@@ -193,7 +194,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               color: Colors.white54,
                             ),
                           ), // Not necessary for Option 1
-                          value: _selectedSpeciality,
                           onChanged: (newValue) {
                             setState(() {
                               _selectedSpeciality = newValue;
