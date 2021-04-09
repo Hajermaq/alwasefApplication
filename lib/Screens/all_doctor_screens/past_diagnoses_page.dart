@@ -162,7 +162,6 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                                   BorderRadius.circular(32.0),
                                             ),
                                           ),
-                                          onPressed: null,
                                         ),
                                       ),
                                       Divider(
