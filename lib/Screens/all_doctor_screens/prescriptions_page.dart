@@ -125,11 +125,11 @@ class _PrescriptionsState extends State<Prescriptions> {
       if (doc.data()['speciality'] == 'طبيب قلب') {
         doctorSpeciality = 'cardiologist';
       } else if (doc.data()['speciality'] == 'طبيب باطنية') {
-        doctorSpeciality = 'Internal medicine physicians';
+        doctorSpeciality = 'internal physician';
       } else if (doc.data()['speciality'] == 'طبيب أسرة') {
         doctorSpeciality = 'family physician';
       } else {
-        doctorSpeciality = 'Psychologist';
+        doctorSpeciality = 'psychologist';
       }
       print(doctorName);
       if (mounted) {
@@ -936,172 +936,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                               ],
                                             ),
-                                            // Column(
-                                            //   mainAxisAlignment:
-                                            //       MainAxisAlignment.spaceEvenly,
-                                            //   children: [
-                                            //     prescription.data()['note_2'] ==
-                                            //             ''
-                                            //         ? Padding(
-                                            //             padding:
-                                            //                 const EdgeInsets
-                                            //                         .only(
-                                            //                     right: 80.0),
-                                            //             child: Column(
-                                            //               children: [
-                                            //                 Row(
-                                            //                   children: [
-                                            //                     Text(
-                                            //                       '( 1 )',
-                                            //                       style:
-                                            //                           ksubBoldLabelTextStyle,
-                                            //                     ),
-                                            //                     SizedBox(
-                                            //                       width: 15.0,
-                                            //                     ),
-                                            //                     Expanded(
-                                            //                       child: Text(
-                                            //                         '${prescription.data()['instruction-note']}',
-                                            //                         style:
-                                            //                             TextStyle(
-                                            //                           color: Colors
-                                            //                               .black45,
-                                            //                           fontSize:
-                                            //                               15.0,
-                                            //                           fontWeight:
-                                            //                               FontWeight
-                                            //                                   .bold,
-                                            //                         ),
-                                            //                       ),
-                                            //                     ),
-                                            //                   ],
-                                            //                 ),
-                                            //                 SizedBox(
-                                            //                   height: 10,
-                                            //                 ),
-                                            //                 Row(
-                                            //                   children: [
-                                            //                     Text(
-                                            //                       '( 2 )',
-                                            //                       style:
-                                            //                           ksubBoldLabelTextStyle,
-                                            //                     ),
-                                            //                     SizedBox(
-                                            //                       width: 15.0,
-                                            //                     ),
-                                            //                     Expanded(
-                                            //                       child: Text(
-                                            //                         '${prescription.data()['note_1']}',
-                                            //                         style:
-                                            //                             TextStyle(
-                                            //                           color: Colors
-                                            //                               .black45,
-                                            //                           fontSize:
-                                            //                               15.0,
-                                            //                           fontWeight:
-                                            //                               FontWeight
-                                            //                                   .bold,
-                                            //                         ),
-                                            //                       ),
-                                            //                     ),
-                                            //                   ],
-                                            //                 ),
-                                            //               ],
-                                            //             ),
-                                            //           )
-                                            //         : Column(
-                                            //             children: [
-                                            //               Row(
-                                            //                 children: [
-                                            //                   Text(
-                                            //                     '( 1 )',
-                                            //                     style:
-                                            //                         ksubBoldLabelTextStyle,
-                                            //                   ),
-                                            //                   SizedBox(
-                                            //                     width: 15.0,
-                                            //                   ),
-                                            //                   Expanded(
-                                            //                     child: Text(
-                                            //                       '${prescription.data()['instruction-note']}',
-                                            //                       style:
-                                            //                           TextStyle(
-                                            //                         color: Colors
-                                            //                             .black45,
-                                            //                         fontSize:
-                                            //                             15.0,
-                                            //                         fontWeight:
-                                            //                             FontWeight
-                                            //                                 .bold,
-                                            //                       ),
-                                            //                     ),
-                                            //                   ),
-                                            //                 ],
-                                            //               ),
-                                            //               SizedBox(
-                                            //                 height: 10,
-                                            //               ),
-                                            //               Row(
-                                            //                 children: [
-                                            //                   Text(
-                                            //                     '( 2 )',
-                                            //                     style:
-                                            //                         ksubBoldLabelTextStyle,
-                                            //                   ),
-                                            //                   SizedBox(
-                                            //                     width: 15.0,
-                                            //                   ),
-                                            //                   Expanded(
-                                            //                     child: Text(
-                                            //                       '${prescription.data()['note_1']}',
-                                            //                       style:
-                                            //                           TextStyle(
-                                            //                         color: Colors
-                                            //                             .black45,
-                                            //                         fontSize:
-                                            //                             15.0,
-                                            //                         fontWeight:
-                                            //                             FontWeight
-                                            //                                 .bold,
-                                            //                       ),
-                                            //                     ),
-                                            //                   ),
-                                            //                 ],
-                                            //               ),
-                                            //               SizedBox(
-                                            //                 height: 10,
-                                            //               ),
-                                            //               Row(
-                                            //                 children: [
-                                            //                   Text(
-                                            //                     '( 3 )',
-                                            //                     style:
-                                            //                         ksubBoldLabelTextStyle,
-                                            //                   ),
-                                            //                   SizedBox(
-                                            //                     width: 15.0,
-                                            //                   ),
-                                            //                   Expanded(
-                                            //                     child: Text(
-                                            //                       '${prescription.data()['note_2']}',
-                                            //                       style:
-                                            //                           TextStyle(
-                                            //                         color: Colors
-                                            //                             .black45,
-                                            //                         fontSize:
-                                            //                             15.0,
-                                            //                         fontWeight:
-                                            //                             FontWeight
-                                            //                                 .bold,
-                                            //                       ),
-                                            //                     ),
-                                            //                   ),
-                                            //                 ],
-                                            //               ),
-                                            //             ],
-                                            //           ),
-                                            //   ],
-                                            // ),
                                             Divider(
                                               color: klighterColor,
                                               thickness: 0.9,
@@ -1589,6 +1423,29 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                             'p-${prescription.data()['prescription-id']}.pdf',
                                                                             pdf1);
                                                                       });
+                                                                      showDialog(
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext
+                                                                                context) {
+                                                                          return AlertDialog(
+                                                                            title:
+                                                                                new Text('تم تحميل الملف بنجاح, اذهب الى\n Files>> Show Internal Storage >> your device >> Download', style: TextStyle(color: kBlueColor)),
+                                                                            actions: <Widget>[
+                                                                              FlatButton(
+                                                                                child: new Text(
+                                                                                  "حسنا",
+                                                                                  style: TextStyle(color: kBlueColor),
+                                                                                ),
+                                                                                onPressed: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                              ),
+                                                                            ],
+                                                                          );
+                                                                        },
+                                                                      );
                                                                     },
                                                                     title: Text(
                                                                       'تحميل الوصفة الطبية',
@@ -1610,11 +1467,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           ),
                                                         );
                                                       },
-                                                      // onPressed: () async {
-                                                      //   writeToPdf();
-                                                      //   await savePdfFile(
-                                                      //       'example.pdf');
-
                                                       color: klighterColor,
                                                       shape:
                                                           RoundedRectangleBorder(

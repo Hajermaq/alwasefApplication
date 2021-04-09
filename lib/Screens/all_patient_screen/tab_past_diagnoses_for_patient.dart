@@ -1,8 +1,11 @@
+import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
+import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import '../../constants.dart';
 
 class PatientPastDiagnoses extends StatefulWidget {
@@ -45,17 +48,16 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-
                             DocumentSnapshot diagnoses =
-                              snapshot.data.docs[index];
+                                snapshot.data.docs[index];
                             String status = diagnoses.data()['status'];
 
                             String medicalDiagnosis =
-                            diagnoses.data()['medical-diagnosis'];
+                                diagnoses.data()['medical-diagnosis'];
                             // search logic
                             if (medicalDiagnosis
-                                .toLowerCase()
-                                .contains(searchValue.toLowerCase()) ||
+                                    .toLowerCase()
+                                    .contains(searchValue.toLowerCase()) ||
                                 medicalDiagnosis
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
@@ -65,7 +67,7 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                 ),
                                 color: kGreyColor,
                                 margin:
-                                EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                                 child: Column(
                                   children: [
                                     ListTile(
@@ -77,7 +79,7 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: Text(
                                           diagnoses.data()[
-                                          'diagnosis-creation-date'],
+                                              'diagnosis-creation-date'],
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontSize: 15.0,
@@ -87,13 +89,13 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                       trailing: OutlinedButton.icon(
                                         icon: status == 'ongoing'
                                             ? Icon(
-                                          Icons.replay_circle_filled,
-                                          color: kBlueColor,
-                                        )
+                                                Icons.replay_circle_filled,
+                                                color: kBlueColor,
+                                              )
                                             : Icon(
-                                          Icons.update,
-                                          color: kBlueColor,
-                                        ),
+                                                Icons.update,
+                                                color: kBlueColor,
+                                              ),
                                         label: Text(
                                           "${diagnoses.data()['status']}",
                                           style: TextStyle(
@@ -106,10 +108,10 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                               width: 2.0, color: kBlueColor),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(32.0),
+                                                BorderRadius.circular(32.0),
                                           ),
                                         ),
-                                        onPressed: null,
+                                        onPressed: () {},
                                       ),
                                     ),
                                     Divider(
@@ -123,14 +125,13 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                       child: Container(
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Row(
                                               children: [
                                                 Text(
                                                   'وصف التشخيص',
-                                                  style:
-                                                  ksubBoldLabelTextStyle,
+                                                  style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 15.0,
@@ -140,8 +141,7 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                                   style: TextStyle(
                                                     color: Colors.black45,
                                                     fontSize: 15.0,
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ],
@@ -150,8 +150,7 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                               children: [
                                                 Text(
                                                   'النصيحة الطبية',
-                                                  style:
-                                                  ksubBoldLabelTextStyle,
+                                                  style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 15.0,
@@ -161,8 +160,7 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                                                   style: TextStyle(
                                                     color: Colors.black45,
                                                     fontSize: 15.0,
-                                                    fontWeight:
-                                                    FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ],
