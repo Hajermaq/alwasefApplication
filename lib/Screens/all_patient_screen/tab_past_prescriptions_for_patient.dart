@@ -1,11 +1,8 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import '../../constants.dart';
 
 class PatientPastPrescriptions extends StatefulWidget {

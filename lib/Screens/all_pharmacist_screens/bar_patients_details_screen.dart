@@ -1,32 +1,27 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_diagnoses_for_patient.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
+import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_for_patient.dart';
+import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_prescriptions.dart';
 import 'package:alwasef_app/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:scroll_navigation/scroll_navigation.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
-class PatientDetails extends StatefulWidget {
-  static final String id = 'patient_details_screen';
-  final UserManagement user = UserManagement();
+class PatientDetails2 extends StatefulWidget {
   final String name;
   final String email;
   final String uid;
-  PatientDetails({this.name, this.email, this.uid});
+  PatientDetails2({this.name, this.email, this.uid});
   @override
-  _PatientDetailsState createState() => _PatientDetailsState();
+  _PatientDetails2State createState() => _PatientDetails2State();
 }
 
-class _PatientDetailsState extends State<PatientDetails>
+class _PatientDetails2State extends State<PatientDetails2>
     with TickerProviderStateMixin {
+
   TabController _tabController;
+
   @override
   void initState() {
     _tabController = TabController(length: 5, vsync: this);
@@ -105,20 +100,20 @@ class _PatientDetailsState extends State<PatientDetails>
                             child: TabBar(
                               controller: _tabController,
                               labelStyle: TextStyle(
-                                  //up to your taste
+                                //up to your taste
                                   fontWeight: FontWeight.w700),
                               indicatorSize:
-                                  TabBarIndicatorSize.label, //makes it better
+                              TabBarIndicatorSize.label, //makes it better
                               labelColor: kBlueColor, //Google's sweet blue
                               unselectedLabelColor: kGreyColor, //niceish grey
                               isScrollable: true, //up to your taste
                               indicator: MD2Indicator(
-                                  //it begins here
+                                //it begins here
                                   indicatorHeight: 3,
                                   indicatorColor: kBlueColor,
                                   indicatorSize: MD2IndicatorSize
                                       .normal //3 different modes tiny-normal-full
-                                  ),
+                              ),
                               tabs: <Widget>[
                                 Tab(
                                   text: "الوصفة الطبية",
@@ -144,19 +139,19 @@ class _PatientDetailsState extends State<PatientDetails>
                               child: TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    Prescriptions(
+                                    Prescriptions2(
                                       uid: widget.uid,
                                     ),
-                                    Diagnoses(
+                                    PatientDiagnoses(
                                       uid: widget.uid,
                                     ),
                                     PatientMedicalHistory(
                                       uid: widget.uid,
                                     ),
-                                    PastPrescriptions(
+                                    PatientPastPrescriptions(
                                       uid: widget.uid,
                                     ),
-                                    PastDiagnoses(
+                                    PatientPastDiagnoses(
                                       uid: widget.uid,
                                     ),
                                   ]),

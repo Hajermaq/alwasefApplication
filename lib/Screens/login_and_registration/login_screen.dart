@@ -1,5 +1,5 @@
 import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/profile_pages.dart';
+import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/profile_changes.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';

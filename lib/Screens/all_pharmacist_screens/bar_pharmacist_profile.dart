@@ -1,19 +1,19 @@
-import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
-import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/profile_changes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/profile_changes.dart';
+import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 
 
-class PatientProfile extends StatefulWidget {
+class PharmacistProfileInfo extends StatefulWidget {
   @override
-  _PatientProfileState createState() => _PatientProfileState();
+  _PharmacistProfileInfoState createState() => _PharmacistProfileInfoState();
 }
 
-class _PatientProfileState extends State<PatientProfile> {
+class _PharmacistProfileInfoState extends State<PharmacistProfileInfo> {
   final currentUser = FirebaseAuth.instance.currentUser;
   final auth = FirebaseAuth.instance;
 
@@ -52,7 +52,7 @@ class _PatientProfileState extends State<PatientProfile> {
               padding: const EdgeInsets.all(10.0),
               child: StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('/Patient')
+                      .collection('/Pharmacist')
                       .doc(currentUser.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
@@ -79,7 +79,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                       size: 40,
                                     ),
                                     title: Text(
-                                      '${snapshot.data.get('patient-name')}',
+                                      'ص.${snapshot.data.get('pharmacist-name')}',
                                       style: TextStyle(
                                         fontSize: 20.0,
                                       ),
@@ -105,7 +105,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => ChangeEmail(
-                                            collectionName: 'Patient',
+                                            collectionName: 'Pharmacist',
                                           ),
                                         ),
                                       );
@@ -121,7 +121,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => ChangePassword(
-                                            collectionName: 'Patient',
+                                            collectionName: 'Pharmacist',
                                           ),
                                         ),
                                       );
@@ -138,7 +138,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               CreatePhoneNumber(
-                                                collectionName: 'Patient',
+                                                collectionName: 'Pharmacist',
                                               ),
                                         ),
                                       );
@@ -160,7 +160,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                               ChangePhoneNumber(
                                                 currentphonenumber: snapshot.data
                                                     .get('phone-number'),
-                                                collectionName: 'Patient',
+                                                collectionName: 'Pharmacist',
                                               ),
                                         ),
                                       );

@@ -6,6 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
 
 class PatientsReports extends StatefulWidget {
+  PatientsReports({this.condition});
+  final String condition;
+
   @override
   _PatientsReportsState createState() => _PatientsReportsState();
 }
@@ -13,10 +16,6 @@ class PatientsReports extends StatefulWidget {
 class _PatientsReportsState extends State<PatientsReports> {
 
   String searchValue = '';
-
-
-
-
 
 
   @override
@@ -57,7 +56,7 @@ class _PatientsReportsState extends State<PatientsReports> {
               child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('/Report')
-                      .where('prescriber-id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                      .where(widget.condition, isEqualTo: FirebaseAuth.instance.currentUser.uid)
                       .snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (!snapshot.hasData) {

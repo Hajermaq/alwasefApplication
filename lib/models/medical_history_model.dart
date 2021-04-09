@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MedicalHistory {
   String patientUID;
   String patientFullName, gender, birthDate, maritalStatus, pregnancy, smoking;
-  int age;
   double weight, height;
   List<String> hospitalizations,
       surgery,
@@ -21,7 +20,6 @@ class MedicalHistory {
         'full name': patientFullName,
         'gender': gender,
         'birth date': birthDate,
-        'age': age,
         'weight': weight,
         'height': height,
         'marital status': maritalStatus,
@@ -33,12 +31,6 @@ class MedicalHistory {
         'current medications': currentMed,
         'allergies': allergies,
         'medication allergies': medAllergies,
-        // 'hospitalization': checkListNull(hospitalizations),
-        // 'surgery': checkListNull(surgery),
-        // 'chronic disease': checkListNull(chronicDisease),
-        // 'current medications': checkListNull(currentMed),
-        // 'allergies': checkListNull(allergies),
-        // 'medication allergies': checkListNull(medAllergies),
       });
     } catch (e) {
       print(e);

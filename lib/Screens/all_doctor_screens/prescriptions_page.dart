@@ -47,7 +47,7 @@ class _PrescriptionsState extends State<Prescriptions> {
   //Functions
 
 // get information from FireStore
-  getPatientinfo() async {
+  getPatientInfo() async {
     await FirebaseFirestore.instance
         .collection('/Patient')
         .doc(widget.uid)
@@ -84,7 +84,7 @@ class _PrescriptionsState extends State<Prescriptions> {
     });
   }
 
-  getHospitalinfo() async {
+  getHospitalInfo() async {
     String hospitalUid = '';
     await FirebaseFirestore.instance
         .collection('/Patient')
@@ -113,7 +113,7 @@ class _PrescriptionsState extends State<Prescriptions> {
     });
   }
 
-  getDoctorinfo() async {
+  getDoctorInfo() async {
     await FirebaseFirestore.instance
         .collection('/Doctors')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -140,9 +140,9 @@ class _PrescriptionsState extends State<Prescriptions> {
 
   @override
   void initState() {
-    getPatientinfo();
-    getHospitalinfo();
-    getDoctorinfo();
+    getPatientInfo();
+    getHospitalInfo();
+    getDoctorInfo();
   }
 
   //Function related to pdf generation
@@ -518,6 +518,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
+                            Widget statusIcon;
                             DocumentSnapshot prescription =
                                 snapshot.data.docs[index];
                             String status = prescription.data()['status'];
@@ -525,6 +526,18 @@ class _PrescriptionsState extends State<Prescriptions> {
                             String tradeName = prescription.data()['tradeName'];
                             String dose =
                                 prescription.data()['dose'].toString();
+
+                            if(status == 'pending'){
+                              statusIcon = Icon(Icons.hourglass_top_outlined, color: kBlueColor,);
+                            } else if (status == 'updated') {
+                              statusIcon = Icon(Icons.update, color: kBlueColor,);
+                            } else if (status == 'inconsistent') {
+                            statusIcon = Icon(Icons.warning_amber_outlined, color: Colors.red);
+                            } else if (status == 'dispensed') {
+                            statusIcon = Icon(Icons.assignment_turned_in_outlined, color: Colors.green);
+                            }
+
+
                             // search logic
                             if (tradeName
                                     .toLowerCase()
@@ -565,15 +578,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                         ),
                                       ),
                                       trailing: OutlinedButton.icon(
-                                        icon: status == 'pending'
-                                            ? Icon(
-                                                Icons.hourglass_top_outlined,
-                                                color: kBlueColor,
-                                              )
-                                            : Icon(
-                                                Icons.update,
-                                                color: kBlueColor,
-                                              ),
+                                        icon: statusIcon,
                                         label: Text(
                                           "${prescription.data()['status']}",
                                           style: TextStyle(
