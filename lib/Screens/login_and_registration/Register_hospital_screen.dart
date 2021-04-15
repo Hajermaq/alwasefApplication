@@ -147,7 +147,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                   },
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: 88.0,
                 ),
                 RoundRaisedButton(
                     text: 'سجل',

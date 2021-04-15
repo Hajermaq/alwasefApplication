@@ -55,11 +55,7 @@ class _PatientMainPageState extends State<PatientMainPage> {
             ),
             pages: [
               //Profile Page
-              PatientProfile(
-                uid: currentUser.uid.toString(),
-                email: currentUser.email.toString(),
-                name: name.toString(),
-              ),
+              PatientProfile(),
               //medical info page
               PatientMedicalInfo(
                 uid: currentUser.uid.toString(),

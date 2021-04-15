@@ -24,13 +24,19 @@ const kRegisterHospitalHeadlineStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 const kBoldLabelTextStyle = TextStyle(
+  fontSize: 15,
   color: Colors.white,
   fontWeight: FontWeight.bold,
 );
 const ksubBoldLabelTextStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
-  fontSize: 18.0,
+  fontSize: 15.0,
+);
+const ksubBoldValueTextStyle = TextStyle(
+  color: Colors.black45,
+  fontSize: 15.0,
+  fontWeight: FontWeight.bold,
 );
 
 const kValuesTextStyle = TextStyle(
@@ -39,31 +45,31 @@ const kValuesTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 const kRegisterUsersHeadlineStyle = TextStyle(
-  fontSize: 60.0,
+  fontSize: 40.0,
   fontFamily: 'Almarai',
   fontWeight: FontWeight.bold,
 );
 
 const kMainHeadLinesStyle = TextStyle(
-  fontSize: 30.0,
+  fontSize: 20.0,
 );
 
 //TextFields style
 const kTextFieldHintStyle = TextStyle(
   color: Colors.white54,
-  fontSize: 20.0,
+  fontSize: 15.0,
   fontWeight: FontWeight.normal,
 );
 const kDropDownHintStyle = TextStyle(
   color: Colors.white54,
-  fontSize: 20.0,
+  fontSize: 16.0,
   fontWeight: FontWeight.normal,
 );
 //Button style
 const kButtonTextStyle = TextStyle(
   color: kButtonTextColor,
   // fontFamily: 'Montserrat',
-  fontSize: 25,
+  fontSize: 20,
   fontWeight: FontWeight.w600,
   letterSpacing: 1,
 );

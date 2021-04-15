@@ -122,6 +122,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     RoundTextFields(
                       validator: Validation().validateName,
                       textInputType: TextInputType.name,
@@ -130,9 +133,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintMessage: 'اسم المستخدم',
                       onSaved: (value) {
                         name = value;
-                      },
-                      onChanged: (value) {
-                        _key.currentState.validate();
                       },
                     ),
                     SizedBox(
@@ -147,9 +147,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (value) {
                         email = value;
                       },
-                      onChanged: (value) {
-                        _key.currentState.validate();
-                      },
                     ),
                     SizedBox(
                       height: 20.0,
@@ -163,21 +160,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (value) {
                         password = value;
                       },
-                      onChanged: (value) {
-                        _key.currentState.validate();
-                      },
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                      margin: EdgeInsets.only(right: 50, left: 90),
+                      margin: EdgeInsets.only(right: 50, left: 40),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           value: _selectedSpeciality,
-                          isExpanded: true,
                           dropdownColor: kBlueColor,
+                          isDense: true,
                           style: kDropDownHintStyle,
                           hint: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -237,7 +231,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                           return Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                            margin: EdgeInsets.only(right: 50, left: 90),
+                            margin: EdgeInsets.only(right: 50, left: 40),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
                                 isExpanded: true,
@@ -272,7 +266,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }, // end of builder
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 48.0,
                     ),
                     RoundRaisedButton(
                       text: 'سجل',

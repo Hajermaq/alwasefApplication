@@ -26,8 +26,8 @@ class _LogInORSignInState extends State<LogInORSignIn> {
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
-            height: 200.0,
-            width: 200.0,
+            height: 150.0,
+            width: 150.0,
             child: SvgPicture.asset(
               'assets/images/password.svg',
               color: kSVGcolor,
@@ -51,7 +51,7 @@ class _LogInORSignInState extends State<LogInORSignIn> {
             },
           ),
           SizedBox(
-            height: 33.0,
+            height: 100.0,
           ),
           OutinedButton(
             text: 'تسجيل مستخدم',
@@ -63,7 +63,7 @@ class _LogInORSignInState extends State<LogInORSignIn> {
             height: 33.0,
           ),
           OutinedButton(
-            text: 'تسجيل مستشفى',
+            text: 'تسجيل كمستشفى',
             onPressed: () {
               Navigator.pushNamed(context, RegisterHospitalScreen.id);
             },

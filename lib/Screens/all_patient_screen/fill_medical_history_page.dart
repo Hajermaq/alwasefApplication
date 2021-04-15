@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:age/age.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -76,6 +75,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kGreyColor,
         body: SafeArea(
             minimum: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
             child: Form(
@@ -197,59 +197,9 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         onSaved: (date){
                           medicalHistory.birthDate = dateFormat.format(date);
 
-                          var tempAge = Age.dateDifference(
-                              fromDate: date,
-                              toDate: DateTime.now(),
-                              includeToDate: false);
-                          medicalHistory.age = tempAge.years;
                         },
                       ),
                     ),
-
-                    // Builder(
-                    //   builder: (context) {
-                    //     if (tempBirthDate != null) {
-                    //       return Padding(
-                    //         padding: const EdgeInsets.all(8.0),
-                    //         child: TextFormField(
-                    //           textAlign: TextAlign.center,
-                    //           keyboardType: TextInputType.number,
-                    //           decoration: InputDecoration(
-                    //             labelText: 'العمر :',
-                    //             border: OutlineInputBorder(),
-                    //           ),
-                    //           initialValue: tempAge.tempAge.years.toString(),
-                    //         ),
-                    //       );
-                    //     } else {
-                    //       return Container(width: 0.0, height:0.0);
-                    //     }
-                    //   }
-                    // ),
-                    //
-                    // //العمر
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: TextFormField(
-                    //     textAlign: TextAlign.center,
-                    //     keyboardType: TextInputType.number,
-                    //     decoration: InputDecoration(
-                    //       labelText: 'العمر :',
-                    //       border: OutlineInputBorder(),
-                    //     ),
-                    //     validator: (value) {
-                    //       if (value.isEmpty) {
-                    //         return 'هذا الحقل مطلوب';
-                    //       }
-                    //       return null;
-                    //     },
-                    //     onSaved: (value) {
-                    //       medicalHistory.age = int.parse(value);
-                    //
-                    //     },
-                    //     //controller: ageCtrl,
-                    //   ),
-                    // ),
 
                     //الوزن
                     Padding(

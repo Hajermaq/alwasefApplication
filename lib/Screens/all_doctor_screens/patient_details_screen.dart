@@ -26,7 +26,6 @@ class PatientDetails extends StatefulWidget {
 
 class _PatientDetailsState extends State<PatientDetails>
     with TickerProviderStateMixin {
-  @override
   TabController _tabController;
   @override
   void initState() {
@@ -160,8 +159,6 @@ class _PatientDetailsState extends State<PatientDetails>
                                     PastDiagnoses(
                                       uid: widget.uid,
                                     ),
-                                    // add_diagnosis(),
-                                    // view_medical_history(),
                                   ]),
                             ),
                           ),

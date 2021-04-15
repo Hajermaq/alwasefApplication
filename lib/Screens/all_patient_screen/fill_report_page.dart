@@ -2,7 +2,6 @@ import 'package:alwasef_app/models/report_model.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 
@@ -27,7 +26,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: kGreyColor,
+      backgroundColor: kGreyColor,
       body: Builder(
         builder: (BuildContext context) => SafeArea(
             minimum: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
@@ -51,6 +50,13 @@ class _CreateReportPageState extends State<CreateReportPage> {
                         height: 20,
                         thickness: 10,
                       ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 15.0, 8.0, 10.0),
+                      child: Text(
+                          'ينشئ هذا التقرير المريض اللذي انتهى من الوصفة\n أو بدأ بتناول الدواء فقط ',
+                          textAlign: TextAlign.center, style: TextStyle(color: Colors.red)),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

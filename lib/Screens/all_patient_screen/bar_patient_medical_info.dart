@@ -1,15 +1,10 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_diagnoses_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_prescriptions_for_patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
 import 'tab_diagnoses_for_patient.dart';
 import 'edit_medical_history_page.dart';
@@ -39,58 +34,30 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
     return Theme(
       data: Theme.of(context).copyWith(scaffoldBackgroundColor: kLightColor),
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.grey,
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(6.0),
+              bottomLeft: Radius.circular(6.0),
+            ),
+          ),
+          title: Text(
+            'المعلومات الصحية ',
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
+          ),
+        ),
         body: SafeArea(
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Container(
-                //   height: 150,
-                //   child: Card(
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(15.0),
-                //     ),
-                //     margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                //     color: klighterColor,
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(10.0),
-                //       child: Row(
-                //         children: [
-                //           CircleAvatar(
-                //             radius: 30.0,
-                //             backgroundColor: kLightColor,
-                //             child: Icon(
-                //               Icons.person,
-                //               color: kBlueColor,
-                //               size: 50,
-                //             ),
-                //           ),
-                //           SizedBox(
-                //             width: 20.0,
-                //           ),
-                //           Column(
-                //             mainAxisAlignment: MainAxisAlignment.center,
-                //             children: [
-                //               Text(
-                //                 widget.name,
-                //                 style: TextStyle(
-                //                     color: kBlueColor, fontSize: 30.0),
-                //               ),
-                //               SizedBox(
-                //                 height: 7.0,
-                //               ),
-                //               Text(
-                //                 widget.email,
-                //                 style: TextStyle(
-                //                     color: kBlueColor, fontSize: 20.0),
-                //               ),
-                //             ],
-                //           ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 Expanded(
                   child: Container(
                     child: Card(
@@ -165,8 +132,7 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                   child:
                                                       CircularProgressIndicator());
                                             }
-                                            if (snapshot.data.docs.length ==
-                                                0) {
+                                            if (snapshot.data.docs.length == 0) {
                                               return Column(
                                                 children: [
                                                   Card(

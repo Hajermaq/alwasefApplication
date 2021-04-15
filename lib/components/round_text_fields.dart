@@ -30,7 +30,10 @@ class RoundTextFields extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
       child: Container(
-        margin: EdgeInsets.only(right: 50, left: 50),
+        margin: EdgeInsets.only(
+          right: 50,
+          left: 50,
+        ),
         child: TextFormField(
           onSaved: onSaved,
           validator: validator,
@@ -38,15 +41,16 @@ class RoundTextFields extends StatelessWidget {
           obscureText: isObscure,
           onChanged: onChanged,
           decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(5.0, 10.0, 15.0, 10.0),
             errorStyle: TextStyle(
               color: kRedColor,
               fontWeight: FontWeight.bold,
-              fontSize: 15.0,
+              fontSize: 11.0,
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: kRedColor,
-                width: 4.0,
+                width: 3.0,
               ),
               borderRadius: BorderRadius.circular(35.0),
             ),

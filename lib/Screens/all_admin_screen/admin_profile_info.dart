@@ -1,6 +1,6 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/profile_pages.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
+import 'package:alwasef_app/Screens/services/profile_changes.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:alwasef_app/components/round-button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

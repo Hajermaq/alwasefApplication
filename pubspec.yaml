@@ -45,12 +45,6 @@ dependencies:
   material_design_icons_flutter: ^2.3.50
   flushbar: ^1.10.4
   age: ^0.0.1
-
-  # these 3 may be going to delete them
-  #flutter_mobx: ^1.1.0+2
-  #flutter_calendar_carousel: ^1.5.3
-  #some_calendar: ^1.2.6
-
   dropdownfield: ^1.0.3
   font_awesome_flutter: ^8.0.0
   line_icons: ^1.3.2

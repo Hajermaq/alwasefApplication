@@ -1,6 +1,6 @@
 import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/profile_pages.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
+import 'package:alwasef_app/Screens/services/profile_changes.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../all_patient_screen/patients_mainpage.dart';
@@ -34,8 +34,9 @@ class _LogInScreenState extends State<LogInScreen> {
 
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
-
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
+  //Functions
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +61,31 @@ class _LogInScreenState extends State<LogInScreen> {
                     color: kSVGcolor,
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                  child: Text(
-                    'لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا  ',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'مرحبا !',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        ' سجل دخولك باستخدام البريد الإلكتروني وكلمة المرور.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -105,7 +123,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   //hiddenPass: true,
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: 48.0,
                 ),
                 RoundRaisedButton(
                   text: ' إذهب',
@@ -322,7 +340,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       );
                     },
                     child: Text(
-                      'هل نسيت كلمة المرور؟',
+                      'لا اتذكر كلمة المرور؟',
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -382,8 +400,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
-          color: kLightColor,
+          color: Colors.white54,
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -402,7 +421,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         ),
       ),
-      backgroundColor: kLightColor,
+      backgroundColor: kBlueColor,
       body: SingleChildScrollView(
         child: Builder(builder: (BuildContext context) {
           return Form(
@@ -414,90 +433,58 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 SizedBox(
                   height: 200,
                 ),
-                Text(
-                  'أعد إدخال البريد الإلكتروني الخاصة بك للمتابعة',
-                  style: TextStyle(color: kBlueColor, fontSize: 16.0),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                    left: 50.0,
-                    right: 50.0,
-                  ),
-                  child: TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    validator: Validation().validateEmailReset,
-                    onSaved: (value) {
-                      writtenEmail = value;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'البريد الإلكتروني',
-                      fillColor: kGreyColor,
-                      filled: true,
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: kRedColor,
-                          width: 3.0,
-                        ),
+                  padding: const EdgeInsets.symmetric(horizontal: 19),
+                  child: Column(
+                    children: [
+                      Text(
+                        'فضلا!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white54, fontSize: 25.0),
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
+                      SizedBox(
+                        height: 10,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.transparent),
+                      Text(
+                        'أعد إدخال البريد الإلكتروني الخاصة بك للمتابعة.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white54, fontSize: 16.0),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(),
-                      ),
-                    ),
+                    ],
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 50,
                 ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 100.0, vertical: 20.0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 50.0,
-                    child: RaisedButton(
-                      onPressed: () {
-                        if (_key2.currentState.validate()) {
-                          //there is no error
-                          _key2.currentState.save();
-                          resetPassword(writtenEmail, widget.collectionName,
-                                  context, widget.currentEmail)
-                              .then((value) => Navigator.pop(context));
-                          _key2.currentState.save();
-                        } else {
-                          setState(() {
-                            autovalidateMode = AutovalidateMode.always;
-                          });
-                        }
-                      },
-                      color: kBlueColor,
-                      child: Text(
-                        'تحديث',
-                        style: TextStyle(
-                          color: Colors.white,
-                          // fontFamily: 'Montserrat',
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                  ),
+                RoundTextFields(
+                  validator: Validation().validateEmailReset,
+                  textInputType: TextInputType.name,
+                  isObscure: false,
+                  color: kButtonColor,
+                  hintMessage: 'البريد الإلكتروني',
+                  onSaved: (value) {
+                    writtenEmail = value;
+                  },
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                RoundRaisedButton(
+                  text: 'تحديث',
+                  onPressed: () async {
+                    if (_key2.currentState.validate()) {
+                      //there is no error
+                      _key2.currentState.save();
+                      resetPassword(writtenEmail, widget.collectionName,
+                              context, widget.currentEmail)
+                          .then((value) => Navigator.pop(context));
+                    } else {
+                      // there is an error
+                      setState(() {
+                        autovalidateMode = AutovalidateMode.always;
+                      });
+                    }
+                  },
                 ),
               ],
             ),

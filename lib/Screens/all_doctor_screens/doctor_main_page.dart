@@ -6,7 +6,7 @@ import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
 import 'doctor_home_page.dart';
-import 'doctor_patients_reports.dart';
+import '../services/display_patients_reports.dart';
 import 'doctor_search_page.dart';
 
 class DoctorMainPage extends StatefulWidget {
@@ -16,13 +16,6 @@ class DoctorMainPage extends StatefulWidget {
 }
 
 class _DoctorMainPageState extends State<DoctorMainPage> {
-  //FireStore
-  var db = FirebaseFirestore.instance;
-
-  // Variables
-  String currentName;
-  String currentEmail;
-  String currentUID;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +39,8 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
               //search Page
               PatientData(),
               // patients reports
-              PatientsReports(),
+              PatientsReports(
+                  condition: 'prescriber-id'),
               //Profile Page
               DoctorProfileInfo(),
             ], //end of pages

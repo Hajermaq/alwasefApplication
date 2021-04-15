@@ -50,7 +50,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor: kGreyColor,
+        backgroundColor: kGreyColor,
         body: SafeArea(
           minimum: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
           child: Form(

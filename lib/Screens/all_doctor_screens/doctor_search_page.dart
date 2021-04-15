@@ -137,14 +137,16 @@ class _PatientDataState extends State<PatientData> {
                                           10.0, 10.0, 10.0, 0),
                                       color: Color(0xfff0f2f7),
                                       child: ListTile(
-                                        leading: Icon(Icons.arrow_back),
+                                        leading: Icon(
+                                          Icons.arrow_back,
+                                        ),
                                         title: Text(
                                           documentSnapshot
                                               .data()['patient-name'],
                                           // snapshot.data.docs[index].get('patient-name'),
                                           style: TextStyle(
                                               color: kBlueColor,
-                                              fontSize: 30.0),
+                                              fontSize: 25.0),
                                         ),
                                         subtitle: Text(
                                           snapshot.data.docs[index]

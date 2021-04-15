@@ -47,7 +47,7 @@ class _PrescriptionsState extends State<Prescriptions> {
   //Functions
 
 // get information from FireStore
-  getPatientinfo() async {
+  getPatientInfo() async {
     await FirebaseFirestore.instance
         .collection('/Patient')
         .doc(widget.uid)
@@ -84,7 +84,7 @@ class _PrescriptionsState extends State<Prescriptions> {
     });
   }
 
-  getHospitalinfo() async {
+  getHospitalInfo() async {
     String hospitalUid = '';
     await FirebaseFirestore.instance
         .collection('/Patient')
@@ -113,7 +113,7 @@ class _PrescriptionsState extends State<Prescriptions> {
     });
   }
 
-  getDoctorinfo() async {
+  getDoctorInfo() async {
     await FirebaseFirestore.instance
         .collection('/Doctors')
         .doc(FirebaseAuth.instance.currentUser.uid)
@@ -140,9 +140,9 @@ class _PrescriptionsState extends State<Prescriptions> {
 
   @override
   void initState() {
-    getPatientinfo();
-    getHospitalinfo();
-    getDoctorinfo();
+    getPatientInfo();
+    getHospitalInfo();
+    getDoctorInfo();
   }
 
   //Function related to pdf generation
@@ -518,6 +518,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
+                            Widget statusIcon;
                             DocumentSnapshot prescription =
                                 snapshot.data.docs[index];
                             String status = prescription.data()['status'];
@@ -525,6 +526,32 @@ class _PrescriptionsState extends State<Prescriptions> {
                             String tradeName = prescription.data()['tradeName'];
                             String dose =
                                 prescription.data()['dose'].toString();
+
+                            if (status == 'pending') {
+                              statusIcon = Icon(
+                                Icons.hourglass_top_outlined,
+                                color: kBlueColor,
+                                size: 15,
+                              );
+                            } else if (status == 'updated') {
+                              statusIcon = Icon(
+                                Icons.update,
+                                color: kBlueColor,
+                                size: 15,
+                              );
+                            } else if (status == 'inconsistent') {
+                              statusIcon = Icon(
+                                Icons.warning_amber_outlined,
+                                color: Colors.red,
+                                size: 15,
+                              );
+                            } else if (status == 'dispensed') {
+                              statusIcon = Icon(
+                                Icons.assignment_turned_in_outlined,
+                                color: Colors.green,
+                                size: 15,
+                              );
+                            }
                             // search logic
                             if (tradeName
                                     .toLowerCase()
@@ -548,10 +575,13 @@ class _PrescriptionsState extends State<Prescriptions> {
                                 child: Column(
                                   children: [
                                     ListTile(
-                                      title: Text(
-                                        // TODO: change it to different names maybe?
-                                        prescription.data()['tradeName'],
-                                        style: kBoldLabelTextStyle,
+                                      title: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          // TODO: change it to different names maybe?
+                                          prescription.data()['tradeName'],
+                                          style: kBoldLabelTextStyle,
+                                        ),
                                       ),
                                       subtitle: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -564,30 +594,25 @@ class _PrescriptionsState extends State<Prescriptions> {
                                               letterSpacing: 2.0),
                                         ),
                                       ),
-                                      trailing: OutlinedButton.icon(
-                                        icon: status == 'pending'
-                                            ? Icon(
-                                                Icons.hourglass_top_outlined,
-                                                color: kBlueColor,
-                                              )
-                                            : Icon(
-                                                Icons.update,
-                                                color: kBlueColor,
-                                              ),
-                                        label: Text(
-                                          "${prescription.data()['status']}",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 17,
-                                              color: kBlueColor),
-                                        ),
-                                        onPressed: null,
-                                        style: ElevatedButton.styleFrom(
-                                          side: BorderSide(
-                                              width: 2.0, color: kBlueColor),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(32.0),
+                                      trailing: Container(
+                                        height: 35,
+                                        child: OutlinedButton.icon(
+                                          icon: statusIcon,
+                                          label: Text(
+                                            "${prescription.data()['status']}",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15,
+                                                color: kBlueColor),
+                                          ),
+                                          onPressed: null,
+                                          style: ElevatedButton.styleFrom(
+                                            side: BorderSide(
+                                                width: 2.0, color: kBlueColor),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(32.0),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -616,11 +641,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                                 Text(
                                                   '${prescription.data()['scientificName']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -638,22 +659,14 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                                 Text(
                                                   '${prescription.data()['strength-unit']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 8,
                                                 ),
                                                 Text(
                                                   '${prescription.data()['strength']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -671,11 +684,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                                 Text(
                                                   '${prescription.data()['pharmaceutical-form']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -693,11 +702,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                                 Text(
                                                   '${prescription.data()['frequency']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -716,12 +721,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 InkWell(
                                                   child: Text(
                                                     'انقر هنا للقراءة',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                                    style:
+                                                        ksubBoldValueTextStyle,
                                                   ),
                                                   onTap: () {
                                                     showModalBottomSheet(
@@ -923,11 +924,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                 ),
                                                 Text(
                                                   '${prescription.data()['refill']}',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                  style: ksubBoldValueTextStyle,
                                                 ),
                                               ],
                                             ),
@@ -953,16 +950,12 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           ksubBoldLabelTextStyle,
                                                     ),
                                                     SizedBox(
-                                                      width: 15.0,
+                                                      width: 10.0,
                                                     ),
                                                     Text(
                                                       'د.  $doctorName',
-                                                      style: TextStyle(
-                                                        color: Colors.black45,
-                                                        fontSize: 15.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                      style:
+                                                          ksubBoldValueTextStyle,
                                                     ),
                                                   ],
                                                 ),

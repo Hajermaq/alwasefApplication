@@ -62,12 +62,28 @@ class _VerifiyPageState extends State<VerifiyPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'شكرا على التسجيل! انتقل إلى البريد وتحقق من حسابك',
-                style: TextStyle(fontSize: 18.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 19),
+                child: Column(
+                  children: [
+                    Text(
+                      'شكرا على التسجيل!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white54, fontSize: 25.0),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      ' انتقل إلى البريد وتحقق من حسابك',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white54, fontSize: 16.0),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
-                height: 40.0,
+                height: 50.0,
               ),
               lodaing ? Icon(Icons.check) : CircularProgressIndicator(),
               SizedBox(
