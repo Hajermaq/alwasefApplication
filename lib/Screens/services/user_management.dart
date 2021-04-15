@@ -194,11 +194,8 @@ class UserManagement {
     String role,
     String hospitalUID,
     String pharmacistUID,
-    String doctor1uid,
-    String doctor2uid,
-    String doctor3uid,
-    String doctor4uid,
     String phoneNumber,
+    List doctors,
   }) async {
     try {
       CollectionReference collection =
@@ -215,10 +212,6 @@ class UserManagement {
           'uid': uid,
           'hospital-uid': hospitalUID,
           'pharmacist-uid': pharmacistUID,
-          'doctor1-uid': doctor1uid,
-          'doctor2-uid': doctor2uid,
-          'doctor3-uid': doctor3uid,
-          'doctor4-uid': doctor4uid,
           //names
           'patient-name': patientName,
           //email
@@ -228,6 +221,7 @@ class UserManagement {
           //random
           'role': role,
           'phone-number': phoneNumber,
+          'doctors': doctors,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();

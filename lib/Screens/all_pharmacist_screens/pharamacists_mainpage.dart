@@ -33,7 +33,7 @@ class _PharmacistMainPageState extends State<PharmacistMainPage> {
             ),
             pages: [
               // Home page
-              // PharmacistHomePage(),
+              PharmacistHomePage(),
               //search Page
               SearchPatientPage(),
               //patients reports

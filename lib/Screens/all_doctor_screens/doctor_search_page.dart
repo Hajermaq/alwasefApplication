@@ -101,7 +101,6 @@ class _PatientDataState extends State<PatientData> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('/Patient')
-                        .where('hospital-uid', isEqualTo: hUID)
                         .where('doctors',
                             arrayContains:
                                 FirebaseAuth.instance.currentUser.uid)

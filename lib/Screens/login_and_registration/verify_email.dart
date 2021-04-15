@@ -119,13 +119,11 @@ class _VerifiyPageState extends State<VerifiyPage> {
                           context: context,
                           hospitalUID: widget.hospital_UID,
                           pharmacistUID: '',
-                          doctor1uid: '',
-                          doctor2uid: '',
-                          doctor3uid: '',
-                          doctor4uid: '',
                           password: widget.password,
                           role: widget.role,
                           patientName: widget.name,
+                          phoneNumber: '',
+                          doctors: [],
                         );
                         //Hospital
                       } else {
