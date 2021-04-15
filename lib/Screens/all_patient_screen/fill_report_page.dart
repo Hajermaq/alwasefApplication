@@ -1,4 +1,6 @@
 import 'package:alwasef_app/models/report_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,9 +11,10 @@ import '../../constants.dart';
 class CreateReportPage extends StatefulWidget {
   final String uid;
   final String name;
-  final String prescriptionID;
-  final String prescriptionPrescriberID;
-  CreateReportPage({this.uid, this.prescriptionID, this.prescriptionPrescriberID, this.name});
+  final String prescriberID;
+  final String pharmacistID;
+  final String tradeName;
+  CreateReportPage({this.uid, this.name, this.pharmacistID, this.prescriberID, this.tradeName});
   @override
   _CreateReportPageState createState() => _CreateReportPageState();
 }
@@ -20,8 +23,41 @@ class _CreateReportPageState extends State<CreateReportPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   Report report = Report();
   List<String> yesNoAnswers = ['لا', 'نعم'];
-
+  String prescriperName;
+  String pharmacistName;
   String temp1, temp2;
+
+  getPrescriberName(String prescriberID) async{
+    await FirebaseFirestore.instance
+        .collection('/Doctors')
+        .doc(prescriberID)
+        .get()
+        .then((doc) {
+      prescriperName = doc.data()['doctor-name'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  getPharmacistName(String pharmacistID) async{
+    await FirebaseFirestore.instance
+        .collection('/Pharmacist')
+        .doc(pharmacistID)
+        .get()
+        .then((doc) {
+      pharmacistName = doc.data()['pharmacist-name'];
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    getPrescriberName(widget.prescriberID);
+    getPharmacistName(widget.pharmacistID);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +80,12 @@ class _CreateReportPageState extends State<CreateReportPage> {
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Divider(
                         height: 20,
-                        thickness: 10,
+                        thickness: 6,
                       ),
                     ),
 
@@ -82,8 +119,9 @@ class _CreateReportPageState extends State<CreateReportPage> {
                           setState(() {
                             report.patientID = widget.uid;
                             report.patientName = widget.name;
-                            report.prescriptionID = widget.prescriptionID;
-                            report.prescriptionPrescriberID = widget.prescriptionPrescriberID;
+                            report.prescriberName = prescriperName;
+                            report.pharmacistName = pharmacistName;
+                            report.tradeName = widget.tradeName;
                             report.completed  = selectedValue;
                           });
                         },
@@ -174,7 +212,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                                   backgroundColor: kLightColor,
                                   borderRadius: 4.0,
                                   margin: EdgeInsets.all(8.0),
-                                  duration: Duration(seconds: 3),
+                                  duration: Duration(seconds: 2),
                                   messageText: Text(' تم إضافة تقرير لهذه الوصفة بنجاح',
                                     style: TextStyle(color: kBlueColor, fontFamily: 'Almarai', ),
                                     textAlign: TextAlign.center,

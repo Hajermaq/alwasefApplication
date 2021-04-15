@@ -556,7 +556,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                               backgroundColor: kLightColor,
                                               borderRadius: 4.0,
                                               margin: EdgeInsets.all(8.0),
-                                              duration: Duration(seconds: 3),
+                                              duration: Duration(seconds: 2),
                                               messageText: Text(' تم تعديل السجل الطبي الخاص بك بنجاح',
                                                 style: TextStyle(color: kBlueColor, fontFamily: 'Almarai', ),
                                                 textAlign: TextAlign.center,

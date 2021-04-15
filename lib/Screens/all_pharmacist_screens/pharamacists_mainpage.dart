@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/services/display_patients_reports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
@@ -32,11 +33,11 @@ class _PharmacistMainPageState extends State<PharmacistMainPage> {
             ),
             pages: [
               // Home page
-              PharmacistHomePage(),
+              // PharmacistHomePage(),
               //search Page
               SearchPatientPage(),
               //patients reports
-              //PatientsReports(condition: 'pharmacist-id'),
+              PatientsReports(condition: 'pharmacist-id'),
               //profile
               PharmacistProfileInfo(),
             ],

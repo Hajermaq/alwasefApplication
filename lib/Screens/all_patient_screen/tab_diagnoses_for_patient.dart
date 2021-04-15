@@ -42,7 +42,12 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());
                     } if (snapshot.data.docs.length == 0) {
-                      return Center(child: Text('ليس لديك أي تشيص حتى الان', style: TextStyle(color: Colors.black)));
+                      return Center(
+                        child: Text(
+                          'لا يوجد تشخيصات سايقة.',
+                          style: TextStyle(color: Colors.black54, fontSize: 17),
+                        ),
+                      );
                     } else {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,

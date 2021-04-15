@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'fill_report_page.dart';
+import 'package:age/age.dart';
 
 class PatientPrescriptions extends StatefulWidget {
   PatientPrescriptions({this.uid});
@@ -53,7 +55,11 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
       if (doc.docs.isNotEmpty) {
         var medicalHistory = doc.docs[0];
         patientName = medicalHistory.data()['full name'];
-        age = medicalHistory.data()['age'].toString();
+        var tempAge = Age.dateDifference(
+            fromDate: DateTime.parse(medicalHistory.get('birth date')),
+            toDate: DateTime.now(),
+            includeToDate: false);
+        age = tempAge.years.toString();
         String g = medicalHistory.data()['gender'];
         if (g.contains('أنثى')) {
           gender = 'Female';
@@ -187,7 +193,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                           pw.Align(
                             alignment: pw.Alignment.center,
                             child: pw.Text(
-                              'Prescrioption  Form',
+                              'Prescription  Form',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
                                 letterSpacing: 2.0,
@@ -460,36 +466,144 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                       .collection('/Patient')
                       .doc(widget.uid)
                       .collection('/Prescriptions')
-                      .snapshots(), //TODO: where status equals dispensed (after creating pharmacicst)
+                      .where('status', isEqualTo: 'dispensed')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(child: CircularProgressIndicator());
                     } if (snapshot.data.docs.length == 0) {
-                      return Center(child: Text('ليس لديك أي وصفات حتى الان', style: TextStyle(color: Colors.black)));
+                      return Center(
+                        child: Text(
+                          'لا يوجد تشخيصات سايقة.',
+                          style: TextStyle(color: Colors.black54, fontSize: 17),
+                        ),
+                      );
                     } else {
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            Widget statusIcon;
-                            DocumentSnapshot prescription =
-                            snapshot.data.docs[index];
-                            String status = prescription.data()['status'];
+                            DocumentSnapshot prescription = snapshot.data.docs[index];
+
+                            // time calculations for buttons (add report/request refill)
+                            String start = prescription.data()['start-date'];
+                            DateTime startDate = DateTime.tryParse(start);
+                            int refill = prescription.data()['refill'];
+                            var difference = Age.dateDifference(
+                                fromDate: startDate,
+                                toDate: DateTime.now(),
+                                includeToDate: false);
+                            int nomOfDaysSinceStartDate = difference.days;
+
+                            // delete if 1 month passed
+                            if (nomOfDaysSinceStartDate >=28 && refill == 0) {
+                                  UserManagement()
+                                      .PastPrescriptionsSetUp(
+                                    context,
+                                    widget.uid,
+                                    prescription
+                                        .data()[
+                                    'prescriber-id']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'registerNumber']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'prescription-creation-date']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'start-date']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'end-date']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'scientificName']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'scientificNameArabic']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'tradeName']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'tradeNameArabic']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'strength']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'strength-unit']
+                                        .toString(),
+                                    prescription
+                                        .data()['size']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'size-unit']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'pharmaceutical-form']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'administration-route']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'storage-conditions']
+                                        .toString(),
+                                    prescription
+                                        .data()['price']
+                                        .toString(),
+                                    prescription
+                                        .data()['dose'],
+                                    prescription.data()[
+                                    'quantity'],
+                                    prescription
+                                        .data()['refill'],
+                                    prescription.data()[
+                                    'dosing-expire'],
+                                    prescription.data()[
+                                    'frequency'],
+                                    prescription
+                                        .data()[
+                                    'instruction-note']
+                                        .toString(),
+                                    prescription
+                                        .data()[
+                                    'doctor-note']
+                                        .toString(),
+                                  );
+                                   FirebaseFirestore
+                                      .instance
+                                      .collection(
+                                      '/Patient')
+                                      .doc(widget.uid)
+                                      .collection(
+                                      '/Prescriptions')
+                                      .doc(
+                                      prescription.id)
+                                      .delete();
+                            }
+
+                            // doctor info
                             String prescriberID = prescription.data()['prescriber-id'];
+                            getDoctorInfo(prescriberID); //TODO: test this يمكن يكون اسم الواصف لكل الوصفات نفس الاسم
 
                             //search by
                             String tradeName = prescription.data()['tradeName'];
                             String dose = prescription.data()['dose'].toString();
-
-                            if(status == 'pending'){
-                              statusIcon = Icon(Icons.hourglass_top_outlined, color: kBlueColor,);
-                            } else if (status == 'updated') {
-                              statusIcon = Icon(Icons.update, color: kBlueColor,);
-                            } else if (status == 'inconsistent') {
-                              statusIcon = Icon(Icons.warning_amber_outlined, color: Colors.red);
-                            } else if (status == 'dispensed') {
-                              statusIcon = Icon(Icons.assignment_turned_in_outlined, color: Colors.green);
-                            }
-                            getDoctorInfo(prescriberID);
 
                             // search logic
                             if (tradeName
@@ -531,7 +645,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                         ),
                                       ),
                                       trailing: OutlinedButton.icon(
-                                        icon: statusIcon,
+                                        icon: Icon(Icons.assignment_turned_in_outlined, color: Colors.green),
                                         label: Text(
                                           "${prescription.data()['status']}",
                                           style: TextStyle(
@@ -1240,13 +1354,15 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                               endIndent: 20,
                                               indent: 20,
                                             ),
+                                            // buttons
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.center,
                                               children: [
                                                 Row(
                                                   children: [
-                                                    status == 'dispensed' //TODO: if status is dispensed show this button
+                                                    //allow creating report if 7 days of more passed
+                                                    nomOfDaysSinceStartDate >=7
                                                         ? RaisedButton(
                                                       color: klighterColor,
                                                       shape: RoundedRectangleBorder(
@@ -1266,17 +1382,18 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                     CreateReportPage(
                                                                       uid: widget.uid,
                                                                       name: patientName,
-                                                                      prescriptionID: prescription.id,
-                                                                      prescriptionPrescriberID: prescriberID,
+                                                                      prescriberID: prescription.data()['prescriber-id'],
+                                                                      pharmacistID: prescription.data()['pharmacist-id'],
+                                                                      tradeName: prescription.data()['tradeName'],
                                                                     )));
                                                       },
                                                     )
                                                         : SizedBox(),
-
                                                     SizedBox(
                                                       width: 10.0,
                                                     ),
-                                                    // View
+
+                                                    // View and safe pdf
                                                     RaisedButton(
                                                       onPressed: () async {
                                                         showModalBottomSheet(
@@ -1457,6 +1574,34 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                               10)),
                                                       child: Text("عرض"),
                                                     ),
+                                                    SizedBox(
+                                                      width: 10.0,
+                                                    ),
+
+                                                    //allow request refill if a month passed and nom of refill is 1 or more
+                                                    nomOfDaysSinceStartDate >=28 && refill > 0
+                                                        ? RaisedButton(
+                                                      color: klighterColor,
+                                                      shape: RoundedRectangleBorder(
+                                                          side: BorderSide(
+                                                              color: kGreyColor,
+                                                              width: 2),
+                                                          borderRadius:
+                                                          BorderRadius.circular(10)
+                                                      ),
+                                                      child: Text("طلب إعادة تعبئة"),
+                                                      onPressed: () async {
+                                                        await FirebaseFirestore.instance
+                                                            .collection('/Patient')
+                                                            .doc(widget.uid)
+                                                            .collection('/Prescriptions')
+                                                            .doc(prescription.id)
+                                                            .update({
+                                                          'status': 'requested refill'
+                                                        });
+                                                      },
+                                                    )
+                                                        : SizedBox(),
                                                   ],
                                                 ),
                                               ],

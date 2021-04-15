@@ -15,6 +15,7 @@ class PrescriptionsReports extends StatefulWidget {
 class _PrescriptionsReportsState extends State<PrescriptionsReports> {
   Widget yesButton;
   Widget noButton;
+  String searchValue = '';
 
   Future displayReportPrescription(String prescriptionID){ //TODO: delete this
     return showModalBottomSheet(
@@ -240,46 +241,61 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
               if (!snapshot.hasData) {
                 return Center( child: CircularProgressIndicator());
               } if (snapshot.data.docs.length == 0) {
-                return Center(child: Text('لم تقم بكاتبة أي تقرير حتى الان', style: TextStyle(color: Colors.black)));
+                return Center(
+                  child: Text(
+                    'لم تقم بكتابة أي تقرير حتى الان.',
+                    style: TextStyle(color: Colors.black54, fontSize: 17),
+                  ),
+                );
               } else {
                 return ListView.builder(
-                  //padding: ,
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
-                      DocumentSnapshot report =
-                        snapshot.data.docs[index];
-                      String prescriptionRefID = report.data()['prescription-id'];
+                      DocumentSnapshot report = snapshot.data.docs[index];
                       String completed = report.data()['completed'];
                       String committed = report.data()['committed'];
                       String sideEffects = report.data()['side effects'].join('\n');
                       String notes = report.data()['notes'];
-                      return Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        color: kGreyColor,
-                        margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ListTile(
-                                leading: Icon(Icons.assignment_rounded),
-                                title: Text('التقرير رقم $index', style: TextStyle(fontSize: 26)),
-                                trailing: Theme(
-                                  data: Theme.of(context).copyWith(
-                                    cardColor: Colors.black,
-                                  ),
-                                  child: PopupMenuButton(
-                                      itemBuilder: (BuildContext context){
-                                        return ['عرض الوصفة الخاصة بهذا التقرير', 'حذف التقرير'].map((e) {
-                                          return PopupMenuItem<String>(
-                                            value: e,
-                                            child: Text(e),
-                                          );
-                                        }).toList();
-                                      },
-                                      onSelected: (item){
-                                        if (item == 'حذف التقرير'){
+
+                      String precriberName = report.data()['prescriper-name'];
+                      String pharmacistName = report.data()['pharmacist-name'];
+                      //search by
+                      String tradeName = report.data()['tradeName'];
+
+                      //search logic
+                      if (tradeName
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase()) ||
+                          tradeName
+                              .toUpperCase()
+                              .contains(searchValue.toUpperCase())) {
+
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: kGreyColor,
+                          margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ListTile(
+                                  leading: Icon(Icons.assignment_rounded),
+                                  title: Text('اسم الدواء: $tradeName '),
+                                  trailing: Theme(
+                                    data: Theme.of(context).copyWith(
+                                      cardColor: Colors.black,
+                                    ),
+                                    child: PopupMenuButton(
+                                        itemBuilder: (BuildContext context){
+                                          return ['حذف التقرير'].map((e) {
+                                            return PopupMenuItem<String>(
+                                              value: e,
+                                              child: Text(e),
+                                            );
+                                          }).toList();
+                                        },
+                                        onSelected: (item){
                                           showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -316,20 +332,17 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                                 );
                                               }
                                           );
-                                        } else {
-                                          //TODO: test display prescription of this report
                                         }
-                                      }
-                                  ),
-                                ), //weather delete or display prescription
-                              ),
-                              Divider(
-                                color: klighterColor,
-                                thickness: 0.9,
-                                endIndent: 20,
-                                indent: 20,
-                              ),
-                              Padding(
+                                    ),
+                                  ), //weather delete or display prescription,
+                                ),
+                                Divider(
+                                  color: klighterColor,
+                                  thickness: 0.9,
+                                  endIndent: 20,
+                                  indent: 20,
+                                ),
+                                Padding(
                                   padding: const EdgeInsets.fromLTRB(10.0, 7.0, 10.0, 10),
                                   child: Container(
                                     //height: 100,
@@ -337,33 +350,33 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Row(
-                                          children: [
-                                            Text(
-                                              'تم الانتهاء من الوصفة: ',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(width: 15.0,),
-                                            Text('$completed',
-                                            style: TextStyle(
-                                              color: Colors.black45,
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                          ]
+                                            children: [
+                                              Text(
+                                                'تم الانتهاء من الوصفة: ',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(width: 15.0,),
+                                              Text('$completed',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ]
                                         ),
                                         SizedBox(height: 15.0,),
                                         Row(
-                                          children: [
-                                            Text('تم الالتزام بالوصفة: ',
-                                                style: ksubBoldLabelTextStyle
-                                            ),
-                                            SizedBox(width: 15.0,),
-                                            Text('$committed',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
-                                              )),
+                                            children: [
+                                              Text('تم الالتزام بالوصفة: ',
+                                                  style: ksubBoldLabelTextStyle
+                                              ),
+                                              SizedBox(width: 15.0,),
+                                              Text('$committed',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
                                             ]
                                         ),
                                         SizedBox(height: 15.0,),
@@ -397,13 +410,51 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                             ]
                                         ),
                                         SizedBox(height: 15.0,),
+                                        Divider(
+                                          color: klighterColor,
+                                          thickness: 0.9,
+                                          endIndent: 20,
+                                          indent: 20,
+                                        ),
+                                        Row(
+                                            children: [
+                                              Text('الواصف: ',
+                                                  style: ksubBoldLabelTextStyle
+                                              ),
+                                              SizedBox(width: 15.0,),
+                                              Text('$precriberName',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ]
+                                        ),
+                                        SizedBox(height: 15.0,),
+                                        Row(
+                                            children: [
+                                              Text('الصيدلي: ',
+                                                  style: ksubBoldLabelTextStyle
+                                              ),
+                                              SizedBox(width: 15.0,),
+                                              Text('$pharmacistName',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  )),
+                                            ]
+                                        ),
                                       ],
                                     ),
                                   ),
-                              ),
-                          ]
-                        ),
-                      );
+                                ),
+                              ]
+                          ),
+                        );
+                      } else {
+                        return SizedBox();
+                      }
                     }
                 );
               }

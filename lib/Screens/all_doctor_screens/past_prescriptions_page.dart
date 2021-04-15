@@ -65,7 +65,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
         body: Column(
           children: [
             FilledRoundTextFields(
-              hintMessage: 'ابحث عن الوصفة',
+              hintMessage: 'ابحث عن وصفة',
               fillColor: kGreyColor,
               onChanged: (value) {
                 setState(() {
@@ -78,7 +78,7 @@ class _PastPrescriptionsState extends State<PastPrescriptions> {
                   stream: FirebaseFirestore.instance
                       .collection('/Patient')
                       .doc(widget.uid)
-                      .collection('/PastPrescriptions ')
+                      .collection('/PastPrescriptions')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {

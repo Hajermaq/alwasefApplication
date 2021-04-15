@@ -125,47 +125,6 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'طلبات إعادة التعبئة',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            ListTileDivider(
-                              color: Colors.black26,
-                            ),
-                            Column(
-                              children: getArraytinfo(messages, 'الرسالة'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: kLightColor,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
                                     'طلبات تعديل الوصفات من الصيدلي',
                                     style: TextStyle(
                                         fontSize: 20.0,

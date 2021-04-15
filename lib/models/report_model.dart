@@ -6,8 +6,9 @@ class Report {
       notes,
       patientID,
       patientName,
-      prescriptionID,
-      prescriptionPrescriberID;
+      prescriberName,
+      pharmacistName,
+      tradeName;
   List<dynamic> sideEffects;
 
 
@@ -22,8 +23,9 @@ class Report {
         'notes': notes,
         'patient-id': patientID,
         'patient-name': patientName,
-        'prescription-id': prescriptionID,
-        'prescriber-id' : prescriptionPrescriberID
+        'prescriper-name': prescriberName,
+        'pharmacist-name' : pharmacistName,
+        'tradeName' : tradeName,
       }).then((_) {
         print('document is created');
       }).catchError((_) {

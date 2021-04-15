@@ -87,7 +87,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('/Patient')
-                    //TODO: change where equals to (.where('uid', isEqualTo: currentUser.id) )
+                    //TODO: change where equals to (.where('uid', isEqualTo: FirebaseAuth.instance.currentUser.uid) )
                         .where('hospital-uid', isEqualTo: hUID)
                         .snapshots(),
                     builder: (BuildContext context,
@@ -95,6 +95,8 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                       if (!snapshot.hasData) {
                         //TODO
                         return CircularProgressIndicator();
+                      } if(snapshot.data.docs.length == 0){
+                        return Text('ليس لديك مرضى حتى الان');
                       } else {
                         return ListView.builder(
                             physics: ScrollPhysics(),
