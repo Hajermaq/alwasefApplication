@@ -14,7 +14,7 @@ class OutinedButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 50.0),
       child: Container(
-        height: 57.0,
+        height: 50.0,
         child: GestureDetector(
           onTap: onPressed,
           child: Container(

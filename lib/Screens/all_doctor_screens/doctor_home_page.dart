@@ -41,6 +41,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: kLightColor,
           ),
@@ -94,7 +95,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                               title: Text(
                                 'مرحبا بك د. ${doctor['doctor-name']}',
                                 style: TextStyle(
-                                    fontSize: 20.0,
+                                    fontSize: 17.0,
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -125,9 +126,9 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'طلبات تعديل الوصفات من الصيدلي',
+                                    'طلبات تعديل الوصفات ',
                                     style: TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: 17.0,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold),
                                   ),

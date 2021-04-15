@@ -107,8 +107,8 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 PharmacistManagement(
-                                              pharmacist_id: document
-                                                  .data()['pharmacist-name'],
+                                              pharmacist_id:
+                                                  document.data()['uid'],
                                             ),
                                           ),
                                         );

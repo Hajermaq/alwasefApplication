@@ -1,14 +1,11 @@
-import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/profile_changes.dart';
-import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
+import 'package:alwasef_app/Screens/services/profile_changes.dart';
 import 'package:alwasef_app/components/profile_components.dart';
-import 'package:alwasef_app/components/round-button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
-
 
 class DoctorProfileInfo extends StatefulWidget {
   @override
@@ -16,7 +13,6 @@ class DoctorProfileInfo extends StatefulWidget {
 }
 
 class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
-
   final currentUser = FirebaseAuth.instance.currentUser;
   final auth = FirebaseAuth.instance;
 
@@ -148,7 +144,8 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                     },
                                     title: 'تعيين رقم هاتف',
                                     subtitle: snapshot.data
-                                                .get('phone-number') == ''
+                                                .get('phone-number') ==
+                                            ''
                                         ? ''
                                         : '${snapshot.data.get('phone-number')}',
                                     icon_1: Icon(Icons.phone),

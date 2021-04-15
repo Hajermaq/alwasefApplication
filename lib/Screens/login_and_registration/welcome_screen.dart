@@ -18,13 +18,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
-            height: 200.0,
-            width: 200.0,
+            height: 150.0,
+            width: 150.0,
             child: SvgPicture.asset(
               'assets/images/vitamin.svg',
               color: kSVGcolor,
@@ -37,9 +37,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               textAlign: TextAlign.center,
               style: kMainHeadLinesStyle,
             ),
-          ),
-          SizedBox(
-            height: 220.0,
           ),
           OutinedButton(
             text: 'إنضموا إلينا',

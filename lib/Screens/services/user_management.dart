@@ -2,6 +2,7 @@ import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
+import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
 import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -117,7 +118,12 @@ class UserManagement {
           'experience-years': experienceYears,
         }).then((_) {
           print('collection is created');
-          Navigator.pushNamed(context, DoctorMainPage.id);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LogInScreen(),
+            ),
+          );
         }).catchError((_) {
           print(" an error occured");
         });
@@ -164,7 +170,12 @@ class UserManagement {
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
-          Navigator.pushNamed(context, PharmacistMainPage.id);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LogInScreen(),
+            ),
+          );
         }).catchError((_) {
           print(" an error occured");
         });
@@ -220,7 +231,12 @@ class UserManagement {
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
-          Navigator.pushNamed(context, PatientMainPage.id);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LogInScreen(),
+            ),
+          );
         }).catchError((_) {
           print(" an error occured");
         });
@@ -264,7 +280,12 @@ class UserManagement {
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
-          Navigator.pushNamed(context, AdminScreen.id);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LogInScreen(),
+            ),
+          );
         }).catchError((_) {
           print(" an error occured");
         });

@@ -1,12 +1,11 @@
 import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
-import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/profile_changes.dart';
+import 'package:alwasef_app/Screens/services/profile_changes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:alwasef_app/components/profile_components.dart';
-
 
 class PatientProfile extends StatefulWidget {
   @override
@@ -91,7 +90,7 @@ class _PatientProfileState extends State<PatientProfile> {
                             Card(
                               elevation: 8.0,
                               margin:
-                              EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
+                                  EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
@@ -138,14 +137,15 @@ class _PatientProfileState extends State<PatientProfile> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               CreatePhoneNumber(
-                                                collectionName: 'Patient',
-                                              ),
+                                            collectionName: 'Patient',
+                                          ),
                                         ),
                                       );
                                     },
                                     title: 'تعيين رقم هاتف',
                                     subtitle: snapshot.data
-                                        .get('phone-number') == ''
+                                                .get('phone-number') ==
+                                            ''
                                         ? ''
                                         : '${snapshot.data.get('phone-number')}',
                                     icon_1: Icon(Icons.phone),
@@ -158,10 +158,10 @@ class _PatientProfileState extends State<PatientProfile> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               ChangePhoneNumber(
-                                                currentphonenumber: snapshot.data
-                                                    .get('phone-number'),
-                                                collectionName: 'Patient',
-                                              ),
+                                            currentphonenumber: snapshot.data
+                                                .get('phone-number'),
+                                            collectionName: 'Patient',
+                                          ),
                                         ),
                                       );
                                     },
@@ -180,7 +180,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                             height: 600,
                                             child: Column(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 Text(
                                                   'تسجيل الخروج ',
@@ -204,11 +204,11 @@ class _PatientProfileState extends State<PatientProfile> {
                                                     child: RaisedButton(
                                                       onPressed: () async {
                                                         await auth.signOut().then(
-                                                                (value) => Navigator
+                                                            (value) => Navigator
                                                                 .pushNamed(
-                                                                context,
-                                                                WelcomeScreen
-                                                                    .id));
+                                                                    context,
+                                                                    WelcomeScreen
+                                                                        .id));
                                                       },
                                                       color: kBlueColor,
                                                       child: Text(
@@ -218,15 +218,15 @@ class _PatientProfileState extends State<PatientProfile> {
                                                           // fontFamily: 'Montserrat',
                                                           fontSize: 20,
                                                           fontWeight:
-                                                          FontWeight.w600,
+                                                              FontWeight.w600,
                                                           letterSpacing: 1,
                                                         ),
                                                       ),
                                                       shape:
-                                                      RoundedRectangleBorder(
+                                                          RoundedRectangleBorder(
                                                         borderRadius:
-                                                        BorderRadius
-                                                            .circular(30.0),
+                                                            BorderRadius
+                                                                .circular(30.0),
                                                       ),
                                                     ),
                                                   ),
@@ -240,7 +240,7 @@ class _PatientProfileState extends State<PatientProfile> {
                                                     style: TextStyle(
                                                         color: kGreyColor,
                                                         fontWeight:
-                                                        FontWeight.bold),
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
                                               ],

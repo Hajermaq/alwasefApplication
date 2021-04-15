@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
@@ -112,14 +113,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Container(
                       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-                      child: Text(
-                        'انشئ حساب',
-                        textAlign: TextAlign.center,
-                        style: kRegisterUsersHeadlineStyle,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40.0, bottom: 40),
+                        child: Text(
+                          'انشئ حساب',
+                          textAlign: TextAlign.center,
+                          style: kRegisterUsersHeadlineStyle,
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: 50.0,
+                      height: 20.0,
                     ),
                     RoundTextFields(
                       validator: Validation().validateName,
@@ -129,9 +133,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintMessage: 'اسم المستخدم',
                       onSaved: (value) {
                         name = value;
-                      },
-                      onChanged: (value) {
-                        _key.currentState.validate();
                       },
                     ),
                     SizedBox(
@@ -146,9 +147,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (value) {
                         email = value;
                       },
-                      onChanged: (value) {
-                        _key.currentState.validate();
-                      },
                     ),
                     SizedBox(
                       height: 20.0,
@@ -162,37 +160,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (value) {
                         password = value;
                       },
-                      onChanged: (value) {
-                        _key.currentState.validate();
-                      },
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
                     Container(
                       padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                      margin: EdgeInsets.only(right: 50, left: 50),
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: kButtonColor,
-                          style: BorderStyle.solid,
-                          width: 4.0,
-                        ),
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
+                      margin: EdgeInsets.only(right: 50, left: 40),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           value: _selectedSpeciality,
-                          isExpanded: true,
                           dropdownColor: kBlueColor,
+                          isDense: true,
                           style: kDropDownHintStyle,
-                          hint: Text(
-                            'فضلا اختر تخصص',
-                            style: GoogleFonts.almarai(
-                              color: Colors.white54,
-                            ),
+                          hint: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(
+                                Icons.shopping_bag_outlined,
+                                color: kPinkColor,
+                              ),
+                              Text(
+                                'فضلا اختر مسمى وظيفي',
+                                style: GoogleFonts.almarai(
+                                  color: Colors.white54,
+                                  fontSize: 17.0,
+                                ),
+                              ),
+                            ],
                           ), // Not necessary for Option 1
                           onChanged: (newValue) {
                             setState(() {
@@ -236,40 +231,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           }
                           return Container(
                             padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                            margin: EdgeInsets.only(right: 50, left: 50),
-                            height: 50.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: kButtonColor,
-                                style: BorderStyle.solid,
-                                width: 4.0,
-                              ),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
+                            margin: EdgeInsets.only(right: 50, left: 40),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
                                 isExpanded: true,
                                 dropdownColor: kBlueColor,
                                 style: kDropDownHintStyle,
-                                hint: Text(
-                                  'فضلا اختر مستشفى',
-                                  style: GoogleFonts.almarai(
-                                    color: Colors.white54,
-                                  ),
+                                hint: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Icon(
+                                      Icons.local_hospital_outlined,
+                                      color: kPinkColor,
+                                    ),
+                                    Text(
+                                      'فضلا اختر اسم مستشفى',
+                                      style: GoogleFonts.almarai(
+                                        color: Colors.white54,
+                                        fontSize: 17.0,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 items: hospitalsNames,
                                 onChanged: (value) {
                                   hospital_UID = value;
                                 },
+                                value: hospital_UID,
                               ),
                             ),
                           );
                         }
                       }, // end of builder
                     ),
-
-                    //here
+                    SizedBox(
+                      height: 48.0,
+                    ),
                     RoundRaisedButton(
                       text: 'سجل',
                       onPressed: () async {
@@ -284,6 +282,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           });
                         }
                       },
+                    ),
+                    Container(
+                      // TODO write this code
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LogInScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'تسجيل الدخول',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ],
                 );

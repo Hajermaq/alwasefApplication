@@ -49,9 +49,9 @@ class _PharmacistMainPageState extends State<PharmacistMainPage> {
               ScrollNavigationItem(
                 icon: Icon(Icons.search_outlined),
               ),
-              // ScrollNavigationItem(
-              //   icon: Icon(Icons.receipt_outlined),
-              // ),
+              ScrollNavigationItem(
+                icon: Icon(Icons.receipt_outlined),
+              ),
               ScrollNavigationItem(
                 icon: Icon(Icons.account_circle_outlined),
               ),
