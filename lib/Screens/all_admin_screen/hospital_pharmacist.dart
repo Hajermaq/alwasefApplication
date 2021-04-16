@@ -81,24 +81,27 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                 name
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
-                              return Container(
-                                color: kGreyColor,
-                                child: Column(
-                                  children: [
-                                    ListTile(
+                              return Column(
+                                children: [
+                                  Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 0),
+                                    color: Color(0xfff0f2f7),
+                                    child: ListTile(
                                       title: Text(
                                         '${document.data()['pharmacist-name']}',
                                         // textAlign: TextAlign.end,
                                         style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 20.0),
+                                            color: kBlueColor, fontSize: 25.0),
                                       ),
                                       subtitle: Text(
                                         '${document.data()['email']}',
                                         // textAlign: TextAlign.end,
                                         style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 20.0),
+                                            color: kBlueColor, fontSize: 20.0),
                                       ),
                                       trailing: Icon(Icons.keyboard_arrow_left),
                                       onTap: () {
@@ -114,11 +117,11 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                         );
                                       },
                                     ),
-                                    ListTileDivider(
-                                      color: kLightColor,
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  ListTileDivider(
+                                    color: kLightColor,
+                                  ),
+                                ],
                               );
                             }
                             return SizedBox();

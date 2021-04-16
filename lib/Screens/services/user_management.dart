@@ -307,7 +307,6 @@ class UserManagement {
     //units
     String strength,
     String strengthUnit,
-
     // random
     String frequency,
     String note1,
@@ -336,7 +335,6 @@ class UserManagement {
             // status
             'status': 'pending',
             //id's
-
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
             'prescription-id': presciptionId,
@@ -360,9 +358,7 @@ class UserManagement {
             'price': publicPrice,
             // textfiles data
             //integers
-
             'refill': refill,
-
             // strings
             'frequency': frequency,
             'instruction-note': instructionNote,
@@ -385,6 +381,7 @@ class UserManagement {
     //id's
     String patientId,
     String prescriberId,
+    String presciptionId,
     //dates
     String creationDate,
     String startDate,
@@ -397,19 +394,17 @@ class UserManagement {
     String strength,
     String strengthUnit,
     // random
+    String frequency,
+    String note1,
+    String note2,
     String pharmaceuticalForm,
     String administrationRoute,
     String storageConditions,
     String publicPrice,
     //Textfiels data
     // integers
-    double dose,
-    int quantity,
     int refill,
-    int dosingExpire,
     // strings
-    var frequency,
-    var doseUnit,
     String instructionNote,
     String doctorNotes,
   }) async {
@@ -432,7 +427,6 @@ class UserManagement {
             //id's
             'prescriber-id': prescriberId,
             'pharmacist-id': '',
-
             //dates
             'prescription-creation-date': creationDate,
             'start-date': startDate,
@@ -451,12 +445,13 @@ class UserManagement {
             'price': publicPrice,
             // textfiles data
             //integers
-            'quantity': quantity,
             'refill': refill,
             // strings
             'frequency': frequency,
             'instruction-note': instructionNote,
             'doctor-note': doctorNotes,
+            'note_1': note1,
+            'note_2': note2,
           },
           SetOptions(merge: true),
         ).then((_) {

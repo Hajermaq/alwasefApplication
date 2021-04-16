@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:alwasef_app/components/round-button.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -31,12 +32,17 @@ class _LogInScreenState extends State<LogInScreen> {
   String email;
   String password;
   String role;
-
+  bool lodaing = false;
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
-  //Functions
+  @override
+  void initState() {
+    setState(() {
+      lodaing = false;
+    });
+  } //Functions
 
   @override
   Widget build(BuildContext context) {
@@ -125,12 +131,14 @@ class _LogInScreenState extends State<LogInScreen> {
                 SizedBox(
                   height: 48.0,
                 ),
+                lodaing ? CircularProgressIndicator() : Text(''),
                 RoundRaisedButton(
                   text: ' إذهب',
                   onPressed: () async {
                     if (_key.currentState.validate()) {
                       //there is no error
                       _key.currentState.save();
+
                       try {
                         // Doctor
                         await auth
@@ -188,6 +196,17 @@ class _LogInScreenState extends State<LogInScreen> {
                               .where('email', isEqualTo: value.user.email)
                               .get()
                               .then((value) {
+                            SpinKitFadingCircle(
+                              itemBuilder: (BuildContext context, int index) {
+                                return DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: index.isEven
+                                        ? Colors.red
+                                        : Colors.green,
+                                  ),
+                                );
+                              },
+                            );
                             value.docs.forEach((element) {
                               if ('صيدلي' == element.data()['role']) {
                                 Navigator.pushReplacement(

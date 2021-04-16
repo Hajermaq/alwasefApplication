@@ -1,19 +1,12 @@
-// import ''/AndroidStudioProjects/alwasef_app/lib/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/components/text_field_1.dart';
-import 'package:alwasef_app/models/prescription_model.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
-import 'package:alwasef_app/components/DatePicker.dart';
-import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/constants.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flushbar/flushbar.dart';
 
 class AddDiagnosis extends StatefulWidget {
   AddDiagnosis({this.uid});
@@ -98,10 +91,8 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                               child: Column(
                                 children: [
                                   TextField_1(
+                                    textInputType: TextInputType.text,
                                     validator: Validation().validateMessage,
-                                    textInputType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
                                     onSaved: (value) {
                                       medicalDiagnosis = value;
                                     },
@@ -181,6 +172,21 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                         medicalDiagnosis,
                                         diagnosisDescription,
                                         medicalAdvice);
+                                    Flushbar(
+                                      backgroundColor: Colors.white,
+                                      borderRadius: 4.0,
+                                      margin: EdgeInsets.all(8.0),
+                                      duration: Duration(seconds: 4),
+                                      messageText: Text(
+                                        ' تم إضافة تشخيص جديدة لهذا المريض',
+                                        style: TextStyle(
+                                          color: kBlueColor,
+                                          fontFamily: 'Almarai',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )..show(context)
+                                        .then((r) => Navigator.pop(context));
                                   } else {
                                     // there is an error
                                     setState(() {

@@ -87,15 +87,16 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('/Patient')
-                    //TODO: change where equals to (.where('uid', isEqualTo: FirebaseAuth.instance.currentUser.uid) )
-                        .where('hospital-uid', isEqualTo: hUID)
+                        .where('pharmacist-uid',
+                            isEqualTo: FirebaseAuth.instance.currentUser.uid)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         //TODO
                         return CircularProgressIndicator();
-                      } if(snapshot.data.docs.length == 0){
+                      }
+                      if (snapshot.data.docs.length == 0) {
                         return Text('ليس لديك مرضى حتى الان');
                       } else {
                         return ListView.builder(
@@ -103,12 +104,12 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot documentSnapshot =
-                              snapshot.data.docs[index];
+                                  snapshot.data.docs[index];
                               String name =
-                              documentSnapshot.data()['patient-name'];
+                                  documentSnapshot.data()['patient-name'];
                               if (name
-                                  .toLowerCase()
-                                  .contains(searchValue.toLowerCase()) ||
+                                      .toLowerCase()
+                                      .contains(searchValue.toLowerCase()) ||
                                   name
                                       .toUpperCase()
                                       .contains(searchValue.toUpperCase())) {
@@ -117,7 +118,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                                     Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
-                                        BorderRadius.circular(15.0),
+                                            BorderRadius.circular(15.0),
                                       ),
                                       margin: EdgeInsets.fromLTRB(
                                           10.0, 10.0, 10.0, 0),

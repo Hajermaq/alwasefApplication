@@ -51,7 +51,15 @@ class _LogInORSignInState extends State<LogInORSignIn> {
             },
           ),
           SizedBox(
-            height: 100.0,
+            height: 20.0,
+          ),
+          Divider(
+            indent: 90,
+            endIndent: 90,
+            color: Colors.white,
+          ),
+          SizedBox(
+            height: 25.0,
           ),
           OutinedButton(
             text: 'تسجيل مستخدم',
@@ -60,7 +68,7 @@ class _LogInORSignInState extends State<LogInORSignIn> {
             },
           ),
           SizedBox(
-            height: 33.0,
+            height: 20.0,
           ),
           OutinedButton(
             text: 'تسجيل كمستشفى',

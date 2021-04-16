@@ -2,22 +2,14 @@ import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.d
 import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../../constants.dart';
-import 'PDF_screen.dart';
 import 'add_prescriptions.dart';
-import 'dart:io';
-import 'dart:math';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+import 'package:flushbar/flushbar.dart';
 
 class Prescriptions extends StatefulWidget {
   Prescriptions({this.uid});
@@ -35,6 +27,8 @@ class _PrescriptionsState extends State<Prescriptions> {
   String experienceYears = '';
   String doctorPhoneNumber = '';
 
+  Widget noButton;
+  Widget yesButton;
 
 // get information from FireStore
   getDoctorInfo() async {
@@ -66,9 +60,6 @@ class _PrescriptionsState extends State<Prescriptions> {
   void initState() {
     getDoctorInfo();
   }
-
-
-
 
   Widget buildBottomSheet(BuildContext context) {
     return Container(
@@ -126,7 +117,9 @@ class _PrescriptionsState extends State<Prescriptions> {
                       .collection('/Patient')
                       .doc(widget.uid)
                       .collection('/Prescriptions')
-                      .where('status', isNotEqualTo: 'requested refill')
+                      //.where('status', isNotEqualTo: 'requested refill')
+                      .where('prescriber-id',
+                          isEqualTo: FirebaseAuth.instance.currentUser.uid)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -135,33 +128,45 @@ class _PrescriptionsState extends State<Prescriptions> {
                       );
                     }
                     if (snapshot.data.docs.length == 0) {
+                      print('nooo');
                       return Center(
                         child: Text(
                           'لا يوجد وصفات طبية لهذا المريض.',
                           style: TextStyle(color: Colors.black54, fontSize: 17),
                         ),
                       );
-                    } else {
-                      return ListView.builder(
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (context, index) {
-                            Widget statusIcon;
-                            DocumentSnapshot prescription =
-                                snapshot.data.docs[index];
+                    }
+                    return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (context, index) {
+                          Widget statusIcon;
+                          DocumentSnapshot prescription =
+                              snapshot.data.docs[index];
+                          if (prescription.data()['status'] !=
+                              'requested refill') {
                             String status = prescription.data()['status'];
                             //search by
                             String tradeName = prescription.data()['tradeName'];
                             String dose =
                                 prescription.data()['dose'].toString();
 
-                            if(status == 'pending'){
-                              statusIcon = Icon(Icons.hourglass_top_outlined, color: kBlueColor,);
+                            if (status == 'pending') {
+                              statusIcon = Icon(
+                                Icons.hourglass_top_outlined,
+                                color: kBlueColor,
+                              );
                             } else if (status == 'updated') {
-                              statusIcon = Icon(Icons.update, color: kBlueColor,);
+                              statusIcon = Icon(
+                                Icons.update,
+                                color: kBlueColor,
+                              );
                             } else if (status == 'inconsistent') {
-                            statusIcon = Icon(Icons.warning_amber_outlined, color: Colors.red);
+                              statusIcon = Icon(Icons.warning_amber_outlined,
+                                  color: Colors.red);
                             } else if (status == 'dispensed') {
-                            statusIcon = Icon(Icons.assignment_turned_in_outlined, color: Colors.green);
+                              statusIcon = Icon(
+                                  Icons.assignment_turned_in_outlined,
+                                  color: Colors.green);
                             }
 
                             // search logic
@@ -177,7 +182,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                 dose
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
-
                               return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
@@ -789,108 +793,167 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                     //Delete
                                                     RaisedButton(
                                                       onPressed: () async {
-                                                        UserManagement()
-                                                            .PastPrescriptionsSetUp(
-                                                          context,
-                                                          widget.uid,
-                                                          prescription
-                                                              .data()[
-                                                                  'prescriber-id']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'registerNumber']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'prescription-creation-date']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'start-date']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'end-date']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'scientificName']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'scientificNameArabic']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'tradeName']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'tradeNameArabic']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'strength']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'strength-unit']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()['size']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'size-unit']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'pharmaceutical-form']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'administration-route']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'storage-conditions']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()['price']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()['dose'],
-                                                          prescription.data()[
-                                                              'quantity'],
-                                                          prescription
-                                                              .data()['refill'],
-                                                          prescription.data()[
-                                                              'dosing-expire'],
-                                                          prescription.data()[
-                                                              'frequency'],
-                                                          prescription
-                                                              .data()[
-                                                                  'instruction-note']
-                                                              .toString(),
-                                                          prescription
-                                                              .data()[
-                                                                  'doctor-note']
-                                                              .toString(),
-                                                        );
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                '/Patient')
-                                                            .doc(widget.uid)
-                                                            .collection(
-                                                                '/Prescriptions')
-                                                            .doc(
-                                                                prescription.id)
-                                                            .delete();
-                                                        PastPrescriptions(
-                                                          uid: widget.uid,
-                                                        );
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              yesButton =
+                                                                  FlatButton(
+                                                                      child: Text(
+                                                                          'نعم'),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        UserManagement()
+                                                                            .PastPrescriptionsSetUp(
+                                                                          context,
+                                                                          widget
+                                                                              .uid,
+                                                                          prescription
+                                                                              .data()['prescriber-id']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['registerNumber']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['prescription-creation-date']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['start-date']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['end-date']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['scientificName']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['scientificNameArabic']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['tradeName']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['tradeNameArabic']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['strength']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['strength-unit']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['size']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['size-unit']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['pharmaceutical-form']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['administration-route']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['storage-conditions']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['price']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['dose'],
+                                                                          prescription
+                                                                              .data()['quantity'],
+                                                                          prescription
+                                                                              .data()['refill'],
+                                                                          prescription
+                                                                              .data()['dosing-expire'],
+                                                                          prescription
+                                                                              .data()['frequency'],
+                                                                          prescription
+                                                                              .data()['instruction-note']
+                                                                              .toString(),
+                                                                          prescription
+                                                                              .data()['doctor-note']
+                                                                              .toString(),
+                                                                        );
+                                                                        await FirebaseFirestore
+                                                                            .instance
+                                                                            .collection('/Patient')
+                                                                            .doc(widget.uid)
+                                                                            .collection('/Prescriptions')
+                                                                            .doc(prescription.id)
+                                                                            .delete();
+                                                                        PastPrescriptions(
+                                                                          uid: widget
+                                                                              .uid,
+                                                                        );
+                                                                        Flushbar(
+                                                                          backgroundColor:
+                                                                              kLightColor,
+                                                                          borderRadius:
+                                                                              4.0,
+                                                                          margin:
+                                                                              EdgeInsets.all(8.0),
+                                                                          duration:
+                                                                              Duration(seconds: 2),
+                                                                          messageText:
+                                                                              Text(
+                                                                            ' تم حذف الوصفة بنجاح.',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: kBlueColor,
+                                                                              fontFamily: 'Almarai',
+                                                                            ),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                          ),
+                                                                        )..show(context).then((r) =>
+                                                                            Navigator.pop(context));
+                                                                      });
+                                                              noButton =
+                                                                  FlatButton(
+                                                                child:
+                                                                    Text('لا'),
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                              );
+
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'هل أنت متأكد من حذف الوصفة؟',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color:
+                                                                          kBlueColor,
+                                                                      fontFamily:
+                                                                          'Almarai',
+                                                                    ),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center),
+                                                                titleTextStyle: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                                actions: [
+                                                                  yesButton,
+                                                                  noButton
+                                                                ],
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              25)),
+                                                                ),
+                                                                elevation: 24.0,
+                                                              );
+                                                            });
                                                       },
                                                       color: klighterColor,
                                                       shape:
@@ -905,7 +968,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                           10)),
                                                       child: Text("حذف"),
                                                     ),
-
                                                   ],
                                                 ),
                                               ],
@@ -919,9 +981,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                               );
                             }
                             return SizedBox();
-                          });
-                    }
-                    return SizedBox();
+                          } else {
+                            return SizedBox();
+                          }
+                        });
                   }),
             ),
           ],

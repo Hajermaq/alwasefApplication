@@ -118,9 +118,7 @@ class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
                                 children: [
                                   TextField_1(
                                     validator: Validation().validateMessage,
-                                    textInputType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
+                                    textInputType: TextInputType.text,
                                     onSaved: (value) {
                                       widget.medicalDiagnosis = value;
                                     },

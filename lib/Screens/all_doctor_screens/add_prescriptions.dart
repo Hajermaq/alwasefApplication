@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:flushbar/flushbar.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/components/drug_info_card.dart';
 import 'package:alwasef_app/components/text_field_1.dart';
@@ -247,7 +247,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           labelText: 'تاريخ النهاية',
                                           date: creationDate,
                                           onSaved: (value) {
-                                            endDate = formatter.format(value);
+                                            if (value != null) {
+                                              endDate = formatter.format(value);
+                                            }
                                           },
                                         ),
                                         Divider(
@@ -284,6 +286,96 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                             maxLines: maxLines,
                                           ),
                                         ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 100.0,
+                                              vertical: 20.0),
+                                          child: Container(
+                                            height: 50.0,
+                                            child: RaisedButton(
+                                              textColor: Colors.white54,
+                                              color: kGreyColor,
+                                              child: Text(
+                                                '     إرسال     ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  // fontFamily: 'Montserrat',
+                                                  fontSize: 30,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 1,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                if (_key.currentState
+                                                    .validate()) {
+                                                  _key.currentState.save();
+                                                  UserManagement(
+                                                          currentPatient_uid:
+                                                              widget.uid)
+                                                      .newPrescriptionSetUp(
+                                                    context: context,
+                                                    patientId: widget.uid,
+                                                    prescriberId: prescriberId,
+                                                    presciptionId: '[$s]',
+                                                    creationDate: creationDate,
+                                                    startDate: startDate,
+                                                    endDate: endDate,
+                                                    scientificName:
+                                                        scientificName,
+                                                    tradeName: tradeName,
+                                                    tradeNameArabic:
+                                                        tradeNameArabic,
+                                                    strengthUnit: strengthUnit,
+                                                    strength: strength,
+                                                    note1: note1,
+                                                    note2: note2,
+                                                    pharmaceuticalForm:
+                                                        pharmaceuticalForm,
+                                                    administrationRoute:
+                                                        administrationRoute,
+                                                    storageConditions:
+                                                        storageConditions,
+                                                    publicPrice: publicPrice,
+                                                    refill: refill,
+                                                    frequency: frequency,
+                                                    instructionNote:
+                                                        instructionNote,
+                                                    doctorNotes: doctorNotes,
+                                                  );
+
+                                                  Flushbar(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    borderRadius: 4.0,
+                                                    margin: EdgeInsets.all(8.0),
+                                                    duration:
+                                                        Duration(seconds: 4),
+                                                    messageText: Text(
+                                                      ' تم إضافة وصفة جديدة لهذا المريض',
+                                                      style: TextStyle(
+                                                        color: kBlueColor,
+                                                        fontFamily: 'Almarai',
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  )..show(context).then((r) =>
+                                                      Navigator.pop(context));
+                                                } else {
+                                                  // there is an error
+                                                  setState(() {
+                                                    autovalidateMode =
+                                                        AutovalidateMode.always;
+                                                  });
+                                                }
+                                              },
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -294,65 +386,81 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                         }
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 100.0, vertical: 20.0),
-                      child: Container(
-                        height: 50.0,
-                        child: RaisedButton(
-                          textColor: Colors.white54,
-                          color: kGreyColor,
-                          child: Text(
-                            'إرسال',
-                            style: TextStyle(
-                              color: Colors.white,
-                              // fontFamily: 'Montserrat',
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (_key.currentState.validate()) {
-                              _key.currentState.save();
-                              UserManagement(currentPatient_uid: widget.uid)
-                                  .newPrescriptionSetUp(
-                                context: context,
-                                patientId: widget.uid,
-                                prescriberId: prescriberId,
-                                presciptionId: '[$s]',
-                                creationDate: creationDate,
-                                startDate: startDate,
-                                endDate: endDate,
-                                scientificName: scientificName,
-                                tradeName: tradeName,
-                                tradeNameArabic: tradeNameArabic,
-                                strengthUnit: strengthUnit,
-                                strength: strength,
-                                note1: note1,
-                                note2: note2,
-                                pharmaceuticalForm: pharmaceuticalForm,
-                                administrationRoute: administrationRoute,
-                                storageConditions: storageConditions,
-                                publicPrice: publicPrice,
-                                refill: refill,
-                                frequency: frequency,
-                                instructionNote: instructionNote,
-                                doctorNotes: doctorNotes,
-                              );
-                            } else {
-                              // there is an error
-                              setState(() {
-                                autovalidateMode = AutovalidateMode.always;
-                              });
-                            }
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.symmetric(
+                    //       horizontal: 100.0, vertical: 20.0),
+                    //   child: Container(
+                    //     height: 50.0,
+                    //     child: RaisedButton(
+                    //       textColor: Colors.white54,
+                    //       color: kGreyColor,
+                    //       child: Text(
+                    //         'إرسال',
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           // fontFamily: 'Montserrat',
+                    //           fontSize: 30,
+                    //           fontWeight: FontWeight.w600,
+                    //           letterSpacing: 1,
+                    //         ),
+                    //       ),
+                    //       onPressed: () {
+                    //         if (_key.currentState.validate()) {
+                    //           _key.currentState.save();
+                    //           UserManagement(currentPatient_uid: widget.uid)
+                    //               .newPrescriptionSetUp(
+                    //             context: context,
+                    //             patientId: widget.uid,
+                    //             prescriberId: prescriberId,
+                    //             presciptionId: '[$s]',
+                    //             creationDate: creationDate,
+                    //             startDate: startDate,
+                    //             endDate: endDate,
+                    //             scientificName: scientificName,
+                    //             tradeName: tradeName,
+                    //             tradeNameArabic: tradeNameArabic,
+                    //             strengthUnit: strengthUnit,
+                    //             strength: strength,
+                    //             note1: note1,
+                    //             note2: note2,
+                    //             pharmaceuticalForm: pharmaceuticalForm,
+                    //             administrationRoute: administrationRoute,
+                    //             storageConditions: storageConditions,
+                    //             publicPrice: publicPrice,
+                    //             refill: refill,
+                    //             frequency: frequency,
+                    //             instructionNote: instructionNote,
+                    //             doctorNotes: doctorNotes,
+                    //           );
+                    //
+                    //           Flushbar(
+                    //             backgroundColor: Colors.white,
+                    //             borderRadius: 4.0,
+                    //             margin: EdgeInsets.all(8.0),
+                    //             duration: Duration(seconds: 4),
+                    //             messageText: Text(
+                    //               ' تم إضافة وصفة جديدة لهذا المريض',
+                    //               style: TextStyle(
+                    //                 color: kBlueColor,
+                    //                 fontFamily: 'Almarai',
+                    //               ),
+                    //               textAlign: TextAlign.center,
+                    //             ),
+                    //           )..show(context)
+                    //               .then((r) => Navigator.pop(context));
+                    //         } else {
+                    //           // there is an error
+                    //           setState(() {
+                    //             autovalidateMode = AutovalidateMode.always;
+                    //           });
+                    //         }
+                    //       },
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(30.0),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

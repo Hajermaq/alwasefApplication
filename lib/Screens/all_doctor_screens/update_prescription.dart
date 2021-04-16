@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
@@ -8,18 +5,14 @@ import 'package:alwasef_app/components/drug_info_card.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/components/text_field_1.dart';
 import 'package:alwasef_app/constants.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'add_prescriptions.dart';
+import 'package:flushbar/flushbar.dart';
 
 class UpdatePrescription extends StatefulWidget {
   UpdatePrescription({this.uid, this.documentID});
@@ -91,6 +84,7 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
               tradenamearabic.contains(stringFromTF)) {
             registerNumber = obj['RegisterNumber'].toString();
             tradeName = obj['tradeName'].toString();
+            print('from function $tradename');
             scientificName = obj['scientificName'].toString();
             tradeNameArabic = obj['tradeNameArabic'].toString();
             pharmaceuticalForm = obj['PharmaceuticalForm'].toString();
@@ -142,239 +136,276 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
             children: [
               _searchBar(),
               Expanded(
-                child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('/Patient')
-                        .doc(widget.uid)
-                        .collection('/Prescriptions')
-                        .doc(widget.documentID)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      } else {
-                        if (stringFromTF == null) {
-                          scientificName = snapshot.data.get('scientificName');
-                          pharmaceuticalForm =
-                              snapshot.data.get('pharmaceutical-form');
-                          instructionNote =
-                              snapshot.data.get('instruction-note');
-                          frequency = snapshot.data.get('frequency');
-                          refill = snapshot.data.get('refill');
-                          strength = snapshot.data.get('strength');
-                          strengthUnit = snapshot.data.get('strength-unit');
-                          startDate = snapshot.data.get('start-date');
-                          endDate = snapshot.data.get('end-date');
-                          doctorNotes = snapshot.data.get('doctor-note');
-                          note1 = snapshot.data.get('note_1');
-                          note2 = snapshot.data.get('note_2');
+                child: Form(
+                  key: _key,
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('/Patient')
+                          .doc(widget.uid)
+                          .collection('/Prescriptions')
+                          .doc(widget.documentID)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return CircularProgressIndicator();
                         } else {
-                          scientificName = scientificName;
-                          pharmaceuticalForm = pharmaceuticalForm;
-                          instructionNote = instructionNote;
-                          frequency = frequency;
-                          refill = refill;
-                          strength = strength;
-                          strengthUnit = strengthUnit;
-                          startDate = startDate;
-                          endDate = endDate;
-                          doctorNotes = doctorNotes;
-                          note1 = note1;
-                          note2 = note2;
-                        }
+                          if (stringFromTF == null) {
+                            tradeNameArabic =
+                                snapshot.data.get('tradeNameArabic');
+                            tradeName = snapshot.data.get('tradeName');
+                            publicPrice = snapshot.data.get('price');
+                            administrationRoute =
+                                snapshot.data.get('administration-route');
+                            storageConditions =
+                                snapshot.data.get('storage-conditions');
+                            scientificName =
+                                snapshot.data.get('scientificName');
+                            pharmaceuticalForm =
+                                snapshot.data.get('pharmaceutical-form');
+                            instructionNote =
+                                snapshot.data.get('instruction-note');
+                            frequency = snapshot.data.get('frequency');
+                            refill = snapshot.data.get('refill');
+                            strength = snapshot.data.get('strength');
+                            strengthUnit = snapshot.data.get('strength-unit');
+                            startDate = snapshot.data.get('start-date');
+                            endDate = snapshot.data.get('end-date');
+                            doctorNotes = snapshot.data.get('doctor-note');
+                            note1 = snapshot.data.get('note_1');
+                            note2 = snapshot.data.get('note_2');
+                          } else {
+                            tradeNameArabic = tradeNameArabic;
+                            tradeName = tradeName;
+                            publicPrice = publicPrice;
+                            administrationRoute = administrationRoute;
+                            storageConditions = storageConditions;
+                            scientificName = scientificName;
+                            pharmaceuticalForm = pharmaceuticalForm;
+                            instructionNote = instructionNote;
+                            frequency = frequency;
+                            refill = refill;
+                            strength = strength;
+                            strengthUnit = strengthUnit;
+                            startDate = startDate;
+                            endDate = endDate;
+                            doctorNotes = doctorNotes;
+                            note1 = note1;
+                            note2 = note2;
+                          }
 
-                        return ListView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: [
-                            Column(
-                              children: [
-                                DrugInfoCard(
-                                  drugName: stringFromTF == null
-                                      ? snapshot.data.get('tradeNameArabic')
-                                      : tradeName,
-                                  pharmaceuticalForm: stringFromTF == null
-                                      ? snapshot.data.get('pharmaceutical-form')
-                                      : pharmaceuticalForm,
-                                  date: stringFromTF == null
-                                      ? snapshot.data
-                                          .get('prescription-creation-date')
-                                      : creationDate,
-                                  administrationRoute: stringFromTF == null
-                                      ? snapshot.data
-                                          .get('administration-route')
-                                      : administrationRoute,
-                                  storageCondition: stringFromTF == null
-                                      ? snapshot.data.get('storage-conditions')
-                                      : storageConditions,
-                                  price: stringFromTF == null
-                                      ? snapshot.data.get('price')
-                                      : publicPrice,
-                                ),
-                                DosageCard(
+                          return ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: [
+                              Column(
+                                children: [
+                                  DrugInfoCard(
+                                    drugName: tradeName,
+                                    pharmaceuticalForm: pharmaceuticalForm,
+                                    date: creationDate,
+                                    administrationRoute: administrationRoute,
+                                    storageCondition: storageConditions,
+                                    price: publicPrice,
+                                  ),
+                                  DosageCard(
                                     strength,
                                     strengthUnit,
                                     pharmaceuticalForm,
                                     frequency,
                                     note1,
                                     note2,
-                                    scientificName),
-                                Card(
-                                  color: kGreyColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
+                                    scientificName,
                                   ),
-                                  margin:
-                                      EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        TextField_1(
-                                          textInputType:
-                                              TextInputType.numberWithOptions(
-                                                  decimal: false),
-                                          onChanged: (value) {
-                                            refill = int.parse(value);
-                                          },
-                                          validator: Validation()
-                                              .validateIntegerNumber,
-                                          labelText: 'إعادة التعبئة',
-                                          initialValue:
-                                              '${snapshot.data.get('refill')}',
-                                        ),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        DatePicker(
-                                          initialValue: DateTime.parse(
-                                              snapshot.data.get('start-date')),
-                                          labelText: 'تاريخ البداية',
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'التاريخ مطلوب';
-                                            }
-                                            return null;
-                                          },
-                                          date: creationDate,
-                                          onChanged: (value) {
-                                            startDate = formatter.format(value);
-                                          },
-                                        ),
-                                        DatePicker(
-                                          initialValue: DateTime.parse(
-                                              snapshot.data.get('end-date')),
-                                          labelText: 'تاريخ النهاية',
-                                          date: creationDate,
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return '';
-                                            }
-                                            return null;
-                                          },
-                                          onChanged: (value) {
-                                            endDate = formatter.format(value);
-                                          },
-                                        ),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            labelText: 'تعليمات للمريض',
-                                            validator:
-                                                Validation().validateMessage,
-                                            onChanged: (String value) {
-                                              instructionNote = value;
+                                  Card(
+                                    color: kGreyColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    margin: EdgeInsets.fromLTRB(
+                                        10.0, 10.0, 10.0, 0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          TextField_1(
+                                            textInputType:
+                                                TextInputType.numberWithOptions(
+                                                    decimal: false),
+                                            onSaved: (value) {
+                                              refill = int.parse(value);
                                             },
-                                            maxLines: maxLines,
+                                            validator: Validation()
+                                                .validateIntegerNumber,
+                                            labelText: 'إعادة التعبئة',
                                             initialValue:
-                                                '${snapshot.data.get('instruction-note')}',
+                                                '${snapshot.data.get('refill')}',
                                           ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            labelText: 'ملاحظات للصيدلي',
-                                            onChanged: (value) {
-                                              doctorNotes = value;
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          DatePicker(
+                                            initialValue: DateTime.parse(
+                                                snapshot.data
+                                                    .get('start-date')),
+                                            labelText: 'تاريخ البداية',
+                                            validator: (value) {
+                                              if (value == null) {
+                                                return 'التاريخ مطلوب';
+                                              }
+                                              return null;
                                             },
-                                            maxLines: maxLines,
-                                            initialValue: snapshot.data
-                                                .get('doctor-note'),
+                                            date: creationDate,
+                                            onSaved: (value) {
+                                              startDate =
+                                                  formatter.format(value);
+                                            },
                                           ),
-                                        ),
-                                      ],
+                                          DatePicker(
+                                            initialValue:
+                                                snapshot.data.get('end-date') ==
+                                                        null
+                                                    ? DateTime.tryParse('')
+                                                    : DateTime.tryParse(snapshot
+                                                        .data
+                                                        .get('end-date')),
+                                            labelText: 'تاريخ النهاية',
+                                            date: creationDate,
+                                            onSaved: (value) {
+                                              if (value != null) {
+                                                endDate =
+                                                    formatter.format(value);
+                                              }
+                                            },
+                                          ),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.all(12),
+                                            height: maxLines * 24.0,
+                                            child: TextField_1(
+                                              labelText: 'تعليمات للمريض',
+                                              validator:
+                                                  Validation().validateMessage,
+                                              onSaved: (String value) {
+                                                instructionNote = value;
+                                              },
+                                              maxLines: maxLines,
+                                              initialValue:
+                                                  '${snapshot.data.get('instruction-note')}',
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.all(12),
+                                            height: maxLines * 24.0,
+                                            child: TextField_1(
+                                              labelText: 'ملاحظات للصيدلي',
+                                              onSaved: (value) {
+                                                doctorNotes = value;
+                                              },
+                                              maxLines: maxLines,
+                                              initialValue: snapshot.data
+                                                  .get('doctor-note'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 100.0, vertical: 20.0),
-                              child: Container(
-                                width: double.infinity,
-                                height: 50.0,
-                                child: RaisedButton(
-                                  textColor: kButtonTextColor,
-                                  color: kGreyColor,
-                                  child: Text(
-                                    'تحديث',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      // fontFamily: 'Montserrat',
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 1,
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 100.0, vertical: 20.0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50.0,
+                                  child: RaisedButton(
+                                    textColor: kButtonTextColor,
+                                    color: kGreyColor,
+                                    child: Text(
+                                      'تحديث',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        // fontFamily: 'Montserrat',
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 1,
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () async {
-                                    UserManagement(
-                                            documentId: widget.documentID,
-                                            currentPatient_uid: widget.uid)
-                                        .prescriptionUpdate(
-                                      scientificName: scientificName,
-                                      context: context,
-                                      patientId: widget.uid,
-                                      prescriberId: '',
-                                      creationDate: creationDate,
-                                      startDate: startDate,
-                                      endDate: endDate,
-                                      tradeName: tradeName,
-                                      tradeNameArabic: tradeNameArabic,
-                                      strengthUnit: strengthUnit,
-                                      strength: strength,
-                                      pharmaceuticalForm: pharmaceuticalForm,
-                                      administrationRoute: administrationRoute,
-                                      storageConditions: storageConditions,
-                                      publicPrice: publicPrice,
-                                      refill: refill,
-                                      frequency: frequency,
-                                      instructionNote: instructionNote,
-                                      doctorNotes: doctorNotes,
-                                    );
-                                    Navigator.pop(context);
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
+                                    onPressed: () async {
+                                      if (_key.currentState.validate()) {
+                                        _key.currentState.save();
+                                        UserManagement(
+                                                documentId: widget.documentID,
+                                                currentPatient_uid: widget.uid)
+                                            .prescriptionUpdate(
+                                          note1: note1,
+                                          note2: note2,
+                                          scientificName: scientificName,
+                                          context: context,
+                                          patientId: widget.uid,
+                                          prescriberId: snapshot.data
+                                              .get('prescriber-id'),
+                                          creationDate: creationDate,
+                                          startDate: startDate,
+                                          endDate: endDate,
+                                          tradeName: tradeName,
+                                          tradeNameArabic: tradeNameArabic,
+                                          strengthUnit: strengthUnit,
+                                          strength: strength,
+                                          pharmaceuticalForm:
+                                              pharmaceuticalForm,
+                                          administrationRoute:
+                                              administrationRoute,
+                                          storageConditions: storageConditions,
+                                          publicPrice: publicPrice,
+                                          refill: refill,
+                                          frequency: frequency,
+                                          instructionNote: instructionNote,
+                                          doctorNotes: doctorNotes,
+                                        );
+
+                                        Flushbar(
+                                          backgroundColor: Colors.white,
+                                          borderRadius: 4.0,
+                                          margin: EdgeInsets.all(8.0),
+                                          duration: Duration(seconds: 4),
+                                          messageText: Text(
+                                            ' تم تعديل وصفة جديدة لهذا المريض',
+                                            style: TextStyle(
+                                              color: kBlueColor,
+                                              fontFamily: 'Almarai',
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )..show(context).then(
+                                            (r) => Navigator.pop(context));
+                                      } else {
+                                        // there is an error
+                                        setState(() {
+                                          autovalidateMode =
+                                              AutovalidateMode.always;
+                                        });
+                                      }
+                                    },
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }
-                    }),
+                            ],
+                          );
+                        }
+                      }),
+                ),
               ),
             ],
           ),
