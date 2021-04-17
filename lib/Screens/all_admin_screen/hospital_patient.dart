@@ -111,6 +111,8 @@ class _HospitalPatientsState extends State<HospitalPatients> {
                                                 PatientManagement(
                                               patient_id:
                                                   document.data()['uid'],
+                                              map: document
+                                                  .data()['doctors_map'],
                                             ),
                                           ),
                                         );

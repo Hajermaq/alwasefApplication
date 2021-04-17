@@ -123,7 +123,12 @@ class _VerifiyPageState extends State<VerifiyPage> {
                           role: widget.role,
                           patientName: widget.name,
                           phoneNumber: '',
-                          doctors: [],
+                          doctorsMap: {
+                            '1': '',
+                            '2': '',
+                            '3': '',
+                            '4': '',
+                          },
                         );
                         //Hospital
                       } else {

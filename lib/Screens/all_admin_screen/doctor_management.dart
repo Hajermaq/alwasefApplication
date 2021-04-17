@@ -104,6 +104,10 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                     if (!snapshot.hasData) {
                                       return Text('has no data');
                                     } else {
+                                     snapshot.data.docs.forEach((element) {
+                                       element.data()['speciality']
+
+                                     });
                                       List<String> specialities = [
                                         'طبيب قلب',
                                         'طبيب نفسي',
@@ -118,7 +122,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
 
                                         child: DropdownButtonHideUnderline(
                                           child: DropdownButton(
-                                            value: _selectedSpeciality,
+                                            value: snapshot.data,
                                             isExpanded: true,
                                             dropdownColor: kLightColor,
                                             style: kDropDownHintStyle,

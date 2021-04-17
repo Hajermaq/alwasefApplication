@@ -195,7 +195,7 @@ class UserManagement {
     String hospitalUID,
     String pharmacistUID,
     String phoneNumber,
-    List doctors,
+    Map doctorsMap,
   }) async {
     try {
       CollectionReference collection =
@@ -221,7 +221,7 @@ class UserManagement {
           //random
           'role': role,
           'phone-number': phoneNumber,
-          'doctors': doctors,
+          'doctors_map': doctorsMap,
         }).then((_) {
           print('collection is created');
           Navigator.of(context).pop();
