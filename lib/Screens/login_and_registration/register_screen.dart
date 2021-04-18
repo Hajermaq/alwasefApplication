@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
+import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String password;
   String email;
   String role;
-  Widget okButton;
+  String reEnterPassword;
 
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
@@ -70,32 +72,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       // print("Done");
     } catch (e) {
+      print(e);
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          okButton = FlatButton(
-            child: Text('حسنا'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          );
           return AlertDialog(
-            title:
-                Text(' البريد الإلكتروني المدخل قيد الاستخدام من قبل حساب آخر.',
-                    style: TextStyle(
-                      color: kBlueColor,
-                      fontFamily: 'Almarai',
-                    ),
-                    textAlign: TextAlign.center),
-            titleTextStyle:
-                TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            actions: [
-              okButton,
+            title: new Text(
+                ' البريد الإلكتروني المدخل قيد الاستخدام من قبل حساب آخر.',
+                style: TextStyle(color: kBlueColor)),
+            actions: <Widget>[
+              FlatButton(
+                child: new Text(
+                  "حسنا",
+                  style: TextStyle(color: kBlueColor),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
             ],
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
-            elevation: 24.0,
           );
         },
       );
@@ -122,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 40.0, bottom: 40),
                         child: Text(
-                          'انشئ حساب',
+                          'أنشئ حسابـا',
                           textAlign: TextAlign.center,
                           style: kRegisterUsersHeadlineStyle,
                         ),
@@ -132,7 +127,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20.0,
                     ),
                     RoundTextFields(
-                      validator: Validation().validateName,
+                      validator: Validation().validateMessage,
                       textInputType: TextInputType.name,
                       isObscure: false,
                       color: kButtonColor,
@@ -166,10 +161,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onSaved: (value) {
                         password = value;
                       },
+                      onChanged: (value) {
+                        reEnterPassword = value;
+                      }
                     ),
                     SizedBox(
-                      height: 30.0,
+                      height: 20.0,
                     ),
+                    RoundTextFields(
+                      validator: (value) =>
+                      value != reEnterPassword
+                          ? 'كلمة المرور غير متطابقة'
+                          : null,
+                      isObscure: true,
+                      color: kButtonColor,
+                      hintMessage: 'أعد إدخال كلمة المرور',
+                      // onSaved: (value) {
+                      //   password = value;
+                      // },
+                      textInputType: TextInputType.text,
+                      //hiddenPass: true,
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 50, right: 50),
                       child: DropdownButtonFormField(
@@ -197,16 +210,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         value: _selectedSpeciality,
                         items: _specialities.map((speciality) {
                           return DropdownMenuItem(
-                            child: new Text(speciality,
-                                style: GoogleFonts.almarai()),
+                            child: new Text(speciality, style: GoogleFonts.almarai()),
                             value: speciality,
                             onTap: () {
                               role = speciality;
                             },
                           );
                         }).toList(),
+
                         validator: (value) =>
-                            value == null ? 'هذا الحقل مطلوب' : null,
+                        value == null
+                            ? 'هذا الحقل مطلوب'
+                            : null,
                         onSaved: (newValue) {
                           setState(() {
                             _selectedSpeciality = newValue;
@@ -218,6 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 20.0,
                     ),
+
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('/Hospital')
@@ -231,7 +247,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           for (var document in documents) {
                             hospitalsNames.add(
                               DropdownMenuItem(
-                                child: Text(document.get('hospital-name')),
+                                child: Text(
+                                  document.get('hospital-name')
+                                ),
                                 value: '${document.id}',
                               ),
                             );
@@ -249,7 +267,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   fontSize: 13.0,
                                 ),
                                 prefixIcon: Icon(
-                                  Icons.shopping_bag_outlined,
+                                  Icons.local_hospital_outlined,
                                   color: kPinkColor,
                                 ),
                                 errorStyle: TextStyle(
@@ -262,7 +280,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               items: hospitalsNames,
                               value: hospital_UID,
                               validator: (value) =>
-                                  value == null ? 'هذا الحقل مطلوب' : null,
+                              value == null
+                                  ? 'هذا الحقل مطلوب'
+                                  : null,
                               onSaved: (newValue) {
                                 setState(() {
                                   hospital_UID = newValue;

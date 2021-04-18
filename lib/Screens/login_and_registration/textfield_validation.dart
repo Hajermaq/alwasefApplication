@@ -6,9 +6,9 @@ class Validation {
     String pattern = r'(^[a-zA-Z ]*$)';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 اسم المستخدم مطلوب';
+      return ' \u26A0 هذا  الحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
-      return ' \u26A0 اسم المستخدم غير صالح';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
@@ -17,16 +17,16 @@ class Validation {
     String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
-      return 'فضلا ادخل رقم هاتف';
+      return ' \u26A0 هذاالحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
-      return 'فضلا ادخل رقم هاتف صالح';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
 
   String validateDate(String value) {
     if (value.length == 0) {
-      return ' \u26A0 التاريخ مطلوب';
+      return ' \u26A0 هذاالحقل مطلوب';
     }
     return null;
   }
@@ -36,16 +36,17 @@ class Validation {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 البريد الإلكتروني مطلوب';
+
+      return ' \u26A0 هذاالحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
-      return ' \u26A0 البريد الإلكتروني غير صالح';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
 
   String validateMessage(String value) {
     if (value.length == 0) {
-      return ' \u26A0 البريد الإلكتروني مطلوب';
+      return ' \u26A0 هذاالحقل مطلوب';
     }
     return null;
   }
@@ -55,9 +56,9 @@ class Validation {
     String pattern = r'[0-9.,]+';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 الخانة مطلوبة';
+      return ' \u26A0 هذاالحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
-      return ' \u26A0 القيمة غير صالحة';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
@@ -67,16 +68,16 @@ class Validation {
     String pattern = r'^[0-9]+$';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 الخانة مطلوبة';
+      return ' \u26A0 هذاالحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
-      return ' \u26A0 القيمة غير صالحة';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
 
   String validateDropDownMenue(String value) {
     if (value == null) {
-      return ' \u26A0 الخانة مطلوبة';
+      return ' \u26A0 هذاالحقل مطلوب';
     }
     return null;
   }
@@ -86,9 +87,9 @@ class Validation {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 البريد الإلكتروني مطلوب';
+      return ' \u26A0 هذاالحقل مطلوب';
     } else if (!FirebaseAuth.instance.currentUser.email.contains(value)) {
-      return ' \u26A0 البريد الإلكتروني غير موجود ';
+      return ' \u26A0  هذه القيمة غير صالحة';
     }
     return null;
   }
@@ -98,7 +99,7 @@ class Validation {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 البريد الإلكتروني مطلوب';
+      return ' \u26A0 هذا الحقل مطلوب';
     } else if (!regExp.hasMatch(value)) {
       return ' \u26A0 البريد الإلكتروني غير موجود ';
     }
@@ -110,7 +111,7 @@ class Validation {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
-      return ' \u26A0 كلمة المرور مطلوب';
+      return ' \u26A0 هذا الحقل مطلوب';
     }
     return null;
   }
@@ -132,7 +133,7 @@ class Validation {
     if (value.length == 0) {
       return ' \u26A0 كلمة المرور  مطلوب';
     } else if (!regExp1.hasMatch(value)) {
-      return ' \u26A0 كلمة السر يجب ان تحتوي على حرف كبير ';
+      return ' \u26A0   كلمة السر يجب ان تحتوي على حرف كبير ';
     } else if (!regExp2.hasMatch(value)) {
       return ' \u26A0 كلمة السر يجب ان تحتوي على حرف صغير ';
     } else if (!regExp3.hasMatch(value)) {

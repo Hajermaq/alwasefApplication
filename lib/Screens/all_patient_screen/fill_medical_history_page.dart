@@ -105,7 +105,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         }).toList(),
                         validator: (value) =>
                         value == null
-                            ? 'هذا الحقل مطلوب'
+                            ? 'هذاالحقل مطلوب'
                             : null,
                         onSaved: (selectedValue) {
                           setState(() {
