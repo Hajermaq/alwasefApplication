@@ -7,23 +7,21 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
 
 class DoctorManagement extends StatefulWidget {
-  DoctorManagement({this.doctor_id});
+  DoctorManagement({this.doctor_id, this.experienceYears, this.speciality});
   final String doctor_id;
+  final String experienceYears;
+  final String speciality;
 
   @override
   _DoctorManagementState createState() => _DoctorManagementState();
 }
 
 class _DoctorManagementState extends State<DoctorManagement> {
-  String experience;
-
   String _selectedSpeciality;
   String _selectedExperience;
 
   @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser.uid);
-    print(widget.doctor_id);
     return SafeArea(
       child: Scaffold(
         backgroundColor: kLightColor,
@@ -95,19 +93,15 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                 child: StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection('/Doctors')
-                                      .where('hospital-uid',
-                                          isEqualTo: FirebaseAuth
-                                              .instance.currentUser.uid)
-                                      .where('speciality', isEqualTo: 'general')
+                                      .where('uid', isEqualTo: widget.doctor_id)
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Text('has no data');
                                     } else {
-                                     snapshot.data.docs.forEach((element) {
-                                       element.data()['speciality']
-
-                                     });
+                                      var doc = snapshot.data;
+                                      String heart =
+                                          doc.docs[0].data()['speciality'];
                                       List<String> specialities = [
                                         'طبيب قلب',
                                         'طبيب نفسي',
@@ -122,7 +116,9 @@ class _DoctorManagementState extends State<DoctorManagement> {
 
                                         child: DropdownButtonHideUnderline(
                                           child: DropdownButton(
-                                            value: snapshot.data,
+                                            value: _selectedSpeciality == null
+                                                ? heart
+                                                : _selectedSpeciality,
                                             isExpanded: true,
                                             dropdownColor: kLightColor,
                                             style: kDropDownHintStyle,
@@ -144,17 +140,6 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                                 value: speciality,
                                                 onTap: () {
                                                   speciality = speciality;
-
-                                                  print(speciality);
-
-                                                  FirebaseFirestore.instance
-                                                      .collection('/Doctors')
-                                                      .doc(widget.doctor_id)
-                                                      .update(
-                                                    {
-                                                      'speciality': speciality,
-                                                    },
-                                                  );
                                                 },
                                               );
                                             }).toList(),
@@ -195,15 +180,15 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                 child: StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection('/Doctors')
-                                      .where('hospital-uid',
-                                          isEqualTo: FirebaseAuth
-                                              .instance.currentUser.uid)
-                                      .where('speciality', isEqualTo: 'general')
+                                      .where('uid', isEqualTo: widget.doctor_id)
                                       .snapshots(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Text('has no data');
                                     } else {
+                                      var doc = snapshot.data;
+                                      String experience = doc.docs[0]
+                                          .data()['experience-years'];
                                       List<String> experienceYears = [
                                         'أقل من 5 سنوات خبرة (متخصص)',
                                         'أكثر من 5 سنوات خبرة (مستشار)',
@@ -216,7 +201,9 @@ class _DoctorManagementState extends State<DoctorManagement> {
 
                                         child: DropdownButtonHideUnderline(
                                           child: DropdownButton(
-                                            value: _selectedExperience,
+                                            value: _selectedExperience == null
+                                                ? experience
+                                                : _selectedExperience,
                                             isExpanded: true,
                                             dropdownColor: kLightColor,
                                             style: kDropDownHintStyle,
@@ -238,16 +225,6 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                                 value: option,
                                                 onTap: () {
                                                   experience = option;
-
-                                                  FirebaseFirestore.instance
-                                                      .collection('/Doctors')
-                                                      .doc(widget.doctor_id)
-                                                      .update(
-                                                    {
-                                                      'experience-years':
-                                                          experience,
-                                                    },
-                                                  );
                                                 },
                                               );
                                             }).toList(),
@@ -272,129 +249,80 @@ class _DoctorManagementState extends State<DoctorManagement> {
                 ],
               ),
             ),
-            // Card(
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(15.0),
-            //   ),
-            //   color: kGreyColor,
-            //   margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //     children: [
-            //       ListTile(
-            //         title: Text(
-            //           'تعيين الصيدلي ',
-            //           textAlign: TextAlign.center,
-            //           style: kBoldLabelTextStyle,
-            //         ),
-            //       ),
-            //       Divider(
-            //         color: klighterColor,
-            //         thickness: 0.9,
-            //         endIndent: 20,
-            //         indent: 20,
-            //       ),
-            //       Padding(
-            //         padding: const EdgeInsets.all(15.0),
-            //         child: Container(
-            //           child: Column(
-            //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //             children: [
-            //               Row(
-            //                 children: [
-            //                   Text(
-            //                     'طبيب عام',
-            //                     style: ksubBoldLabelTextStyle,
-            //                   ),
-            //                   SizedBox(
-            //                     width: 15.0,
-            //                   ),
-            //                   Expanded(
-            //                     child: StreamBuilder<QuerySnapshot>(
-            //                       stream: FirebaseFirestore.instance
-            //                           .collection('/Pharmacist')
-            //                           .where('hospital-uid',
-            //                               isEqualTo: FirebaseAuth
-            //                                   .instance.currentUser.uid)
-            //                           .snapshots(),
-            //                       builder: (context, snapshot) {
-            //                         if (!snapshot.hasData) {
-            //                           return Text('has no data');
-            //                         } else {
-            //                           List<DropdownMenuItem> hospitalsNames =
-            //                               [];
-            //                           var documents = snapshot.data.docs;
-            //                           for (var document in documents) {
-            //                             hospitalsNames.add(
-            //                               DropdownMenuItem(
-            //                                 child: Text(
-            //                                   document
-            //                                       .data()['Pharmacist-name']
-            //                                       .toString(),
-            //                                   style: TextStyle(
-            //                                       color: Colors.black54),
-            //                                 ),
-            //                                 value: '${document.id}',
-            //                               ),
-            //                             );
-            //                           }
-            //                           return Container(
-            //                             padding:
-            //                                 EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-            //                             margin: EdgeInsets.only(
-            //                                 right: 50, left: 50),
-            //                             height: 50.0,
-            //                             // decoration: BoxDecoration(
-            //                             //   border: Border.all(
-            //                             //     color: kButtonColor,
-            //                             //     style: BorderStyle.solid,
-            //                             //     width: 4.0,
-            //                             //   ),
-            //                             //   color: Colors.transparent,
-            //                             //   borderRadius:
-            //                             //       BorderRadius.circular(30.0),
-            //                             // ),
-            //                             child: DropdownButtonHideUnderline(
-            //                               child: DropdownButton(
-            //                                 isExpanded: true,
-            //                                 dropdownColor: kLightColor,
-            //                                 style: kDropDownHintStyle,
-            //                                 hint: Text(
-            //                                   'فضلا اختر طبيب',
-            //                                   style: GoogleFonts.almarai(
-            //                                     color: Colors.black54,
-            //                                   ),
-            //                                 ),
-            //                                 items: hospitalsNames,
-            //                                 onChanged: (value) {
-            //                                   pharmacist_uid = value;
-            //
-            //                                   FirebaseFirestore.instance
-            //                                       .collection('/Patient')
-            //                                       .doc(widget.doctor_id)
-            //                                       .update(
-            //                                     {
-            //                                       'pharmacist-uid':
-            //                                           pharmacist_uid,
-            //                                     },
-            //                                   );
-            //                                 },
-            //                               ),
-            //                             ),
-            //                           );
-            //                         }
-            //                       }, // end of builder
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 20.0),
+              child: Container(
+                height: 50.0,
+                child: RaisedButton(
+                  textColor: Colors.white54,
+                  color: kGreyColor,
+                  child: Text(
+                    '     حفظ     ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      // fontFamily: 'Montserrat',
+                      fontSize: 30,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  onPressed: () async {
+                    // if (_key.currentState
+                    //     .validate()) {
+                    //   _key.currentState.save();
+                    FirebaseFirestore.instance
+                        .collection('/Doctors')
+                        .doc(widget.doctor_id)
+                        .update(
+                      {
+                        'speciality': _selectedSpeciality == null
+                            ? widget.speciality
+                            : _selectedSpeciality,
+                      },
+                    );
+                    FirebaseFirestore.instance
+                        .collection('/Doctors')
+                        .doc(widget.doctor_id)
+                        .update(
+                      {
+                        'experience-years': _selectedExperience == null
+                            ? widget.experienceYears
+                            : _selectedExperience,
+                      },
+                    );
+
+                    // Flushbar(
+                    //   backgroundColor:
+                    //   Colors.white,
+                    //   borderRadius: 4.0,
+                    //   margin: EdgeInsets.all(8.0),
+                    //   duration:
+                    //   Duration(seconds: 4),
+                    //   messageText: Text(
+                    //     ' تم إضافة وصفة جديدة لهذا المريض',
+                    //     style: TextStyle(
+                    //       color: kBlueColor,
+                    //       fontFamily: 'Almarai',
+                    //     ),
+                    //     textAlign:
+                    //     TextAlign.center,
+                    //   ),
+                    // )..show(context).then((r) =>
+                    //     Navigator.pop(context));
+                    // } else {
+                    //   // there is an error
+                    //   setState(() {
+                    //     autovalidateMode =
+                    //         AutovalidateMode.always;
+                    //   });
+                    // }
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

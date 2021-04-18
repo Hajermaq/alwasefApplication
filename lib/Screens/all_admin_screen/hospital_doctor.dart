@@ -111,6 +111,10 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
                                             builder: (context) =>
                                                 DoctorManagement(
                                               doctor_id: document.data()['uid'],
+                                              experienceYears: document
+                                                  .data()['experience-years'],
+                                              speciality:
+                                                  document.data()['speciality'],
                                             ),
                                           ),
                                         );

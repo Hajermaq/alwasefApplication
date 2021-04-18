@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:alwasef_app/components/round-button.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'loading_screen.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -155,14 +156,23 @@ class _LogInScreenState extends State<LogInScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        DoctorMainPage(),
-                                  ),
+                                      builder: (context) => LoadingScreen(
+                                            password: password,
+                                            email: email,
+                                          )),
                                 );
                               }
                             });
                           });
                         });
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => LoadingScreen(
+                        //             password: password,
+                        //             email: email,
+                        //           )),
+                        // );
                         //patient
                         await auth
                             .signInWithEmailAndPassword(
@@ -370,6 +380,24 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
       ),
     );
+  }
+
+  Future<bool> DoctorLogIn(String password, String email) async {
+    await auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      FirebaseFirestore.instance
+          .collection('/Doctors')
+          .where('email', isEqualTo: value.user.email)
+          .get()
+          .then((value) {
+        value.docs.forEach((element) {
+          if ('طبيب' == element.data()['role']) {
+            return true;
+          }
+        });
+      });
+    });
   }
 }
 

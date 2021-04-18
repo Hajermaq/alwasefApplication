@@ -112,6 +112,8 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                                                 PharmacistManagement(
                                               pharmacist_id:
                                                   document.data()['uid'],
+                                              speciality:
+                                                  document.data()['speciality'],
                                             ),
                                           ),
                                         );
