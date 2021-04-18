@@ -400,6 +400,13 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          height: 8,
+                          color: kGreyColor
+                      ),
+                    ),
                   ],
                 );
               }

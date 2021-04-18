@@ -147,13 +147,6 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                           ]),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        height: 8,
-                        color: kGreyColor
-                    ),
-                  ),
                 ]);
               } else {
                 var documents = snapshot.data.docs;

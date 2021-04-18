@@ -223,7 +223,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               ),
                             ),
                             //العمر
-                            Padding( //TODO: How to update age in database?
+                            Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 style: TextStyle(color: Colors.black54),

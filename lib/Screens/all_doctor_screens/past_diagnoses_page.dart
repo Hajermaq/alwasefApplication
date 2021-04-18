@@ -23,21 +23,6 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: klighterColor,
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.note_add_outlined),
-          backgroundColor: kBlueColor,
-          onPressed: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddPrescriptions(
-                  uid: widget.uid,
-                ),
-              ),
-            );
-          },
-        ),
         body: Column(
           children: [
             FilledRoundTextFields(

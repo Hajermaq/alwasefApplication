@@ -52,6 +52,7 @@ class _PatientManagementState extends State<PatientManagement> {
       child: Scaffold(
         backgroundColor: kLightColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: kLightColor,
           ),
@@ -67,7 +68,7 @@ class _PatientManagementState extends State<PatientManagement> {
           title: Text(
             'صفحة المريض ',
             style: GoogleFonts.almarai(
-              color: kGreyColor,
+              color: kBlueColor,
               fontSize: 28.0,
             ),
           ),
@@ -79,7 +80,12 @@ class _PatientManagementState extends State<PatientManagement> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return CircularProgressIndicator();
+                return Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: kGreyColor,
+                      valueColor: AlwaysStoppedAnimation(kBlueColor)
+                  ),
+                );
               }
               DocumentSnapshot doc = snapshot.data;
               Map docsMap = doc.get('doctors_map');
@@ -173,7 +179,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     dropdownColor: kLightColor,
                                                     style: kDropDownHintStyle,
                                                     hint: Text(
-                                                      'فضلا اختر طبيب',
+                                                      'فضلا اختر طبيبا',
                                                       style:
                                                           GoogleFonts.almarai(
                                                         color: Colors.black54,
@@ -266,7 +272,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     dropdownColor: kLightColor,
                                                     style: kDropDownHintStyle,
                                                     hint: Text(
-                                                      'فضلا اختر طبيب',
+                                                      'فضلا اختر طبيبا',
                                                       style:
                                                           GoogleFonts.almarai(
                                                         color: Colors.black54,
@@ -354,7 +360,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     dropdownColor: kLightColor,
                                                     style: kDropDownHintStyle,
                                                     hint: Text(
-                                                      'فضلا اختر طبيب',
+                                                      'فضلا اختر طبيبا',
                                                       style:
                                                           GoogleFonts.almarai(
                                                         color: Colors.black54,
@@ -442,7 +448,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     dropdownColor: kLightColor,
                                                     style: kDropDownHintStyle,
                                                     hint: Text(
-                                                      'فضلا اختر طبيب',
+                                                      'فضلا اختر طبيبا',
                                                       style:
                                                           GoogleFonts.almarai(
                                                         color: Colors.black54,
@@ -555,7 +561,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     dropdownColor: kLightColor,
                                                     style: kDropDownHintStyle,
                                                     hint: Text(
-                                                      'فضلا اختر صيدلي',
+                                                      'فضلا اختر صيدليا',
                                                       style:
                                                           GoogleFonts.almarai(
                                                         color: Colors.black54,

@@ -24,6 +24,7 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
     String name;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
           color: kLightColor,
         ),
@@ -37,9 +38,9 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
           ),
         ),
         title: Text(
-          'صفحة الطبيب ',
+          'صفحة الأطباء ',
           style: GoogleFonts.almarai(
-            color: kGreyColor,
+            color: kBlueColor,
             fontSize: 28.0,
           ),
         ),
@@ -67,7 +68,12 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
                         .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)
+                          ),
+                        );
                       }
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,

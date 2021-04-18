@@ -28,6 +28,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
       child: Scaffold(
         backgroundColor: kLightColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: kLightColor,
           ),
@@ -43,7 +44,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
           title: Text(
             'صفحة الطبيب ',
             style: GoogleFonts.almarai(
-              color: kGreyColor,
+              color: kBlueColor,
               fontSize: 28.0,
             ),
           ),
