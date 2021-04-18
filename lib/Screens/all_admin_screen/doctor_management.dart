@@ -105,7 +105,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                       return Text('has no data');
                                     } else {
                                      snapshot.data.docs.forEach((element) {
-                                       element.data()['speciality']
+                                       element.data()['speciality'];
 
                                      });
                                       List<String> specialities = [
