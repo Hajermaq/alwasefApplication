@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart';
+import '../../constants.dart';
+
 
 
 class PrescriptionsReports extends StatefulWidget {
@@ -10,6 +11,8 @@ class PrescriptionsReports extends StatefulWidget {
   PrescriptionsReports({this.uid});
   @override
   _PrescriptionsReportsState createState() => _PrescriptionsReportsState();
+
+
 }
 
 class _PrescriptionsReportsState extends State<PrescriptionsReports> {
@@ -17,197 +20,6 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
   Widget noButton;
   String searchValue = '';
 
-  Future displayReportPrescription(String prescriptionID){ //TODO: delete this
-    return showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return FutureBuilder<DocumentSnapshot>(
-          future: FirebaseFirestore.instance
-              .collection('/Patient')
-              .doc(widget.uid)
-              .collection('/Prescriptions')
-              .doc(prescriptionID)
-              .get(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center( child: CircularProgressIndicator());
-            } else {
-              DocumentSnapshot prescription = snapshot.data;
-              return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                color: kGreyColor,
-                margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(
-                        Icons.build_circle_outlined,
-                        size: 50,
-                      ),
-                      title: Text(
-                        // TODO: change it to different names maybe?
-                        prescription.data()['tradeName'],
-                        style: kBoldLabelTextStyle,
-                      ),
-                      // subtitle: Text(
-                      //   '  ${prescription.data()['administration-route']}  -   ${prescription.data()['tradeName']} ${prescription.data()['tradeName']} ',
-                      //   style: TextStyle(
-                      //       color: Colors.black45,
-                      //       fontSize: 14.0,
-                      //       fontWeight: FontWeight.w500),
-                      // ),
-
-                      trailing: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            prescription.data()[
-                            'prescription-creation-date'],
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 13.0),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      color: klighterColor,
-                      thickness: 0.9,
-                      endIndent: 20,
-                      indent: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 100,
-                        child: Column(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // Row(
-                            //   children: [
-                            //     Text(
-                            //       '',
-                            //       style: ksubBoldLabelTextStyle,
-                            //     ),
-                            //     SizedBox(
-                            //       width: 15.0,
-                            //     ),
-                            //     Text(
-                            //       '${prescription.data()['start-date']}',
-                            //       style: kValuesTextStyle,
-                            //     ),
-                            //   ],
-                            // ),
-                            // VerticalDivider(
-                            //   indent: 20,
-                            //   endIndent: 20.0,
-                            //   color: kLightColor,
-                            //   thickness: 1.5,
-                            // ),
-                            // Row(
-                            //   children: [
-                            //     Text(
-                            //       ' نهاية الوصفة',
-                            //       style: ksubBoldLabelTextStyle,
-                            //     ),
-                            //     SizedBox(
-                            //       width: 15.0,
-                            //     ),
-                            //     Text(
-                            //       '${prescription.data()['end-date']}',
-                            //       style: kValuesTextStyle,
-                            //     ),
-                            //   ],
-                            // ),
-                            // VerticalDivider(
-                            //   indent: 20,
-                            //   endIndent: 20.0,
-                            //   color: kLightColor,
-                            //   thickness: 1.5,
-                            // ),
-                            Row(
-                              children: [
-                                Text(
-                                  ' التكرار',
-                                  style: ksubBoldLabelTextStyle,
-                                ),
-                                SizedBox(
-                                  width: 15.0,
-                                ),
-                                Text(
-                                  '${'${prescription.data()['frequency']}'}',
-                                  style: TextStyle(
-                                    color: Colors.black45,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            // VerticalDivider(
-                            //   indent: 20,
-                            //   endIndent: 20.0,
-                            //   color: kLightColor,
-                            //   thickness: 1.5,
-                            // ),
-                            Row(
-                              children: [
-                                Text(
-                                  'التعليمات',
-                                  style: ksubBoldLabelTextStyle,
-                                ),
-                                SizedBox(
-                                  width: 15.0,
-                                ),
-                                Text(
-                                  '${prescription.data()['instruction-note']}',
-                                  style: TextStyle(
-                                    color: Colors.black45,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'عدد مرات إعادة العبئة',
-                                      style: ksubBoldLabelTextStyle,
-                                    ),
-                                    SizedBox(
-                                      width: 15.0,
-                                    ),
-                                    Text(
-                                      '${prescription.data()['refill']}',
-                                      style: kValuesTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-          }
-        );
-      }
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +28,7 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -234,12 +47,17 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
         ),
         body: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('/Report')
-                .where('patient-id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                .collection('/Patient')
+                .doc(widget.uid)
+                .collection('Reports')
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return Center( child: CircularProgressIndicator());
+                return Center( child: CircularProgressIndicator(
+                    backgroundColor: kGreyColor,
+                    valueColor: AlwaysStoppedAnimation(kBlueColor)
+                )
+                );
               } if (snapshot.data.docs.length == 0) {
                 return Center(
                   child: Text(
@@ -257,8 +75,10 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                       String sideEffects = report.data()['side effects'].join('\n');
                       String notes = report.data()['notes'];
 
-                      String precriberName = report.data()['prescriper-name'];
-                      String pharmacistName = report.data()['pharmacist-name'];
+                      String prescriberID = report.data()['prescriper-id'];
+                      String pharmacistID = report.data()['pharmacist-id'];
+
+
                       //search by
                       String tradeName = report.data()['tradeName'];
 
@@ -284,14 +104,15 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                   title: Text('اسم الدواء: $tradeName '),
                                   trailing: Theme(
                                     data: Theme.of(context).copyWith(
-                                      cardColor: Colors.black,
+                                      cardColor: Colors.white,
                                     ),
                                     child: PopupMenuButton(
+                                        offset: Offset(20,40),
                                         itemBuilder: (BuildContext context){
                                           return ['حذف التقرير'].map((e) {
                                             return PopupMenuItem<String>(
                                               value: e,
-                                              child: Text(e),
+                                              child: Text(e, style: TextStyle(color: kBlueColor)),
                                             );
                                           }).toList();
                                         },
@@ -318,17 +139,28 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
 
                                                 return AlertDialog(
                                                   title: Text('هل أنت متأكد من حذف التقرير؟', textAlign: TextAlign.center),
-                                                  titleTextStyle: TextStyle(fontSize: 22),
-                                                  content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك ', style: TextStyle(fontFamily: 'Almarai',)),
+                                                  titleTextStyle: TextStyle(
+                                                    color: kBlueColor,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Almarai',
+                                                  ),
+                                                  content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
+                                                  contentTextStyle: TextStyle(
+                                                    color: kBlueColor,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Almarai',
+                                                  ),
                                                   actions: [
                                                     yesButton,
                                                     noButton
                                                   ],
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                    borderRadius: BorderRadius.all(Radius.circular(15)),
                                                   ),
                                                   elevation: 24.0,
-                                                  backgroundColor: Colors.black,
+                                                  backgroundColor: Colors.white,
                                                 );
                                               }
                                           );
@@ -416,34 +248,84 @@ class _PrescriptionsReportsState extends State<PrescriptionsReports> {
                                           endIndent: 20,
                                           indent: 20,
                                         ),
-                                        Row(
+
+                                        Theme(
+                                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                          child: ExpansionTile(
+                                            title:  Text('معلومات الواصف والصيدلي: ',
+                                                style: ksubBoldLabelTextStyle
+                                            ),
                                             children: [
-                                              Text('الواصف: ',
-                                                  style: ksubBoldLabelTextStyle
+                                              FutureBuilder(
+                                                future: FirebaseFirestore.instance
+                                                    .collection('/Doctors')
+                                                    .doc(prescriberID)
+                                                    .get(),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                        child: CircularProgressIndicator(
+                                                          valueColor: AlwaysStoppedAnimation(Colors.transparent),
+                                                        ));
+                                                  } else {
+                                                    var me = snapshot.data;
+                                                    String doctorName2 = me.get('doctor-name');
+                                                    return Row(
+                                                        children: [
+                                                          SizedBox(width: 15),
+                                                          Text('الواصف: ',
+                                                              style: ksubBoldLabelTextStyle
+                                                          ),
+                                                          SizedBox(width: 15.0,),
+
+                                                          Text('$doctorName2',
+                                                              style: TextStyle(
+                                                                color: Colors.black45,
+                                                                fontSize: 15.0,
+                                                                fontWeight: FontWeight.bold,
+                                                              )),
+                                                        ]
+                                                    );
+                                                  }
+                                                },
+
                                               ),
-                                              SizedBox(width: 15.0,),
-                                              Text('$precriberName',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ]
-                                        ),
-                                        SizedBox(height: 15.0,),
-                                        Row(
-                                            children: [
-                                              Text('الصيدلي: ',
-                                                  style: ksubBoldLabelTextStyle
+                                              SizedBox(height: 15.0,),
+                                              FutureBuilder(
+                                                future: FirebaseFirestore.instance
+                                                    .collection('/Pharmacist')
+                                                    .doc(pharmacistID)
+                                                    .get(),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                        child: CircularProgressIndicator(
+                                                        valueColor: AlwaysStoppedAnimation(Colors.transparent),) //kGreyColor
+                                                    );
+                                                  } else {
+                                                    var doc = snapshot.data;
+                                                    String pharmacistName = doc.get('pharmacist-name');
+                                                    return Row(
+                                                        children: [
+                                                          SizedBox(width: 15),
+                                                          Text('الصيدلي: ',
+                                                              style: ksubBoldLabelTextStyle
+                                                          ),
+                                                          SizedBox(width: 15.0,),
+                                                          Text('$pharmacistName',
+                                                              style: TextStyle(
+                                                                color: Colors.black45,
+                                                                fontSize: 15.0,
+                                                                fontWeight: FontWeight.bold,
+                                                              )),
+                                                        ]
+                                                    );
+                                                  }
+                                                },
                                               ),
-                                              SizedBox(width: 15.0,),
-                                              Text('$pharmacistName',
-                                                  style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  )),
-                                            ]
+                                              SizedBox(height: 15.0,),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),

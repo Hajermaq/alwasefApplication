@@ -66,6 +66,7 @@ class _PatientDataState extends State<PatientData> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -80,7 +81,7 @@ class _PatientDataState extends State<PatientData> {
           ),
           title: Text(
             'البحث ',
-            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: Container(
@@ -109,7 +110,17 @@ class _PatientDataState extends State<PatientData> {
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         //TODO
-                        return CircularProgressIndicator();
+                        return Center(child: CircularProgressIndicator(
+                            backgroundColor: kGreyColor,
+                            valueColor: AlwaysStoppedAnimation(kBlueColor))
+                        );
+                      } if (snapshot.data.docs.length == 0) {
+                        return Center(
+                          child: Text(
+                            'ليس لديك أي مرضى حاليا.',
+                            style: TextStyle(color: Colors.black54, fontSize: 17),
+                          ),
+                        );
                       } else {
                         return ListView.builder(
                             physics: ScrollPhysics(),

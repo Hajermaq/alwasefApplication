@@ -1,3 +1,4 @@
+import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,15 +7,16 @@ import 'package:flutter/widgets.dart';
 import '../../constants.dart';
 import 'check_prescriptions_inconsistencies.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:age/age.dart';
 
-class Prescriptions2 extends StatefulWidget {
-  Prescriptions2({this.uid});
+class PrescriptionsPh extends StatefulWidget {
+  PrescriptionsPh({this.uid});
   final String uid;
   @override
-  _Prescriptions2State createState() => _Prescriptions2State();
+  _PrescriptionsPhState createState() => _PrescriptionsPhState();
 }
 
-class _Prescriptions2State extends State<Prescriptions2> {
+class _PrescriptionsPhState extends State<PrescriptionsPh> {
   String searchValue = '';
   List inconsistencyResult;
   Widget yesButton;
@@ -80,7 +82,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
                           Icon(Icons.assignment_turned_in_outlined,
                               color: Colors.green, size: 75),
                           SizedBox(height: 50),
-                          Text('تم مقارنة $compared وصفة',
+                          Text('تم مقارنة $compared وصفات',
                               style: TextStyle(
                                 fontFamily: 'Almarai',
                               ),
@@ -111,7 +113,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                 color: Colors.red, size: 75),
                             SizedBox(height: 50),
                             Text(
-                              'تم مقارنة $compared وصفة',
+                              'تم مقارنة $compared وصفات',
                               style: TextStyle(
                                 fontFamily: 'Almarai',
                               ),
@@ -145,7 +147,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
         body: Column(
           children: [
             FilledRoundTextFields(
-              hintMessage: 'ابحث عن الوصفة',
+              hintMessage: 'ابحث عن وصفة',
               fillColor: kGreyColor,
               onChanged: (value) {
                 setState(() {
@@ -163,27 +165,143 @@ class _Prescriptions2State extends State<Prescriptions2> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     // the prescriptions list that will be checked
-                    // List drugsToCheck = [];
+                    List drugsToCheck = [];
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(
+                          backgroundColor: kGreyColor,
+                          valueColor: AlwaysStoppedAnimation(kBlueColor))
+                      );
                     }
                     if (snapshot.data.docs.length == 0) {
-                      List drugsToCheck = [];
                       inconsistencyResult =
                           CheckInconsistencies().check(drugsToCheck);
                       return Center(
                           child: Text(
-                        'لا يوجد وصفات طبية لهذا المريض.',
+                        'لا توجد وصفات طبية.',
                         style: TextStyle(color: Colors.black54, fontSize: 17),
                       ));
                     } else {
-                      List drugsToCheck = [];
-                      snapshot.data.docs.forEach((doc) {
-                        String scientificName = doc.data()['scientificName'];
-                        print(scientificName);
-                        drugsToCheck.add(scientificName);
+
+                      // delete if 1 month passed
+                      snapshot.data.docs.forEach((prescription) {
+                        String status = prescription.data()['status'];
+                        String start = prescription.data()['start-date'];
+                        DateTime startDate = DateTime.tryParse(start);
+                        int refill = prescription.data()['refill'];
+                        var difference = Age.dateDifference(
+                            fromDate: startDate,
+                            toDate: DateTime.now(),
+                            includeToDate: false);
+
+                        if ((difference.months >=1 || difference.days >=28)
+                            && refill == 0 && status == 'dispensed') {
+                          UserManagement()
+                              .PastPrescriptionsSetUp(
+                            context,
+                            widget.uid,
+                            prescription
+                                .data()[
+                            'prescriber-id']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'registerNumber']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'prescription-creation-date']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'start-date']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'end-date']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'scientificName']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'scientificNameArabic']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'tradeName']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'tradeNameArabic']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'strength']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'strength-unit']
+                                .toString(),
+                            prescription
+                                .data()['size']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'size-unit']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'pharmaceutical-form']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'administration-route']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'storage-conditions']
+                                .toString(),
+                            prescription
+                                .data()['price']
+                                .toString(),
+                            prescription
+                                .data()['dose'],
+                            prescription.data()[
+                            'quantity'],
+                            prescription
+                                .data()['refill'],
+                            prescription.data()[
+                            'dosing-expire'],
+                            prescription.data()[
+                            'frequency'],
+                            prescription
+                                .data()[
+                            'instruction-note']
+                                .toString(),
+                            prescription
+                                .data()[
+                            'doctor-note']
+                                .toString(),
+                          );
+                          FirebaseFirestore
+                              .instance
+                              .collection(
+                              '/Patient')
+                              .doc(widget.uid)
+                              .collection(
+                              '/Prescriptions')
+                              .doc(
+                              prescription.id)
+                              .delete();
+                        } else {
+
+                          String scientificName = prescription.data()['scientificName'];
+                          print(scientificName);
+                          drugsToCheck.add(scientificName);
+                        }
                       });
-                      //
+
                       inconsistencyResult =
                           CheckInconsistencies().check(drugsToCheck);
 
@@ -216,8 +334,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                 snapshot.data.docs[index];
 
                             String status = prescription.data()['status'];
-                            String prescriberID =
-                                prescription.data()['prescriber-id'];
+                            String prescriberID = prescription.data()['prescriber-id'];
                             int refill = prescription.data()['refill'];
 
                             //search by
@@ -258,16 +375,20 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                 dose
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
-                              return StreamBuilder(
-                                  stream: FirebaseFirestore.instance
+                              return FutureBuilder(
+                                  future: FirebaseFirestore.instance
                                       .collection('/Doctors')
-                                      //.orderBy('doctor-name',descending: true)
                                       .doc(prescriberID)
-                                      .snapshots(),
+                                      .get(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(
-                                          child: CircularProgressIndicator());
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: LinearProgressIndicator(
+                                                backgroundColor: kGreyColor,
+                                                valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                                          ));
                                     }
                                     DocumentSnapshot doc = snapshot.data;
 
@@ -698,172 +819,6 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                                       ),
                                                     ],
                                                   ),
-                                                  // Column(
-                                                  //   mainAxisAlignment:
-                                                  //       MainAxisAlignment.spaceEvenly,
-                                                  //   children: [
-                                                  //     prescription.data()['note_2'] ==
-                                                  //             ''
-                                                  //         ? Padding(
-                                                  //             padding:
-                                                  //                 const EdgeInsets
-                                                  //                         .only(
-                                                  //                     right: 80.0),
-                                                  //             child: Column(
-                                                  //               children: [
-                                                  //                 Row(
-                                                  //                   children: [
-                                                  //                     Text(
-                                                  //                       '( 1 )',
-                                                  //                       style:
-                                                  //                           ksubBoldLabelTextStyle,
-                                                  //                     ),
-                                                  //                     SizedBox(
-                                                  //                       width: 15.0,
-                                                  //                     ),
-                                                  //                     Expanded(
-                                                  //                       child: Text(
-                                                  //                         '${prescription.data()['instruction-note']}',
-                                                  //                         style:
-                                                  //                             TextStyle(
-                                                  //                           color: Colors
-                                                  //                               .black45,
-                                                  //                           fontSize:
-                                                  //                               15.0,
-                                                  //                           fontWeight:
-                                                  //                               FontWeight
-                                                  //                                   .bold,
-                                                  //                         ),
-                                                  //                       ),
-                                                  //                     ),
-                                                  //                   ],
-                                                  //                 ),
-                                                  //                 SizedBox(
-                                                  //                   height: 10,
-                                                  //                 ),
-                                                  //                 Row(
-                                                  //                   children: [
-                                                  //                     Text(
-                                                  //                       '( 2 )',
-                                                  //                       style:
-                                                  //                           ksubBoldLabelTextStyle,
-                                                  //                     ),
-                                                  //                     SizedBox(
-                                                  //                       width: 15.0,
-                                                  //                     ),
-                                                  //                     Expanded(
-                                                  //                       child: Text(
-                                                  //                         '${prescription.data()['note_1']}',
-                                                  //                         style:
-                                                  //                             TextStyle(
-                                                  //                           color: Colors
-                                                  //                               .black45,
-                                                  //                           fontSize:
-                                                  //                               15.0,
-                                                  //                           fontWeight:
-                                                  //                               FontWeight
-                                                  //                                   .bold,
-                                                  //                         ),
-                                                  //                       ),
-                                                  //                     ),
-                                                  //                   ],
-                                                  //                 ),
-                                                  //               ],
-                                                  //             ),
-                                                  //           )
-                                                  //         : Column(
-                                                  //             children: [
-                                                  //               Row(
-                                                  //                 children: [
-                                                  //                   Text(
-                                                  //                     '( 1 )',
-                                                  //                     style:
-                                                  //                         ksubBoldLabelTextStyle,
-                                                  //                   ),
-                                                  //                   SizedBox(
-                                                  //                     width: 15.0,
-                                                  //                   ),
-                                                  //                   Expanded(
-                                                  //                     child: Text(
-                                                  //                       '${prescription.data()['instruction-note']}',
-                                                  //                       style:
-                                                  //                           TextStyle(
-                                                  //                         color: Colors
-                                                  //                             .black45,
-                                                  //                         fontSize:
-                                                  //                             15.0,
-                                                  //                         fontWeight:
-                                                  //                             FontWeight
-                                                  //                                 .bold,
-                                                  //                       ),
-                                                  //                     ),
-                                                  //                   ),
-                                                  //                 ],
-                                                  //               ),
-                                                  //               SizedBox(
-                                                  //                 height: 10,
-                                                  //               ),
-                                                  //               Row(
-                                                  //                 children: [
-                                                  //                   Text(
-                                                  //                     '( 2 )',
-                                                  //                     style:
-                                                  //                         ksubBoldLabelTextStyle,
-                                                  //                   ),
-                                                  //                   SizedBox(
-                                                  //                     width: 15.0,
-                                                  //                   ),
-                                                  //                   Expanded(
-                                                  //                     child: Text(
-                                                  //                       '${prescription.data()['note_1']}',
-                                                  //                       style:
-                                                  //                           TextStyle(
-                                                  //                         color: Colors
-                                                  //                             .black45,
-                                                  //                         fontSize:
-                                                  //                             15.0,
-                                                  //                         fontWeight:
-                                                  //                             FontWeight
-                                                  //                                 .bold,
-                                                  //                       ),
-                                                  //                     ),
-                                                  //                   ),
-                                                  //                 ],
-                                                  //               ),
-                                                  //               SizedBox(
-                                                  //                 height: 10,
-                                                  //               ),
-                                                  //               Row(
-                                                  //                 children: [
-                                                  //                   Text(
-                                                  //                     '( 3 )',
-                                                  //                     style:
-                                                  //                         ksubBoldLabelTextStyle,
-                                                  //                   ),
-                                                  //                   SizedBox(
-                                                  //                     width: 15.0,
-                                                  //                   ),
-                                                  //                   Expanded(
-                                                  //                     child: Text(
-                                                  //                       '${prescription.data()['note_2']}',
-                                                  //                       style:
-                                                  //                           TextStyle(
-                                                  //                         color: Colors
-                                                  //                             .black45,
-                                                  //                         fontSize:
-                                                  //                             15.0,
-                                                  //                         fontWeight:
-                                                  //                             FontWeight
-                                                  //                                 .bold,
-                                                  //                       ),
-                                                  //                     ),
-                                                  //                   ),
-                                                  //                 ],
-                                                  //               ),
-                                                  //             ],
-                                                  //           ),
-                                                  //   ],
-                                                  // ),
                                                   Divider(
                                                     color: klighterColor,
                                                     thickness: 0.9,
@@ -1087,7 +1042,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                                                             onPressed: () async {
                                                                               await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
                                                                                 'status': 'inconsistent',
-                                                                                'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                                //'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                               });
                                                                               Navigator.pop(context);
                                                                             });
@@ -1180,7 +1135,7 @@ class _Prescriptions2State extends State<Prescriptions2> {
                                                                                 await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
                                                                                   'refill': newRefill,
                                                                                   'status': 'dispensed',
-                                                                                  'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                                  //'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                                 });
                                                                                 Navigator.pop(context);
                                                                               });

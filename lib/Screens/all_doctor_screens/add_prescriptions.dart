@@ -16,8 +16,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AddPrescriptions extends StatefulWidget {
-  AddPrescriptions({this.uid});
+  AddPrescriptions({this.uid, this.pharmacistUid});
   final String uid;
+  final String pharmacistUid;
   static final String id = 'add_prescription_screen';
   @override
   _AddPrescriptionsState createState() => _AddPrescriptionsState();
@@ -177,7 +178,10 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                 SizedBox(
                                   height: 90,
                                 ),
-                                CircularProgressIndicator(),
+                                CircularProgressIndicator(
+                                    backgroundColor: kGreyColor,
+                                    valueColor: AlwaysStoppedAnimation(kBlueColor)
+                                ),
                                 SizedBox(
                                   height: 90,
                                 ),
@@ -316,6 +320,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                     context: context,
                                                     patientId: widget.uid,
                                                     prescriberId: prescriberId,
+                                                    prepharmacistId: widget.pharmacistUid,
                                                     presciptionId: '[$s]',
                                                     creationDate: creationDate,
                                                     startDate: startDate,

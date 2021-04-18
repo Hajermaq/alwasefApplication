@@ -37,7 +37,7 @@ class _PharmacistMainPageState extends State<PharmacistMainPage> {
               //search Page
               SearchPatientPage(),
               //patients reports
-              PatientsReports(condition: 'pharmacist-id'),
+              PatientsReports(role: 'pharmacist'),
               //profile
               PharmacistProfileInfo(),
             ],

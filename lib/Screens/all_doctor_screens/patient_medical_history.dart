@@ -49,7 +49,10 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(
+                  backgroundColor: kGreyColor,
+                  valueColor: AlwaysStoppedAnimation(kBlueColor))
+              );
             }
             if (snapshot.data.docs.length == 0) {
               return Center(
@@ -163,6 +166,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           height: 10,
                         ),
                         MedicalHistoryHeadLine(
+                          wantIcon: false,
                           label: 'الأمراض المزمنة',
                         ),
                         ListTileDivider(
@@ -176,6 +180,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           height: 10,
                         ),
                         MedicalHistoryHeadLine(
+                          wantIcon: false,
                           label: 'الأمراض التحسسية',
                         ),
                         ListTileDivider(
@@ -188,6 +193,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           height: 10,
                         ),
                         MedicalHistoryHeadLine(
+                          wantIcon: false,
                           label: 'حساسية الدواء',
                         ),
                         ListTileDivider(
@@ -201,6 +207,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           height: 10,
                         ),
                         MedicalHistoryHeadLine(
+                          wantIcon: false,
                           label: 'العمليات السابقة',
                         ),
                         ListTileDivider(
@@ -213,6 +220,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           height: 10,
                         ),
                         MedicalHistoryHeadLine(
+                          wantIcon: false,
                           label: 'الأدوية الحالية',
                         ),
                         ListTileDivider(

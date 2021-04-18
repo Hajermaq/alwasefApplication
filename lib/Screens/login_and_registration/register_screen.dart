@@ -162,53 +162,101 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 30.0,
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                      margin: EdgeInsets.only(right: 50, left: 40),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: _selectedSpeciality,
-                          dropdownColor: kBlueColor,
-                          isDense: true,
-                          style: kDropDownHintStyle,
-                          hint: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                Icons.shopping_bag_outlined,
-                                color: kPinkColor,
-                              ),
-                              Text(
-                                'فضلا اختر مسمى وظيفي',
-                                style: GoogleFonts.almarai(
-                                  color: Colors.white54,
-                                  fontSize: 17.0,
-                                ),
-                              ),
-                            ],
-                          ), // Not necessary for Option 1
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedSpeciality = newValue;
-                            });
-                          },
-                          items: _specialities.map((speciality) {
-                            return DropdownMenuItem(
-                              child: new Text(speciality),
-                              value: speciality,
-                              onTap: () {
-                                role = speciality;
-                              },
-                            );
-                          }).toList(),
+                    // Container(
+                    //   padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
+                    //   margin: EdgeInsets.only(right: 50, left: 40),
+                    //   child: DropdownButtonHideUnderline(
+                    //     child: DropdownButton(
+                    //       value: _selectedSpeciality,
+                    //       dropdownColor: kBlueColor,
+                    //       isDense: true,
+                    //       style: kDropDownHintStyle,
+                    //       hint: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //         children: [
+                    //           Icon(
+                    //             Icons.shopping_bag_outlined,
+                    //             color: kPinkColor,
+                    //           ),
+                    //           Text(
+                    //             'فضلا اختر مسمى وظيفي',
+                    //             style: GoogleFonts.almarai(
+                    //               color: Colors.white54,
+                    //               fontSize: 17.0,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ), // Not necessary for Option 1
+                    //       onChanged: (newValue) {
+                    //         setState(() {
+                    //           _selectedSpeciality = newValue;
+                    //         });
+                    //       },
+                    //       items: _specialities.map((speciality) {
+                    //         return DropdownMenuItem(
+                    //           child: new Text(speciality),
+                    //           value: speciality,
+                    //           onTap: () {
+                    //             role = speciality;
+                    //           },
+                    //         );
+                    //       }).toList(),
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50, right: 50),
+                      child: DropdownButtonFormField(
+                        dropdownColor: kBlueColor,
+                        isDense: true,
+                        style: kDropDownHintStyle,
+                        decoration: InputDecoration(
+                          labelText: 'فضلا اختر مسمى وظيفي',
+                          labelStyle: TextStyle(
+                            color: Colors.white54,
+                            fontSize: 13.0,
+                          ),
+                          //border: OutlineInputBorder(),
+                          prefixIcon: Icon(
+                            Icons.shopping_bag_outlined,
+                            color: kPinkColor,
+                          ),
+                          errorStyle: TextStyle(
+                            color: kRedColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11.0,
+                          ),
                         ),
+                        icon: Icon(Icons.arrow_drop_down),
+                        value: _selectedSpeciality,
+                        items: _specialities.map((speciality) {
+                          return DropdownMenuItem(
+                            child: new Text(speciality, style: GoogleFonts.almarai()),
+                            value: speciality,
+                            onTap: () {
+                              role = speciality;
+                            },
+                          );
+                        }).toList(),
+
+                        validator: (value) =>
+                        value == null
+                            ? 'هذا الحقل مطلوب'
+                            : null,
+                        onSaved: (newValue) {
+                          setState(() {
+                            _selectedSpeciality = newValue;
+                          });
+                        },
+                        onChanged: (selectedValue) {},
                       ),
                     ),
                     SizedBox(
                       height: 20.0,
                     ),
+
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('/Hospital')
@@ -223,43 +271,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             hospitalsNames.add(
                               DropdownMenuItem(
                                 child: Text(
-                                  document.get('hospital-name'),
+                                  document.get('hospital-name')
                                 ),
                                 value: '${document.id}',
                               ),
                             );
                           }
-                          return Container(
-                            padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                            margin: EdgeInsets.only(right: 50, left: 40),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                isExpanded: true,
-                                dropdownColor: kBlueColor,
-                                style: kDropDownHintStyle,
-                                hint: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Icon(
-                                      Icons.local_hospital_outlined,
-                                      color: kPinkColor,
-                                    ),
-                                    Text(
-                                      'فضلا اختر اسم مستشفى',
-                                      style: GoogleFonts.almarai(
-                                        color: Colors.white54,
-                                        fontSize: 17.0,
-                                      ),
-                                    ),
-                                  ],
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 50, right: 50),
+                            child: DropdownButtonFormField(
+                              dropdownColor: kBlueColor,
+                              isExpanded: true,
+                              style: kDropDownHintStyle,
+                              decoration: InputDecoration(
+                                labelText: 'فضلا اختر اسم مستشفى',
+                                labelStyle: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 13.0,
                                 ),
-                                items: hospitalsNames,
-                                onChanged: (value) {
-                                  hospital_UID = value;
-                                },
-                                value: hospital_UID,
+                                prefixIcon: Icon(
+                                  Icons.shopping_bag_outlined,
+                                  color: kPinkColor,
+                                ),
+                                errorStyle: TextStyle(
+                                  color: kRedColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11.0,
+                                ),
                               ),
+                              icon: Icon(Icons.arrow_drop_down),
+                              items: hospitalsNames,
+                              value: hospital_UID,
+                              validator: (value) =>
+                              value == null
+                                  ? 'هذا الحقل مطلوب'
+                                  : null,
+                              onSaved: (newValue) {
+                                setState(() {
+                                  hospital_UID = newValue;
+                                });
+                              },
+                              onChanged: (newValue) {},
                             ),
                           );
                         }

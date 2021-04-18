@@ -121,7 +121,7 @@ class _PatientDetailsState extends State<PatientDetails>
                                   ),
                               tabs: <Widget>[
                                 Tab(
-                                  text: "الوصفة الطبية",
+                                  text: "الوصفات الطبية",
                                 ),
                                 Tab(
                                   text: "التشخيصات",
@@ -133,7 +133,7 @@ class _PatientDetailsState extends State<PatientDetails>
                                   text: "الوصفات السابقة",
                                 ),
                                 Tab(
-                                  text: "التشخيصات سابقة",
+                                  text: "التشخيصات السابقة",
                                 ),
                               ],
                             ),

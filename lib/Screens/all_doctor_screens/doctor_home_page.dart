@@ -35,41 +35,46 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     setState(() {
       getName();
     });
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: kLightColor,
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(6.0),
-              bottomLeft: Radius.circular(6.0),
-            ),
-          ),
-          title: Text(
-            'الصفحة الرئيسة ',
-            style: GoogleFonts.almarai(
-              color: kLightColor,
-              fontSize: 28.0,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: kLightColor,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(6.0),
+            bottomLeft: Radius.circular(6.0),
           ),
         ),
-        backgroundColor: kGreyColor,
-        body: StreamBuilder(
+        title: Text(
+          'الصفحة الرئيسة ',
+          style: GoogleFonts.almarai(
+            color: kBlueColor,
+            fontSize: 28.0,
+          ),
+        ),
+      ),
+      backgroundColor: kGreyColor,
+      body: SafeArea(
+        minimum: EdgeInsets.only(left: 6.0, right: 6.0),
+        child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('/Patient')
                 .where('doctors',
-                    arrayContains: FirebaseAuth.instance.currentUser.uid)
+                    arrayContains: currentUser.uid)
                 .snapshots(),
             builder: (context, snapshot) {
               List myPatientsIDs = [];
               List myPatientsNames = [];
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(
+                    backgroundColor: kGreyColor,
+                    valueColor: AlwaysStoppedAnimation(kBlueColor))
+                );
               }
               if (snapshot.data.docs.length == 0) {
                 return Column(children: [
@@ -90,7 +95,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                         children: [
                           ListTile(
                             title: Text(
-                              'مرحبا بك ص. $name',
+                              'مرحبا بك د. $name',
                               style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.black,
@@ -137,8 +142,16 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                             ),
                             MedicalHistoyListTile(
                               titleText: 'ليس لديك أي مرضى حتى الان',
+                              dataText: '',
                             ),
                           ]),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        height: 8,
+                        color: kGreyColor
                     ),
                   ),
                 ]);
@@ -167,7 +180,7 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                           children: [
                             ListTile(
                               title: Text(
-                                'مرحبا بك ص. $name',
+                                'مرحبا بك د. $name',
                                 style: TextStyle(
                                     fontSize: 20.0,
                                     color: Colors.black,
@@ -225,28 +238,40 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                                 .collection('/Patient')
                                                 .doc(myPatientsIDs[index])
                                                 .collection('/Prescriptions')
-                                                .where('status',
-                                                    isEqualTo: 'inconsistent')
+                                                .where('prescriber-id',
+                                                    isEqualTo: currentUser.uid)
+                                                // .where('status',
+                                                //     isEqualTo: 'inconsistent')
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Center(
                                                     child:
-                                                        LinearProgressIndicator());
-                                              }
-                                              int patientNewPrescriptionsNo =
-                                                  snapshot.data.docs.length;
-                                              // only display patients names who has one or more new prescriptions
-                                              if (patientNewPrescriptionsNo !=
-                                                  0) {
-                                                return MedicalHistoyListTile(
-                                                  titleText:
-                                                      myPatientsNames[index],
-                                                  dataText:
-                                                      'لديه $patientNewPrescriptionsNo وصفات متعارضة',
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: LinearProgressIndicator(
+                                                            backgroundColor: kGreyColor,
+                                                            valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                                                        )
                                                 );
                                               } else {
-                                                return SizedBox();
+                                                int patientInconsistentPrescriptionsNo = 0;
+                                                snapshot.data.docs.forEach((prescription){
+                                                  if( prescription.data()['status'] == 'inconsistent') {
+                                                    patientInconsistentPrescriptionsNo++;
+                                                  }
+                                                });
+                                                // only display patients names who has one or more inconsistent prescription
+                                                if (patientInconsistentPrescriptionsNo != 0) {
+                                                  return MedicalHistoyListTile(
+                                                    titleText:
+                                                    myPatientsNames[index],
+                                                    dataText:
+                                                    'لديه $patientInconsistentPrescriptionsNo وصفات متعارضة',
+                                                  );
+                                                } else {
+                                                  return SizedBox();
+                                                }
                                               }
                                             },
                                           );
@@ -255,6 +280,13 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                 ),
                               ]),
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 8,
+                          color: kGreyColor
                       ),
                     ),
                   ],

@@ -10,11 +10,10 @@ import '../../constants.dart';
 
 class CreateReportPage extends StatefulWidget {
   final String uid;
-  final String name;
   final String prescriberID;
   final String pharmacistID;
   final String tradeName;
-  CreateReportPage({this.uid, this.name, this.pharmacistID, this.prescriberID, this.tradeName});
+  CreateReportPage({this.uid, this.pharmacistID, this.prescriberID, this.tradeName});
   @override
   _CreateReportPageState createState() => _CreateReportPageState();
 }
@@ -23,41 +22,12 @@ class _CreateReportPageState extends State<CreateReportPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   Report report = Report();
   List<String> yesNoAnswers = ['لا', 'نعم'];
-  String prescriperName;
-  String pharmacistName;
+
   String temp1, temp2;
 
-  getPrescriberName(String prescriberID) async{
-    await FirebaseFirestore.instance
-        .collection('/Doctors')
-        .doc(prescriberID)
-        .get()
-        .then((doc) {
-      prescriperName = doc.data()['doctor-name'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
 
-  getPharmacistName(String pharmacistID) async{
-    await FirebaseFirestore.instance
-        .collection('/Pharmacist')
-        .doc(pharmacistID)
-        .get()
-        .then((doc) {
-      pharmacistName = doc.data()['pharmacist-name'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
 
-  @override
-  void initState() {
-    getPrescriberName(widget.prescriberID);
-    getPharmacistName(widget.pharmacistID);
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +47,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                       child: Text(
                         'التقرير ',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                       ),
                     ),
 
@@ -85,7 +55,7 @@ class _CreateReportPageState extends State<CreateReportPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Divider(
                         height: 20,
-                        thickness: 6,
+                        thickness: 4,
                       ),
                     ),
 
@@ -95,19 +65,21 @@ class _CreateReportPageState extends State<CreateReportPage> {
                           'ينشئ هذا التقرير المريض اللذي انتهى من الوصفة\n أو بدأ بتناول الدواء فقط ',
                           textAlign: TextAlign.center, style: TextStyle(color: Colors.red)),
                     ),
+                    SizedBox(height: 13),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'هل انتهيت من الوصفة الطبية؟',
+                          border: OutlineInputBorder(),
                         ),
                         icon: Icon(Icons.arrow_drop_down),
                         value: temp1,
                         items: yesNoAnswers.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54),)),
                             value: item,
                           );
                         }).toList(),
@@ -117,10 +89,8 @@ class _CreateReportPageState extends State<CreateReportPage> {
                             : null,
                         onSaved: (selectedValue) {
                           setState(() {
-                            report.patientID = widget.uid;
-                            report.patientName = widget.name;
-                            report.prescriberName = prescriperName;
-                            report.pharmacistName = pharmacistName;
+                            report.prescriberID = widget.prescriberID;
+                            report.pharmacistID = widget.pharmacistID;
                             report.tradeName = widget.tradeName;
                             report.completed  = selectedValue;
                           });
@@ -131,16 +101,17 @@ class _CreateReportPageState extends State<CreateReportPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'هل التزمت بالوصفة الطبية؟',
+                          border: OutlineInputBorder(),
                         ),
                         icon: Icon(Icons.arrow_drop_down),
                         value: temp2,
                         items: yesNoAnswers.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54),)),
                             value: item,
                           );
                         }).toList(),
@@ -159,10 +130,12 @@ class _CreateReportPageState extends State<CreateReportPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        style: TextStyle(color: Colors.black54),
                         maxLines: 5,
                         decoration: InputDecoration(
                           labelText: 'هل ظهرت عليك أي أعراض جانبية :',
                           hintText: 'اذكرها',
+                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -180,10 +153,12 @@ class _CreateReportPageState extends State<CreateReportPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        style: TextStyle(color: Colors.black54),
                         maxLines: 5,
                         decoration: InputDecoration(
                           labelText: 'ملاحظات :',
                           hintText: 'اذكرها',
+                          border: OutlineInputBorder(),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {

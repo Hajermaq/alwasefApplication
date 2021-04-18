@@ -1,4 +1,4 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/PDF_screen.dart';
+import 'file:///C:/Users/HP/Desktop/Hawa/AndroidStudioProjects/alwasefApplication/lib/Screens/services/PDF_screen.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -40,11 +40,6 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
   String allergies = '';
   String hospitalName = '';
   String hospitalPhoneNumber = '';
-  //prescription prescriber info
-  String doctorName = '';
-  String doctorSpeciality = '';
-  String experienceYears = '';
-  String doctorPhoneNumber = '';
 
   // get information from FireStore
   getPatientInfo() async {
@@ -72,7 +67,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
 
         for (String i in allergiesList) {
           allergies += i;
-          allergies += ' ';
+          allergies += ' / ';
         }
 
         print(allergies);
@@ -117,30 +112,6 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
     });
   }
 
-  getDoctorInfo(String doctorID) async {
-    await FirebaseFirestore.instance
-        .collection('/Doctors')
-        .doc(doctorID)
-        .get()
-        .then((doc) {
-      doctorName = doc.data()['doctor-name'];
-      experienceYears = doc.data()['experience-years'];
-      doctorPhoneNumber = doc.data()['phone-number'];
-      if (doc.data()['speciality'] == 'طبيب قلب') {
-        doctorSpeciality = 'cardiologist';
-      } else if (doc.data()['speciality'] == 'طبيب باطنية') {
-        doctorSpeciality = 'Internal medicine physicians';
-      } else if (doc.data()['speciality'] == 'طبيب أسرة') {
-        doctorSpeciality = 'family physician';
-      } else {
-        doctorSpeciality = 'Psychologist';
-      }
-      print(doctorName);
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
 
   //Function related to pdf generation
   Future<bool> _reguestPremission(Permission permission) async {
@@ -500,6 +471,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
             iconTheme: IconThemeData(
               color: Colors.grey,
             ),
@@ -529,7 +501,11 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                     builder: (context, snapshot) {
                       Map<DateTime, List<dynamic>> allEventsMap = {};
                       if (!snapshot.hasData) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator(
+                            backgroundColor: kGreyColor,
+                            valueColor: AlwaysStoppedAnimation(kBlueColor)
+                        )
+                        );
                       } if (snapshot.data.docs.length == 0){
                         return theCalendar(allEventsMap);
                       } else {
@@ -548,8 +524,9 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                           String pharmaceuticalForm = doc.data()['pharmaceutical-form'];
                           String frequency = doc.data()['frequency'];
                           int refill = doc.data()['refill'];
-                          String notes = doc.data()['instruction-note'];
-
+                          String instructionsNote = doc.data()['instruction-note'];
+                          String storageConditions = doc.data()['storage-conditions'];
+                          //String pharmacistID = doc.data()['pharmacist-id'];
                           //add to list
                           prescriptionAllInfo.add(prescriberID); //0
                           prescriptionAllInfo.add(prescriptionID); //1
@@ -560,7 +537,9 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                           prescriptionAllInfo.add(pharmaceuticalForm); //6
                           prescriptionAllInfo.add(frequency); //7
                           prescriptionAllInfo.add(refill); //8
-                          prescriptionAllInfo.add(notes); //9
+                          prescriptionAllInfo.add(instructionsNote); //9
+                          prescriptionAllInfo.add(storageConditions); //10
+                          //prescriptionAllInfo.add(pharmacistID);
 
                           if (allEventsMap.containsKey(startDate)){
                             allEventsMap[startDate].add(prescriptionAllInfo);
@@ -592,7 +571,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                 ),
                 SizedBox(height: 10),
                 ...selectedDayEvents.map((event) {
-                  getDoctorInfo(event[0]);
+                  String prescriberID = event[0];
                   String prescriptionID = event[1];
                   String creationDate = event[2];
                   String scientificName = event[3];
@@ -601,7 +580,9 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                   String pharmaceuticalForm = event[6];
                   String frequency = event[7];
                   int refill = event[8];
-                  String notes = event[9];
+                  String instructionsNote = event[9];
+                  String storageConditions = event[10];
+                  //String pharmacistID = event[];
                   return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
@@ -635,6 +616,16 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                                                     ListTile(
                                                       onTap:
                                                           () async {
+
+                                                            var doctorDoc = await FirebaseFirestore.instance
+                                                                .collection('/Doctors')
+                                                                .doc(prescriberID).get();
+
+                                                            //prescription prescriber info
+                                                            String doctorName = doctorDoc.get('doctor-name');
+                                                            String doctorSpeciality = doctorDoc.get('speciality');
+
+
                                                         pdf = pw
                                                             .Document();
                                                         writeToPdf(
@@ -713,7 +704,15 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                                                     ),
                                                     // Download prescription in External storage at Files App
                                                     ListTile(
-                                                      onTap: () {
+                                                      onTap: () async{
+                                                        var doctorDoc = await FirebaseFirestore.instance
+                                                            .collection('/Doctors')
+                                                            .doc(prescriberID).get();
+
+                                                        //prescription prescriber info
+                                                        String doctorName = doctorDoc.get('doctor-name');
+                                                        String doctorSpeciality = doctorDoc.get('speciality');
+
                                                         //create a pdf document
                                                         pw.Document
                                                         pdf1 =
@@ -783,23 +782,45 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                               endIndent: 20,
                               indent: 20,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 15, 20, 15),
-                              child: Row(
-                                children: [
-                                  Text('تعليمات: ',
-                                      textAlign: TextAlign.right,
-                                      style: ksubBoldLabelTextStyle
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(15, 15, 20, 15),
+                                  child: Row(
+                                    children: [
+                                      Text('تعليمات: ',
+                                          textAlign: TextAlign.right,
+                                          style: ksubBoldLabelTextStyle
+                                      ),
+                                      SizedBox(
+                                        width: 15.0,
+                                      ),
+                                      Text('$instructionsNote',
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold,)
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width: 15.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(15, 8, 20, 15),
+                                  child: Row(
+                                    children: [
+                                      Text('ظروف التخزين: ',
+                                          textAlign: TextAlign.right,
+                                          style: ksubBoldLabelTextStyle
+                                      ),
+                                      SizedBox(
+                                        width: 15.0,
+                                      ),
+                                      Text('$storageConditions',
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold,)
+                                      ),
+                                    ],
                                   ),
-                                  Text('$notes',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(color: Colors.black45, fontWeight: FontWeight.bold,)
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             //SizedBox(height: 8),
                           ],

@@ -43,11 +43,15 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: CircularProgressIndicator(
+                          backgroundColor: kGreyColor,
+                          valueColor: AlwaysStoppedAnimation(kBlueColor)
+                      )
+                      );
                     } if (snapshot.data.docs.length == 0) {
                       return Center(
                         child: Text(
-                          'لا يوجد تشخيصات سايقة.',
+                          'لا توجد تشخيصات سابقة.',
                           style: TextStyle(color: Colors.black54, fontSize: 17),
                         ),
                       );

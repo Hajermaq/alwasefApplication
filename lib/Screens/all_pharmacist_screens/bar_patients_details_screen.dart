@@ -2,6 +2,7 @@ import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.d
 import 'package:alwasef_app/Screens/all_patient_screen/tab_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_for_patient.dart';
+import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_past_prescriptions.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_prescriptions.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -116,7 +117,7 @@ class _PatientDetails2State extends State<PatientDetails2>
                               ),
                               tabs: <Widget>[
                                 Tab(
-                                  text: "الوصفة الطبية",
+                                  text: "الوصفات الطبية",
                                 ),
                                 Tab(
                                   text: "التشخيصات",
@@ -128,7 +129,7 @@ class _PatientDetails2State extends State<PatientDetails2>
                                   text: "الوصفات السابقة",
                                 ),
                                 Tab(
-                                  text: "التشخيصات سابقة",
+                                  text: "التشخيصات السابقة",
                                 ),
                               ],
                             ),
@@ -139,7 +140,7 @@ class _PatientDetails2State extends State<PatientDetails2>
                               child: TabBarView(
                                   controller: _tabController,
                                   children: [
-                                    Prescriptions2(
+                                    PrescriptionsPh(
                                       uid: widget.uid,
                                     ),
                                     PatientDiagnoses(
@@ -148,7 +149,7 @@ class _PatientDetails2State extends State<PatientDetails2>
                                     PatientMedicalHistory(
                                       uid: widget.uid,
                                     ),
-                                    PatientPastPrescriptions(
+                                    PastPrescriptionsPh(
                                       uid: widget.uid,
                                     ),
                                     PatientPastDiagnoses(

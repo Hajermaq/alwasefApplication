@@ -70,7 +70,7 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                             padding: EdgeInsets.all(20.0),
                             child: Container(
                               child: Text(
-                                'أضف تشخيص جديد',
+                                'أضف تشخيصا جديدا',
                                 style: TextStyle(
                                   color: kGreyColor,
                                   fontSize: 40.0,

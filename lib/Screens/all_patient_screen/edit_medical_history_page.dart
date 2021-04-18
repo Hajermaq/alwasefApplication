@@ -34,17 +34,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
   Widget yesButton;
   Widget noButton;
 
-  // TextEditingController weightCtrl,
-  //     heightCtrl;
-  //
-  // void iniState() {
-  //   super.initState();
-  //   // weightCtrl = TextEditingController();
-  //   // heightCtrl = TextEditingController();
-  //
-  // }
-
-
 
 
   @override
@@ -63,7 +52,10 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator(
+                        backgroundColor: kGreyColor,
+                        valueColor: AlwaysStoppedAnimation(kBlueColor))
+                    );
                   } else {
                     DocumentSnapshot medicalHistory = snapshot.data.docs[0];
                     final age = Age.dateDifference(
@@ -88,7 +80,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                     var medAllergyVal =
                         medicalHistory.data()['medication allergies'];
 
-                    //ListView(scrollDirection: Axis.vertical, children: [
                     return Container(
                       child:
                         SingleChildScrollView(
@@ -102,13 +93,13 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   child: Text(
                                     'السجل الطبي للمريض ',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 20),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 //Spacer(),
                                 Theme(
                                   data: Theme.of(context).copyWith(
-                                    cardColor: Colors.black,
+                                    cardColor: Colors.white,
                                   ),
                                   child: PopupMenuButton<String>(
                                     offset: Offset(30,50),
@@ -116,7 +107,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                       return ['حذف السجل الطبي'].map((e)  {
                                         return PopupMenuItem<String>(
                                           value: e,
-                                          child: Text(e),
+                                          child: Text(e, style: TextStyle(color: Colors.black54)),
                                         );
                                       }).toList();
                                     },
@@ -150,19 +141,30 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
 
                                            return AlertDialog(
                                              title: Text('هل أنت متأكد من حذف السجل الصحي؟',
-                                                 style: TextStyle(fontFamily: 'Almarai',),
-                                                 textAlign: TextAlign.center),
-                                             titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                 textAlign: TextAlign.center
+                                             ),
+                                             titleTextStyle: TextStyle(
+                                                 color: Colors.black54,
+                                                 fontSize: 15,
+                                                 fontWeight: FontWeight.bold,
+                                                 fontFamily: 'Almarai',
+                                             ),
                                              content: Text('قد يؤدي ذلك إلى ضعف الخدمة المقدمة لك '),
+                                             contentTextStyle: TextStyle(
+                                               color: Colors.black54,
+                                               fontSize: 15,
+                                               fontWeight: FontWeight.bold,
+                                               fontFamily: 'Almarai',
+                                             ),
                                              actions: [
                                                yesButton,
                                                noButton
                                              ],
                                              shape: RoundedRectangleBorder(
-                                                 borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                 borderRadius: BorderRadius.all(Radius.circular(13)),
                                              ),
                                              elevation: 24.0,
-                                             backgroundColor: Colors.black,
+                                             backgroundColor: Colors.white,
                                            );
                                          }
                                        );
@@ -175,13 +177,14 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Divider(
                                 height: 20,
-                                thickness: 10,
+                                thickness: 5,
                               ),
                             ),
                             //الاسم
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 decoration: InputDecoration(
                                   labelText: 'الاسم الكامل:',
                                   border: OutlineInputBorder(),
@@ -195,10 +198,11 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 decoration: InputDecoration(
                                   labelText: 'الجنس:',
                                   border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.wc_sharp),
+                                  prefixIcon: Icon(Icons.wc_outlined),
                                 ),
                                 initialValue: medicalHistory.data()['gender'],
                                 readOnly: true,
@@ -208,6 +212,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 decoration: InputDecoration(
                                   labelText: 'تاريخ الميلاد:',
                                   border: OutlineInputBorder(),
@@ -221,6 +226,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding( //TODO: How to update age in database?
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   labelText: 'العمر :',
@@ -234,6 +240,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -263,6 +270,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -292,6 +300,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -307,7 +316,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
-                                dropdownColor: Colors.black,
+                                dropdownColor: Colors.white,
                                 decoration: InputDecoration(
                                   labelText: 'الحالة الاجتماعية :',
                                   border: OutlineInputBorder(),
@@ -317,7 +326,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 items: maritalStatusList.map((item) {
                                   //to convert list items into dropdown menu items
                                   return DropdownMenuItem(
-                                    child: Center(child: Text(item)),
+                                    child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                                     value: item,
                                   );
                                 }).toList(),
@@ -336,7 +345,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
-                                dropdownColor: Colors.black,
+                                dropdownColor: Colors.white,
                                 decoration: InputDecoration(
                                   labelText: 'هل تدخن :',
                                   border: OutlineInputBorder(),
@@ -346,7 +355,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 items: smokingList.map((item) {
                                   //to convert list items into dropdown menu items
                                   return DropdownMenuItem(
-                                    child: Center(child: Text(item)),
+                                    child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                                     value: item,
                                   );
                                 }).toList(),
@@ -365,7 +374,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: DropdownButtonFormField(
-                                dropdownColor: Colors.black,
+                                dropdownColor: Colors.white,
                                 decoration: InputDecoration(
                                   labelText: 'هل هناك احتمال حمل :',
                                   border: OutlineInputBorder(),
@@ -374,7 +383,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 items: yesNoAnswers.map((item) {
                                   //to convert list items into dropdown menu items
                                   return DropdownMenuItem(
-                                    child: Center(child: Text(item)),
+                                    child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                                     value: item,
                                   );
                                 }).toList(),
@@ -393,6 +402,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText: 'هل سبق أن تم تنويمك في المستشفى :',
@@ -418,6 +428,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText: 'هل خضعت لأي عملية جراحية من قبل :',
@@ -442,6 +453,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText: 'هل تعاني من أي أمراض مزمنة :',
@@ -466,6 +478,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText: 'هل تتناول أي أدوية حاليا :',
@@ -491,6 +504,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText: 'هل تعاني من أي حساسية :',
@@ -516,6 +530,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
+                                style: TextStyle(color: Colors.black54),
                                 maxLines: 5,
                                 decoration: InputDecoration(
                                   labelText:

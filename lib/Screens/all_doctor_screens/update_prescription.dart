@@ -147,7 +147,10 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
+                          return CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)
+                          );
                         } else {
                           if (stringFromTF == null) {
                             tradeNameArabic =

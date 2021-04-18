@@ -28,6 +28,7 @@ class _PatientProfileState extends State<PatientProfile> {
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -42,7 +43,7 @@ class _PatientProfileState extends State<PatientProfile> {
           ),
           title: Text(
             'الحساب الشخصي ',
-            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: SingleChildScrollView(
@@ -56,7 +57,11 @@ class _PatientProfileState extends State<PatientProfile> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return CircularProgressIndicator();
+                      return Center(child: CircularProgressIndicator(
+                          backgroundColor: kGreyColor,
+                          valueColor: AlwaysStoppedAnimation(kBlueColor)
+                      )
+                      );
                     } else {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 40.0),

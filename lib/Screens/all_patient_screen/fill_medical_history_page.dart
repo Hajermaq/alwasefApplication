@@ -29,49 +29,6 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
   List<String> yesNoAnswers = ['لا', 'نعم'];
   List<String> smokingList = ['لا أبدا', 'أحيانا', ' نعم دائما'];
 
-
-  // TextEditingController nameCtrl,
-  //     birthDateCtrl,
-  //     ageCtrl,
-  //     weightCtrl,
-  //     heightCtrl,
-  //     hospCtrl,
-  //     surgCtrl,
-  //     currMedCtrl,
-  //     chroDisCtrl,
-  //     allergCtrl,
-  //     medAllergCtrl;
-
-
-  // void iniState() {
-  //   super.initState();
-  //   nameCtrl = TextEditingController();
-  //   birthDateCtrl = TextEditingController();
-  //   ageCtrl = TextEditingController();
-  //   weightCtrl = TextEditingController();
-  //   heightCtrl = TextEditingController();
-  //   hospCtrl = TextEditingController();
-  //   surgCtrl = TextEditingController();
-  //   currMedCtrl = TextEditingController();
-  //   chroDisCtrl = TextEditingController();
-  //   allergCtrl = TextEditingController();
-  //   medAllergCtrl = TextEditingController();
-  // }
-  //
-  // void dispose(){
-  //   // nameCtrl.dispose();
-  //   // ageCtrl.dispose();
-  //   // weightCtrl.dispose();
-  //   // heightCtrl.dispose();
-  //   // hospCtrl.dispose();
-  //   // surgCtrl.dispose();
-  //   // currMedCtrl.dispose();
-  //   // chroDisCtrl.dispose();
-  //   // allergCtrl.dispose();
-  //   // medAllergCtrl.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +46,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                       child: Text(
                         'السجل الطبي للمريض ',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                       ),
                     ),
 
@@ -131,18 +88,18 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'الجنس:',
                           border: OutlineInputBorder(),
-                          prefixIcon: Icon(Icons.wc_sharp),
+                          prefixIcon: Icon(Icons.wc_outlined),
                         ),
                         icon: Icon(Icons.arrow_drop_down),
                         value: medicalHistory.gender,
                         items: genderList.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                             value: item,
                           );
                         }).toList(),
@@ -181,7 +138,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                               return Theme(
                                 data: ThemeData.light().copyWith(
                                   colorScheme: ColorScheme.light(
-                                    primary: kBlueColor,
+                                    primary: kGreyColor,
                                     onPrimary: klighterColor,
                                     surface: kLightColor,
                                   ),
@@ -253,7 +210,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'الحالة الاجتماعية :',
                           border: OutlineInputBorder(),
@@ -263,7 +220,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         items: maritalStatusList.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                             value: item,
                           );
                         }).toList(),
@@ -285,7 +242,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'هل تدخن :',
                           border: OutlineInputBorder(),
@@ -295,7 +252,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         items: smokingList.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                             value: item,
                           );
                         }).toList(),
@@ -316,7 +273,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownButtonFormField(
-                        dropdownColor: Colors.black,
+                        dropdownColor: Colors.white,
                         decoration: InputDecoration(
                           labelText: 'هل هناك احتمال حمل :',
                           border: OutlineInputBorder(),
@@ -325,7 +282,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         items: yesNoAnswers.map((item) {
                           //to convert list items into dropdown menu items
                           return DropdownMenuItem(
-                            child: Center(child: Text(item)),
+                            child: Center(child: Text(item, style: TextStyle(color: Colors.black54))),
                             value: item,
                           );
                         }).toList(),
