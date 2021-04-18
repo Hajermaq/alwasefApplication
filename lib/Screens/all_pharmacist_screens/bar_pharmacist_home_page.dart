@@ -30,35 +30,39 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
   }
 
   @override
+  void initState() {
+    getName();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    setState(() {
-      getName();
-    });
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: kLightColor,
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(6.0),
-              bottomLeft: Radius.circular(6.0),
-            ),
-          ),
-          title: Text(
-            'الصفحة الرئيسة ',
-            style: GoogleFonts.almarai(
-              color: kLightColor,
-              fontSize: 28.0,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: kLightColor,
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(6.0),
+            bottomLeft: Radius.circular(6.0),
           ),
         ),
-        backgroundColor: kGreyColor,
-        body: StreamBuilder(
+        title: Text(
+          'الصفحة الرئيسة ',
+          style: GoogleFonts.almarai(
+            color: kBlueColor,
+            fontSize: 28.0,
+          ),
+        ),
+      ),
+      backgroundColor: kGreyColor,
+      body: SafeArea(
+        minimum: EdgeInsets.only(left: 6.0, right: 6.0),
+        child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('/Patient')
                 .where('pharmacist-uid', isEqualTo: currentUser.uid)
@@ -67,121 +71,121 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
               List myPatientsIDs = [];
               List myPatientsNames = [];
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator(
+                    backgroundColor: kGreyColor,
+                    valueColor: AlwaysStoppedAnimation(kBlueColor))
+                );
               }
               if (snapshot.data.docs.length == 0) {
-                return SingleChildScrollView(
-                  child: Column(children: [
-                    SizedBox(
-                      height: 30,
+                return Column(
+                    children: [
+                      Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                    color: kLightColor,
+                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ListTile(
+                            title: Text(
+                              'مرحبا بك ص. $name',
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
-                      color: kLightColor,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
+                    ),
+                  ),
+                      Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    color: kLightColor,
+                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            ListTile(
-                              title: Text(
-                                'مرحبا بك ص. $name',
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'الوصفات المضافة حديثا: ',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                            ListTileDivider(
+                              color: Colors.black26,
+                            ),
+                            MedicalHistoyListTile(
+                              titleText: 'ليس لديك أي مرضى حتى الان',
+                              dataText: '',
+                            ),
+                          ]),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: kLightColor,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'الوصفات المضافة حديثا: ',
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ListTileDivider(
-                                color: Colors.black26,
-                              ),
-                              MedicalHistoyListTile(
-                                titleText: 'ليس لديك أي مرضى حتى الان',
-                              ),
-                            ]),
-                      ),
+                  ),
+                      Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      color: kLightColor,
-                      margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              SizedBox(
-                                height: 10,
+                    color: kLightColor,
+                    margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'طلبات إعادة التعبئة:',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'طلبات إعادة التعبئة:',
-                                      style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ListTileDivider(
-                                color: Colors.black26,
-                              ),
-                              MedicalHistoyListTile(
-                                titleText: 'ليس لديك أي مرضى حتى الان',
-                              ),
-                            ]),
-                      ),
+                            ),
+                            ListTileDivider(
+                              color: Colors.black26,
+                            ),
+                            MedicalHistoyListTile(
+                              titleText: 'ليس لديك أي مرضى حتى الان',
+                            ),
+                          ]),
                     ),
-                  ]),
-                );
+                  ),
+                ]);
               } else {
                 var documents = snapshot.data.docs;
                 for (var doc in documents) {
@@ -265,43 +269,38 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                                 .collection('/Patient')
                                                 .doc(myPatientsIDs[index])
                                                 .collection('/Prescriptions')
-                                                .where('status',
-                                                    isEqualTo: 'pending')
+                                            // can not use this method because do not give docs length
+                                                // .where('status',
+                                                //     isEqualTo: 'pending')
                                                 // .where('status',
                                                 //     isEqualTo: 'updated')
-                                                // .where('status',
-                                                //     isEqualTo: 'dispensed')
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Center(
                                                     child:
-                                                        LinearProgressIndicator());
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: LinearProgressIndicator(
+                                                              backgroundColor: kGreyColor,
+                                                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                                                        ));
                                               }
-                                              var secondSnapshot =
-                                                  FirebaseFirestore.instance
-                                                      .collection('/Patient')
-                                                      .doc(myPatientsIDs[index])
-                                                      .collection(
-                                                          '/Prescriptions')
-                                                      .where('status',
-                                                          isEqualTo: 'updated')
-                                                      .get();
-                                              int me = 0;
-                                              secondSnapshot
-                                                  .then((value) => me++);
-                                              print(me);
-
-                                              int patientNewPrescriptionsNo =
-                                                  snapshot.data.docs.length;
-                                              // only display patients names who has one or more new prescriptions
-                                              if (patientNewPrescriptionsNo !=
-                                                  0) {
-                                                return MedicalHistoyListTile(
+                                              int patientNewPrescriptionsNo = 0;
+                                              snapshot.data.docs.forEach((prescription){
+                                                if(
+                                                prescription.data()['status'] == 'pending' ||
+                                                    prescription.data()['status'] == 'updated' ) {
+                                                  patientNewPrescriptionsNo++;
+                                                }
+                                              });
+                                              // only display patients names who has one or more new prescription
+                                              if (patientNewPrescriptionsNo != 0) {
+                                                 return MedicalHistoyListTile(
                                                   titleText:
-                                                      myPatientsNames[index],
+                                                  myPatientsNames[index],
                                                   dataText:
-                                                      'لديه وصفات $patientNewPrescriptionsNo جديدة',
+                                                  'لديه/لديها $patientNewPrescriptionsNo وصفات جديدة',
                                                 );
                                               } else {
                                                 return SizedBox();
@@ -370,21 +369,27 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                               if (!snapshot.hasData) {
                                                 return Center(
                                                     child:
-                                                        LinearProgressIndicator());
-                                              }
-                                              int patientNewPrescriptionsNo =
-                                                  snapshot.data.docs.length;
-                                              // only display patients names who requested refill
-                                              if (patientNewPrescriptionsNo !=
-                                                  0) {
-                                                return MedicalHistoyListTile(
-                                                  titleText:
-                                                      myPatientsNames[index],
-                                                  dataText:
-                                                      'طلب إعادة تعبئة لـ $patientNewPrescriptionsNo وصفات',
-                                                );
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: LinearProgressIndicator(
+                                                              backgroundColor: kGreyColor,
+                                                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                                                        ));
                                               } else {
-                                                return SizedBox();
+                                                int patientNewPrescriptionsNo =
+                                                    snapshot.data.docs.length;
+                                                // only display patients names who requested refill
+                                                if (patientNewPrescriptionsNo !=
+                                                    0) {
+                                                  return MedicalHistoyListTile(
+                                                    titleText:
+                                                    myPatientsNames[index],
+                                                    dataText:
+                                                    'طلب إعادة تعبئة لـ $patientNewPrescriptionsNo وصفات',
+                                                  );
+                                                } else {
+                                                  return SizedBox();
+                                                }
                                               }
                                             },
                                           );
@@ -395,6 +400,13 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          height: 8,
+                          color: kGreyColor
+                      ),
+                    ),
                   ],
                 );
               }
@@ -402,4 +414,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
       ),
     );
   }
+
+
+
 }

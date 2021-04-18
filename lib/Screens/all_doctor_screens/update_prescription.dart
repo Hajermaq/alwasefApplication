@@ -8,6 +8,7 @@ import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -147,7 +148,9 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
+                          return CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor));
                         } else {
                           if (stringFromTF == null) {
                             tradeNameArabic =
@@ -227,91 +230,183 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: [
-                                          TextField_1(
-                                            textInputType:
-                                                TextInputType.numberWithOptions(
-                                                    decimal: false),
-                                            onSaved: (value) {
-                                              refill = int.parse(value);
-                                            },
-                                            validator: Validation()
-                                                .validateIntegerNumber,
-                                            labelText: 'إعادة التعبئة',
-                                            initialValue:
-                                                '${snapshot.data.get('refill')}',
-                                          ),
-                                          Divider(
-                                            color: klighterColor,
-                                            thickness: 0.9,
-                                            endIndent: 20,
-                                            indent: 20,
-                                          ),
-                                          DatePicker(
-                                            initialValue: DateTime.parse(
-                                                snapshot.data
-                                                    .get('start-date')),
-                                            labelText: 'تاريخ البداية',
-                                            validator: (value) {
-                                              if (value == null) {
-                                                return 'التاريخ مطلوب';
-                                              }
-                                              return null;
-                                            },
-                                            date: creationDate,
-                                            onSaved: (value) {
-                                              startDate =
-                                                  formatter.format(value);
-                                            },
-                                          ),
-                                          DatePicker(
-                                            initialValue:
-                                                snapshot.data.get('end-date') ==
-                                                        null
-                                                    ? DateTime.tryParse('')
-                                                    : DateTime.tryParse(snapshot
-                                                        .data
-                                                        .get('end-date')),
-                                            labelText: 'تاريخ النهاية',
-                                            date: creationDate,
-                                            onSaved: (value) {
-                                              if (value != null) {
-                                                endDate =
-                                                    formatter.format(value);
-                                              }
-                                            },
-                                          ),
-                                          Divider(
-                                            color: klighterColor,
-                                            thickness: 0.9,
-                                            endIndent: 20,
-                                            indent: 20,
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.all(12),
-                                            height: maxLines * 24.0,
-                                            child: TextField_1(
-                                              labelText: 'تعليمات للمريض',
-                                              validator:
-                                                  Validation().validateMessage,
-                                              onSaved: (String value) {
-                                                instructionNote = value;
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextFormField(
+                                              validator: Validation()
+                                                  .validateIntegerNumber,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              style: TextStyle(
+                                                  color: Colors.black54),
+                                              decoration: InputDecoration(
+                                                labelText: 'إعادة التعبئة',
+                                                border: OutlineInputBorder(),
+                                                prefixIcon: Icon(Icons.redo),
+                                              ),
+                                              onSaved: (value) {
+                                                refill = int.parse(value);
                                               },
-                                              maxLines: maxLines,
                                               initialValue:
-                                                  '${snapshot.data.get('instruction-note')}',
+                                                  '${snapshot.data.get('refill')}',
                                             ),
                                           ),
-                                          Container(
-                                            margin: EdgeInsets.all(12),
-                                            height: maxLines * 24.0,
-                                            child: TextField_1(
-                                              labelText: 'ملاحظات للصيدلي',
-                                              onSaved: (value) {
-                                                doctorNotes = value;
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: DateTimeField(
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    'تاريخ بداية الوصفة:',
+                                                border: OutlineInputBorder(),
+                                                prefixIcon:
+                                                    Icon(Icons.calendar_today),
+                                              ),
+                                              format: dateFormat,
+                                              validator: (value) =>
+                                                  value == null
+                                                      ? 'هذا الحقل مطلوب'
+                                                      : null,
+                                              onShowPicker:
+                                                  (context, currentValue) {
+                                                return showDatePicker(
+                                                  context: context,
+                                                  builder: (context, child) {
+                                                    return Theme(
+                                                      data: ThemeData.light()
+                                                          .copyWith(
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                          primary: kGreyColor,
+                                                          onPrimary:
+                                                              klighterColor,
+                                                          surface: kLightColor,
+                                                        ),
+                                                      ),
+                                                      child: child,
+                                                    );
+                                                  },
+                                                  initialDate: DateTime.now()
+                                                      .subtract(
+                                                          Duration(days: 0)),
+                                                  firstDate: currentValue ??
+                                                      DateTime.now(),
+                                                  lastDate: DateTime(2070),
+                                                );
                                               },
-                                              maxLines: maxLines,
+                                              onSaved: (value) {
+                                                if (value != null) {
+                                                  startDate =
+                                                      formatter.format(value);
+                                                }
+                                              },
+                                              initialValue: snapshot.data
+                                                          .get('start-date') ==
+                                                      null
+                                                  ? DateTime.tryParse('')
+                                                  : DateTime.tryParse(snapshot
+                                                      .data
+                                                      .get('start-date')),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: DateTimeField(
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    'تاريخ نهاية الوصفة:',
+                                                border: OutlineInputBorder(),
+                                                prefixIcon:
+                                                    Icon(Icons.calendar_today),
+                                              ),
+                                              format: dateFormat,
+                                              onShowPicker:
+                                                  (context, currentValue) {
+                                                return showDatePicker(
+                                                  context: context,
+                                                  builder: (context, child) {
+                                                    return Theme(
+                                                      data: ThemeData.light()
+                                                          .copyWith(
+                                                        colorScheme:
+                                                            ColorScheme.light(
+                                                          primary: kGreyColor,
+                                                          onPrimary:
+                                                              klighterColor,
+                                                          surface: kLightColor,
+                                                        ),
+                                                      ),
+                                                      child: child,
+                                                    );
+                                                  },
+                                                  initialDate: DateTime.now()
+                                                      .subtract(
+                                                          Duration(days: 0)),
+                                                  firstDate: currentValue ??
+                                                      DateTime.now(),
+                                                  lastDate: DateTime(2070),
+                                                );
+                                              },
+                                              onSaved: (value) {
+                                                if (value != null) {
+                                                  endDate =
+                                                      formatter.format(value);
+                                                }
+                                              },
+                                              initialValue: snapshot.data
+                                                          .get('end-date') ==
+                                                      null
+                                                  ? DateTime.tryParse('')
+                                                  : DateTime.tryParse(snapshot
+                                                      .data
+                                                      .get('end-date')),
+                                            ),
+                                          ),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextFormField(
+                                              maxLines: 5,
+                                              decoration: InputDecoration(
+                                                labelText: 'تعليمات للمريض',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator:
+                                                  Validation().validateMessage,
+                                              onSaved: (value) {
+                                                setState(() {
+                                                  instructionNote = value;
+                                                });
+                                              },
+                                              initialValue:
+                                                  '${snapshot.data.get('instruction-note')}',
+                                              //controller: hospCtrl,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextFormField(
+                                              maxLines: 5,
+                                              decoration: InputDecoration(
+                                                labelText: 'ملاحظات للصيدلي',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                              validator:
+                                                  Validation().validateMessage,
+                                              onSaved: (value) {
+                                                setState(() {
+                                                  doctorNotes = value;
+                                                });
+                                              },
                                               initialValue: snapshot.data
                                                   .get('doctor-note'),
+                                              //controller: hospCtrl,
                                             ),
                                           ),
                                         ],

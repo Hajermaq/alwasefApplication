@@ -295,6 +295,7 @@ class UserManagement {
     //id's
     String patientId,
     String prescriberId,
+    String prepharmacistId,
     String presciptionId,
     //dates
     String creationDate,
@@ -336,7 +337,7 @@ class UserManagement {
             'status': 'pending',
             //id's
             'prescriber-id': prescriberId,
-            'pharmacist-id': '',
+            'pharmacist-id': prepharmacistId,
             'prescription-id': presciptionId,
             //dates
             'prescription-creation-date': creationDate,
@@ -426,7 +427,6 @@ class UserManagement {
             'status': 'updated',
             //id's
             'prescriber-id': prescriberId,
-            'pharmacist-id': '',
             //dates
             'prescription-creation-date': creationDate,
             'start-date': startDate,

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/components/drug_info_card.dart';
@@ -16,8 +17,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AddPrescriptions extends StatefulWidget {
-  AddPrescriptions({this.uid});
+  AddPrescriptions({this.uid, this.pharmacistUid});
   final String uid;
+  final String pharmacistUid;
   static final String id = 'add_prescription_screen';
   @override
   _AddPrescriptionsState createState() => _AddPrescriptionsState();
@@ -177,7 +179,10 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                 SizedBox(
                                   height: 90,
                                 ),
-                                CircularProgressIndicator(),
+                                CircularProgressIndicator(
+                                    backgroundColor: kGreyColor,
+                                    valueColor:
+                                        AlwaysStoppedAnimation(kBlueColor)),
                                 SizedBox(
                                   height: 90,
                                 ),
@@ -219,38 +224,118 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
-                                        TextField_1(
-                                          textInputType:
-                                              TextInputType.numberWithOptions(
-                                                  decimal: false),
-                                          onSaved: (value) {
-                                            refill = int.parse(value);
-                                          },
-                                          validator: Validation()
-                                              .validateIntegerNumber,
-                                          labelText: 'إعادة التعبئة',
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextFormField(
+                                            validator: Validation()
+                                                .validateIntegerNumber,
+                                            keyboardType: TextInputType.number,
+                                            style: TextStyle(
+                                                color: Colors.black54),
+                                            decoration: InputDecoration(
+                                              labelText: 'إعادة التعبئة',
+                                              border: OutlineInputBorder(),
+                                              prefixIcon: Icon(Icons.redo),
+                                            ),
+                                            onSaved: (value) {
+                                              refill = int.parse(value);
+                                            },
+                                          ),
                                         ),
-                                        DatePicker(
-                                          labelText: 'تاريخ البداية',
-                                          validator: (value) {
-                                            if (value == null) {
-                                              return 'التاريخ مطلوب';
-                                            }
-                                            return null;
-                                          },
-                                          date: creationDate,
-                                          onSaved: (value) {
-                                            startDate = formatter.format(value);
-                                          },
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DateTimeField(
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              labelText: 'تاريخ بداية الوصفة:',
+                                              border: OutlineInputBorder(),
+                                              prefixIcon:
+                                                  Icon(Icons.calendar_today),
+                                            ),
+                                            format: dateFormat,
+                                            validator: (value) => value == null
+                                                ? 'هذا الحقل مطلوب'
+                                                : null,
+                                            onShowPicker:
+                                                (context, currentValue) {
+                                              return showDatePicker(
+                                                context: context,
+                                                builder: (context, child) {
+                                                  return Theme(
+                                                    data: ThemeData.light()
+                                                        .copyWith(
+                                                      colorScheme:
+                                                          ColorScheme.light(
+                                                        primary: kGreyColor,
+                                                        onPrimary:
+                                                            klighterColor,
+                                                        surface: kLightColor,
+                                                      ),
+                                                    ),
+                                                    child: child,
+                                                  );
+                                                },
+                                                initialDate: DateTime.now()
+                                                    .subtract(
+                                                        Duration(days: 0)),
+                                                firstDate: currentValue ??
+                                                    DateTime.now(),
+                                                lastDate: DateTime(2070),
+                                              );
+                                            },
+                                            onSaved: (value) {
+                                              if (value != null) {
+                                                startDate =
+                                                    formatter.format(value);
+                                              }
+                                            },
+                                          ),
                                         ),
-                                        DatePicker(
-                                          labelText: 'تاريخ النهاية',
-                                          date: creationDate,
-                                          onSaved: (value) {
-                                            if (value != null) {
-                                              endDate = formatter.format(value);
-                                            }
-                                          },
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DateTimeField(
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              labelText: 'تاريخ نهاية الوصفة:',
+                                              border: OutlineInputBorder(),
+                                              prefixIcon:
+                                                  Icon(Icons.calendar_today),
+                                            ),
+                                            format: dateFormat,
+                                            onShowPicker:
+                                                (context, currentValue) {
+                                              return showDatePicker(
+                                                context: context,
+                                                builder: (context, child) {
+                                                  return Theme(
+                                                    data: ThemeData.light()
+                                                        .copyWith(
+                                                      colorScheme:
+                                                          ColorScheme.light(
+                                                        primary: kGreyColor,
+                                                        onPrimary:
+                                                            klighterColor,
+                                                        surface: kLightColor,
+                                                      ),
+                                                    ),
+                                                    child: child,
+                                                  );
+                                                },
+                                                initialDate: DateTime.now()
+                                                    .subtract(
+                                                        Duration(days: 0)),
+                                                firstDate: currentValue ??
+                                                    DateTime.now(),
+                                                lastDate: DateTime(2070),
+                                              );
+                                            },
+                                            onSaved: (value) {
+                                              if (value != null) {
+                                                endDate =
+                                                    formatter.format(value);
+                                              }
+                                            },
+                                          ),
                                         ),
                                         Divider(
                                           color: klighterColor,
@@ -258,32 +343,40 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           endIndent: 20,
                                           indent: 20,
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            labelText: 'تعليمات للمريض',
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextFormField(
+                                            maxLines: 5,
+                                            decoration: InputDecoration(
+                                              labelText: 'تعليمات للمريض',
+                                              border: OutlineInputBorder(),
+                                            ),
                                             validator:
                                                 Validation().validateMessage,
-                                            onSaved: (String newValue) {
+                                            onSaved: (value) {
                                               setState(() {
-                                                instructionNote = newValue;
+                                                instructionNote = value;
                                               });
                                             },
-                                            maxLines: maxLines,
+                                            //controller: hospCtrl,
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.all(12),
-                                          height: maxLines * 24.0,
-                                          child: TextField_1(
-                                            labelText: 'ملاحظات للصيدلي',
-                                            onSaved: (String newValue) {
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextFormField(
+                                            maxLines: 5,
+                                            decoration: InputDecoration(
+                                              labelText: 'ملاحظات للصيدلي',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                            validator:
+                                                Validation().validateMessage,
+                                            onSaved: (value) {
                                               setState(() {
-                                                doctorNotes = newValue;
+                                                doctorNotes = value;
                                               });
                                             },
-                                            maxLines: maxLines,
+                                            //controller: hospCtrl,
                                           ),
                                         ),
                                         Padding(
@@ -293,12 +386,12 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                           child: Container(
                                             height: 50.0,
                                             child: RaisedButton(
-                                              textColor: Colors.white54,
-                                              color: kGreyColor,
+                                              textColor: kGreyColor,
+                                              color: Colors.white,
                                               child: Text(
                                                 '     إرسال     ',
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: kGreyColor,
                                                   // fontFamily: 'Montserrat',
                                                   fontSize: 30,
                                                   fontWeight: FontWeight.w600,
@@ -316,6 +409,8 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                     context: context,
                                                     patientId: widget.uid,
                                                     prescriberId: prescriberId,
+                                                    prepharmacistId:
+                                                        widget.pharmacistUid,
                                                     presciptionId: '[$s]',
                                                     creationDate: creationDate,
                                                     startDate: startDate,
@@ -386,81 +481,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                         }
                       },
                     ),
-                    // Padding(
-                    //   padding: EdgeInsets.symmetric(
-                    //       horizontal: 100.0, vertical: 20.0),
-                    //   child: Container(
-                    //     height: 50.0,
-                    //     child: RaisedButton(
-                    //       textColor: Colors.white54,
-                    //       color: kGreyColor,
-                    //       child: Text(
-                    //         'إرسال',
-                    //         style: TextStyle(
-                    //           color: Colors.white,
-                    //           // fontFamily: 'Montserrat',
-                    //           fontSize: 30,
-                    //           fontWeight: FontWeight.w600,
-                    //           letterSpacing: 1,
-                    //         ),
-                    //       ),
-                    //       onPressed: () {
-                    //         if (_key.currentState.validate()) {
-                    //           _key.currentState.save();
-                    //           UserManagement(currentPatient_uid: widget.uid)
-                    //               .newPrescriptionSetUp(
-                    //             context: context,
-                    //             patientId: widget.uid,
-                    //             prescriberId: prescriberId,
-                    //             presciptionId: '[$s]',
-                    //             creationDate: creationDate,
-                    //             startDate: startDate,
-                    //             endDate: endDate,
-                    //             scientificName: scientificName,
-                    //             tradeName: tradeName,
-                    //             tradeNameArabic: tradeNameArabic,
-                    //             strengthUnit: strengthUnit,
-                    //             strength: strength,
-                    //             note1: note1,
-                    //             note2: note2,
-                    //             pharmaceuticalForm: pharmaceuticalForm,
-                    //             administrationRoute: administrationRoute,
-                    //             storageConditions: storageConditions,
-                    //             publicPrice: publicPrice,
-                    //             refill: refill,
-                    //             frequency: frequency,
-                    //             instructionNote: instructionNote,
-                    //             doctorNotes: doctorNotes,
-                    //           );
-                    //
-                    //           Flushbar(
-                    //             backgroundColor: Colors.white,
-                    //             borderRadius: 4.0,
-                    //             margin: EdgeInsets.all(8.0),
-                    //             duration: Duration(seconds: 4),
-                    //             messageText: Text(
-                    //               ' تم إضافة وصفة جديدة لهذا المريض',
-                    //               style: TextStyle(
-                    //                 color: kBlueColor,
-                    //                 fontFamily: 'Almarai',
-                    //               ),
-                    //               textAlign: TextAlign.center,
-                    //             ),
-                    //           )..show(context)
-                    //               .then((r) => Navigator.pop(context));
-                    //         } else {
-                    //           // there is an error
-                    //           setState(() {
-                    //             autovalidateMode = AutovalidateMode.always;
-                    //           });
-                    //         }
-                    //       },
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(30.0),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

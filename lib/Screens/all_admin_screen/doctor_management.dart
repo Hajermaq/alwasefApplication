@@ -26,6 +26,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
       child: Scaffold(
         backgroundColor: kLightColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: kLightColor,
           ),
@@ -41,7 +42,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
           title: Text(
             'صفحة الطبيب ',
             style: GoogleFonts.almarai(
-              color: kGreyColor,
+              color: kBlueColor,
               fontSize: 28.0,
             ),
           ),
@@ -102,6 +103,11 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                       var doc = snapshot.data;
                                       String heart =
                                           doc.docs[0].data()['speciality'];
+
+                                      snapshot.data.docs.forEach((element) {
+                                        element.data()['speciality'];
+                                      });
+
                                       List<String> specialities = [
                                         'طبيب قلب',
                                         'طبيب نفسي',

@@ -30,6 +30,7 @@ class _AdminProfileInfoState extends State<AdminProfileInfo> {
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -44,7 +45,7 @@ class _AdminProfileInfoState extends State<AdminProfileInfo> {
           ),
           title: Text(
             'الحساب الشخصي ',
-            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: SingleChildScrollView(

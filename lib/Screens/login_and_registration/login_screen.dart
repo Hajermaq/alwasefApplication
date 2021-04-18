@@ -1,11 +1,8 @@
-import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/services/profile_changes.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../all_patient_screen/patients_mainpage.dart';
-import '../all_pharmacist_screens/pharamacists_mainpage.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:alwasef_app/components/round-button.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'loading_screen.dart';
 
 class LogInScreen extends StatefulWidget {
@@ -29,6 +25,7 @@ class _LogInScreenState extends State<LogInScreen> {
   User user;
 
   //Variables
+  Widget okButton;
   String hUID = '';
   String email;
   String password;
@@ -153,10 +150,14 @@ class _LogInScreenState extends State<LogInScreen> {
                               .then((value) {
                             value.docs.forEach((element) {
                               if ('طبيب' == element.data()['role']) {
+                                setState(() {
+                                  lodaing = true;
+                                });
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => LoadingScreen(
+                                            role: element.data()['role'],
                                             password: password,
                                             email: email,
                                           )),
@@ -188,9 +189,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PatientMainPage(),
-                                  ),
+                                      builder: (context) => LoadingScreen(
+                                            role: element.data()['role'],
+                                            password: password,
+                                            email: email,
+                                          )),
                                 );
                               }
                             });
@@ -206,25 +209,16 @@ class _LogInScreenState extends State<LogInScreen> {
                               .where('email', isEqualTo: value.user.email)
                               .get()
                               .then((value) {
-                            SpinKitFadingCircle(
-                              itemBuilder: (BuildContext context, int index) {
-                                return DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    color: index.isEven
-                                        ? Colors.red
-                                        : Colors.green,
-                                  ),
-                                );
-                              },
-                            );
                             value.docs.forEach((element) {
                               if ('صيدلي' == element.data()['role']) {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        PharmacistMainPage(),
-                                  ),
+                                      builder: (context) => LoadingScreen(
+                                            role: element.data()['role'],
+                                            password: password,
+                                            email: email,
+                                          )),
                                 );
                               }
                             });
@@ -245,9 +239,11 @@ class _LogInScreenState extends State<LogInScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        AdminScreen(),
-                                  ),
+                                      builder: (context) => LoadingScreen(
+                                            role: element.data()['role'],
+                                            password: password,
+                                            email: email,
+                                          )),
                                 );
                               }
                             });
@@ -258,21 +254,30 @@ class _LogInScreenState extends State<LogInScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
+                              okButton = FlatButton(
+                                child: Text('حسنا'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
                               return AlertDialog(
-                                title: new Text(
+                                title: Text(
                                     'لم يتم العثور على مستخدم لهذا البريد الإلكتروني.',
-                                    style: TextStyle(color: kBlueColor)),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: new Text(
-                                      "حسنا",
-                                      style: TextStyle(color: kBlueColor),
+                                    style: TextStyle(
+                                      color: kBlueColor,
+                                      fontFamily: 'Almarai',
                                     ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
+                                    textAlign: TextAlign.center),
+                                titleTextStyle: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                actions: [
+                                  okButton,
                                 ],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                ),
+                                elevation: 24.0,
                               );
                             },
                           );
@@ -280,21 +285,31 @@ class _LogInScreenState extends State<LogInScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
+                              okButton = FlatButton(
+                                child: Text('حسنا'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
                               return AlertDialog(
-                                title: new Text(
-                                    'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "نسيت كلمة المرور" لإعادة ضبطها. ',
-                                    style: TextStyle(color: kBlueColor)),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: new Text(
-                                      "حسنا",
-                                      style: TextStyle(color: kBlueColor),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
+                                title: Text(
+                                  'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "نسيت كلمة المرور" لإعادة ضبطها. ',
+                                  style: TextStyle(
+                                    color: kBlueColor,
+                                    fontFamily: 'Almarai',
                                   ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                titleTextStyle: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                actions: [
+                                  okButton,
                                 ],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                ),
+                                elevation: 24.0,
                               );
                             },
                           );
@@ -302,21 +317,30 @@ class _LogInScreenState extends State<LogInScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
+                              okButton = FlatButton(
+                                child: Text('حسنا'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
                               return AlertDialog(
-                                title: new Text(
+                                title: Text(
                                     'يوجد محاولات كثيرة لتسجيل الدخول بهذا المستخدم، حاول مرة اخرى لاحقا.',
-                                    style: TextStyle(color: kBlueColor)),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: new Text(
-                                      "حسنا",
-                                      style: TextStyle(color: kBlueColor),
+                                    style: TextStyle(
+                                      color: kBlueColor,
+                                      fontFamily: 'Almarai',
                                     ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
+                                    textAlign: TextAlign.center),
+                                titleTextStyle: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                actions: [
+                                  okButton,
                                 ],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                ),
+                                elevation: 24.0,
                               );
                             },
                           );
@@ -325,20 +349,29 @@ class _LogInScreenState extends State<LogInScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
+                              okButton = FlatButton(
+                                child: Text('حسنا'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
                               return AlertDialog(
-                                title: new Text('حدث خطأ غير محدد.',
-                                    style: TextStyle(color: kBlueColor)),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: new Text(
-                                      "حسنا",
-                                      style: TextStyle(color: kBlueColor),
+                                title: Text('حدث خطأ غير محدد.',
+                                    style: TextStyle(
+                                      color: kBlueColor,
+                                      fontFamily: 'Almarai',
                                     ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
+                                    textAlign: TextAlign.center),
+                                titleTextStyle: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                                actions: [
+                                  okButton,
                                 ],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                ),
+                                elevation: 24.0,
                               );
                             },
                           );
@@ -405,8 +438,21 @@ Future<void> resetPassword(String email, String collectionName,
     BuildContext context, String currentemail) async {
   if (email == currentemail) {
     await auth.sendPasswordResetEmail(email: email);
+    Flushbar(
+      backgroundColor: Colors.white,
+      borderRadius: 4.0,
+      margin: EdgeInsets.all(8.0),
+      duration: Duration(seconds: 4),
+      messageText: Text(
+        ' تم إرسال رسالة تغيير كلمة المرور لبريدك الإلكتروني.',
+        style: TextStyle(
+          color: kBlueColor,
+          fontFamily: 'Almarai',
+        ),
+        textAlign: TextAlign.center,
+      ),
+    )..show(context).then((r) => Navigator.pop(context));
   } else {
-    print('no');
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -517,14 +563,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   height: 50,
                 ),
                 RoundRaisedButton(
-                  text: 'تحديث',
+                  text: 'حفظ',
                   onPressed: () async {
                     if (_key2.currentState.validate()) {
                       //there is no error
                       _key2.currentState.save();
                       resetPassword(writtenEmail, widget.collectionName,
-                              context, widget.currentEmail)
-                          .then((value) => Navigator.pop(context));
+                          context, widget.currentEmail);
                     } else {
                       // there is an error
                       setState(() {

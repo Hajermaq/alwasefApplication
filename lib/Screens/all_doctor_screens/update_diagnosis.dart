@@ -96,7 +96,7 @@ class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
                             padding: EdgeInsets.all(20.0),
                             child: Container(
                               child: Text(
-                                'أضف تشخيص جديد',
+                                'تعديل التشخيص',
                                 style: TextStyle(
                                   color: kGreyColor,
                                   fontSize: 40.0,

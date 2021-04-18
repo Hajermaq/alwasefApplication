@@ -47,6 +47,20 @@ class _PatientDataState extends State<PatientData> {
     });
   }
 
+  getPatientDoctors() async {
+    await FirebaseFirestore.instance
+        .collection('/Patient')
+        .doc(FirebaseAuth.instance.currentUser.uid)
+        .get()
+        .then((doc) {
+      speciality = doc.data()['speciality'];
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   @override
   void initState() {
     getHUID();
@@ -66,6 +80,7 @@ class _PatientDataState extends State<PatientData> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -80,7 +95,7 @@ class _PatientDataState extends State<PatientData> {
           ),
           title: Text(
             'البحث ',
-            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: Container(
@@ -101,87 +116,114 @@ class _PatientDataState extends State<PatientData> {
                 child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('/Patient')
-                        .where('doctors',
-                            arrayContains:
-                                FirebaseAuth.instance.currentUser.uid)
                         .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                    builder: (BuildContext context, snapshot) {
                       if (!snapshot.hasData) {
-                        //TODO
-                        return CircularProgressIndicator();
+                        return Center(
+                            child: CircularProgressIndicator(
+                                backgroundColor: kGreyColor,
+                                valueColor:
+                                    AlwaysStoppedAnimation(kBlueColor)));
+                      }
+                      var docs = snapshot.data.docs;
+                      List listOfMyPatients = [];
+                      docs.forEach((doc) {
+                        Map map = doc.data()['doctors_map'];
+                        if (map.containsValue(
+                            FirebaseAuth.instance.currentUser.uid)) {
+                          listOfMyPatients.add(doc.get('uid'));
+                        }
+                      });
+                      if (listOfMyPatients.length == 0) {
+                        return Center(
+                          child: Text(
+                            'ليس لديك أي مرضى حاليا.',
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 17),
+                          ),
+                        );
                       } else {
                         return ListView.builder(
                             physics: ScrollPhysics(),
-                            itemCount: snapshot.data.docs.length,
+                            itemCount: listOfMyPatients.length,
                             itemBuilder: (context, index) {
-                              DocumentSnapshot documentSnapshot =
-                                  snapshot.data.docs[index];
-                              String name =
-                                  documentSnapshot.data()['patient-name'];
-                              if (name
-                                      .toLowerCase()
-                                      .contains(searchValue.toLowerCase()) ||
-                                  name
-                                      .toUpperCase()
-                                      .contains(searchValue.toUpperCase())) {
-                                return Column(
-                                  children: [
-                                    Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                      ),
-                                      margin: EdgeInsets.fromLTRB(
-                                          10.0, 10.0, 10.0, 0),
-                                      color: Color(0xfff0f2f7),
-                                      child: ListTile(
-                                        leading: Icon(
-                                          Icons.arrow_back,
-                                        ),
-                                        title: Text(
-                                          documentSnapshot
-                                              .data()['patient-name'],
-                                          // snapshot.data.docs[index].get('patient-name'),
-                                          style: TextStyle(
-                                              color: kBlueColor,
-                                              fontSize: 25.0),
-                                        ),
-                                        subtitle: Text(
-                                          snapshot.data.docs[index]
-                                              .get('email'),
-                                          style: TextStyle(
-                                              color: kBlueColor,
-                                              fontSize: 15.0),
-                                        ),
-                                        onTap: () async {
-                                          currentUID = snapshot.data.docs[index]
-                                              .get('uid');
-                                          print(
-                                              " the id: ${snapshot.data.docs[index].get('uid')}");
-                                          currentName = snapshot
-                                              .data.docs[index]
-                                              .get('patient-name');
-                                          currentEmail = snapshot
-                                              .data.docs[index]
-                                              .get('email');
-                                          await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PatientDetails(
-                                                        name: currentName,
-                                                        email: currentEmail,
-                                                        uid: currentUID,
-                                                      )));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                return SizedBox();
-                              }
+                              return StreamBuilder(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('/Patient')
+                                      .doc(listOfMyPatients[index])
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                          child: CircularProgressIndicator(
+                                              backgroundColor: kLightColor,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      kLightColor)));
+                                    } else {
+                                      print('hey');
+                                      String name =
+                                          snapshot.data.get('patient-name');
+                                      if (name.toLowerCase().contains(
+                                              searchValue.toLowerCase()) ||
+                                          name.toUpperCase().contains(
+                                              searchValue.toUpperCase())) {
+                                        return Column(
+                                          children: [
+                                            Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                              margin: EdgeInsets.fromLTRB(
+                                                  10.0, 10.0, 10.0, 0),
+                                              color: Color(0xfff0f2f7),
+                                              child: ListTile(
+                                                leading: Icon(
+                                                  Icons.arrow_back,
+                                                ),
+                                                title: Text(
+                                                  snapshot.data
+                                                      .get('patient-name'),
+                                                  // snapshot.data.docs[index].get('patient-name'),
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 25.0),
+                                                ),
+                                                subtitle: Text(
+                                                  snapshot.data.get('email'),
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 15.0),
+                                                ),
+                                                onTap: () async {
+                                                  currentUID =
+                                                      snapshot.data.get('uid');
+                                                  currentName = snapshot.data
+                                                      .get('patient-name');
+                                                  currentEmail = snapshot.data
+                                                      .get('email');
+                                                  await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PatientDetails(
+                                                                name:
+                                                                    currentName,
+                                                                email:
+                                                                    currentEmail,
+                                                                uid: currentUID,
+                                                              )));
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    }
+
+                                    return SizedBox();
+                                  });
                             });
                       }
                     }),

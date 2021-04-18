@@ -52,6 +52,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -66,7 +67,7 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
           ),
           title: Text(
             'البحث ',
-            style: GoogleFonts.almarai(color: kGreyColor, fontSize: 28.0),
+            style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: Container(
@@ -94,7 +95,11 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         //TODO
-                        return CircularProgressIndicator();
+                        return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                        );
                       }
                       if (snapshot.data.docs.length == 0) {
                         return Text('ليس لديك مرضى حتى الان');

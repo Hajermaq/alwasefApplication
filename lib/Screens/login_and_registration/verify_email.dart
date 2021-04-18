@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/round-button.dart';
+import 'package:alwasef_app/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -85,12 +86,24 @@ class _VerifiyPageState extends State<VerifiyPage> {
               SizedBox(
                 height: 50.0,
               ),
-              lodaing ? Icon(Icons.check) : CircularProgressIndicator(),
+              lodaing
+                  ? Column(
+                      children: [
+                        CircleAvatar(
+                            backgroundColor: kGreyColor,
+                            child: Icon(Icons.check)),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text('تم التحقق من بريدك الإلكتروني'),
+                      ],
+                    )
+                  : CircularProgressIndicator(),
               SizedBox(
-                height: 40.0,
+                height: 100.0,
               ),
               RoundRaisedButton(
-                text: 'تم التحقق',
+                text: 'تسجيل الدخول',
                 onPressed: () async {
                   setState(() {
                     if (isVerified) {

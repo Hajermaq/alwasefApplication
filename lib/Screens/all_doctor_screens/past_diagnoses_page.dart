@@ -18,45 +18,11 @@ class PastDiagnoses extends StatefulWidget {
 
 class _PastDiagnosesState extends State<PastDiagnoses> {
   String searchValue = '';
-  Widget buildBottomSheet(BuildContext context) {
-    return Container(
-      color: Color(0xff757575),
-      child: Container(
-        decoration: BoxDecoration(
-          color: klighterColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50.0),
-            topRight: Radius.circular(50.0),
-          ),
-        ),
-        child: Column(
-          children: [
-            ListTile(),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: klighterColor,
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.note_add_outlined),
-          backgroundColor: kBlueColor,
-          onPressed: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddPrescriptions(
-                  uid: widget.uid,
-                ),
-              ),
-            );
-          },
-        ),
         body: Column(
           children: [
             FilledRoundTextFields(
@@ -78,13 +44,15 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                            backgroundColor: kGreyColor,
+                            valueColor: AlwaysStoppedAnimation(kBlueColor))
                       );
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(
                         child: Text(
-                          'لا يوجد تشخيصات سايقة لهذا المريض.',
+                          'لا توجد تشخيصات سابقة.',
                           style: TextStyle(color: Colors.black54, fontSize: 17),
                         ),
                       );
@@ -105,126 +73,119 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                 medicalDiagnosis
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
-                              return GestureDetector(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: buildBottomSheet);
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  color: kGreyColor,
-                                  margin:
-                                      EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                        title: Text(
-                                          ' ${diagnoses.data()['medical-diagnosis']}',
-                                          style: kBoldLabelTextStyle,
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                color: kGreyColor,
+                                margin:
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      title: Text(
+                                        ' ${diagnoses.data()['medical-diagnosis']}',
+                                        style: kBoldLabelTextStyle,
+                                      ),
+                                      subtitle: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Text(
+                                          diagnoses.data()[
+                                              'diagnosis-creation-date'],
+                                          style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 15.0,
+                                              letterSpacing: 2.0),
                                         ),
-                                        subtitle: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            diagnoses.data()[
-                                                'diagnosis-creation-date'],
-                                            style: TextStyle(
-                                                color: Colors.black54,
-                                                fontSize: 15.0,
-                                                letterSpacing: 2.0),
+                                      ),
+                                      trailing: OutlinedButton.icon(
+                                        onPressed: () {},
+                                        icon: status == 'ongoing'
+                                            ? Icon(
+                                                Icons.replay_circle_filled,
+                                                color: kBlueColor,
+                                              )
+                                            : Icon(
+                                                Icons.update,
+                                                color: kBlueColor,
+                                              ),
+                                        label: Text(
+                                          "${diagnoses.data()['status']}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17,
+                                              color: kBlueColor),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          side: BorderSide(
+                                              width: 2.0, color: kBlueColor),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(32.0),
                                           ),
                                         ),
-                                        trailing: OutlinedButton.icon(
-                                          onPressed: () {},
-                                          icon: status == 'ongoing'
-                                              ? Icon(
-                                                  Icons.replay_circle_filled,
-                                                  color: kBlueColor,
-                                                )
-                                              : Icon(
-                                                  Icons.update,
-                                                  color: kBlueColor,
+                                      ),
+                                    ),
+                                    Divider(
+                                      color: klighterColor,
+                                      thickness: 0.9,
+                                      endIndent: 20,
+                                      indent: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'وصف التشخيص',
+                                                  style:
+                                                      ksubBoldLabelTextStyle,
                                                 ),
-                                          label: Text(
-                                            "${diagnoses.data()['status']}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 17,
-                                                color: kBlueColor),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            side: BorderSide(
-                                                width: 2.0, color: kBlueColor),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(32.0),
+                                                SizedBox(
+                                                  width: 15.0,
+                                                ),
+                                                Text(
+                                                  '${'${diagnoses.data()['diagnosis-description']}'}',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'النصيحة الطبية',
+                                                  style:
+                                                      ksubBoldLabelTextStyle,
+                                                ),
+                                                SizedBox(
+                                                  width: 15.0,
+                                                ),
+                                                Text(
+                                                  '${diagnoses.data()['medical-advice']}',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Divider(
-                                        color: klighterColor,
-                                        thickness: 0.9,
-                                        endIndent: 20,
-                                        indent: 20,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'وصف التشخيص',
-                                                    style:
-                                                        ksubBoldLabelTextStyle,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15.0,
-                                                  ),
-                                                  Text(
-                                                    '${'${diagnoses.data()['diagnosis-description']}'}',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    'النصيحة الطبية',
-                                                    style:
-                                                        ksubBoldLabelTextStyle,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15.0,
-                                                  ),
-                                                  Text(
-                                                    '${diagnoses.data()['medical-advice']}',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               );
                             }

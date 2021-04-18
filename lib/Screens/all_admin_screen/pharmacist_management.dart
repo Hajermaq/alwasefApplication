@@ -23,6 +23,7 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
       child: Scaffold(
         backgroundColor: kLightColor,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: kLightColor,
           ),
@@ -38,7 +39,7 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
           title: Text(
             'صفحة الصيدلي ',
             style: GoogleFonts.almarai(
-              color: kGreyColor,
+              color: kBlueColor,
               fontSize: 28.0,
             ),
           ),
@@ -131,9 +132,10 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                                               return DropdownMenuItem(
                                                 child: new Text(
                                                   speciality,
-                                                  style: TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 17),
+                                                  style: GoogleFonts.almarai(
+                                                    color: Colors.black54,
+                                                      fontSize: 17
+                                                  ),
                                                 ),
                                                 value: speciality,
                                                 onTap: () {

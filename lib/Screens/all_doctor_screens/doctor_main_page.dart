@@ -40,7 +40,7 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
               PatientData(),
               // patients reports
               PatientsReports(
-                  condition: 'prescriber-id'),
+                  role: 'doctor'),
               //Profile Page
               DoctorProfileInfo(),
             ], //end of pages

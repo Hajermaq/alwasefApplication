@@ -13,9 +13,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../constants.dart';
 
 class LoadingScreen extends StatefulWidget {
-  LoadingScreen({this.email, this.password});
+  LoadingScreen({this.email, this.password, this.role});
   final String password;
   final String email;
+  final String role;
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }
@@ -219,10 +220,27 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 2),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => DoctorMainPage())));
+    if (widget.role == 'طبيب') {
+      Timer(
+          Duration(seconds: 2),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => DoctorMainPage())));
+    } else if (widget.role == 'مريض') {
+      Timer(
+          Duration(seconds: 2),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => PatientMainPage())));
+    } else if (widget.role == 'صيدلي') {
+      Timer(
+          Duration(seconds: 2),
+          () => Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => PharmacistMainPage())));
+    } else {
+      Timer(
+          Duration(seconds: 2),
+          () => Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => AdminScreen())));
+    }
   }
 
   @override

@@ -36,6 +36,7 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(
             color: Colors.grey,
           ),
@@ -115,7 +116,6 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                     PatientPrescriptions(
                                       uid: widget.uid,
                                     ),
-                                    //Container(child: Icon(Icons.person)),
                                     PatientDiagnoses(
                                       uid: widget.uid,
                                     ),
@@ -130,7 +130,10 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                             if (!snapshot.hasData) {
                                               return Center(
                                                   child:
-                                                      CircularProgressIndicator());
+                                                      CircularProgressIndicator(
+                                                          backgroundColor: kGreyColor,
+                                                          valueColor: AlwaysStoppedAnimation(kBlueColor))
+                                              );
                                             }
                                             if (snapshot.data.docs.length == 0) {
                                               return Column(
@@ -185,7 +188,6 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                     margin: EdgeInsets.fromLTRB(
                                                         10.0, 10.0, 10.0, 0),
                                                     child: ListTile(
-                                                      //TODO: drug icon
                                                       leading:
                                                           Icon(Icons.animation),
                                                       title: Text(

@@ -68,13 +68,15 @@ class _DiagnosesState extends State<Diagnoses> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: CircularProgressIndicator(
+                            backgroundColor: kGreyColor,
+                            valueColor: AlwaysStoppedAnimation(kBlueColor))
                       );
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(
                         child: Text(
-                          'لا يوجد تشخيصات لهذا المريض.',
+                          'لا توجد تشخيصات.',
                           style: TextStyle(color: Colors.black54, fontSize: 17),
                         ),
                       );

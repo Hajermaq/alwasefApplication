@@ -23,6 +23,7 @@ class _HospitalPatientsState extends State<HospitalPatients> {
     String name;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
           color: kLightColor,
         ),
@@ -36,9 +37,9 @@ class _HospitalPatientsState extends State<HospitalPatients> {
           ),
         ),
         title: Text(
-          'صفحة المريض ',
+          'صفحة المرضى ',
           style: GoogleFonts.almarai(
-            color: kGreyColor,
+            color: kBlueColor,
             fontSize: 28.0,
           ),
         ),
@@ -66,7 +67,12 @@ class _HospitalPatientsState extends State<HospitalPatients> {
                         .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)
+                          ),
+                        );
                       }
                       return ListView.builder(
                           itemCount: snapshot.data.docs.length,

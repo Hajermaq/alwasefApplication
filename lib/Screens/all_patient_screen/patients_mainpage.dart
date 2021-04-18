@@ -54,8 +54,6 @@ class _PatientMainPageState extends State<PatientMainPage> {
               verticalPadding: 15.0,
             ),
             pages: [
-              //Profile Page
-              PatientProfile(),
               //medical info page
               PatientMedicalInfo(
                 uid: currentUser.uid.toString(),
@@ -66,15 +64,14 @@ class _PatientMainPageState extends State<PatientMainPage> {
               PrescriptionsCalendar2(
                 uid: FirebaseAuth.instance.currentUser.uid,
               ),
-              // Home page
               PrescriptionsReports(
                 uid: FirebaseAuth.instance.currentUser.uid,
               ),
+              //Profile Page
+              PatientProfile(),
+              // Home page
             ], //end of pages
             items: [
-              ScrollNavigationItem(
-                icon: Icon(Icons.account_circle_outlined),
-              ),
               ScrollNavigationItem(
                 icon: Icon(Icons.animation),
               ),
@@ -83,6 +80,9 @@ class _PatientMainPageState extends State<PatientMainPage> {
               ),
               ScrollNavigationItem(
                 icon: Icon(Icons.receipt_outlined),
+              ),
+              ScrollNavigationItem(
+                icon: Icon(Icons.account_circle_outlined),
               ),
 
             ], // end of items
