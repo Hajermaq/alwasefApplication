@@ -68,10 +68,9 @@ class _DiagnosesState extends State<Diagnoses> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
-                        child: CircularProgressIndicator(
-                            backgroundColor: kGreyColor,
-                            valueColor: AlwaysStoppedAnimation(kBlueColor))
-                      );
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(
@@ -181,6 +180,9 @@ class _DiagnosesState extends State<Diagnoses> {
                                                 ),
                                               ],
                                             ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
                                             Row(
                                               children: [
                                                 Text(
@@ -188,7 +190,7 @@ class _DiagnosesState extends State<Diagnoses> {
                                                   style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
-                                                  width: 15.0,
+                                                  width: 25.0,
                                                 ),
                                                 Text(
                                                   '${diagnoses.data()['medical-advice']}',
@@ -199,6 +201,9 @@ class _DiagnosesState extends State<Diagnoses> {
                                                   ),
                                                 ),
                                               ],
+                                            ),
+                                            SizedBox(
+                                              height: 10,
                                             ),
                                             Divider(
                                               color: klighterColor,

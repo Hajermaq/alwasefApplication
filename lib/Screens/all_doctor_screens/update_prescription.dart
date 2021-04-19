@@ -3,7 +3,6 @@ import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
 import 'package:alwasef_app/components/drug_info_card.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/components/text_field_1.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -425,7 +424,7 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                     textColor: kButtonTextColor,
                                     color: kGreyColor,
                                     child: Text(
-                                      'تحديث',
+                                      'تعديل',
                                       style: TextStyle(
                                         color: Colors.white,
                                         // fontFamily: 'Montserrat',
@@ -473,7 +472,7 @@ class _UpdatePrescriptionState extends State<UpdatePrescription> {
                                           margin: EdgeInsets.all(8.0),
                                           duration: Duration(seconds: 4),
                                           messageText: Text(
-                                            ' تم تعديل وصفة جديدة لهذا المريض',
+                                            ' تم تعديل الوصفة بنجاح.',
                                             style: TextStyle(
                                               color: kBlueColor,
                                               fontFamily: 'Almarai',

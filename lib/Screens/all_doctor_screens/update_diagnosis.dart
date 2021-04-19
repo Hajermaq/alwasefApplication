@@ -10,6 +10,7 @@ import 'package:alwasef_app/constants.dart';
 import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -96,15 +97,18 @@ class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
                             padding: EdgeInsets.all(20.0),
                             child: Container(
                               child: Text(
-                                'تعديل التشخيص',
+                                'تعديل التشخيص الطبي',
                                 style: TextStyle(
                                   color: kGreyColor,
-                                  fontSize: 40.0,
+                                  fontSize: 33.0,
                                   fontFamily: 'Almarai',
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
+                          ),
+                          SizedBox(
+                            height: 30,
                           ),
                           Card(
                             color: kGreyColor,
@@ -116,34 +120,20 @@ class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
                               padding: EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  TextField_1(
-                                    validator: Validation().validateMessage,
-                                    textInputType: TextInputType.text,
-                                    onSaved: (value) {
-                                      widget.medicalDiagnosis = value;
-                                    },
-                                    labelText: 'التشخيص الصحي',
-                                    initialValue: widget.medicalDiagnosis,
-                                  ),
-                                  Divider(
-                                    color: klighterColor,
-                                    thickness: 0.9,
-                                    endIndent: 20,
-                                    indent: 20,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(12),
-                                    height: maxLines * 24.0,
-                                    child: TextField_1(
-                                      labelText: 'وصف التشخيص',
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
                                       validator: Validation().validateMessage,
-                                      onSaved: (String value) {
-                                        setState(() {
-                                          widget.diagnosisDescription = value;
-                                        });
+                                      decoration: InputDecoration(
+                                        labelText: 'التشخيص الصحي',
+                                        border: OutlineInputBorder(),
+                                        prefixIcon: Icon(
+                                            Icons.medical_services_outlined),
+                                      ),
+                                      onSaved: (value) {
+                                        medicalDiagnosis = value;
                                       },
-                                      maxLines: maxLines,
-                                      initialValue: widget.diagnosisDescription,
+                                      initialValue: widget.medicalDiagnosis,
                                     ),
                                   ),
                                   Divider(
@@ -152,72 +142,121 @@ class _UpdateDiagnosisState extends State<UpdateDiagnosis> {
                                     endIndent: 20,
                                     indent: 20,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.all(12),
-                                    height: maxLines * 24.0,
-                                    child: TextField_1(
-                                      labelText: 'النصيحة الطبية',
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                        labelText: 'وصف التشخيص',
+                                        border: OutlineInputBorder(),
+                                      ),
                                       validator: Validation().validateMessage,
-                                      onSaved: (String value) {
+                                      onSaved: (value) {
                                         setState(() {
-                                          widget.medicalAdvice = value;
+                                          diagnosisDescription = value;
                                         });
                                       },
-                                      maxLines: maxLines,
+                                      initialValue: widget.diagnosisDescription,
+
+                                      //controller: hospCtrl,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: klighterColor,
+                                    thickness: 0.9,
+                                    endIndent: 20,
+                                    indent: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                        labelText: 'النصيحة الطبية',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      validator: Validation().validateMessage,
+                                      onSaved: (value) {
+                                        setState(() {
+                                          medicalAdvice = value;
+                                        });
+                                      },
                                       initialValue: widget.medicalAdvice,
+
+                                      //controller: hospCtrl,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 100.0, vertical: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50.0,
+                                      child: RaisedButton(
+                                        textColor: Colors.white54,
+                                        color: Colors.white,
+                                        child: Text(
+                                          'تعديل',
+                                          style: TextStyle(
+                                            color: kGreyColor,
+                                            // fontFamily: 'Montserrat',
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          if (_key.currentState.validate()) {
+                                            _key.currentState.save();
+                                            UserManagement(
+                                                    currentPatient_uid:
+                                                        widget.uid,
+                                                    documentId:
+                                                        widget.documentID)
+                                                .diagnosisUpdate(
+                                              medicalAdvice:
+                                                  widget.medicalAdvice,
+                                              medicalDiagnosis:
+                                                  widget.medicalDiagnosis,
+                                              diagnosisDescription:
+                                                  widget.diagnosisDescription,
+                                              context: context,
+                                              prescriberId: FirebaseAuth
+                                                  .instance.currentUser.uid,
+                                              patientId: widget.uid,
+                                              creationDate: creationDate,
+                                            );
+                                            Flushbar(
+                                              backgroundColor: Colors.white,
+                                              borderRadius: 4.0,
+                                              margin: EdgeInsets.all(8.0),
+                                              duration: Duration(seconds: 4),
+                                              messageText: Text(
+                                                ' تم تعديل التشخيص الطبي بنجاح.',
+                                                style: TextStyle(
+                                                  color: kBlueColor,
+                                                  fontFamily: 'Almarai',
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )..show(context).then(
+                                                (r) => Navigator.pop(context));
+                                          } else {
+                                            // there is an error
+                                            setState(() {
+                                              autovalidateMode =
+                                                  AutovalidateMode.always;
+                                            });
+                                          }
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 100.0, vertical: 20.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 50.0,
-                              child: RaisedButton(
-                                textColor: Colors.white54,
-                                color: kGreyColor,
-                                child: Text(
-                                  'تحديث',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    // fontFamily: 'Montserrat',
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  if (_key.currentState.validate()) {
-                                    _key.currentState.save();
-                                    UserManagement(
-                                            currentPatient_uid: widget.uid,
-                                            documentId: widget.documentID)
-                                        .diagnosisUpdate(
-                                      medicalAdvice: widget.medicalAdvice,
-                                      medicalDiagnosis: widget.medicalDiagnosis,
-                                      diagnosisDescription:
-                                          widget.diagnosisDescription,
-                                      context: context,
-                                      prescriberId:
-                                          FirebaseAuth.instance.currentUser.uid,
-                                      patientId: widget.uid,
-                                      creationDate: creationDate,
-                                    );
-                                  } else {
-                                    // there is an error
-                                    setState(() {
-                                      autovalidateMode =
-                                          AutovalidateMode.always;
-                                    });
-                                  }
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
                               ),
                             ),
                           ),

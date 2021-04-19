@@ -18,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
@@ -30,13 +30,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               color: kSVGcolor,
             ),
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Text(
-              'لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا  ',
-              textAlign: TextAlign.center,
-              style: kMainHeadLinesStyle,
-            ),
+          SizedBox(
+            height: 70.0,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'أهلا بك',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 40.0),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'في تطبيق واصف للوصفات الطبية\n الإلكترونية الميسرة.',
+                textAlign: TextAlign.center,
+                style: kMainHeadLinesStyle,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 200.0,
           ),
           OutinedButton(
             text: 'إنضموا إلينا',

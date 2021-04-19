@@ -101,7 +101,7 @@ flutter:
         - asset: assets/fonts/Almarai-Bold.ttf
         - asset: assets/fonts/Almarai-Light.ttf
         - asset: assets/fonts/Almarai-Regular.ttf
-    - family: Hacen Tunisia
+    - family: Hacen Egypt
       fonts:
-        - asset: assets/fonts/Hacen Tunisia.ttf
+        - asset: assets/fonts/Hacen Egypt.ttf
 

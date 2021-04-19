@@ -83,8 +83,7 @@ class _PatientManagementState extends State<PatientManagement> {
                 return Center(
                   child: CircularProgressIndicator(
                       backgroundColor: kGreyColor,
-                      valueColor: AlwaysStoppedAnimation(kBlueColor)
-                  ),
+                      valueColor: AlwaysStoppedAnimation(kBlueColor)),
                 );
               }
               DocumentSnapshot doc = snapshot.data;
@@ -158,7 +157,11 @@ class _PatientManagementState extends State<PatientManagement> {
                                                   DropdownMenuItem(
                                                     child: Text(
                                                       document.data()[
-                                                          'doctor-name'],
+                                                                  'doctor-name'] ==
+                                                              null
+                                                          ? ''
+                                                          : document.data()[
+                                                              'doctor-name'],
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),
@@ -323,7 +326,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                               .where('hospital-uid',
                                                   isEqualTo: FirebaseAuth
                                                       .instance.currentUser.uid)
-                                              .where('speciality',
+                                              .where('doctor-speciality',
                                                   isEqualTo: 'طبيب نفسي')
                                               .snapshots(),
                                           builder: (context, snapshot) {
@@ -427,7 +430,11 @@ class _PatientManagementState extends State<PatientManagement> {
                                                   DropdownMenuItem(
                                                     child: Text(
                                                       document.data()[
-                                                          'doctor-name'],
+                                                                  'doctor-name'] ==
+                                                              null
+                                                          ? ''
+                                                          : document.data()[
+                                                              'doctor-name'],
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),
@@ -538,9 +545,15 @@ class _PatientManagementState extends State<PatientManagement> {
                                                   DropdownMenuItem(
                                                     child: Text(
                                                       document
-                                                          .data()[
-                                                              'pharmacist-name']
-                                                          .toString(),
+                                                                  .data()[
+                                                                      'pharmacist-name']
+                                                                  .toString() ==
+                                                              null
+                                                          ? ''
+                                                          : document
+                                                              .data()[
+                                                                  'pharmacist-name']
+                                                              .toString(),
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),

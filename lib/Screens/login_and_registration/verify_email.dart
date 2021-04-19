@@ -98,7 +98,9 @@ class _VerifiyPageState extends State<VerifiyPage> {
                         Text('تم التحقق من بريدك الإلكتروني'),
                       ],
                     )
-                  : CircularProgressIndicator(),
+                  : CircularProgressIndicator(
+                      backgroundColor: Colors.white54,
+                      valueColor: AlwaysStoppedAnimation(Colors.red)),
               SizedBox(
                 height: 100.0,
               ),
@@ -111,44 +113,42 @@ class _VerifiyPageState extends State<VerifiyPage> {
                         UserManagement().newDoctorSetUp(
                           context: context,
                           hospitalUID: widget.hospital_UID,
-                          password: widget.password,
-                          speciality: '',
+                          speciality: null,
                           doctorName: widget.name,
                           role: widget.role,
                           phoneNumber: '',
-                          experienceYears: '',
+                          experienceYears: null,
                         );
                       } else if ('صيدلي' == widget.role) {
                         UserManagement().newPharmacistSetUp(
                           context: context,
                           hospitalUID: widget.hospital_UID,
-                          password: widget.password,
                           pharmacistName: widget.name,
                           role: widget.role,
-                          speciality: '',
+                          speciality: null,
                         );
                       } else if ('مريض' == widget.role) {
+                        String pharmacistUID;
                         UserManagement().newPatientSetUp(
                           context: context,
                           hospitalUID: widget.hospital_UID,
-                          pharmacistUID: '',
-                          password: widget.password,
+                          pharmacistUID: pharmacistUID,
                           role: widget.role,
                           patientName: widget.name,
                           phoneNumber: '',
                           doctorsMap: {
-                            '1': '',
-                            '2': '',
-                            '3': '',
-                            '4': '',
+                            '1': null,
+                            '2': null,
+                            '3': null,
+                            '4': null,
                           },
                         );
                         //Hospital
                       } else {
                         UserManagement().newHospitalSetUp(
-                            context: context,
-                            hospitalName: widget.name,
-                            role: widget.role,
+                          context: context,
+                          hospitalName: widget.name,
+                          role: widget.role,
                         );
                       }
                     }

@@ -26,19 +26,11 @@ class _LogInORSignInState extends State<LogInORSignIn> {
         children: [
           Container(
             padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
-            height: 150.0,
-            width: 150.0,
+            height: 200.0,
+            width: 200.0,
             child: SvgPicture.asset(
               'assets/images/password.svg',
               color: kSVGcolor,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
-            child: Text(
-              'لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا  ',
-              textAlign: TextAlign.center,
-              style: kMainHeadLinesStyle,
             ),
           ),
           SizedBox(
