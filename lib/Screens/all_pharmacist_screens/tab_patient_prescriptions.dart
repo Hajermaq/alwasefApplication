@@ -826,7 +826,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                     indent: 20,
                                                   ),
                                                   SizedBox(
-                                                    height: 10,
+                                                    height: 6,
                                                   ),
                                                   Row(
                                                     mainAxisAlignment:
@@ -997,6 +997,83 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                       ),
                                                     ],
                                                   ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        'ملاحظات الطبيب للصيدلي',
+                                                        style:
+                                                        ksubBoldLabelTextStyle,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 20.0,
+                                                      ),
+                                                      InkWell(
+                                                        child: Text(
+                                                          'انقر هنا للقراءة',
+                                                          style: TextStyle(
+                                                            color:
+                                                            Colors.black45,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        onTap: () {
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder:
+                                                                  (context) {
+                                                                return Container(
+                                                                  height: 250,
+                                                                  child: Card(
+                                                                    shape:
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          15.0),
+                                                                    ),
+                                                                    color:
+                                                                    kGreyColor,
+                                                                    child:
+                                                                    Column(
+                                                                      children: [
+                                                                        ListTile(
+                                                                          title:
+                                                                          Text(
+                                                                            'ملاحظات من الطبيب للصيدلي',
+                                                                            textAlign:
+                                                                            TextAlign.center,
+                                                                            style:
+                                                                            kBoldLabelTextStyle,
+                                                                          ),
+                                                                        ),
+                                                                        Divider(
+                                                                          color:
+                                                                          klighterColor,
+                                                                          thickness:
+                                                                          0.9,
+                                                                          endIndent:
+                                                                          20,
+                                                                          indent:
+                                                                          20,
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                          const EdgeInsets.all(15.0),
+                                                                          child: Text(
+                                                                            '${prescription.data()['doctor-note']}',
+                                                                            style: ksubBoldLabelTextStyle,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
                                                   Divider(
                                                     color: klighterColor,
                                                     thickness: 0.9,
@@ -1040,9 +1117,13 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                             child:
                                                                                 Text('نعم'),
                                                                             onPressed: () async {
-                                                                              await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
+                                                                              await FirebaseFirestore.instance.collection('/Patient')
+                                                                                  .doc(widget.uid)
+                                                                                  .collection('/Prescriptions')
+                                                                                  .doc(prescription.id)
+                                                                                  .update({
                                                                                 'status': 'inconsistent',
-                                                                                //'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                                'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                               });
                                                                               Navigator.pop(context);
                                                                             });
@@ -1071,11 +1152,12 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                           fontSize:
                                                                               15,
                                                                           fontWeight:
-                                                                              FontWeight.bold),
+                                                                              FontWeight.bold, color: kBlueColor),
                                                                       content: Text(
                                                                           'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الطبيب بتعديلها',
                                                                           style:
                                                                               TextStyle(
+                                                                                color: kBlueColor,
                                                                             fontFamily:
                                                                                 'Almarai',
                                                                           ),
@@ -1094,7 +1176,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                           24.0,
                                                                       backgroundColor:
                                                                           Colors
-                                                                              .black,
+                                                                              .white,
                                                                     );
                                                                   });
                                                             },
@@ -1132,10 +1214,15 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                           yesButton = FlatButton(
                                                                               child: Text('نعم'),
                                                                               onPressed: () async {
-                                                                                await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
+                                                                                await FirebaseFirestore.instance
+                                                                                    .collection('/Patient')
+                                                                                    .doc(widget.uid)
+                                                                                    .collection('/Prescriptions')
+                                                                                    .doc(prescription.id)
+                                                                                    .update({
                                                                                   'refill': newRefill,
                                                                                   'status': 'dispensed',
-                                                                                  //'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                                  'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                                 });
                                                                                 Navigator.pop(context);
                                                                               });
@@ -1153,12 +1240,14 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                             title: Text('هل تريد تأكيد الوصفة؟',
                                                                                 style: TextStyle(
                                                                                   fontFamily: 'Almarai',
+                                                                                    color: kBlueColor
                                                                                 ),
                                                                                 textAlign: TextAlign.center),
                                                                             titleTextStyle:
-                                                                                TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                                                TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
                                                                             content: Text('عند تأكيدك للوصفة سينقص عدد مرات إعادة التعبئة المسموح بها لهذ هالوصفة',
                                                                                 style: TextStyle(
+                                                                                  color: kBlueColor,
                                                                                   fontFamily: 'Almarai',
                                                                                 ),
                                                                                 textAlign: TextAlign.center),
@@ -1173,7 +1262,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                             elevation:
                                                                                 24.0,
                                                                             backgroundColor:
-                                                                                Colors.black,
+                                                                                Colors.white,
                                                                           );
                                                                         });
                                                                   },
@@ -1207,12 +1296,12 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                                     fontFamily: 'Almarai',
                                                                                   ),
                                                                                   textAlign: TextAlign.center),
-                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
                                                                               shape: RoundedRectangleBorder(
                                                                                 borderRadius: BorderRadius.all(Radius.circular(25)),
                                                                               ),
                                                                               elevation: 24.0,
-                                                                              backgroundColor: Colors.black,
+                                                                              backgroundColor: Colors.white,
                                                                             );
                                                                           });
                                                                     } else {
@@ -1244,7 +1333,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                                     fontFamily: 'Almarai',
                                                                                   ),
                                                                                   textAlign: TextAlign.center),
-                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
                                                                               actions: [
                                                                                 yesButton,
                                                                                 noButton
@@ -1253,7 +1342,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                                 borderRadius: BorderRadius.all(Radius.circular(25)),
                                                                               ),
                                                                               elevation: 24.0,
-                                                                              backgroundColor: Colors.black,
+                                                                              backgroundColor: Colors.white,
                                                                             );
                                                                           });
                                                                     }

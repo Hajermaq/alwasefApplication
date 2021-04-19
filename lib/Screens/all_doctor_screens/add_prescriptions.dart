@@ -25,7 +25,7 @@ class AddPrescriptions extends StatefulWidget {
   _AddPrescriptionsState createState() => _AddPrescriptionsState();
 }
 
-class _AddPrescriptionsState extends State<AddPrescriptions> {
+class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerProviderStateMixin{
   //FirrStore
   String prescriberId = FirebaseAuth.instance.currentUser.uid;
   //Data from Api with default value
@@ -61,6 +61,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
   static final DateFormat formatter = DateFormat('yyyy-MM-dd');
   // start date
   String startDate;
+  ValueNotifier<DateTime> tempStartDate = ValueNotifier<DateTime>(DateTime.now());
   // end date
   String endDate;
   //Form requirements
@@ -275,13 +276,11 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                     child: child,
                                                   );
                                                 },
-                                                initialDate: DateTime.now()
-                                                    .subtract(
-                                                        Duration(days: 0)),
+                                                initialDate: tempStartDate.value,
                                                 firstDate: currentValue ??
                                                     DateTime.now(),
                                                 lastDate: DateTime(2070),
-                                              );
+                                              ).then((DateTime dateTime) => tempStartDate.value = dateTime);
                                             },
                                             onSaved: (value) {
                                               if (value != null) {
@@ -289,6 +288,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                     formatter.format(value);
                                               }
                                             },
+
                                           ),
                                         ),
                                         Padding(
@@ -321,11 +321,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> {
                                                     child: child,
                                                   );
                                                 },
-                                                initialDate: DateTime.now()
-                                                    .subtract(
-                                                        Duration(days: 0)),
-                                                firstDate: currentValue ??
+                                                initialDate: tempStartDate.value ??
                                                     DateTime.now(),
+                                                firstDate: tempStartDate.value,
                                                 lastDate: DateTime(2070),
                                               );
                                             },

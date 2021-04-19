@@ -165,7 +165,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                             if (status != 'requested refill') {
                               String pharmacistID =
                                   prescription.data()['pharmacist-id'];
-
                               //search by
                               String tradeName =
                                   prescription.data()['tradeName'];
@@ -204,7 +203,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                                   dose
                                       .toUpperCase()
                                       .contains(searchValue.toUpperCase())) {
-                                return FutureBuilder(
+                                if (pharmacistID.isNotEmpty) {
+                                  return FutureBuilder(
                                     future: FirebaseFirestore.instance
                                         .collection('/Pharmacist')
                                         .doc(pharmacistID)
@@ -215,18 +215,17 @@ class _PrescriptionsState extends State<Prescriptions> {
                                             child: CircularProgressIndicator(
                                                 backgroundColor: klighterColor,
                                                 valueColor:
-                                                    AlwaysStoppedAnimation(
-                                                        klighterColor)));
+                                                AlwaysStoppedAnimation(
+                                                    klighterColor)));
                                       }
-
                                       DocumentSnapshot doc = snapshot.data;
                                       String pharmacistName =
-                                          doc.data()['pharmacist-name'];
+                                      doc.data()['pharmacist-name'];
 
                                       return Card(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
-                                              BorderRadius.circular(15.0),
+                                          BorderRadius.circular(15.0),
                                         ),
                                         color: kGreyColor,
                                         margin: EdgeInsets.fromLTRB(
@@ -242,10 +241,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                               ),
                                               subtitle: Padding(
                                                 padding:
-                                                    const EdgeInsets.all(5.0),
+                                                const EdgeInsets.all(5.0),
                                                 child: Text(
                                                   prescription.data()[
-                                                      'prescription-creation-date'],
+                                                  'prescription-creation-date'],
                                                   style: TextStyle(
                                                       color: Colors.black54,
                                                       fontSize: 15.0,
@@ -258,7 +257,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                   "${prescription.data()['status']}",
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 17,
                                                       color: kBlueColor),
                                                 ),
@@ -269,8 +268,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                       color: kBlueColor),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            32.0),
+                                                    BorderRadius.circular(
+                                                        32.0),
                                                   ),
                                                 ),
                                               ),
@@ -283,19 +282,19 @@ class _PrescriptionsState extends State<Prescriptions> {
                                             ),
                                             Padding(
                                               padding:
-                                                  const EdgeInsets.all(8.0),
+                                              const EdgeInsets.all(8.0),
                                               child: Container(
                                                 child: Column(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
+                                                  MainAxisAlignment
+                                                      .spaceEvenly,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         Text(
                                                           'الاسم العلمي',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 15.0,
@@ -304,10 +303,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['scientificName']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                       ],
@@ -320,7 +319,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'الجرعة',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 65.0,
@@ -329,10 +328,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['strength-unit']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                         SizedBox(
@@ -342,10 +341,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['strength']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                       ],
@@ -358,7 +357,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'شكل الجرعة',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 19.0,
@@ -367,10 +366,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['pharmaceutical-form']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                       ],
@@ -383,7 +382,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'التكرار',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 65.0,
@@ -392,10 +391,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['frequency']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                       ],
@@ -408,7 +407,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'تعليمات',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 50.0,
@@ -421,32 +420,32 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                   .black45,
                                                               fontSize: 15.0,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                              FontWeight
+                                                                  .bold,
                                                             ),
                                                           ),
                                                           onTap: () {
                                                             showModalBottomSheet(
                                                                 context:
-                                                                    context,
+                                                                context,
                                                                 builder:
                                                                     (context) {
                                                                   return Container(
                                                                     height: 250,
                                                                     child: Card(
                                                                       shape:
-                                                                          RoundedRectangleBorder(
+                                                                      RoundedRectangleBorder(
                                                                         borderRadius:
-                                                                            BorderRadius.circular(15.0),
+                                                                        BorderRadius.circular(15.0),
                                                                       ),
                                                                       color:
-                                                                          kGreyColor,
+                                                                      kGreyColor,
                                                                       child:
-                                                                          Column(
+                                                                      Column(
                                                                         children: [
                                                                           ListTile(
                                                                             title:
-                                                                                Text(
+                                                                            Text(
                                                                               'تعليمات عن الوصفة',
                                                                               textAlign: TextAlign.center,
                                                                               style: kBoldLabelTextStyle,
@@ -454,148 +453,148 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                           ),
                                                                           Divider(
                                                                             color:
-                                                                                klighterColor,
+                                                                            klighterColor,
                                                                             thickness:
-                                                                                0.9,
+                                                                            0.9,
                                                                             endIndent:
-                                                                                20,
+                                                                            20,
                                                                             indent:
-                                                                                20,
+                                                                            20,
                                                                           ),
                                                                           Padding(
                                                                             padding:
-                                                                                const EdgeInsets.all(15.0),
+                                                                            const EdgeInsets.all(15.0),
                                                                             child:
-                                                                                Container(
+                                                                            Container(
                                                                               child: Column(
                                                                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                                                 children: [
                                                                                   prescription.data()['note_2'] == ''
                                                                                       ? Padding(
-                                                                                          padding: const EdgeInsets.only(right: 80.0),
-                                                                                          child: Column(
-                                                                                            children: [
-                                                                                              Row(
-                                                                                                children: [
-                                                                                                  Text(
-                                                                                                    '( 1 )',
-                                                                                                    style: ksubBoldLabelTextStyle,
-                                                                                                  ),
-                                                                                                  SizedBox(
-                                                                                                    width: 15.0,
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    child: Text(
-                                                                                                      '${prescription.data()['instruction-note']}',
-                                                                                                      style: TextStyle(
-                                                                                                        color: Colors.black45,
-                                                                                                        fontSize: 15.0,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                              SizedBox(
-                                                                                                height: 10,
-                                                                                              ),
-                                                                                              Row(
-                                                                                                children: [
-                                                                                                  Text(
-                                                                                                    '( 2 )',
-                                                                                                    style: ksubBoldLabelTextStyle,
-                                                                                                  ),
-                                                                                                  SizedBox(
-                                                                                                    width: 15.0,
-                                                                                                  ),
-                                                                                                  Expanded(
-                                                                                                    child: Text(
-                                                                                                      '${prescription.data()['note_1']}',
-                                                                                                      style: TextStyle(
-                                                                                                        color: Colors.black45,
-                                                                                                        fontSize: 15.0,
-                                                                                                        fontWeight: FontWeight.bold,
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        )
-                                                                                      : Column(
+                                                                                    padding: const EdgeInsets.only(right: 80.0),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        Row(
                                                                                           children: [
-                                                                                            Row(
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  '( 1 )',
-                                                                                                  style: ksubBoldLabelTextStyle,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: 15.0,
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  child: Text(
-                                                                                                    '${prescription.data()['instruction-note']}',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.black45,
-                                                                                                      fontSize: 15.0,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
+                                                                                            Text(
+                                                                                              '( 1 )',
+                                                                                              style: ksubBoldLabelTextStyle,
                                                                                             ),
                                                                                             SizedBox(
-                                                                                              height: 10,
+                                                                                              width: 15.0,
                                                                                             ),
-                                                                                            Row(
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  '( 2 )',
-                                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${prescription.data()['instruction-note']}',
+                                                                                                style: TextStyle(
+                                                                                                  color: Colors.black45,
+                                                                                                  fontSize: 15.0,
+                                                                                                  fontWeight: FontWeight.bold,
                                                                                                 ),
-                                                                                                SizedBox(
-                                                                                                  width: 15.0,
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  child: Text(
-                                                                                                    '${prescription.data()['note_1']}',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.black45,
-                                                                                                      fontSize: 15.0,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              height: 10,
-                                                                                            ),
-                                                                                            Row(
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  '( 3 )',
-                                                                                                  style: ksubBoldLabelTextStyle,
-                                                                                                ),
-                                                                                                SizedBox(
-                                                                                                  width: 15.0,
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  child: Text(
-                                                                                                    '${prescription.data()['note_2']}',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.black45,
-                                                                                                      fontSize: 15.0,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
+                                                                                              ),
                                                                                             ),
                                                                                           ],
                                                                                         ),
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        Row(
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              '( 2 )',
+                                                                                              style: ksubBoldLabelTextStyle,
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              width: 15.0,
+                                                                                            ),
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${prescription.data()['note_1']}',
+                                                                                                style: TextStyle(
+                                                                                                  color: Colors.black45,
+                                                                                                  fontSize: 15.0,
+                                                                                                  fontWeight: FontWeight.bold,
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  )
+                                                                                      : Column(
+                                                                                    children: [
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '( 1 )',
+                                                                                            style: ksubBoldLabelTextStyle,
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 15.0,
+                                                                                          ),
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${prescription.data()['instruction-note']}',
+                                                                                              style: TextStyle(
+                                                                                                color: Colors.black45,
+                                                                                                fontSize: 15.0,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '( 2 )',
+                                                                                            style: ksubBoldLabelTextStyle,
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 15.0,
+                                                                                          ),
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${prescription.data()['note_1']}',
+                                                                                              style: TextStyle(
+                                                                                                color: Colors.black45,
+                                                                                                fontSize: 15.0,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      Row(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '( 3 )',
+                                                                                            style: ksubBoldLabelTextStyle,
+                                                                                          ),
+                                                                                          SizedBox(
+                                                                                            width: 15.0,
+                                                                                          ),
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${prescription.data()['note_2']}',
+                                                                                              style: TextStyle(
+                                                                                                color: Colors.black45,
+                                                                                                fontSize: 15.0,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
                                                                                 ],
                                                                               ),
                                                                             ),
@@ -617,7 +616,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'عدد مرات إعادة التعبئة',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 15.0,
@@ -626,10 +625,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           '${prescription.data()['refill']}',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                       ],
@@ -648,7 +647,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         Text(
                                                           'الصيدلي',
                                                           style:
-                                                              ksubBoldLabelTextStyle,
+                                                          ksubBoldLabelTextStyle,
                                                         ),
                                                         SizedBox(
                                                           width: 15.0,
@@ -657,12 +656,12 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                           'ص.  $pharmacistName',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
-                                                        ),
+                                                        )
                                                       ],
                                                     ),
                                                     SizedBox(
@@ -676,8 +675,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                     ),
                                                     Row(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
+                                                      MainAxisAlignment
+                                                          .center,
                                                       children: [
                                                         Row(
                                                           children: [
@@ -689,29 +688,29 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                   MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            UpdatePrescription(
-                                                                      documentID:
+                                                                        UpdatePrescription(
+                                                                          documentID:
                                                                           prescription
                                                                               .id,
-                                                                      uid: widget
-                                                                          .uid,
-                                                                    ),
+                                                                          uid: widget
+                                                                              .uid,
+                                                                        ),
                                                                   ),
                                                                 );
                                                               },
                                                               color:
-                                                                  klighterColor,
+                                                              klighterColor,
                                                               shape: RoundedRectangleBorder(
                                                                   side: BorderSide(
                                                                       color:
-                                                                          kGreyColor,
+                                                                      kGreyColor,
                                                                       width: 2),
                                                                   borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                      10)),
                                                               child:
-                                                                  Text("تعديل"),
+                                                              Text("تعديل"),
                                                             ),
                                                             SizedBox(
                                                               width: 10.0,
@@ -722,10 +721,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                   () async {
                                                                 showDialog(
                                                                     context:
-                                                                        context,
+                                                                    context,
                                                                     builder:
                                                                         (BuildContext
-                                                                            context) {
+                                                                    context) {
                                                                       yesButton = FlatButton(
                                                                           child: Text('نعم'),
                                                                           onPressed: () async {
@@ -779,57 +778,57 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                           });
                                                                       noButton =
                                                                           FlatButton(
-                                                                        child: Text(
-                                                                            'لا'),
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      );
+                                                                            child: Text(
+                                                                                'لا'),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(
+                                                                                  context);
+                                                                            },
+                                                                          );
 
                                                                       return AlertDialog(
                                                                         title: Text(
                                                                             'هل أنت متأكد من حذف الوصفة؟',
                                                                             style:
-                                                                                TextStyle(
+                                                                            TextStyle(
                                                                               color: kBlueColor,
                                                                               fontFamily: 'Almarai',
                                                                             ),
                                                                             textAlign:
-                                                                                TextAlign.center),
+                                                                            TextAlign.center),
                                                                         titleTextStyle: TextStyle(
                                                                             fontSize:
-                                                                                15,
+                                                                            15,
                                                                             fontWeight:
-                                                                                FontWeight.bold),
+                                                                            FontWeight.bold),
                                                                         actions: [
                                                                           yesButton,
                                                                           noButton
                                                                         ],
                                                                         shape:
-                                                                            RoundedRectangleBorder(
+                                                                        RoundedRectangleBorder(
                                                                           borderRadius:
-                                                                              BorderRadius.all(Radius.circular(25)),
+                                                                          BorderRadius.all(Radius.circular(25)),
                                                                         ),
                                                                         elevation:
-                                                                            24.0,
+                                                                        24.0,
                                                                       );
                                                                     });
                                                               },
                                                               color:
-                                                                  klighterColor,
+                                                              klighterColor,
                                                               shape: RoundedRectangleBorder(
                                                                   side: BorderSide(
                                                                       color:
-                                                                          kGreyColor,
+                                                                      kGreyColor,
                                                                       width: 2),
                                                                   borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10)),
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                      10)),
                                                               child:
-                                                                  Text("حذف"),
+                                                              Text("حذف"),
                                                             ),
                                                           ],
                                                         ),
@@ -842,7 +841,630 @@ class _PrescriptionsState extends State<Prescriptions> {
                                           ],
                                         ),
                                       );
-                                    });
+                                    }
+                                  );
+                                } else {
+                                  return  Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(15.0),
+                                  ),
+                                  color: kGreyColor,
+                                  margin: EdgeInsets.fromLTRB(
+                                      10.0, 10.0, 10.0, 0),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        title: Text(
+                                          // TODO: change it to different names maybe?
+                                          prescription
+                                              .data()['tradeName'],
+                                          style: kBoldLabelTextStyle,
+                                        ),
+                                        subtitle: Padding(
+                                          padding:
+                                          const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            prescription.data()[
+                                            'prescription-creation-date'],
+                                            style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 15.0,
+                                                letterSpacing: 2.0),
+                                          ),
+                                        ),
+                                        trailing: OutlinedButton.icon(
+                                          icon: statusIcon,
+                                          label: Text(
+                                            "${prescription.data()['status']}",
+                                            style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.bold,
+                                                fontSize: 17,
+                                                color: kBlueColor),
+                                          ),
+                                          onPressed: null,
+                                          style: ElevatedButton.styleFrom(
+                                            side: BorderSide(
+                                                width: 2.0,
+                                                color: kBlueColor),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  32.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: klighterColor,
+                                        thickness: 0.9,
+                                        endIndent: 20,
+                                        indent: 20,
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceEvenly,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'الاسم العلمي',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['scientificName']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'الجرعة',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 65.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['strength-unit']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 8,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['strength']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'شكل الجرعة',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 19.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['pharmaceutical-form']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'التكرار',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 65.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['frequency']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'تعليمات',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 50.0,
+                                                  ),
+                                                  InkWell(
+                                                    child: Text(
+                                                      'انقر هنا للقراءة',
+                                                      style: TextStyle(
+                                                        color: Colors
+                                                            .black45,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold,
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      showModalBottomSheet(
+                                                          context:
+                                                          context,
+                                                          builder:
+                                                              (context) {
+                                                            return Container(
+                                                              height: 250,
+                                                              child: Card(
+                                                                shape:
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                  BorderRadius.circular(15.0),
+                                                                ),
+                                                                color:
+                                                                kGreyColor,
+                                                                child:
+                                                                Column(
+                                                                  children: [
+                                                                    ListTile(
+                                                                      title:
+                                                                      Text(
+                                                                        'تعليمات عن الوصفة',
+                                                                        textAlign: TextAlign.center,
+                                                                        style: kBoldLabelTextStyle,
+                                                                      ),
+                                                                    ),
+                                                                    Divider(
+                                                                      color:
+                                                                      klighterColor,
+                                                                      thickness:
+                                                                      0.9,
+                                                                      endIndent:
+                                                                      20,
+                                                                      indent:
+                                                                      20,
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                      const EdgeInsets.all(15.0),
+                                                                      child:
+                                                                      Container(
+                                                                        child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                          children: [
+                                                                            prescription.data()['note_2'] == ''
+                                                                                ? Padding(
+                                                                              padding: const EdgeInsets.only(right: 80.0),
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        '( 1 )',
+                                                                                        style: ksubBoldLabelTextStyle,
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        width: 15.0,
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        child: Text(
+                                                                                          '${prescription.data()['instruction-note']}',
+                                                                                          style: TextStyle(
+                                                                                            color: Colors.black45,
+                                                                                            fontSize: 15.0,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        '( 2 )',
+                                                                                        style: ksubBoldLabelTextStyle,
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        width: 15.0,
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        child: Text(
+                                                                                          '${prescription.data()['note_1']}',
+                                                                                          style: TextStyle(
+                                                                                            color: Colors.black45,
+                                                                                            fontSize: 15.0,
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            )
+                                                                                : Column(
+                                                                              children: [
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '( 1 )',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        '${prescription.data()['instruction-note']}',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.black45,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10,
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '( 2 )',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        '${prescription.data()['note_1']}',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.black45,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: 10,
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      '( 3 )',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: Text(
+                                                                                        '${prescription.data()['note_2']}',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.black45,
+                                                                                          fontSize: 15.0,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'عدد مرات إعادة التعبئة',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15.0,
+                                                  ),
+                                                  Text(
+                                                    '${prescription.data()['refill']}',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Divider(
+                                                color: klighterColor,
+                                                thickness: 0.9,
+                                                endIndent: 20,
+                                                indent: 20,
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'الصيدلي',
+                                                    style:
+                                                    ksubBoldLabelTextStyle,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 15.0,
+                                                  ),
+                                                  Text(
+                                                    'ص.  ',
+                                                    style: TextStyle(
+                                                      color:
+                                                      Colors.black45,
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Divider(
+                                                color: klighterColor,
+                                                thickness: 0.9,
+                                                endIndent: 20,
+                                                indent: 20,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .center,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      //Update
+                                                      RaisedButton(
+                                                        onPressed: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                  UpdatePrescription(
+                                                                    documentID:
+                                                                    prescription
+                                                                        .id,
+                                                                    uid: widget
+                                                                        .uid,
+                                                                  ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        color:
+                                                        klighterColor,
+                                                        shape: RoundedRectangleBorder(
+                                                            side: BorderSide(
+                                                                color:
+                                                                kGreyColor,
+                                                                width: 2),
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                10)),
+                                                        child:
+                                                        Text("تعديل"),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10.0,
+                                                      ),
+                                                      //Delete
+                                                      RaisedButton(
+                                                        onPressed:
+                                                            () async {
+                                                          showDialog(
+                                                              context:
+                                                              context,
+                                                              builder:
+                                                                  (BuildContext
+                                                              context) {
+                                                                yesButton = FlatButton(
+                                                                    child: Text('نعم'),
+                                                                    onPressed: () async {
+                                                                      UserManagement().PastPrescriptionsSetUp(
+                                                                        context,
+                                                                        widget.uid,
+                                                                        prescription.data()['prescriber-id'].toString(),
+                                                                        prescription.data()['registerNumber'].toString(),
+                                                                        prescription.data()['prescription-creation-date'].toString(),
+                                                                        prescription.data()['start-date'].toString(),
+                                                                        prescription.data()['end-date'].toString(),
+                                                                        prescription.data()['scientificName'].toString(),
+                                                                        prescription.data()['scientificNameArabic'].toString(),
+                                                                        prescription.data()['tradeName'].toString(),
+                                                                        prescription.data()['tradeNameArabic'].toString(),
+                                                                        prescription.data()['strength'].toString(),
+                                                                        prescription.data()['strength-unit'].toString(),
+                                                                        prescription.data()['size'].toString(),
+                                                                        prescription.data()['size-unit'].toString(),
+                                                                        prescription.data()['pharmaceutical-form'].toString(),
+                                                                        prescription.data()['administration-route'].toString(),
+                                                                        prescription.data()['storage-conditions'].toString(),
+                                                                        prescription.data()['price'].toString(),
+                                                                        prescription.data()['dose'],
+                                                                        prescription.data()['quantity'],
+                                                                        prescription.data()['refill'],
+                                                                        prescription.data()['dosing-expire'],
+                                                                        prescription.data()['frequency'],
+                                                                        prescription.data()['instruction-note'].toString(),
+                                                                        prescription.data()['doctor-note'].toString(),
+                                                                      );
+                                                                      await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).delete();
+                                                                      PastPrescriptions(
+                                                                        uid: widget.uid,
+                                                                      );
+
+                                                                      Flushbar(
+                                                                        backgroundColor: kLightColor,
+                                                                        borderRadius: 4.0,
+                                                                        margin: EdgeInsets.all(8.0),
+                                                                        duration: Duration(seconds: 2),
+                                                                        messageText: Text(
+                                                                          ' تم حذف الوصفة بنجاح.',
+                                                                          style: TextStyle(
+                                                                            color: kBlueColor,
+                                                                            fontFamily: 'Almarai',
+                                                                          ),
+                                                                          textAlign: TextAlign.center,
+                                                                        ),
+                                                                      )..show(context).then((r) =>
+                                                                          Navigator.pop(context));
+                                                                    });
+                                                                noButton =
+                                                                    FlatButton(
+                                                                      child: Text(
+                                                                          'لا'),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                    );
+
+                                                                return AlertDialog(
+                                                                  title: Text(
+                                                                      'هل أنت متأكد من حذف الوصفة؟',
+                                                                      style:
+                                                                      TextStyle(
+                                                                        color: kBlueColor,
+                                                                        fontFamily: 'Almarai',
+                                                                      ),
+                                                                      textAlign:
+                                                                      TextAlign.center),
+                                                                  titleTextStyle: TextStyle(
+                                                                      fontSize:
+                                                                      15,
+                                                                      fontWeight:
+                                                                      FontWeight.bold),
+                                                                  actions: [
+                                                                    yesButton,
+                                                                    noButton
+                                                                  ],
+                                                                  shape:
+                                                                  RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                    BorderRadius.all(Radius.circular(25)),
+                                                                  ),
+                                                                  elevation:
+                                                                  24.0,
+                                                                );
+                                                              });
+                                                        },
+                                                        color:
+                                                        klighterColor,
+                                                        shape: RoundedRectangleBorder(
+                                                            side: BorderSide(
+                                                                color:
+                                                                kGreyColor,
+                                                                width: 2),
+                                                            borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                10)),
+                                                        child:
+                                                        Text("حذف"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                }
                               }
                               return SizedBox();
                             } else {

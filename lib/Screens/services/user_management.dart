@@ -245,8 +245,6 @@ class UserManagement {
     context,
     String role,
     String hospitalName,
-    String doctorUID,
-    String pharmacistUID,
     String phoneNumer,
   }) async {
     try {
@@ -261,8 +259,6 @@ class UserManagement {
 
         await collection.doc(uid).set({
           //ids
-          'doctor-uid': doctorUID,
-          'pharmacist-uid': pharmacistUID,
           'hospital-id': uid,
           //name
           'hospital-name': hospitalName,

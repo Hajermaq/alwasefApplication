@@ -38,6 +38,8 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
   String hospitalName = '';
   String hospitalPhoneNumber = '';
   Widget downloadedButton;
+  Widget yesButton;
+  Widget noButton;
 
   // get information from FireStore
   getPatientInfo() async {
@@ -414,6 +416,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
     getHospitalInfo();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -461,1146 +464,2248 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                         String start = prescription.data()['start-date'];
                         DateTime startDate = DateTime.tryParse(start);
                         int refill = prescription.data()['refill'];
-                        var difference = Age.dateDifference(
-                            fromDate: startDate,
-                            toDate: DateTime.now(),
-                            includeToDate: false);
+                        if(startDate.isBefore(DateTime.now())) {
+                          var difference = Age.dateDifference(
+                              fromDate: startDate,
+                              toDate: DateTime.now(),
+                              includeToDate: false);
+                          print(difference);
 
-                        // delete if 1 month passed
-                        if ((difference.months >= 1 || difference.days >= 28) &&
-                            refill == 0) {
-                          UserManagement().PastPrescriptionsSetUp(
-                            context,
-                            widget.uid,
-                            prescription.data()['prescriber-id'].toString(),
-                            prescription.data()['registerNumber'].toString(),
-                            prescription
-                                .data()['prescription-creation-date']
-                                .toString(),
-                            prescription.data()['start-date'].toString(),
-                            prescription.data()['end-date'].toString(),
-                            prescription.data()['scientificName'].toString(),
-                            prescription
-                                .data()['scientificNameArabic']
-                                .toString(),
-                            prescription.data()['tradeName'].toString(),
-                            prescription.data()['tradeNameArabic'].toString(),
-                            prescription.data()['strength'].toString(),
-                            prescription.data()['strength-unit'].toString(),
-                            prescription.data()['size'].toString(),
-                            prescription.data()['size-unit'].toString(),
-                            prescription
-                                .data()['pharmaceutical-form']
-                                .toString(),
-                            prescription
-                                .data()['administration-route']
-                                .toString(),
-                            prescription
-                                .data()['storage-conditions']
-                                .toString(),
-                            prescription.data()['price'].toString(),
-                            prescription.data()['dose'],
-                            prescription.data()['quantity'],
-                            prescription.data()['refill'],
-                            prescription.data()['dosing-expire'],
-                            prescription.data()['frequency'],
-                            prescription.data()['instruction-note'].toString(),
-                            prescription.data()['doctor-note'].toString(),
-                          );
-                          FirebaseFirestore.instance
-                              .collection('/Patient')
-                              .doc(widget.uid)
-                              .collection('/Prescriptions')
-                              .doc(prescription.id)
-                              .delete();
-                        }
+                          // delete if 1 month passed
+                          if ((difference.months >= 1 || difference.days >= 28) &&
+                              refill == 0) {
+                            UserManagement().PastPrescriptionsSetUp(
+                              context,
+                              widget.uid,
+                              prescription.data()['prescriber-id'].toString(),
+                              prescription.data()['registerNumber'].toString(),
+                              prescription
+                                  .data()['prescription-creation-date']
+                                  .toString(),
+                              prescription.data()['start-date'].toString(),
+                              prescription.data()['end-date'].toString(),
+                              prescription.data()['scientificName'].toString(),
+                              prescription
+                                  .data()['scientificNameArabic']
+                                  .toString(),
+                              prescription.data()['tradeName'].toString(),
+                              prescription.data()['tradeNameArabic'].toString(),
+                              prescription.data()['strength'].toString(),
+                              prescription.data()['strength-unit'].toString(),
+                              prescription.data()['size'].toString(),
+                              prescription.data()['size-unit'].toString(),
+                              prescription
+                                  .data()['pharmaceutical-form']
+                                  .toString(),
+                              prescription
+                                  .data()['administration-route']
+                                  .toString(),
+                              prescription
+                                  .data()['storage-conditions']
+                                  .toString(),
+                              prescription.data()['price'].toString(),
+                              prescription.data()['dose'],
+                              prescription.data()['quantity'],
+                              prescription.data()['refill'],
+                              prescription.data()['dosing-expire'],
+                              prescription.data()['frequency'],
+                              prescription.data()['instruction-note'].toString(),
+                              prescription.data()['doctor-note'].toString(),
+                            );
+                            FirebaseFirestore.instance
+                                .collection('/Patient')
+                                .doc(widget.uid)
+                                .collection('/Prescriptions')
+                                .doc(prescription.id)
+                                .delete();
+                          }
 
-                        // doctor info
-                        String prescriberID =
-                            prescription.data()['prescriber-id'];
-                        String pharmacistID =
-                            prescription.data()['pharmacist-id'];
+                          // doctor info
+                          String prescriberID =
+                          prescription.data()['prescriber-id'];
+                          String pharmacistID =
+                          prescription.data()['pharmacist-id'];
 
-                        //search by
-                        String tradeName = prescription.data()['tradeName'];
-                        String dose = prescription.data()['dose'].toString();
+                          //search by
+                          String tradeName = prescription.data()['tradeName'];
+                          String dose = prescription.data()['dose'].toString();
 
-                        // search logic
-                        if (tradeName
-                                .toLowerCase()
-                                .contains(searchValue.toLowerCase()) ||
-                            tradeName
-                                .toUpperCase()
-                                .contains(searchValue.toUpperCase()) ||
-                            dose
-                                .toLowerCase()
-                                .contains(searchValue.toLowerCase()) ||
-                            dose
-                                .toUpperCase()
-                                .contains(searchValue.toUpperCase())) {
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            color: kGreyColor,
-                            margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  title: Text(
-                                    // TODO: change it to different names maybe?
-                                    prescription.data()['tradeName'],
-                                    style: kBoldLabelTextStyle,
-                                  ),
-                                  subtitle: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text(
-                                      prescription
-                                          .data()['prescription-creation-date'],
-                                      style: TextStyle(
-                                          color: Colors.black54,
-                                          fontSize: 15.0,
-                                          letterSpacing: 2.0),
+                          // search logic
+                          if (tradeName
+                              .toLowerCase()
+                              .contains(searchValue.toLowerCase()) ||
+                              tradeName
+                                  .toUpperCase()
+                                  .contains(searchValue.toUpperCase()) ||
+                              dose
+                                  .toLowerCase()
+                                  .contains(searchValue.toLowerCase()) ||
+                              dose
+                                  .toUpperCase()
+                                  .contains(searchValue.toUpperCase())) {
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              color: kGreyColor,
+                              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      // TODO: change it to different names maybe?
+                                      prescription.data()['tradeName'],
+                                      style: kBoldLabelTextStyle,
                                     ),
-                                  ),
-                                  trailing: OutlinedButton.icon(
-                                    icon: Icon(
-                                        Icons.assignment_turned_in_outlined,
-                                        color: Colors.green),
-                                    label: Text(
-                                      "${prescription.data()['status']}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17,
-                                          color: kBlueColor),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        prescription
+                                            .data()['prescription-creation-date'],
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15.0,
+                                            letterSpacing: 2.0),
+                                      ),
                                     ),
-                                    onPressed: null,
-                                    style: ElevatedButton.styleFrom(
-                                      side: BorderSide(
-                                          width: 2.0, color: kBlueColor),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(32.0),
+                                    trailing: OutlinedButton.icon(
+                                      icon: Icon(
+                                          Icons.assignment_turned_in_outlined,
+                                          color: Colors.green),
+                                      label: Text(
+                                        "${prescription.data()['status']}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                            color: kBlueColor),
+                                      ),
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        side: BorderSide(
+                                            width: 2.0, color: kBlueColor),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(32.0),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Divider(
-                                  color: klighterColor,
-                                  thickness: 0.9,
-                                  endIndent: 20,
-                                  indent: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'الاسم العلمي',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 15.0,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['scientificName']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
+                                  Divider(
+                                    color: klighterColor,
+                                    thickness: 0.9,
+                                    endIndent: 20,
+                                    indent: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'الاسم العلمي',
+                                                style: ksubBoldLabelTextStyle,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'الجرعة',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 65.0,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['strength-unit']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
+                                              SizedBox(
+                                                width: 15.0,
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['strength']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'شكل الجرعة',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 19.0,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['pharmaceutical-form']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'التكرار',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 65.0,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['frequency']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'تعليمات',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 50.0,
-                                            ),
-                                            InkWell(
-                                              child: Text(
-                                                'انقر هنا للقراءة',
+                                              Text(
+                                                '${prescription.data()['scientificName']}',
                                                 style: TextStyle(
                                                   color: Colors.black45,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return Container(
-                                                        height: 250,
-                                                        child: Card(
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15.0),
-                                                          ),
-                                                          color: kGreyColor,
-                                                          child: Column(
-                                                            children: [
-                                                              ListTile(
-                                                                title: Text(
-                                                                  'تعليمات عن الوصفة',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      kBoldLabelTextStyle,
-                                                                ),
-                                                              ),
-                                                              Divider(
-                                                                color:
-                                                                    klighterColor,
-                                                                thickness: 0.9,
-                                                                endIndent: 20,
-                                                                indent: 20,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        15.0),
-                                                                child:
-                                                                    Container(
-                                                                  child: Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceEvenly,
-                                                                    children: [
-                                                                      prescription.data()['note_2'] ==
-                                                                              ''
-                                                                          ? Padding(
-                                                                              padding: const EdgeInsets.only(right: 80.0),
-                                                                              child: Column(
-                                                                                children: [
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        '( 1 )',
-                                                                                        style: ksubBoldLabelTextStyle,
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 15.0,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${prescription.data()['instruction-note']}',
-                                                                                          style: TextStyle(
-                                                                                            color: Colors.black45,
-                                                                                            fontSize: 15.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    height: 10,
-                                                                                  ),
-                                                                                  Row(
-                                                                                    children: [
-                                                                                      Text(
-                                                                                        '( 2 )',
-                                                                                        style: ksubBoldLabelTextStyle,
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 15.0,
-                                                                                      ),
-                                                                                      Expanded(
-                                                                                        child: Text(
-                                                                                          '${prescription.data()['note_1']}',
-                                                                                          style: TextStyle(
-                                                                                            color: Colors.black45,
-                                                                                            fontSize: 15.0,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            )
-                                                                          : Column(
-                                                                              children: [
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '( 1 )',
-                                                                                      style: ksubBoldLabelTextStyle,
-                                                                                    ),
-                                                                                    SizedBox(
-                                                                                      width: 15.0,
-                                                                                    ),
-                                                                                    Expanded(
-                                                                                      child: Text(
-                                                                                        '${prescription.data()['instruction-note']}',
-                                                                                        style: TextStyle(
-                                                                                          color: Colors.black45,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  height: 10,
-                                                                                ),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '( 2 )',
-                                                                                      style: ksubBoldLabelTextStyle,
-                                                                                    ),
-                                                                                    SizedBox(
-                                                                                      width: 15.0,
-                                                                                    ),
-                                                                                    Expanded(
-                                                                                      child: Text(
-                                                                                        '${prescription.data()['note_1']}',
-                                                                                        style: TextStyle(
-                                                                                          color: Colors.black45,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  height: 10,
-                                                                                ),
-                                                                                Row(
-                                                                                  children: [
-                                                                                    Text(
-                                                                                      '( 3 )',
-                                                                                      style: ksubBoldLabelTextStyle,
-                                                                                    ),
-                                                                                    SizedBox(
-                                                                                      width: 15.0,
-                                                                                    ),
-                                                                                    Expanded(
-                                                                                      child: Text(
-                                                                                        '${prescription.data()['note_2']}',
-                                                                                        style: TextStyle(
-                                                                                          color: Colors.black45,
-                                                                                          fontSize: 15.0,
-                                                                                          fontWeight: FontWeight.bold,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'عدد مرات إعادة العبئة',
-                                              style: ksubBoldLabelTextStyle,
-                                            ),
-                                            SizedBox(
-                                              width: 15.0,
-                                            ),
-                                            Text(
-                                              '${prescription.data()['refill']}',
-                                              style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.bold,
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'الجرعة',
+                                                style: ksubBoldLabelTextStyle,
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        FutureBuilder(
-                                            future: FirebaseFirestore.instance
-                                                .collection('/Doctors')
-                                                .doc(prescriberID)
-                                                .get(),
-                                            builder: (context, snapshot) {
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                    child: CircularProgressIndicator(
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation(
-                                                                Colors
-                                                                    .transparent)));
-                                              }
-                                              DocumentSnapshot doc =
-                                                  snapshot.data;
-                                              String doctorName =
-                                                  doc.data()['doctor-name'];
-                                              String tempDoctorSpeciality =
-                                                  doc.data()['speciality'];
-                                              String doctorSpeciality;
-                                              String experienceYears = doc
-                                                  .data()['experience-years'];
-                                              String doctorPhoneNumber =
-                                                  doc.data()['phone-number'];
-
-                                              if (tempDoctorSpeciality ==
-                                                  'طبيب قلب') {
-                                                doctorSpeciality =
-                                                    'cardiologist';
-                                              } else if (tempDoctorSpeciality ==
-                                                  'طبيب باطنية') {
-                                                doctorSpeciality =
-                                                    'Internal medicine physicians';
-                                              } else if (tempDoctorSpeciality ==
-                                                  'طبيب أسرة') {
-                                                doctorSpeciality =
-                                                    'family physician';
-                                              } else {
-                                                doctorSpeciality =
-                                                    'Psychologist';
-                                              }
-
-                                              return Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        'الواصف',
-                                                        style:
-                                                            ksubBoldLabelTextStyle,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 15.0,
-                                                      ),
-                                                      Text(
-                                                        'د.  $doctorName',
-                                                        style: TextStyle(
-                                                          color: Colors.black45,
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
+                                              SizedBox(
+                                                width: 65.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['strength-unit']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['strength']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'شكل الجرعة',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 19.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['pharmaceutical-form']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'التكرار',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 65.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['frequency']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'تعليمات',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 50.0,
+                                              ),
+                                              InkWell(
+                                                child: Text(
+                                                  'انقر هنا للقراءة',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: IconButton(
-                                                      icon: Icon(
-                                                          Icons.info_outline),
-                                                      onPressed: () {
-                                                        showModalBottomSheet(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return Container(
-                                                                height: 200,
-                                                                child: Card(
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            15.0),
+                                                ),
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return Container(
+                                                          height: 250,
+                                                          child: Card(
+                                                            shape:
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                  15.0),
+                                                            ),
+                                                            color: kGreyColor,
+                                                            child: Column(
+                                                              children: [
+                                                                ListTile(
+                                                                  title: Text(
+                                                                    'تعليمات عن الوصفة',
+                                                                    textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                    style:
+                                                                    kBoldLabelTextStyle,
                                                                   ),
+                                                                ),
+                                                                Divider(
                                                                   color:
-                                                                      kGreyColor,
-                                                                  child: Column(
-                                                                    children: [
-                                                                      ListTile(
-                                                                        title:
-                                                                            Text(
-                                                                          'معلومات عن الطبيب',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style:
-                                                                              kBoldLabelTextStyle,
-                                                                        ),
-                                                                      ),
-                                                                      Divider(
-                                                                        color:
-                                                                            klighterColor,
-                                                                        thickness:
-                                                                            0.9,
-                                                                        endIndent:
-                                                                            20,
-                                                                        indent:
-                                                                            20,
-                                                                      ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(15.0),
-                                                                        child:
-                                                                            Container(
-                                                                          child:
-                                                                              Column(
+                                                                  klighterColor,
+                                                                  thickness: 0.9,
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                      15.0),
+                                                                  child:
+                                                                  Container(
+                                                                    child: Column(
+                                                                      mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                      children: [
+                                                                        prescription.data()['note_2'] ==
+                                                                            ''
+                                                                            ? Padding(
+                                                                          padding: const EdgeInsets.only(right: 80.0),
+                                                                          child: Column(
                                                                             children: [
                                                                               Row(
                                                                                 children: [
                                                                                   Text(
-                                                                                    'اسم الطبيب:',
-                                                                                    style: ksubBoldLabelTextStyle,
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    width: 47.0,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    'د.  $doctorName',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.black45,
-                                                                                      fontSize: 15.0,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              Row(
-                                                                                children: [
-                                                                                  Text(
-                                                                                    'عدد سنين الخبرة:',
+                                                                                    '( 1 )',
                                                                                     style: ksubBoldLabelTextStyle,
                                                                                   ),
                                                                                   SizedBox(
                                                                                     width: 15.0,
                                                                                   ),
-                                                                                  Text(
-                                                                                    '$experienceYears',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.black45,
-                                                                                      fontSize: 15.0,
-                                                                                      fontWeight: FontWeight.bold,
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      '${prescription.data()['instruction-note']}',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
                                                                                     ),
                                                                                   ),
                                                                                 ],
                                                                               ),
+                                                                              SizedBox(
+                                                                                height: 10,
+                                                                              ),
                                                                               Row(
                                                                                 children: [
                                                                                   Text(
-                                                                                    'مجال الإختصاص:',
+                                                                                    '( 2 )',
                                                                                     style: ksubBoldLabelTextStyle,
                                                                                   ),
                                                                                   SizedBox(
                                                                                     width: 15.0,
                                                                                   ),
-                                                                                  Text(
-                                                                                    '$doctorSpeciality',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.black45,
-                                                                                      fontSize: 15.0,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              Row(
-                                                                                children: [
-                                                                                  Text(
-                                                                                    'رقم الهاتف:',
-                                                                                    style: ksubBoldLabelTextStyle,
-                                                                                  ),
-                                                                                  SizedBox(
-                                                                                    width: 54.0,
-                                                                                  ),
-                                                                                  Text(
-                                                                                    '$doctorPhoneNumber',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.black45,
-                                                                                      fontSize: 15.0,
-                                                                                      fontWeight: FontWeight.bold,
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      '${prescription.data()['note_1']}',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
                                                                                     ),
                                                                                   ),
                                                                                 ],
                                                                               ),
                                                                             ],
                                                                           ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            });
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        FutureBuilder(
-                                            future: FirebaseFirestore.instance
-                                                .collection('/Pharmacist')
-                                                .doc(pharmacistID)
-                                                .get(),
-                                            builder: (context, snapshot) {
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                    child: CircularProgressIndicator(
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation(
-                                                                Colors
-                                                                    .transparent)));
-                                              }
-                                              DocumentSnapshot doc =
-                                                  snapshot.data;
-                                              String pharmacistName =
-                                                  doc.data()['pharmacist-name'];
-                                              return Row(
-                                                children: [
-                                                  Text(
-                                                    'الصيدلي',
-                                                    style:
-                                                        ksubBoldLabelTextStyle,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 15.0,
-                                                  ),
-                                                  Text(
-                                                    'ص.  $pharmacistName',
-                                                    style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            }),
-                                        Divider(
-                                          color: klighterColor,
-                                          thickness: 0.9,
-                                          endIndent: 20,
-                                          indent: 20,
-                                        ),
-                                        // buttons
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                //allow creating report if 7 days of more passed
-                                                (difference.months >= 1 ||
-                                                        difference.days >= 7)
-                                                    ? RaisedButton(
-                                                        color: klighterColor,
-                                                        shape: RoundedRectangleBorder(
-                                                            side: BorderSide(
-                                                                color:
-                                                                    kGreyColor,
-                                                                width: 2),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        child:
-                                                            Text("إنشاء تقرير"),
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  fullscreenDialog:
-                                                                      true,
-                                                                  builder:
-                                                                      (context) =>
-                                                                          CreateReportPage(
-                                                                            uid:
-                                                                                widget.uid,
-                                                                            prescriberID:
-                                                                                prescriberID,
-                                                                            pharmacistID:
-                                                                                pharmacistID,
-                                                                            tradeName:
-                                                                                tradeName,
-                                                                          )));
-                                                        },
-                                                      )
-                                                    : SizedBox(),
-                                                SizedBox(
-                                                  width: 10.0,
-                                                ),
-
-                                                // View and safe pdf
-                                                RaisedButton(
-                                                  onPressed: () async {
-                                                    showModalBottomSheet(
-                                                      isScrollControlled: true,
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          SingleChildScrollView(
-                                                        child: Container(
-                                                          height: 115,
-                                                          child: Column(
-                                                            children: [
-                                                              //Only view prescription without downloading, using pdf viewer
-                                                              ListTile(
-                                                                onTap:
-                                                                    () async {
-                                                                  var doc = await FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'Doctors')
-                                                                      .doc(
-                                                                          prescriberID)
-                                                                      .get();
-
-                                                                  String
-                                                                      doctorName =
-                                                                      doc.data()[
-                                                                          'doctor-name'];
-                                                                  String
-                                                                      tempDoctorSpeciality =
-                                                                      doc.data()[
-                                                                          'speciality'];
-                                                                  String
-                                                                      doctorSpeciality;
-
-                                                                  if (tempDoctorSpeciality ==
-                                                                      'طبيب قلب') {
-                                                                    doctorSpeciality =
-                                                                        'cardiologist';
-                                                                  } else if (tempDoctorSpeciality ==
-                                                                      'طبيب باطنية') {
-                                                                    doctorSpeciality =
-                                                                        'Internal medicine physicians';
-                                                                  } else if (tempDoctorSpeciality ==
-                                                                      'طبيب أسرة') {
-                                                                    doctorSpeciality =
-                                                                        'family physician';
-                                                                  } else {
-                                                                    doctorSpeciality =
-                                                                        'Psychologist';
-                                                                  }
-
-                                                                  pdf = pw
-                                                                      .Document();
-                                                                  writeToPdf(
-                                                                    pdf: pdf,
-                                                                    doctorSpeciality:
-                                                                        doctorSpeciality,
-                                                                    prescriptionNo:
-                                                                        '${prescription.data()['prescription-id']}',
-                                                                    hospitalPhoneNumber:
-                                                                        hospitalPhoneNumber,
-                                                                    doctorSignature:
-                                                                        doctorName,
-                                                                    allergies:
-                                                                        allergies,
-                                                                    hospitalName:
-                                                                        hospitalName,
-                                                                    doctorName:
-                                                                        '',
-                                                                    date: prescription
-                                                                            .data()[
-                                                                        'prescription-creation-date'],
-                                                                    patientName:
-                                                                        patientName,
-                                                                    gender:
-                                                                        gender,
-                                                                    age: age,
-                                                                    prescription:
-                                                                        '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
-                                                                    refill: prescription
-                                                                        .data()[
-                                                                            'refill']
-                                                                        .toString(),
-                                                                  );
-                                                                  await viewPdf(
-                                                                      pdf);
-                                                                  Directory
-                                                                      directory =
-                                                                      await getApplicationDocumentsDirectory();
-                                                                  String
-                                                                      documentPath =
-                                                                      directory
-                                                                          .path;
-
-                                                                  String
-                                                                      fullPath =
-                                                                      documentPath +
-                                                                          "/$filename";
-                                                                  print(
-                                                                      ' full path name $fullPath');
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              PdfPreviewScreen(
-                                                                        path:
-                                                                            fullPath,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                title: Text(
-                                                                  'عرض الوصفة الطبية بصيغة pdf',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color:
-                                                                        kBlueColor,
-                                                                    fontSize:
-                                                                        20.0,
-                                                                  ),
-                                                                ),
-                                                                trailing: Icon(Icons
-                                                                    .keyboard_arrow_left),
-                                                              ),
-                                                              ListTileDivider(
-                                                                color:
-                                                                    kGreyColor,
-                                                              ),
-                                                              // Download prescription in External storage at Files App
-                                                              ListTile(
-                                                                onTap:
-                                                                    () async {
-                                                                  var doc = await FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'Doctors')
-                                                                      .doc(
-                                                                          prescriberID)
-                                                                      .get();
-
-                                                                  String
-                                                                      doctorName =
-                                                                      doc.data()[
-                                                                          'doctor-name'];
-                                                                  String
-                                                                      tempDoctorSpeciality =
-                                                                      doc.data()[
-                                                                          'speciality'];
-                                                                  String
-                                                                      doctorSpeciality;
-
-                                                                  if (tempDoctorSpeciality ==
-                                                                      'طبيب قلب') {
-                                                                    doctorSpeciality =
-                                                                        'cardiologist';
-                                                                  } else if (tempDoctorSpeciality ==
-                                                                      'طبيب باطنية') {
-                                                                    doctorSpeciality =
-                                                                        'Internal medicine physicians';
-                                                                  } else if (tempDoctorSpeciality ==
-                                                                      'طبيب أسرة') {
-                                                                    doctorSpeciality =
-                                                                        'family physician';
-                                                                  } else {
-                                                                    doctorSpeciality =
-                                                                        'Psychologist';
-                                                                  }
-                                                                  //create a pdf document
-                                                                  pw.Document
-                                                                      pdf1 =
-                                                                      new pw
-                                                                          .Document();
-                                                                  // write to pdf document
-                                                                  writeToPdf(
-                                                                    pdf: pdf1,
-                                                                    doctorSpeciality:
-                                                                        doctorSpeciality,
-                                                                    prescriptionNo:
-                                                                        '${prescription.data()['prescription-id']}',
-                                                                    hospitalPhoneNumber:
-                                                                        hospitalPhoneNumber,
-                                                                    doctorSignature:
-                                                                        doctorName,
-                                                                    allergies:
-                                                                        allergies,
-                                                                    hospitalName:
-                                                                        hospitalName,
-                                                                    doctorName:
-                                                                        '',
-                                                                    date: prescription
-                                                                            .data()[
-                                                                        'prescription-creation-date'],
-                                                                    patientName:
-                                                                        patientName,
-                                                                    gender:
-                                                                        gender,
-                                                                    age: age,
-                                                                    prescription:
-                                                                        '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
-                                                                    refill: prescription
-                                                                        .data()[
-                                                                            'refill']
-                                                                        .toString(),
-                                                                  );
-                                                                  setState(() {
-                                                                    savePdfFile(
-                                                                            'p-${prescription.data()['prescription-id']}.pdf',
-                                                                            pdf1)
-                                                                        .then((value) =>
-                                                                            Flushbar(
-                                                                              backgroundColor: Colors.white,
-                                                                              borderRadius: 4.0,
-                                                                              margin: EdgeInsets.all(8.0),
-                                                                              duration: Duration(seconds: 4),
-                                                                              messageText: Text(
-                                                                                ' تم تحميل الوصفة بنجاح.',
-                                                                                style: TextStyle(
-                                                                                  color: kBlueColor,
-                                                                                  fontFamily: 'Almarai',
+                                                                        )
+                                                                            : Column(
+                                                                          children: [
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 1 )',
+                                                                                  style: ksubBoldLabelTextStyle,
                                                                                 ),
-                                                                                textAlign: TextAlign.center,
-                                                                              ),
-                                                                            )..show(context));
-                                                                  });
-
-                                                                  showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (BuildContext
-                                                                            context) {
-                                                                      downloadedButton =
-                                                                          FlatButton(
-                                                                        child: Text(
-                                                                            'حسنا'),
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                        },
-                                                                      );
-                                                                      return AlertDialog(
-                                                                        title: Text(
-                                                                            'أذهب الى \n Files >> Show internal storage >> your device >> Download',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: kBlueColor,
-                                                                              fontFamily: 'Almarai',
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['instruction-note']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                            textAlign:
-                                                                                TextAlign.center),
-                                                                        titleTextStyle: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                        actions: [
-                                                                          downloadedButton,
-                                                                        ],
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.all(Radius.circular(25)),
+                                                                            SizedBox(
+                                                                              height: 10,
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 2 )',
+                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['note_1']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 10,
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 3 )',
+                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['note_2']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
                                                                         ),
-                                                                        elevation:
-                                                                            24.0,
-                                                                      );
-                                                                    },
-                                                                  );
-                                                                },
-                                                                title: Text(
-                                                                  'تحميل الوصفة الطبية',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color:
-                                                                        kBlueColor,
-                                                                    fontSize:
-                                                                        20.0,
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                                trailing: Icon(Icons
-                                                                    .keyboard_arrow_left),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'عدد مرات إعادة العبئة',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 15.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['refill']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          FutureBuilder(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('/Doctors')
+                                                  .doc(prescriberID)
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                      child: CircularProgressIndicator(
+                                                          backgroundColor:
+                                                          Colors.transparent,
+                                                          valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              Colors
+                                                                  .transparent)));
+                                                }
+                                                DocumentSnapshot doc =
+                                                    snapshot.data;
+                                                String doctorName =
+                                                doc.data()['doctor-name'];
+                                                String tempDoctorSpeciality =
+                                                doc.data()['speciality'];
+                                                String doctorSpeciality;
+                                                String experienceYears = doc
+                                                    .data()['experience-years'];
+                                                String doctorPhoneNumber =
+                                                doc.data()['phone-number'];
+
+                                                if (tempDoctorSpeciality ==
+                                                    'طبيب قلب') {
+                                                  doctorSpeciality =
+                                                  'cardiologist';
+                                                } else if (tempDoctorSpeciality ==
+                                                    'طبيب باطنية') {
+                                                  doctorSpeciality =
+                                                  'Internal medicine physicians';
+                                                } else if (tempDoctorSpeciality ==
+                                                    'طبيب أسرة') {
+                                                  doctorSpeciality =
+                                                  'family physician';
+                                                } else {
+                                                  doctorSpeciality =
+                                                  'Psychologist';
+                                                }
+
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          'الواصف',
+                                                          style:
+                                                          ksubBoldLabelTextStyle,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 15.0,
+                                                        ),
+                                                        Text(
+                                                          'د.  $doctorName',
+                                                          style: TextStyle(
+                                                            color: Colors.black45,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  // onPressed: () async {
-                                                  //   writeToPdf();
-                                                  //   await savePdfFile(
-                                                  //       'example.pdf');
-
-                                                  color: klighterColor,
-                                                  shape: RoundedRectangleBorder(
-                                                      side: BorderSide(
-                                                          color: kGreyColor,
-                                                          width: 2),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  child: Text("عرض"),
-                                                ),
-                                                SizedBox(
-                                                  width: 10.0,
-                                                ),
-
-                                                //allow request refill if a month passed and nom of refill is 1 or more
-                                                (difference.months >= 1 ||
-                                                            difference.days >=
-                                                                28) &&
-                                                        refill > 0
-                                                    ? RaisedButton(
-                                                        color: klighterColor,
-                                                        shape: RoundedRectangleBorder(
-                                                            side: BorderSide(
-                                                                color:
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20),
+                                                      child: IconButton(
+                                                        icon: Icon(
+                                                            Icons.info_outline),
+                                                        onPressed: () {
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                return Container(
+                                                                  height: 200,
+                                                                  child: Card(
+                                                                    shape:
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          15.0),
+                                                                    ),
+                                                                    color:
                                                                     kGreyColor,
-                                                                width: 2),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        child: Text(
-                                                            "طلب إعادة تعبئة"),
-                                                        onPressed: () async {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  '/Patient')
-                                                              .doc(widget.uid)
-                                                              .collection(
-                                                                  '/Prescriptions')
-                                                              .doc(prescription
-                                                                  .id)
-                                                              .update({
-                                                            'status':
-                                                                'requested refill'
-                                                          });
+                                                                    child: Column(
+                                                                      children: [
+                                                                        ListTile(
+                                                                          title:
+                                                                          Text(
+                                                                            'معلومات عن الطبيب',
+                                                                            textAlign:
+                                                                            TextAlign.center,
+                                                                            style:
+                                                                            kBoldLabelTextStyle,
+                                                                          ),
+                                                                        ),
+                                                                        Divider(
+                                                                          color:
+                                                                          klighterColor,
+                                                                          thickness:
+                                                                          0.9,
+                                                                          endIndent:
+                                                                          20,
+                                                                          indent:
+                                                                          20,
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                          const EdgeInsets.all(15.0),
+                                                                          child:
+                                                                          Container(
+                                                                            child:
+                                                                            Column(
+                                                                              children: [
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'اسم الطبيب:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 47.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      'د.  $doctorName',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'عدد سنين الخبرة:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$experienceYears',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'مجال الإختصاص:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$doctorSpeciality',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'رقم الهاتف:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 54.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$doctorPhoneNumber',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              });
                                                         },
-                                                      )
-                                                    : SizedBox(),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          FutureBuilder(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('/Pharmacist')
+                                                  .doc(pharmacistID)
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                      child: CircularProgressIndicator(
+                                                          backgroundColor:
+                                                          Colors.transparent,
+                                                          valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              Colors
+                                                                  .transparent)));
+                                                }
+                                                DocumentSnapshot doc =
+                                                    snapshot.data;
+                                                String pharmacistName =
+                                                doc.data()['pharmacist-name'];
+                                                return Row(
+                                                  children: [
+                                                    Text(
+                                                      'الصيدلي',
+                                                      style:
+                                                      ksubBoldLabelTextStyle,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15.0,
+                                                    ),
+                                                    Text(
+                                                      'ص.  $pharmacistName',
+                                                      style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          // buttons
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  //allow creating report if 7 days of more passed
+                                                  (difference.months >= 1 ||
+                                                      difference.days >= 7)
+                                                      ? RaisedButton(
+                                                    color: klighterColor,
+                                                    shape: RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color:
+                                                            kGreyColor,
+                                                            width: 2),
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            10)),
+                                                    child:
+                                                    Text("إنشاء تقرير"),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              fullscreenDialog:
+                                                              true,
+                                                              builder:
+                                                                  (context) =>
+                                                                  CreateReportPage(
+                                                                    uid:
+                                                                    widget.uid,
+                                                                    prescriberID:
+                                                                    prescriberID,
+                                                                    pharmacistID:
+                                                                    pharmacistID,
+                                                                    tradeName:
+                                                                    tradeName,
+                                                                  )));
+                                                    },
+                                                  )
+                                                      : SizedBox(),
+                                                  SizedBox(
+                                                    width: 10.0,
+                                                  ),
+
+                                                  // View and safe pdf
+                                                  RaisedButton(
+                                                    onPressed: () async {
+                                                      showModalBottomSheet(
+                                                        isScrollControlled: true,
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            SingleChildScrollView(
+                                                              child: Container(
+                                                                height: 115,
+                                                                child: Column(
+                                                                  children: [
+                                                                    //Only view prescription without downloading, using pdf viewer
+                                                                    ListTile(
+                                                                      onTap:
+                                                                          () async {
+                                                                        var doc = await FirebaseFirestore
+                                                                            .instance
+                                                                            .collection(
+                                                                            'Doctors')
+                                                                            .doc(
+                                                                            prescriberID)
+                                                                            .get();
+
+                                                                        String
+                                                                        doctorName =
+                                                                        doc.data()[
+                                                                        'doctor-name'];
+                                                                        String
+                                                                        tempDoctorSpeciality =
+                                                                        doc.data()[
+                                                                        'speciality'];
+                                                                        String
+                                                                        doctorSpeciality;
+
+                                                                        if (tempDoctorSpeciality ==
+                                                                            'طبيب قلب') {
+                                                                          doctorSpeciality =
+                                                                          'cardiologist';
+                                                                        } else if (tempDoctorSpeciality ==
+                                                                            'طبيب باطنية') {
+                                                                          doctorSpeciality =
+                                                                          'Internal medicine physicians';
+                                                                        } else if (tempDoctorSpeciality ==
+                                                                            'طبيب أسرة') {
+                                                                          doctorSpeciality =
+                                                                          'family physician';
+                                                                        } else {
+                                                                          doctorSpeciality =
+                                                                          'Psychologist';
+                                                                        }
+
+                                                                        pdf = pw
+                                                                            .Document();
+                                                                        writeToPdf(
+                                                                          pdf: pdf,
+                                                                          doctorSpeciality:
+                                                                          doctorSpeciality,
+                                                                          prescriptionNo:
+                                                                          '${prescription.data()['prescription-id']}',
+                                                                          hospitalPhoneNumber:
+                                                                          hospitalPhoneNumber,
+                                                                          doctorSignature:
+                                                                          doctorName,
+                                                                          allergies:
+                                                                          allergies,
+                                                                          hospitalName:
+                                                                          hospitalName,
+                                                                          doctorName:
+                                                                          '',
+                                                                          date: prescription
+                                                                              .data()[
+                                                                          'prescription-creation-date'],
+                                                                          patientName:
+                                                                          patientName,
+                                                                          gender:
+                                                                          gender,
+                                                                          age: age,
+                                                                          prescription:
+                                                                          '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
+                                                                          refill: prescription
+                                                                              .data()[
+                                                                          'refill']
+                                                                              .toString(),
+                                                                        );
+                                                                        await viewPdf(
+                                                                            pdf);
+                                                                        Directory
+                                                                        directory =
+                                                                        await getApplicationDocumentsDirectory();
+                                                                        String
+                                                                        documentPath =
+                                                                            directory
+                                                                                .path;
+
+                                                                        String
+                                                                        fullPath =
+                                                                            documentPath +
+                                                                                "/$filename";
+                                                                        print(
+                                                                            ' full path name $fullPath');
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                            builder:
+                                                                                (context) =>
+                                                                                PdfPreviewScreen(
+                                                                                  path:
+                                                                                  fullPath,
+                                                                                ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      title: Text(
+                                                                        'عرض الوصفة الطبية بصيغة pdf',
+                                                                        style:
+                                                                        TextStyle(
+                                                                          color:
+                                                                          kBlueColor,
+                                                                          fontSize:
+                                                                          20.0,
+                                                                        ),
+                                                                      ),
+                                                                      trailing: Icon(Icons
+                                                                          .keyboard_arrow_left),
+                                                                    ),
+                                                                    ListTileDivider(
+                                                                      color:
+                                                                      kGreyColor,
+                                                                    ),
+                                                                    // Download prescription in External storage at Files App
+                                                                    ListTile(
+                                                                      onTap:
+                                                                          () async {
+                                                                        var doc = await FirebaseFirestore
+                                                                            .instance
+                                                                            .collection(
+                                                                            'Doctors')
+                                                                            .doc(
+                                                                            prescriberID)
+                                                                            .get();
+
+                                                                        String
+                                                                        doctorName =
+                                                                        doc.data()[
+                                                                        'doctor-name'];
+                                                                        String
+                                                                        tempDoctorSpeciality =
+                                                                        doc.data()[
+                                                                        'speciality'];
+                                                                        String
+                                                                        doctorSpeciality;
+
+                                                                        if (tempDoctorSpeciality ==
+                                                                            'طبيب قلب') {
+                                                                          doctorSpeciality =
+                                                                          'cardiologist';
+                                                                        } else if (tempDoctorSpeciality ==
+                                                                            'طبيب باطنية') {
+                                                                          doctorSpeciality =
+                                                                          'Internal medicine physicians';
+                                                                        } else if (tempDoctorSpeciality ==
+                                                                            'طبيب أسرة') {
+                                                                          doctorSpeciality =
+                                                                          'family physician';
+                                                                        } else {
+                                                                          doctorSpeciality =
+                                                                          'Psychologist';
+                                                                        }
+                                                                        //create a pdf document
+                                                                        pw.Document
+                                                                        pdf1 =
+                                                                        new pw
+                                                                            .Document();
+                                                                        // write to pdf document
+                                                                        writeToPdf(
+                                                                          pdf: pdf1,
+                                                                          doctorSpeciality:
+                                                                          doctorSpeciality,
+                                                                          prescriptionNo:
+                                                                          '${prescription.data()['prescription-id']}',
+                                                                          hospitalPhoneNumber:
+                                                                          hospitalPhoneNumber,
+                                                                          doctorSignature:
+                                                                          doctorName,
+                                                                          allergies:
+                                                                          allergies,
+                                                                          hospitalName:
+                                                                          hospitalName,
+                                                                          doctorName:
+                                                                          '',
+                                                                          date: prescription
+                                                                              .data()[
+                                                                          'prescription-creation-date'],
+                                                                          patientName:
+                                                                          patientName,
+                                                                          gender:
+                                                                          gender,
+                                                                          age: age,
+                                                                          prescription:
+                                                                          '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
+                                                                          refill: prescription
+                                                                              .data()[
+                                                                          'refill']
+                                                                              .toString(),
+                                                                        );
+                                                                        setState(() {
+                                                                          savePdfFile(
+                                                                              'p-${prescription.data()['prescription-id']}.pdf',
+                                                                              pdf1)
+                                                                              .then((value) =>
+                                                                          Flushbar(
+                                                                            backgroundColor: Colors.white,
+                                                                            borderRadius: 4.0,
+                                                                            margin: EdgeInsets.all(8.0),
+                                                                            duration: Duration(seconds: 4),
+                                                                            messageText: Text(
+                                                                              ' تم تحميل الوصفة بنجاح.',
+                                                                              style: TextStyle(
+                                                                                color: kBlueColor,
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          )..show(context));
+                                                                        });
+
+                                                                        showDialog(
+                                                                          context:
+                                                                          context,
+                                                                          builder:
+                                                                              (BuildContext
+                                                                          context) {
+                                                                            downloadedButton =
+                                                                                FlatButton(
+                                                                                  child: Text(
+                                                                                      'حسنا'),
+                                                                                  onPressed:
+                                                                                      () {
+                                                                                    Navigator.pop(
+                                                                                        context);
+                                                                                  },
+                                                                                );
+                                                                            return AlertDialog(
+                                                                              title: Text(
+                                                                                  'أذهب الى \n Files >> Show internal storage >> your device >> Download',
+                                                                                  style:
+                                                                                  TextStyle(
+                                                                                    color: kBlueColor,
+                                                                                    fontFamily: 'Almarai',
+                                                                                  ),
+                                                                                  textAlign:
+                                                                                  TextAlign.center),
+                                                                              titleTextStyle: TextStyle(
+                                                                                  fontSize:
+                                                                                  15,
+                                                                                  fontWeight:
+                                                                                  FontWeight.bold),
+                                                                              actions: [
+                                                                                downloadedButton,
+                                                                              ],
+                                                                              shape:
+                                                                              RoundedRectangleBorder(
+                                                                                borderRadius:
+                                                                                BorderRadius.all(Radius.circular(25)),
+                                                                              ),
+                                                                              elevation:
+                                                                              24.0,
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                      title: Text(
+                                                                        'تحميل الوصفة الطبية',
+                                                                        style:
+                                                                        TextStyle(
+                                                                          color:
+                                                                          kBlueColor,
+                                                                          fontSize:
+                                                                          20.0,
+                                                                        ),
+                                                                      ),
+                                                                      trailing: Icon(Icons
+                                                                          .keyboard_arrow_left),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                      );
+                                                    },
+                                                    // onPressed: () async {
+                                                    //   writeToPdf();
+                                                    //   await savePdfFile(
+                                                    //       'example.pdf');
+
+                                                    color: klighterColor,
+                                                    shape: RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color: kGreyColor,
+                                                            width: 2),
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                    child: Text("عرض"),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.0,
+                                                  ),
+
+                                                  //allow request refill if a month passed and nom of refill is 1 or more
+                                                  (difference.months >= 1 ||
+                                                      difference.days >=
+                                                          28) &&
+                                                      refill > 0
+                                                      ? RaisedButton(
+                                                    color: klighterColor,
+                                                    shape: RoundedRectangleBorder(
+                                                        side: BorderSide(
+                                                            color:
+                                                            kGreyColor,
+                                                            width: 2),
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            10)),
+                                                    child: Text(
+                                                        "طلب إعادة تعبئة"),
+                                                    onPressed: () async {
+                                                      showDialog(
+                                                          context:
+                                                          context,
+                                                          builder:
+                                                              (BuildContext context) {
+                                                            yesButton = FlatButton(
+                                                                child: Text('نعم'),
+                                                                onPressed: () async {
+                                                                  await FirebaseFirestore
+                                                                      .instance
+                                                                      .collection(
+                                                                      '/Patient')
+                                                                      .doc(widget.uid)
+                                                                      .collection(
+                                                                      '/Prescriptions')
+                                                                      .doc(prescription.id)
+                                                                      .update({
+                                                                    'status': 'requested refill'
+                                                                  });
+                                                                  Navigator.pop(context);
+                                                                });
+                                                            noButton =
+                                                                FlatButton(
+                                                                  child: Text('لا'),
+                                                                  onPressed: () {
+                                                                    Navigator.pop(context);
+                                                                  },
+                                                                );
+
+                                                            return AlertDialog(
+                                                              title: Text('هل أنت متأكد من طلب إعادة تعبئة؟',
+                                                                  style: TextStyle(
+                                                                    fontFamily: 'Almarai',
+                                                                  ),
+                                                                  textAlign: TextAlign.center),
+                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                              content: Text('عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الصيدلي بقبول الطلب',
+                                                                  style: TextStyle(
+                                                                    color: kBlueColor,
+                                                                    fontFamily: 'Almarai',
+                                                                  ),
+                                                                  textAlign: TextAlign.center),
+                                                              actions: [
+                                                                yesButton,
+                                                                noButton
+                                                              ],
+                                                              shape: RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                              ),
+                                                              elevation: 24.0,
+                                                              backgroundColor: Colors.white,
+                                                            );
+                                                          });
+                                                    },
+                                                  )
+                                                      : SizedBox(),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
+                                ],
+                              ),
+                            );
+                          }
+                          return SizedBox(); 
+                        } else {
+
+                          var difference = Age.dateDifference(
+                              fromDate: startDate,
+                              toDate: DateTime.now(),
+                              includeToDate: false);
+                          print(difference);
+
+                          // delete if 1 month passed
+                          if ((difference.months >= 1 || difference.days >= 28) &&
+                              refill == 0) {
+                            UserManagement().PastPrescriptionsSetUp(
+                              context,
+                              widget.uid,
+                              prescription.data()['prescriber-id'].toString(),
+                              prescription.data()['registerNumber'].toString(),
+                              prescription
+                                  .data()['prescription-creation-date']
+                                  .toString(),
+                              prescription.data()['start-date'].toString(),
+                              prescription.data()['end-date'].toString(),
+                              prescription.data()['scientificName'].toString(),
+                              prescription
+                                  .data()['scientificNameArabic']
+                                  .toString(),
+                              prescription.data()['tradeName'].toString(),
+                              prescription.data()['tradeNameArabic'].toString(),
+                              prescription.data()['strength'].toString(),
+                              prescription.data()['strength-unit'].toString(),
+                              prescription.data()['size'].toString(),
+                              prescription.data()['size-unit'].toString(),
+                              prescription
+                                  .data()['pharmaceutical-form']
+                                  .toString(),
+                              prescription
+                                  .data()['administration-route']
+                                  .toString(),
+                              prescription
+                                  .data()['storage-conditions']
+                                  .toString(),
+                              prescription.data()['price'].toString(),
+                              prescription.data()['dose'],
+                              prescription.data()['quantity'],
+                              prescription.data()['refill'],
+                              prescription.data()['dosing-expire'],
+                              prescription.data()['frequency'],
+                              prescription.data()['instruction-note'].toString(),
+                              prescription.data()['doctor-note'].toString(),
+                            );
+                            FirebaseFirestore.instance
+                                .collection('/Patient')
+                                .doc(widget.uid)
+                                .collection('/Prescriptions')
+                                .doc(prescription.id)
+                                .delete();
+                          }
+
+                          // doctor info
+                          String prescriberID =
+                          prescription.data()['prescriber-id'];
+                          String pharmacistID =
+                          prescription.data()['pharmacist-id'];
+
+                          //search by
+                          String tradeName = prescription.data()['tradeName'];
+                          String dose = prescription.data()['dose'].toString();
+
+                          // search logic
+                          if (tradeName
+                              .toLowerCase()
+                              .contains(searchValue.toLowerCase()) ||
+                              tradeName
+                                  .toUpperCase()
+                                  .contains(searchValue.toUpperCase()) ||
+                              dose
+                                  .toLowerCase()
+                                  .contains(searchValue.toLowerCase()) ||
+                              dose
+                                  .toUpperCase()
+                                  .contains(searchValue.toUpperCase())) {
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              color: kGreyColor,
+                              margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      // TODO: change it to different names maybe?
+                                      prescription.data()['tradeName'],
+                                      style: kBoldLabelTextStyle,
+                                    ),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(
+                                        prescription
+                                            .data()['prescription-creation-date'],
+                                        style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15.0,
+                                            letterSpacing: 2.0),
+                                      ),
+                                    ),
+                                    trailing: OutlinedButton.icon(
+                                      icon: Icon(
+                                          Icons.assignment_turned_in_outlined,
+                                          color: Colors.green),
+                                      label: Text(
+                                        "${prescription.data()['status']}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17,
+                                            color: kBlueColor),
+                                      ),
+                                      onPressed: null,
+                                      style: ElevatedButton.styleFrom(
+                                        side: BorderSide(
+                                            width: 2.0, color: kBlueColor),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(32.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: klighterColor,
+                                    thickness: 0.9,
+                                    endIndent: 20,
+                                    indent: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'الاسم العلمي',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 15.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['scientificName']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'الجرعة',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 65.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['strength-unit']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['strength']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'شكل الجرعة',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 19.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['pharmaceutical-form']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'التكرار',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 65.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['frequency']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'تعليمات',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 50.0,
+                                              ),
+                                              InkWell(
+                                                child: Text(
+                                                  'انقر هنا للقراءة',
+                                                  style: TextStyle(
+                                                    color: Colors.black45,
+                                                    fontSize: 15.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return Container(
+                                                          height: 250,
+                                                          child: Card(
+                                                            shape:
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                  15.0),
+                                                            ),
+                                                            color: kGreyColor,
+                                                            child: Column(
+                                                              children: [
+                                                                ListTile(
+                                                                  title: Text(
+                                                                    'تعليمات عن الوصفة',
+                                                                    textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                    style:
+                                                                    kBoldLabelTextStyle,
+                                                                  ),
+                                                                ),
+                                                                Divider(
+                                                                  color:
+                                                                  klighterColor,
+                                                                  thickness: 0.9,
+                                                                  endIndent: 20,
+                                                                  indent: 20,
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                      15.0),
+                                                                  child:
+                                                                  Container(
+                                                                    child: Column(
+                                                                      mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceEvenly,
+                                                                      children: [
+                                                                        prescription.data()['note_2'] ==
+                                                                            ''
+                                                                            ? Padding(
+                                                                          padding: const EdgeInsets.only(right: 80.0),
+                                                                          child: Column(
+                                                                            children: [
+                                                                              Row(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    '( 1 )',
+                                                                                    style: ksubBoldLabelTextStyle,
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    width: 15.0,
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      '${prescription.data()['instruction-note']}',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              SizedBox(
+                                                                                height: 10,
+                                                                              ),
+                                                                              Row(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    '( 2 )',
+                                                                                    style: ksubBoldLabelTextStyle,
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    width: 15.0,
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: Text(
+                                                                                      '${prescription.data()['note_1']}',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )
+                                                                            : Column(
+                                                                          children: [
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 1 )',
+                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['instruction-note']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 10,
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 2 )',
+                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['note_1']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 10,
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Text(
+                                                                                  '( 3 )',
+                                                                                  style: ksubBoldLabelTextStyle,
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width: 15.0,
+                                                                                ),
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    '${prescription.data()['note_2']}',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.black45,
+                                                                                      fontSize: 15.0,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'عدد مرات إعادة العبئة',
+                                                style: ksubBoldLabelTextStyle,
+                                              ),
+                                              SizedBox(
+                                                width: 15.0,
+                                              ),
+                                              Text(
+                                                '${prescription.data()['refill']}',
+                                                style: TextStyle(
+                                                  color: Colors.black45,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          FutureBuilder(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('/Doctors')
+                                                  .doc(prescriberID)
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                      child: CircularProgressIndicator(
+                                                          backgroundColor:
+                                                          Colors.transparent,
+                                                          valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              Colors
+                                                                  .transparent)));
+                                                }
+                                                DocumentSnapshot doc =
+                                                    snapshot.data;
+                                                String doctorName =
+                                                doc.data()['doctor-name'];
+                                                String tempDoctorSpeciality =
+                                                doc.data()['speciality'];
+                                                String doctorSpeciality;
+                                                String experienceYears = doc
+                                                    .data()['experience-years'];
+                                                String doctorPhoneNumber =
+                                                doc.data()['phone-number'];
+
+                                                if (tempDoctorSpeciality ==
+                                                    'طبيب قلب') {
+                                                  doctorSpeciality =
+                                                  'cardiologist';
+                                                } else if (tempDoctorSpeciality ==
+                                                    'طبيب باطنية') {
+                                                  doctorSpeciality =
+                                                  'Internal medicine physicians';
+                                                } else if (tempDoctorSpeciality ==
+                                                    'طبيب أسرة') {
+                                                  doctorSpeciality =
+                                                  'family physician';
+                                                } else {
+                                                  doctorSpeciality =
+                                                  'Psychologist';
+                                                }
+
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          'الواصف',
+                                                          style:
+                                                          ksubBoldLabelTextStyle,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 15.0,
+                                                        ),
+                                                        Text(
+                                                          'د.  $doctorName',
+                                                          style: TextStyle(
+                                                            color: Colors.black45,
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20),
+                                                      child: IconButton(
+                                                        icon: Icon(
+                                                            Icons.info_outline),
+                                                        onPressed: () {
+                                                          showModalBottomSheet(
+                                                              context: context,
+                                                              builder: (context) {
+                                                                return Container(
+                                                                  height: 200,
+                                                                  child: Card(
+                                                                    shape:
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          15.0),
+                                                                    ),
+                                                                    color:
+                                                                    kGreyColor,
+                                                                    child: Column(
+                                                                      children: [
+                                                                        ListTile(
+                                                                          title:
+                                                                          Text(
+                                                                            'معلومات عن الطبيب',
+                                                                            textAlign:
+                                                                            TextAlign.center,
+                                                                            style:
+                                                                            kBoldLabelTextStyle,
+                                                                          ),
+                                                                        ),
+                                                                        Divider(
+                                                                          color:
+                                                                          klighterColor,
+                                                                          thickness:
+                                                                          0.9,
+                                                                          endIndent:
+                                                                          20,
+                                                                          indent:
+                                                                          20,
+                                                                        ),
+                                                                        Padding(
+                                                                          padding:
+                                                                          const EdgeInsets.all(15.0),
+                                                                          child:
+                                                                          Container(
+                                                                            child:
+                                                                            Column(
+                                                                              children: [
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'اسم الطبيب:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 47.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      'د.  $doctorName',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'عدد سنين الخبرة:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$experienceYears',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'مجال الإختصاص:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 15.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$doctorSpeciality',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                Row(
+                                                                                  children: [
+                                                                                    Text(
+                                                                                      'رقم الهاتف:',
+                                                                                      style: ksubBoldLabelTextStyle,
+                                                                                    ),
+                                                                                    SizedBox(
+                                                                                      width: 54.0,
+                                                                                    ),
+                                                                                    Text(
+                                                                                      '$doctorPhoneNumber',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.black45,
+                                                                                        fontSize: 15.0,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          FutureBuilder(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('/Pharmacist')
+                                                  .doc(pharmacistID)
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                      child: CircularProgressIndicator(
+                                                          backgroundColor:
+                                                          Colors.transparent,
+                                                          valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              Colors
+                                                                  .transparent)));
+                                                }
+                                                DocumentSnapshot doc =
+                                                    snapshot.data;
+                                                String pharmacistName =
+                                                doc.data()['pharmacist-name'];
+                                                return Row(
+                                                  children: [
+                                                    Text(
+                                                      'الصيدلي',
+                                                      style:
+                                                      ksubBoldLabelTextStyle,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 15.0,
+                                                    ),
+                                                    Text(
+                                                      'ص.  $pharmacistName',
+                                                      style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                          Divider(
+                                            color: klighterColor,
+                                            thickness: 0.9,
+                                            endIndent: 20,
+                                            indent: 20,
+                                          ),
+                                          // buttons
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              // View and safe pdf
+                                              RaisedButton(
+                                                onPressed: () async {
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        SingleChildScrollView(
+                                                          child: Container(
+                                                            height: 115,
+                                                            child: Column(
+                                                              children: [
+                                                                //Only view prescription without downloading, using pdf viewer
+                                                                ListTile(
+                                                                  onTap:
+                                                                      () async {
+                                                                    var doc = await FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                        'Doctors')
+                                                                        .doc(
+                                                                        prescriberID)
+                                                                        .get();
+
+                                                                    String
+                                                                    doctorName =
+                                                                    doc.data()[
+                                                                    'doctor-name'];
+                                                                    String
+                                                                    tempDoctorSpeciality =
+                                                                    doc.data()[
+                                                                    'speciality'];
+                                                                    String
+                                                                    doctorSpeciality;
+
+                                                                    if (tempDoctorSpeciality ==
+                                                                        'طبيب قلب') {
+                                                                      doctorSpeciality =
+                                                                      'cardiologist';
+                                                                    } else if (tempDoctorSpeciality ==
+                                                                        'طبيب باطنية') {
+                                                                      doctorSpeciality =
+                                                                      'Internal medicine physicians';
+                                                                    } else if (tempDoctorSpeciality ==
+                                                                        'طبيب أسرة') {
+                                                                      doctorSpeciality =
+                                                                      'family physician';
+                                                                    } else {
+                                                                      doctorSpeciality =
+                                                                      'Psychologist';
+                                                                    }
+
+                                                                    pdf = pw
+                                                                        .Document();
+                                                                    writeToPdf(
+                                                                      pdf: pdf,
+                                                                      doctorSpeciality:
+                                                                      doctorSpeciality,
+                                                                      prescriptionNo:
+                                                                      '${prescription.data()['prescription-id']}',
+                                                                      hospitalPhoneNumber:
+                                                                      hospitalPhoneNumber,
+                                                                      doctorSignature:
+                                                                      doctorName,
+                                                                      allergies:
+                                                                      allergies,
+                                                                      hospitalName:
+                                                                      hospitalName,
+                                                                      doctorName:
+                                                                      '',
+                                                                      date: prescription
+                                                                          .data()[
+                                                                      'prescription-creation-date'],
+                                                                      patientName:
+                                                                      patientName,
+                                                                      gender:
+                                                                      gender,
+                                                                      age: age,
+                                                                      prescription:
+                                                                      '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
+                                                                      refill: prescription
+                                                                          .data()[
+                                                                      'refill']
+                                                                          .toString(),
+                                                                    );
+                                                                    await viewPdf(
+                                                                        pdf);
+                                                                    Directory
+                                                                    directory =
+                                                                    await getApplicationDocumentsDirectory();
+                                                                    String
+                                                                    documentPath =
+                                                                        directory
+                                                                            .path;
+
+                                                                    String
+                                                                    fullPath =
+                                                                        documentPath +
+                                                                            "/$filename";
+                                                                    print(
+                                                                        ' full path name $fullPath');
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                            PdfPreviewScreen(
+                                                                              path:
+                                                                              fullPath,
+                                                                            ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  title: Text(
+                                                                    'عرض الوصفة الطبية بصيغة pdf',
+                                                                    style:
+                                                                    TextStyle(
+                                                                      color:
+                                                                      kBlueColor,
+                                                                      fontSize:
+                                                                      20.0,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: Icon(Icons
+                                                                      .keyboard_arrow_left),
+                                                                ),
+                                                                ListTileDivider(
+                                                                  color:
+                                                                  kGreyColor,
+                                                                ),
+                                                                // Download prescription in External storage at Files App
+                                                                ListTile(
+                                                                  onTap:
+                                                                      () async {
+                                                                    var doc = await FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                        'Doctors')
+                                                                        .doc(
+                                                                        prescriberID)
+                                                                        .get();
+
+                                                                    String
+                                                                    doctorName =
+                                                                    doc.data()[
+                                                                    'doctor-name'];
+                                                                    String
+                                                                    tempDoctorSpeciality =
+                                                                    doc.data()[
+                                                                    'speciality'];
+                                                                    String
+                                                                    doctorSpeciality;
+
+                                                                    if (tempDoctorSpeciality ==
+                                                                        'طبيب قلب') {
+                                                                      doctorSpeciality =
+                                                                      'cardiologist';
+                                                                    } else if (tempDoctorSpeciality ==
+                                                                        'طبيب باطنية') {
+                                                                      doctorSpeciality =
+                                                                      'Internal medicine physicians';
+                                                                    } else if (tempDoctorSpeciality ==
+                                                                        'طبيب أسرة') {
+                                                                      doctorSpeciality =
+                                                                      'family physician';
+                                                                    } else {
+                                                                      doctorSpeciality =
+                                                                      'Psychologist';
+                                                                    }
+                                                                    //create a pdf document
+                                                                    pw.Document
+                                                                    pdf1 =
+                                                                    new pw
+                                                                        .Document();
+                                                                    // write to pdf document
+                                                                    writeToPdf(
+                                                                      pdf: pdf1,
+                                                                      doctorSpeciality:
+                                                                      doctorSpeciality,
+                                                                      prescriptionNo:
+                                                                      '${prescription.data()['prescription-id']}',
+                                                                      hospitalPhoneNumber:
+                                                                      hospitalPhoneNumber,
+                                                                      doctorSignature:
+                                                                      doctorName,
+                                                                      allergies:
+                                                                      allergies,
+                                                                      hospitalName:
+                                                                      hospitalName,
+                                                                      doctorName:
+                                                                      '',
+                                                                      date: prescription
+                                                                          .data()[
+                                                                      'prescription-creation-date'],
+                                                                      patientName:
+                                                                      patientName,
+                                                                      gender:
+                                                                      gender,
+                                                                      age: age,
+                                                                      prescription:
+                                                                      '${prescription.data()['scientificName']} -${prescription.data()['strength']}${prescription.data()['strength-unit']} -\n ${prescription.data()['pharmaceutical-form']} - ${prescription.data()['frequency']}',
+                                                                      refill: prescription
+                                                                          .data()[
+                                                                      'refill']
+                                                                          .toString(),
+                                                                    );
+                                                                    setState(() {
+                                                                      savePdfFile(
+                                                                          'p-${prescription.data()['prescription-id']}.pdf',
+                                                                          pdf1)
+                                                                          .then((value) =>
+                                                                      Flushbar(
+                                                                        backgroundColor: Colors.white,
+                                                                        borderRadius: 4.0,
+                                                                        margin: EdgeInsets.all(8.0),
+                                                                        duration: Duration(seconds: 4),
+                                                                        messageText: Text(
+                                                                          ' تم تحميل الوصفة بنجاح.',
+                                                                          style: TextStyle(
+                                                                            color: kBlueColor,
+                                                                            fontFamily: 'Almarai',
+                                                                          ),
+                                                                          textAlign: TextAlign.center,
+                                                                        ),
+                                                                      )..show(context));
+                                                                    });
+
+                                                                    showDialog(
+                                                                      context:
+                                                                      context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                      context) {
+                                                                        downloadedButton =
+                                                                            FlatButton(
+                                                                              child: Text(
+                                                                                  'حسنا'),
+                                                                              onPressed:
+                                                                                  () {
+                                                                                Navigator.pop(
+                                                                                    context);
+                                                                              },
+                                                                            );
+                                                                        return AlertDialog(
+                                                                          title: Text(
+                                                                              'أذهب الى \n Files >> Show internal storage >> your device >> Download',
+                                                                              style:
+                                                                              TextStyle(
+                                                                                color: kBlueColor,
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign:
+                                                                              TextAlign.center),
+                                                                          titleTextStyle: TextStyle(
+                                                                              fontSize:
+                                                                              15,
+                                                                              fontWeight:
+                                                                              FontWeight.bold),
+                                                                          actions: [
+                                                                            downloadedButton,
+                                                                          ],
+                                                                          shape:
+                                                                          RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                            BorderRadius.all(Radius.circular(25)),
+                                                                          ),
+                                                                          elevation:
+                                                                          24.0,
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  title: Text(
+                                                                    'تحميل الوصفة الطبية',
+                                                                    style:
+                                                                    TextStyle(
+                                                                      color:
+                                                                      kBlueColor,
+                                                                      fontSize:
+                                                                      20.0,
+                                                                    ),
+                                                                  ),
+                                                                  trailing: Icon(Icons
+                                                                      .keyboard_arrow_left),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                  );
+                                                },
+                                                // onPressed: () async {
+                                                //   writeToPdf();
+                                                //   await savePdfFile(
+                                                //       'example.pdf');
+
+                                                color: klighterColor,
+                                                shape: RoundedRectangleBorder(
+                                                    side: BorderSide(
+                                                        color: kGreyColor,
+                                                        width: 2),
+                                                    borderRadius:
+                                                    BorderRadius.circular(
+                                                        10)),
+                                                child: Text("عرض"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return SizedBox();
                         }
-                        return SizedBox();
                       });
                 }
               }),

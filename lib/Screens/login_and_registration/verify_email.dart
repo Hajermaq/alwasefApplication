@@ -149,8 +149,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                             context: context,
                             hospitalName: widget.name,
                             role: widget.role,
-                            doctorUID: '',
-                            pharmacistUID: '');
+                        );
                       }
                     }
                   });
