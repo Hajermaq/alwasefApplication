@@ -71,8 +71,7 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
                         return Center(
                           child: CircularProgressIndicator(
                               backgroundColor: kGreyColor,
-                              valueColor: AlwaysStoppedAnimation(kBlueColor)
-                          ),
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
                         );
                       }
                       return ListView.builder(
@@ -119,8 +118,8 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
                                               doctor_id: document.data()['uid'],
                                               experienceYears: document
                                                   .data()['experience-years'],
-                                              speciality:
-                                                  document.data()['speciality'],
+                                              speciality: document
+                                                  .data()['doctor-speciality'],
                                             ),
                                           ),
                                         );

@@ -250,6 +250,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                       children: [
                         pw.Text(
                           'Patient Name: $patientName ',
+                          textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(
                             font: myFont,
                             fontSize: 18.0,

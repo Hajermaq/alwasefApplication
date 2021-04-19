@@ -101,12 +101,8 @@ class _DoctorManagementState extends State<DoctorManagement> {
                                       return Text('has no data');
                                     } else {
                                       var doc = snapshot.data;
-                                      String heart =
-                                          doc.docs[0].data()['speciality'];
-
-                                      snapshot.data.docs.forEach((element) {
-                                        element.data()['speciality'];
-                                      });
+                                      String heart = doc.docs[0]
+                                          .data()['doctor-speciality'];
 
                                       List<String> specialities = [
                                         'طبيب قلب',
@@ -281,7 +277,7 @@ class _DoctorManagementState extends State<DoctorManagement> {
                         .doc(widget.doctor_id)
                         .update(
                       {
-                        'speciality': _selectedSpeciality == null
+                        'doctor-speciality': _selectedSpeciality == null
                             ? widget.speciality
                             : _selectedSpeciality,
                       },
@@ -296,32 +292,6 @@ class _DoctorManagementState extends State<DoctorManagement> {
                             : _selectedExperience,
                       },
                     );
-
-                    // Flushbar(
-                    //   backgroundColor:
-                    //   Colors.white,
-                    //   borderRadius: 4.0,
-                    //   margin: EdgeInsets.all(8.0),
-                    //   duration:
-                    //   Duration(seconds: 4),
-                    //   messageText: Text(
-                    //     ' تم إضافة وصفة جديدة لهذا المريض',
-                    //     style: TextStyle(
-                    //       color: kBlueColor,
-                    //       fontFamily: 'Almarai',
-                    //     ),
-                    //     textAlign:
-                    //     TextAlign.center,
-                    //   ),
-                    // )..show(context).then((r) =>
-                    //     Navigator.pop(context));
-                    // } else {
-                    //   // there is an error
-                    //   setState(() {
-                    //     autovalidateMode =
-                    //         AutovalidateMode.always;
-                    //   });
-                    // }
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

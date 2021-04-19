@@ -22,6 +22,7 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
 
   //Variables
   String password;
+  String reEnterPassword;
   String email;
   String hospitalname;
   String role = 'موظف استقبال';
@@ -91,9 +92,9 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 40.0, bottom: 20.0),
+                    padding: const EdgeInsets.only(top: 70.0, bottom: 40),
                     child: Text(
-                      'انشئ حساب لمستشفى',
+                      'أنشئ حسابـا لمستشفى',
                       textAlign: TextAlign.center,
                       style: kRegisterUsersHeadlineStyle,
                     ),
@@ -107,9 +108,6 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                   isObscure: false,
                   color: kButtonColor,
                   hintMessage: 'اسم المستشفى',
-                  onChanged: (value) {
-                    _key.currentState.validate();
-                  },
                   onSaved: (value) {
                     hospitalname = value;
                   },
@@ -123,9 +121,6 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                   isObscure: false,
                   color: kButtonColor,
                   hintMessage: 'البريد الإلكتروني',
-                  onChanged: (value) {
-                    _key.currentState.validate();
-                  },
                   onSaved: (value) {
                     email = value;
                   },
@@ -135,16 +130,31 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
                   height: 20.0,
                 ),
                 RoundTextFields(
-                  validator: Validation().validatePassword,
+                    validator: Validation().validatePassword,
+                    isObscure: true,
+                    color: kButtonColor,
+                    hintMessage: 'كلمة المرور',
+                    onSaved: (value) {
+                      password = value;
+                    },
+                    onChanged: (value) {
+                      reEnterPassword = value;
+                    }),
+                SizedBox(
+                  height: 20.0,
+                ),
+                RoundTextFields(
+                  validator: (value) => value != reEnterPassword
+                      ? '\u26A0 كلمة المرور غير متطابقة  '
+                      : null,
                   isObscure: true,
                   color: kButtonColor,
-                  hintMessage: 'كلمة المرور',
-                  onChanged: (value) {
-                    _key.currentState.validate();
-                  },
-                  onSaved: (value) {
-                    password = value;
-                  },
+                  hintMessage: 'أعد إدخال كلمة المرور',
+                  // onSaved: (value) {
+                  //   password = value;
+                  // },
+                  textInputType: TextInputType.text,
+                  //hiddenPass: true,
                 ),
                 SizedBox(
                   height: 88.0,

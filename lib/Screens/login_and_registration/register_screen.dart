@@ -30,7 +30,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     'مريض',
     'طبيب',
     'صيدلي',
-    'موظف استقبال',
   ];
 
   // Variables
@@ -124,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 6.0,
                     ),
                     RoundTextFields(
                       validator: Validation().validateMessage,
@@ -153,25 +152,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 20.0,
                     ),
                     RoundTextFields(
-                      validator: Validation().validatePassword,
-                      textInputType: TextInputType.text,
-                      isObscure: true,
-                      color: kButtonColor,
-                      hintMessage: 'كلمة المرور',
-                      onSaved: (value) {
-                        password = value;
-                      },
-                      onChanged: (value) {
-                        reEnterPassword = value;
-                      }
-                    ),
+                        validator: Validation().validatePassword,
+                        textInputType: TextInputType.text,
+                        isObscure: true,
+                        color: kButtonColor,
+                        hintMessage: 'كلمة المرور',
+                        onSaved: (value) {
+                          password = value;
+                        },
+                        onChanged: (value) {
+                          reEnterPassword = value;
+                        }),
                     SizedBox(
                       height: 20.0,
                     ),
                     RoundTextFields(
-                      validator: (value) =>
-                      value != reEnterPassword
-                          ? 'كلمة المرور غير متطابقة'
+                      validator: (value) => value != reEnterPassword
+                          ? '\u26A0 كلمة المرور غير متطابقة  '
                           : null,
                       isObscure: true,
                       color: kButtonColor,
@@ -182,7 +179,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       textInputType: TextInputType.text,
                       //hiddenPass: true,
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(left: 50, right: 50),
                       child: DropdownButtonFormField(
@@ -210,18 +206,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         value: _selectedSpeciality,
                         items: _specialities.map((speciality) {
                           return DropdownMenuItem(
-                            child: new Text(speciality, style: GoogleFonts.almarai()),
+                            child: new Text(speciality,
+                                style: GoogleFonts.almarai()),
                             value: speciality,
                             onTap: () {
                               role = speciality;
                             },
                           );
                         }).toList(),
-
                         validator: (value) =>
-                        value == null
-                            ? 'هذا الحقل مطلوب'
-                            : null,
+                            value == null ? ' \u26A0 هذا الحقل مطلوب' : null,
                         onSaved: (newValue) {
                           setState(() {
                             _selectedSpeciality = newValue;
@@ -233,7 +227,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(
                       height: 20.0,
                     ),
-
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('/Hospital')
@@ -247,9 +240,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           for (var document in documents) {
                             hospitalsNames.add(
                               DropdownMenuItem(
-                                child: Text(
-                                  document.get('hospital-name')
-                                ),
+                                child: Text(document.get('hospital-name')),
                                 value: '${document.id}',
                               ),
                             );
@@ -279,9 +270,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               icon: Icon(Icons.arrow_drop_down),
                               items: hospitalsNames,
                               value: hospital_UID,
-                              validator: (value) =>
-                              value == null
-                                  ? 'هذا الحقل مطلوب'
+                              validator: (value) => value == null
+                                  ? ' \u26A0 هذا الحقل مطلوب'
                                   : null,
                               onSaved: (newValue) {
                                 setState(() {
@@ -295,7 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }, // end of builder
                     ),
                     SizedBox(
-                      height: 48.0,
+                      height: 30.0,
                     ),
                     RoundRaisedButton(
                       text: 'سجل',

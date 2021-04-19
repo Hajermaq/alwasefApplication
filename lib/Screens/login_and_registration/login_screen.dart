@@ -56,6 +56,9 @@ class _LogInScreenState extends State<LogInScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                SizedBox(
+                  height: 30,
+                ),
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
                   height: 200.0,
@@ -66,7 +69,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
@@ -80,10 +83,10 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       Text(
-                        ' سجل دخولك باستخدام البريد الإلكتروني وكلمة المرور.',
+                        ' سجل دخولك باستخدام \nالبريد الإلكتروني وكلمة المرور.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16.0,
@@ -93,7 +96,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 30.0,
+                  height: 60.0,
                 ),
                 RoundTextFields(
                   validator: Validation().validateEmail,
@@ -166,14 +169,6 @@ class _LogInScreenState extends State<LogInScreen> {
                             });
                           });
                         });
-                        // Navigator.pushReplacement(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => LoadingScreen(
-                        //             password: password,
-                        //             email: email,
-                        //           )),
-                        // );
                         //patient
                         await auth
                             .signInWithEmailAndPassword(
@@ -293,7 +288,7 @@ class _LogInScreenState extends State<LogInScreen> {
                               );
                               return AlertDialog(
                                 title: Text(
-                                  'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "نسيت كلمة المرور" لإعادة ضبطها. ',
+                                  'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "لاأتذكر كلمة المرور" لإعادة ضبطها. ',
                                   style: TextStyle(
                                     color: kBlueColor,
                                     fontFamily: 'Almarai',
@@ -402,7 +397,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       );
                     },
                     child: Text(
-                      'لا اتذكر كلمة المرور؟',
+                      'لا أتذكر كلمة المرور؟',
                       textAlign: TextAlign.center,
                     ),
                   ),

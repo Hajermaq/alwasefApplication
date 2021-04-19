@@ -1,16 +1,8 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
-import 'package:alwasef_app/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
 import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
-import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import '../all_admin_screen/admin_page.dart';
 
 class UserManagement {
   UserManagement({this.currentPatient_uid, this.documentId});
@@ -83,7 +75,6 @@ class UserManagement {
 
   Future<void> newDoctorSetUp({
     context,
-    String password,
     String doctorName,
     String role,
     String hospitalUID,
@@ -109,8 +100,6 @@ class UserManagement {
           'doctor-name': doctorName,
           //email
           'email': email,
-          //pass
-          'password': password,
           //random
           'doctor-speciality': speciality,
           'role': role,
@@ -136,7 +125,6 @@ class UserManagement {
 
   Future<void> newPharmacistSetUp({
     context,
-    String password,
     String pharmacistName,
     String role,
     String hospitalUID,
@@ -161,8 +149,6 @@ class UserManagement {
           'pharmacist-name': pharmacistName,
           //email
           'email': email,
-          //pass
-          'password': password,
           //random
           'role': role,
           'phone-number': phoneNumber,
@@ -189,7 +175,6 @@ class UserManagement {
 
   Future<void> newPatientSetUp({
     context,
-    String password,
     String patientName,
     String role,
     String hospitalUID,
@@ -216,8 +201,6 @@ class UserManagement {
           'patient-name': patientName,
           //email
           'email': email,
-          //password
-          'password': password,
           //random
           'role': role,
           'phone-number': phoneNumber,
@@ -245,8 +228,6 @@ class UserManagement {
     context,
     String role,
     String hospitalName,
-    String doctorUID,
-    String pharmacistUID,
     String phoneNumer,
   }) async {
     try {
@@ -261,8 +242,6 @@ class UserManagement {
 
         await collection.doc(uid).set({
           //ids
-          'doctor-uid': doctorUID,
-          'pharmacist-uid': pharmacistUID,
           'hospital-id': uid,
           //name
           'hospital-name': hospitalName,

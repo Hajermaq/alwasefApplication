@@ -80,6 +80,9 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 30,
+                          ),
                           Card(
                             color: kGreyColor,
                             shape: RoundedRectangleBorder(
@@ -90,32 +93,20 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                               padding: EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
-                                  TextField_1(
-                                    textInputType: TextInputType.text,
-                                    validator: Validation().validateMessage,
-                                    onSaved: (value) {
-                                      medicalDiagnosis = value;
-                                    },
-                                    labelText: 'التشخيص الصحي',
-                                  ),
-                                  Divider(
-                                    color: klighterColor,
-                                    thickness: 0.9,
-                                    endIndent: 20,
-                                    indent: 20,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.all(12),
-                                    height: maxLines * 24.0,
-                                    child: TextField_1(
-                                      labelText: 'تعليمات للمريض',
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
                                       validator: Validation().validateMessage,
-                                      onSaved: (String value) {
-                                        setState(() {
-                                          diagnosisDescription = value;
-                                        });
+                                      style: TextStyle(color: Colors.black54),
+                                      decoration: InputDecoration(
+                                        labelText: 'التشخيص الصحي',
+                                        border: OutlineInputBorder(),
+                                        prefixIcon: Icon(
+                                            Icons.medical_services_outlined),
+                                      ),
+                                      onSaved: (value) {
+                                        medicalDiagnosis = value;
                                       },
-                                      maxLines: maxLines,
                                     ),
                                   ),
                                   Divider(
@@ -124,82 +115,112 @@ class _AddDiagnosisState extends State<AddDiagnosis> {
                                     endIndent: 20,
                                     indent: 20,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.all(12),
-                                    height: maxLines * 24.0,
-                                    child: TextField_1(
-                                      labelText: 'النصيحة الطبية',
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                        labelText: 'وصف التشخيص',
+                                        border: OutlineInputBorder(),
+                                      ),
                                       validator: Validation().validateMessage,
-                                      onSaved: (String value) {
+                                      onSaved: (value) {
+                                        setState(() {
+                                          diagnosisDescription = value;
+                                        });
+                                      },
+                                      //controller: hospCtrl,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: klighterColor,
+                                    thickness: 0.9,
+                                    endIndent: 20,
+                                    indent: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                        labelText: 'النصيحة الطبية',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      validator: Validation().validateMessage,
+                                      onSaved: (value) {
                                         setState(() {
                                           medicalAdvice = value;
                                         });
                                       },
-                                      maxLines: maxLines,
+                                      //controller: hospCtrl,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 100.0, vertical: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50.0,
+                                      child: RaisedButton(
+                                        textColor: Colors.white54,
+                                        color: Colors.white,
+                                        child: Text(
+                                          'إرسال',
+                                          style: TextStyle(
+                                            color: kGreyColor,
+                                            // fontFamily: 'Montserrat',
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          if (_key.currentState.validate()) {
+                                            _key.currentState.save();
+                                            UserManagement().newDiagnosisSetUp(
+                                                context,
+                                                widget.uid,
+                                                prescriberId,
+                                                creationDate,
+                                                medicalDiagnosis,
+                                                diagnosisDescription,
+                                                medicalAdvice);
+                                            Flushbar(
+                                              backgroundColor: Colors.white,
+                                              borderRadius: 4.0,
+                                              margin: EdgeInsets.all(8.0),
+                                              duration: Duration(seconds: 4),
+                                              messageText: Text(
+                                                ' تم إضافة تشخيص جديدة لهذا المريض',
+                                                style: TextStyle(
+                                                  color: kBlueColor,
+                                                  fontFamily: 'Almarai',
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )..show(context).then(
+                                                (r) => Navigator.pop(context));
+                                          } else {
+                                            // there is an error
+                                            setState(() {
+                                              autovalidateMode =
+                                                  AutovalidateMode.always;
+                                            });
+                                          }
+                                        },
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 100.0, vertical: 20.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 50.0,
-                              child: RaisedButton(
-                                textColor: Colors.white54,
-                                color: kGreyColor,
-                                child: Text(
-                                  'إرسال',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    // fontFamily: 'Montserrat',
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  if (_key.currentState.validate()) {
-                                    _key.currentState.save();
-                                    UserManagement().newDiagnosisSetUp(
-                                        context,
-                                        widget.uid,
-                                        prescriberId,
-                                        creationDate,
-                                        medicalDiagnosis,
-                                        diagnosisDescription,
-                                        medicalAdvice);
-                                    Flushbar(
-                                      backgroundColor: Colors.white,
-                                      borderRadius: 4.0,
-                                      margin: EdgeInsets.all(8.0),
-                                      duration: Duration(seconds: 4),
-                                      messageText: Text(
-                                        ' تم إضافة تشخيص جديدة لهذا المريض',
-                                        style: TextStyle(
-                                          color: kBlueColor,
-                                          fontFamily: 'Almarai',
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )..show(context)
-                                        .then((r) => Navigator.pop(context));
-                                  } else {
-                                    // there is an error
-                                    setState(() {
-                                      autovalidateMode =
-                                          AutovalidateMode.always;
-                                    });
-                                  }
-                                },
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                            ),
+                          SizedBox(
+                            height: 30,
                           ),
                         ],
                       ),
