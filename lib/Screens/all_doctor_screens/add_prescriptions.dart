@@ -25,7 +25,8 @@ class AddPrescriptions extends StatefulWidget {
   _AddPrescriptionsState createState() => _AddPrescriptionsState();
 }
 
-class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerProviderStateMixin{
+class _AddPrescriptionsState extends State<AddPrescriptions>
+    with SingleTickerProviderStateMixin {
   //FirrStore
   String prescriberId = FirebaseAuth.instance.currentUser.uid;
   //Data from Api with default value
@@ -61,7 +62,8 @@ class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerPr
   static final DateFormat formatter = DateFormat('yyyy-MM-dd');
   // start date
   String startDate;
-  ValueNotifier<DateTime> tempStartDate = ValueNotifier<DateTime>(DateTime.now());
+  ValueNotifier<DateTime> tempStartDate =
+      ValueNotifier<DateTime>(DateTime.now());
   // end date
   String endDate;
   //Form requirements
@@ -86,8 +88,11 @@ class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerPr
   } //Methods
 
   Future<List<Prescription>> fetchPrescription() async {
-    String URL =
-        "https://script.googleusercontent.com/macros/echo?user_content_key=cZjO7AxQnGr5mEQU49YQ-3MB88SmMHHlsnReCM8fc3VrB0Jmbp6gVSgTMbPyDazhEpcLWrPjyvkfh4NDqrIzSIdQYbaMdEOSm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnOQBGUzymd9dmG3yxLUZhJsOi89FooeW3AOJmSEjWW9Tv86I0CPwvhEbPZSPmNd8uTjl2UHC3vVSohIuEUGeYk7e5IOKNOHuf9z9Jw9Md8uu&lib=MpUICE4vsIfJjj6VE8jMtH_aUQYat3_A-";
+    String URL = "https://script.googleusercontent.com/macros/echo?user_content"
+        "_key=DtUnRVrrV976kfvKU3mNP8xul3ifCzuTgCO75u82suviFYNAWBdvObx6JLtJ4W7P"
+        "M8aaDVaPLQKTe3ntyu5paYYywn0RHb6Im5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_r"
+        "yfhECjZEnAw0OEmvZ6ZgqAm5NuVvpOPxYabOLLgVAlR8GmMtquTES-_KsGjojP8n1DyVcpZpzTBf"
+        "A0REAKN5qDJfrA-Atj5dRUoY4UnnfNz9Jw9Md8uu&lib=MZRMRjEYoeB3skfpJFu14OfaUQYat3_A-";
 
     http.Response response = await http.get(URL);
 
@@ -276,11 +281,14 @@ class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerPr
                                                     child: child,
                                                   );
                                                 },
-                                                initialDate: tempStartDate.value,
+                                                initialDate:
+                                                    tempStartDate.value,
                                                 firstDate: currentValue ??
                                                     DateTime.now(),
                                                 lastDate: DateTime(2070),
-                                              ).then((DateTime dateTime) => tempStartDate.value = dateTime);
+                                              ).then((DateTime dateTime) =>
+                                                  tempStartDate.value =
+                                                      dateTime);
                                             },
                                             onSaved: (value) {
                                               if (value != null) {
@@ -288,7 +296,6 @@ class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerPr
                                                     formatter.format(value);
                                               }
                                             },
-
                                           ),
                                         ),
                                         Padding(
@@ -321,8 +328,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions> with SingleTickerPr
                                                     child: child,
                                                   );
                                                 },
-                                                initialDate: tempStartDate.value ??
-                                                    DateTime.now(),
+                                                initialDate:
+                                                    tempStartDate.value ??
+                                                        DateTime.now(),
                                                 firstDate: tempStartDate.value,
                                                 lastDate: DateTime(2070),
                                               );

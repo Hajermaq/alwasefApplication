@@ -30,17 +30,166 @@ class _LogInScreenState extends State<LogInScreen> {
   String email;
   String password;
   String role;
-  bool lodaing = false;
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
-  @override
-  void initState() {
-    setState(() {
-      lodaing = false;
-    });
-  } //Functions
+  //Functions
+  // Log in user
+  Future<bool> logInUser(
+      {String collectionName,
+      String password,
+      String email,
+      String role}) async {
+    try {
+      await auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        FirebaseFirestore.instance
+            .collection('/$collectionName')
+            .where('email', isEqualTo: value.user.email)
+            .get()
+            .then((value) {
+          value.docs.forEach((element) {
+            if (role == element.data()['role']) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoadingScreen(
+                          role: element.data()['role'],
+                          password: password,
+                          email: email,
+                        )),
+              );
+            }
+          });
+        });
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            okButton = FlatButton(
+              child: Text('حسنا'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            );
+            return AlertDialog(
+              title: Text('لم يتم العثور على مستخدم لهذا البريد الإلكتروني.',
+                  style: TextStyle(
+                    color: kBlueColor,
+                    fontFamily: 'Almarai',
+                  ),
+                  textAlign: TextAlign.center),
+              titleTextStyle:
+                  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              actions: [
+                okButton,
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 24.0,
+            );
+          },
+        );
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            okButton = FlatButton(
+              child: Text('حسنا'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            );
+            return AlertDialog(
+              title: Text(
+                'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "لاأتذكر كلمة المرور" لإعادة ضبطها. ',
+                style: TextStyle(
+                  color: kBlueColor,
+                  fontFamily: 'Almarai',
+                ),
+                textAlign: TextAlign.center,
+              ),
+              titleTextStyle:
+                  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              actions: [
+                okButton,
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 24.0,
+            );
+          },
+        );
+      } else if (e.code == 'too-many-requests') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            okButton = FlatButton(
+              child: Text('حسنا'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            );
+            return AlertDialog(
+              title: Text(
+                  'يوجد محاولات كثيرة لتسجيل الدخول بهذا المستخدم، حاول مرة اخرى لاحقا.',
+                  style: TextStyle(
+                    color: kBlueColor,
+                    fontFamily: 'Almarai',
+                  ),
+                  textAlign: TextAlign.center),
+              titleTextStyle:
+                  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              actions: [
+                okButton,
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 24.0,
+            );
+          },
+        );
+      } else {
+        print(e);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            okButton = FlatButton(
+              child: Text('حسنا'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            );
+            return AlertDialog(
+              title: Text('حدث خطأ غير محدد.',
+                  style: TextStyle(
+                    color: kBlueColor,
+                    fontFamily: 'Almarai',
+                  ),
+                  textAlign: TextAlign.center),
+              titleTextStyle:
+                  TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              actions: [
+                okButton,
+              ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              elevation: 24.0,
+            );
+          },
+        );
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +281,6 @@ class _LogInScreenState extends State<LogInScreen> {
                 SizedBox(
                   height: 48.0,
                 ),
-                lodaing ? CircularProgressIndicator() : Text(''),
                 RoundRaisedButton(
                   text: ' إذهب',
                   onPressed: () async {
@@ -140,238 +288,30 @@ class _LogInScreenState extends State<LogInScreen> {
                       //there is no error
                       _key.currentState.save();
 
-                      try {
-                        // Doctor
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          FirebaseFirestore.instance
-                              .collection('/Doctors')
-                              .where('email', isEqualTo: value.user.email)
-                              .get()
-                              .then((value) {
-                            value.docs.forEach((element) {
-                              if ('طبيب' == element.data()['role']) {
-                                setState(() {
-                                  lodaing = true;
-                                });
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoadingScreen(
-                                            role: element.data()['role'],
-                                            password: password,
-                                            email: email,
-                                          )),
-                                );
-                              }
-                            });
-                          });
-                        });
-                        //patient
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          FirebaseFirestore.instance
-                              .collection('/Patient')
-                              .where('email', isEqualTo: value.user.email)
-                              .get()
-                              .then((value) {
-                            value.docs.forEach((element) {
-                              if ('مريض' == element.data()['role']) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoadingScreen(
-                                            role: element.data()['role'],
-                                            password: password,
-                                            email: email,
-                                          )),
-                                );
-                              }
-                            });
-                          });
-                        });
-                        //pharamacist
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          FirebaseFirestore.instance
-                              .collection('/Pharmacist')
-                              .where('email', isEqualTo: value.user.email)
-                              .get()
-                              .then((value) {
-                            value.docs.forEach((element) {
-                              if ('صيدلي' == element.data()['role']) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoadingScreen(
-                                            role: element.data()['role'],
-                                            password: password,
-                                            email: email,
-                                          )),
-                                );
-                              }
-                            });
-                          });
-                        });
-                        //Hospital
-                        await auth
-                            .signInWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          FirebaseFirestore.instance
-                              .collection('/Hospital')
-                              .where('email', isEqualTo: value.user.email)
-                              .get()
-                              .then((value) {
-                            value.docs.forEach((element) {
-                              if ('موظف استقبال' == element.data()['role']) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoadingScreen(
-                                            role: element.data()['role'],
-                                            password: password,
-                                            email: email,
-                                          )),
-                                );
-                              }
-                            });
-                          });
-                        });
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              okButton = FlatButton(
-                                child: Text('حسنا'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              );
-                              return AlertDialog(
-                                title: Text(
-                                    'لم يتم العثور على مستخدم لهذا البريد الإلكتروني.',
-                                    style: TextStyle(
-                                      color: kBlueColor,
-                                      fontFamily: 'Almarai',
-                                    ),
-                                    textAlign: TextAlign.center),
-                                titleTextStyle: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                actions: [
-                                  okButton,
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                ),
-                                elevation: 24.0,
-                              );
-                            },
-                          );
-                        } else if (e.code == 'wrong-password') {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              okButton = FlatButton(
-                                child: Text('حسنا'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              );
-                              return AlertDialog(
-                                title: Text(
-                                  'كلمة المرور خاطئة. أعد المحاولة، أو انقر على "لاأتذكر كلمة المرور" لإعادة ضبطها. ',
-                                  style: TextStyle(
-                                    color: kBlueColor,
-                                    fontFamily: 'Almarai',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                titleTextStyle: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                actions: [
-                                  okButton,
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                ),
-                                elevation: 24.0,
-                              );
-                            },
-                          );
-                        } else if (e.code == 'too-many-requests') {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              okButton = FlatButton(
-                                child: Text('حسنا'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              );
-                              return AlertDialog(
-                                title: Text(
-                                    'يوجد محاولات كثيرة لتسجيل الدخول بهذا المستخدم، حاول مرة اخرى لاحقا.',
-                                    style: TextStyle(
-                                      color: kBlueColor,
-                                      fontFamily: 'Almarai',
-                                    ),
-                                    textAlign: TextAlign.center),
-                                titleTextStyle: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                actions: [
-                                  okButton,
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                ),
-                                elevation: 24.0,
-                              );
-                            },
-                          );
-                        } else {
-                          print(e);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              okButton = FlatButton(
-                                child: Text('حسنا'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              );
-                              return AlertDialog(
-                                title: Text('حدث خطأ غير محدد.',
-                                    style: TextStyle(
-                                      color: kBlueColor,
-                                      fontFamily: 'Almarai',
-                                    ),
-                                    textAlign: TextAlign.center),
-                                titleTextStyle: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                                actions: [
-                                  okButton,
-                                ],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(25)),
-                                ),
-                                elevation: 24.0,
-                              );
-                            },
-                          );
-                        }
-                      }
+                      // Log in a Doctor
+                      logInUser(
+                          email: email,
+                          password: password,
+                          collectionName: 'Doctors',
+                          role: 'طبيب');
+                      // Log in a Patient
+                      logInUser(
+                          email: email,
+                          password: password,
+                          collectionName: 'Patient',
+                          role: 'مريض');
+                      // Log in a Pharmacist
+                      logInUser(
+                          email: email,
+                          password: password,
+                          collectionName: 'Pharmacist',
+                          role: 'صيدلي');
+                      // Log in a patient Admin/Receptionist
+                      logInUser(
+                          email: email,
+                          password: password,
+                          collectionName: 'Hospital',
+                          role: 'موظف استقبال');
                     } else {
                       // there is an error
                       setState(() {
@@ -409,29 +349,11 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
-
-  Future<bool> DoctorLogIn(String password, String email) async {
-    await auth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      FirebaseFirestore.instance
-          .collection('/Doctors')
-          .where('email', isEqualTo: value.user.email)
-          .get()
-          .then((value) {
-        value.docs.forEach((element) {
-          if ('طبيب' == element.data()['role']) {
-            return true;
-          }
-        });
-      });
-    });
-  }
 }
 
 Future<void> resetPassword(String email, String collectionName,
-    BuildContext context, String currentemail) async {
-  if (email == currentemail) {
+    BuildContext context, String currentEmail) async {
+  if (email == currentEmail) {
     await auth.sendPasswordResetEmail(email: email);
     Flushbar(
       backgroundColor: Colors.white,

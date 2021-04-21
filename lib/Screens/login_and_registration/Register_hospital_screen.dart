@@ -19,7 +19,6 @@ class RegisterHospitalScreen extends StatefulWidget {
 class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   //Firebase
   FirebaseAuth auth = FirebaseAuth.instance;
-
   //Variables
   String password;
   String reEnterPassword;
@@ -29,7 +28,9 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
   //Form requirements
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+
 //Functions
+  // register new user
   Future<void> createUser() async {
     try {
       final authResult = await auth.createUserWithEmailAndPassword(
@@ -48,7 +49,6 @@ class _RegisterHospitalScreenState extends State<RegisterHospitalScreen> {
           ),
         ),
       );
-      // print("Done");
     } catch (e) {
       print(e);
       showDialog(
