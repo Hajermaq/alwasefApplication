@@ -1,27 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\HP\\Desktop\\Hawa\\AndroidStudioProjects\\alwasefApplication\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "outputFile": "C:\\Users\\hajer\\AndroidStudioProjects\\alwasef_app\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\HP\\Desktop\\Hawa\\AndroidStudioProjects\\alwasefApplication\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,281,385,494,614,711",
-                        "endColumns": "143,81,103,108,119,96,73",
-                        "endOffsets": "194,276,380,489,609,706,780"
-                    },
-                    "to": {
-                        "startLines": "113,114,115,116,117,118,119",
-                        "startColumns": "4,4,4,4,4,4,4",
-                        "startOffsets": "8296,8440,8522,8626,8735,8855,8952",
-                        "endColumns": "143,81,103,108,119,96,73",
-                        "endOffsets": "8435,8517,8621,8730,8850,8947,9021"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\97461efba6c5e9e0983cc52e8129f2d5\\play-services-base-17.1.0\\res\\values\\values.xml",
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\97461efba6c5e9e0983cc52e8129f2d5\\play-services-base-17.1.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,33,46",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -40,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\3e26ef26d15f163a2f1a31a2130a0254\\core-1.1.0\\res\\values\\values.xml",
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\3e26ef26d15f163a2f1a31a2130a0254\\core-1.1.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,83,84,88,89,90,91,98,141,173,210",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -59,41 +42,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\38d5f4db3bd51dbb373676af0f0232e8\\jetified-play-services-basement-17.1.0\\res\\values\\values.xml",
-                    "from": {
-                        "startLines": "4,7",
-                        "startColumns": "0,0",
-                        "startOffsets": "238,401",
-                        "endColumns": "63,166",
-                        "endOffsets": "301,567"
-                    },
-                    "to": {
-                        "startLines": "93,103",
-                        "startColumns": "4,4",
-                        "startOffsets": "5825,7003",
-                        "endColumns": "67,166",
-                        "endOffsets": "5888,7165"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\6288419cd7e76937f11d087b10f44d3a\\jetified-android-pdf-viewer-2.8.2\\res\\values\\values.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "288",
-                        "endOffsets": "339"
-                    },
-                    "to": {
-                        "startLines": "388",
-                        "startColumns": "4",
-                        "startOffsets": "24523",
-                        "endColumns": "288",
-                        "endOffsets": "24807"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\5075bc77c451a44b9e5ad7ac41aa6483\\media-1.0.0\\res\\values\\values.xml",
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\5075bc77c451a44b9e5ad7ac41aa6483\\media-1.0.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -110,7 +59,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\HP\\Desktop\\Hawa\\AndroidStudioProjects\\alwasefApplication\\android\\app\\src\\main\\res\\values\\styles.xml",
+                    "source": "C:\\Users\\hajer\\AndroidStudioProjects\\alwasef_app\\android\\app\\src\\main\\res\\values\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
@@ -129,7 +78,41 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\HP\\.gradle\\caches\\transforms-2\\files-2.1\\20c3233714e73a617d23ea69eac6130c\\coordinatorlayout-1.0.0\\res\\values\\values.xml",
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\611fbf8f4d058f1f287a7520135e2d32\\jetified-play-services-basement-17.1.0\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "4,7",
+                        "startColumns": "0,0",
+                        "startOffsets": "238,401",
+                        "endColumns": "63,166",
+                        "endOffsets": "301,567"
+                    },
+                    "to": {
+                        "startLines": "93,103",
+                        "startColumns": "4,4",
+                        "startOffsets": "5825,7003",
+                        "endColumns": "67,166",
+                        "endOffsets": "5888,7165"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\e2937c25b60a518b61c56b4f16c712ce\\jetified-android-pdf-viewer-2.8.2\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "288",
+                        "endOffsets": "339"
+                    },
+                    "to": {
+                        "startLines": "388",
+                        "startColumns": "4",
+                        "startOffsets": "24523",
+                        "endColumns": "288",
+                        "endOffsets": "24807"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\hajer\\.gradle\\caches\\transforms-2\\files-2.1\\20c3233714e73a617d23ea69eac6130c\\coordinatorlayout-1.0.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,102,3,13",
                         "startColumns": "4,4,4,4",
@@ -145,6 +128,23 @@
                         "endLines": "2,149,166,255",
                         "endColumns": "60,12,24,24",
                         "endOffsets": "161,10978,11884,17095"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\hajer\\AndroidStudioProjects\\alwasef_app\\build\\app\\generated\\res\\google-services\\debug\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,281,385,494,614,711",
+                        "endColumns": "143,81,103,108,119,96,73",
+                        "endOffsets": "194,276,380,489,609,706,780"
+                    },
+                    "to": {
+                        "startLines": "113,114,115,116,117,118,119",
+                        "startColumns": "4,4,4,4,4,4,4",
+                        "startOffsets": "8296,8440,8522,8626,8735,8855,8952",
+                        "endColumns": "143,81,103,108,119,96,73",
+                        "endOffsets": "8435,8517,8621,8730,8850,8947,9021"
                     }
                 }
             ]

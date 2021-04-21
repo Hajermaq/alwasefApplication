@@ -101,7 +101,9 @@ flutter:
         - asset: assets/fonts/Almarai-Bold.ttf
         - asset: assets/fonts/Almarai-Light.ttf
         - asset: assets/fonts/Almarai-Regular.ttf
-    - family: Hacen Egypt
+    - family: Noto Naskh
       fonts:
-        - asset: assets/fonts/Hacen Egypt.ttf
-
+        - asset: assets/fonts/NotoNaskhArabic-Regular.ttf
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Bold.ttf
