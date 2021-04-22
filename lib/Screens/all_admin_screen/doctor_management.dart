@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flushbar/flushbar.dart';
 import '../../constants.dart';
 
 class DoctorManagement extends StatefulWidget {
@@ -262,16 +261,12 @@ class _DoctorManagementState extends State<DoctorManagement> {
                     '     حفظ     ',
                     style: TextStyle(
                       color: Colors.white,
-                      // fontFamily: 'Montserrat',
                       fontSize: 30,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 1,
                     ),
                   ),
                   onPressed: () async {
-                    // if (_key.currentState
-                    //     .validate()) {
-                    //   _key.currentState.save();
                     FirebaseFirestore.instance
                         .collection('/Doctors')
                         .doc(widget.doctor_id)
@@ -292,6 +287,21 @@ class _DoctorManagementState extends State<DoctorManagement> {
                             : _selectedExperience,
                       },
                     );
+
+                    Flushbar(
+                      backgroundColor: Colors.white,
+                      borderRadius: 4.0,
+                      margin: EdgeInsets.all(8.0),
+                      duration: Duration(seconds: 4),
+                      messageText: Text(
+                        ' تم حفظ المعلومات بنجاح.',
+                        style: TextStyle(
+                          color: kBlueColor,
+                          fontFamily: 'Almarai',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )..show(context).then((r) => Navigator.pop(context));
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

@@ -39,59 +39,55 @@ class MyApp extends StatelessWidget {
       onTap: () {
         WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
       },
-      child: ChangeNotifierProvider(
-        create: (context) => PrescriptionData(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: [
-            Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales
-          ],
-          locale:
-              Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales
+        ],
+        locale:
+            Locale("ar", "AE"), // OR Locale('ar', 'AE') OR Other RTL locales,
 
-          title: 'Al-Wasef Application',
-          theme: ThemeData(
-            scaffoldBackgroundColor: kScaffoldBackGroundColor,
-            // scaffoldBackgroundColor: Color(0xffC2B4AF),
-            // fontFamily: GoogleFonts.almarai(fontSize: 12.0),
-            accentColor: kRedColor,
-            textTheme: GoogleFonts.almaraiTextTheme(
-              Theme.of(context).textTheme.apply(
-                    bodyColor: Color(0xffE4E8F4),
-                  ),
-            ),
+        title: 'Al-Wasef Application',
+        theme: ThemeData(
+          scaffoldBackgroundColor: kScaffoldBackGroundColor,
+          // scaffoldBackgroundColor: Color(0xffC2B4AF),
+          // fontFamily: GoogleFonts.almarai(fontSize: 12.0),
+          accentColor: kRedColor,
+          textTheme: GoogleFonts.almaraiTextTheme(
+            Theme.of(context).textTheme.apply(
+                  bodyColor: Color(0xffE4E8F4),
+                ),
           ),
-          initialRoute: WelcomeScreen.id,
-          routes: {
-            //login & registration
-            WelcomeScreen.id: (context) => WelcomeScreen(),
-            LogInORSignIn.id: (context) => LogInORSignIn(),
-            LogInScreen.id: (context) => LogInScreen(),
-            RegisterScreen.id: (context) => RegisterScreen(),
-            RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
-            ResetPassword.id: (context) => ResetPassword(),
-            VerifiyPage.id: (context) => VerifiyPage(),
-            //Admin Screens
-            AdminScreen.id: (context) => AdminScreen(),
-            //Doctor Screens
-            DoctorMainPage.id: (context) => DoctorMainPage(),
-            PatientDetails.id: (context) => PatientDetails(),
-            AddPrescriptions.id: (context) => AddPrescriptions(),
-            AddDiagnosis.id: (context) => AddDiagnosis(),
-            //Pharmacist Screens
-            PharmacistMainPage.id: (context) => PharmacistMainPage(),
-            //Patient Screens
-            PatientMainPage.id: (context) => PatientMainPage(),
-            FillMedicalHistoryPage.id: (context) => FillMedicalHistoryPage(),
-            EditMedicalHistoryPage.id: (context) => EditMedicalHistoryPage(),
-          },
         ),
-
+        initialRoute: WelcomeScreen.id,
+        routes: {
+          //login & registration
+          WelcomeScreen.id: (context) => WelcomeScreen(),
+          LogInORSignIn.id: (context) => LogInORSignIn(),
+          LogInScreen.id: (context) => LogInScreen(),
+          RegisterScreen.id: (context) => RegisterScreen(),
+          RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
+          ResetPassword.id: (context) => ResetPassword(),
+          VerifiyPage.id: (context) => VerifiyPage(),
+          //Admin Screens
+          AdminScreen.id: (context) => AdminScreen(),
+          //Doctor Screens
+          DoctorMainPage.id: (context) => DoctorMainPage(),
+          PatientDetails.id: (context) => PatientDetails(),
+          AddPrescriptions.id: (context) => AddPrescriptions(),
+          AddDiagnosis.id: (context) => AddDiagnosis(),
+          //Pharmacist Screens
+          PharmacistMainPage.id: (context) => PharmacistMainPage(),
+          //Patient Screens
+          PatientMainPage.id: (context) => PatientMainPage(),
+          FillMedicalHistoryPage.id: (context) => FillMedicalHistoryPage(),
+          EditMedicalHistoryPage.id: (context) => EditMedicalHistoryPage(),
+        },
       ),
     );
   }

@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icon.dart';
 
 import '../../constants.dart';
 
@@ -38,7 +37,7 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
           ),
         ),
         title: Text(
-          'صفحة الصيادلة ',
+          'قائمة الصيادلة ',
           style: GoogleFonts.almarai(
             color: kBlueColor,
             fontSize: 28.0,
@@ -71,8 +70,7 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
                         return Center(
                           child: CircularProgressIndicator(
                               backgroundColor: kGreyColor,
-                              valueColor: AlwaysStoppedAnimation(kBlueColor)
-                          ),
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
                         );
                       }
                       return ListView.builder(

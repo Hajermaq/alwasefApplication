@@ -24,7 +24,6 @@ class Prescription {
     this.startDate,
     this.creationDate,
     this.scientificName,
-    this.scientificNameArabic,
     this.tradeName,
     this.tradeNameArabic,
     this.strengthUnit,

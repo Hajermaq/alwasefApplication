@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flushbar/flushbar.dart';
 import '../../constants.dart';
 
 class PharmacistManagement extends StatefulWidget {
@@ -133,9 +132,8 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                                                 child: new Text(
                                                   speciality,
                                                   style: GoogleFonts.almarai(
-                                                    color: Colors.black54,
-                                                      fontSize: 17
-                                                  ),
+                                                      color: Colors.black54,
+                                                      fontSize: 17),
                                                 ),
                                                 value: speciality,
                                                 onTap: () {
@@ -185,10 +183,6 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                     ),
                   ),
                   onPressed: () async {
-                    // if (_key.currentState
-                    //     .validate()) {
-                    //   _key.currentState.save();
-
                     FirebaseFirestore.instance
                         .collection('/Pharmacist')
                         .doc(widget.pharmacist_id)
@@ -201,31 +195,20 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                       SetOptions(merge: true),
                     );
 
-                    // Flushbar(
-                    //   backgroundColor:
-                    //   Colors.white,
-                    //   borderRadius: 4.0,
-                    //   margin: EdgeInsets.all(8.0),
-                    //   duration:
-                    //   Duration(seconds: 4),
-                    //   messageText: Text(
-                    //     ' تم إضافة وصفة جديدة لهذا المريض',
-                    //     style: TextStyle(
-                    //       color: kBlueColor,
-                    //       fontFamily: 'Almarai',
-                    //     ),
-                    //     textAlign:
-                    //     TextAlign.center,
-                    //   ),
-                    // )..show(context).then((r) =>
-                    //     Navigator.pop(context));
-                    // } else {
-                    //   // there is an error
-                    //   setState(() {
-                    //     autovalidateMode =
-                    //         AutovalidateMode.always;
-                    //   });
-                    // }
+                    Flushbar(
+                      backgroundColor: Colors.white,
+                      borderRadius: 4.0,
+                      margin: EdgeInsets.all(8.0),
+                      duration: Duration(seconds: 4),
+                      messageText: Text(
+                        ' تم حفظ المعلومات بنجاح.',
+                        style: TextStyle(
+                          color: kBlueColor,
+                          fontFamily: 'Almarai',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )..show(context).then((r) => Navigator.pop(context));
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

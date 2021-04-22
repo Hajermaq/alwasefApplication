@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icon.dart';
-
 import '../../constants.dart';
 import 'doctor_management.dart';
 
@@ -38,7 +36,7 @@ class _HospitalDoctorsState extends State<HospitalDoctors> {
           ),
         ),
         title: Text(
-          'صفحة الأطباء ',
+          'قائمة الأطباء ',
           style: GoogleFonts.almarai(
             color: kBlueColor,
             fontSize: 28.0,

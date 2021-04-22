@@ -148,15 +148,10 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
     var data =
         await rootBundle.load("assets/fonts/NotoNaskhArabic-Regular.ttf");
     var myFont = pw.Font.ttf(data);
-    var myStyle = TextStyle(fontFamily: myFont.toString());
-    var data1 = await rootBundle.load("assets/fonts/Almarai-Regular.ttf");
-    var tff = pw.Font.ttf(data);
+
     pdf.addPage(
       pw.Page(
           pageFormat: PdfPageFormat.a4,
-          // theme: pw.ThemeData.withFont(
-          //   base: myFont,
-          // ),
           build: (pw.Context context) {
             return pw.Column(
               children: [
@@ -389,10 +384,9 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
   }
 
   Future<String> viewPdf(pw.Document pdf) async {
-    //using this path so thet the path is not visible by the user
+    //using this path so that the path is not visible by the user
     Directory directory = await getApplicationDocumentsDirectory();
     if (await directory.exists()) {
-      print('im inside function ${directory.path}');
       File file = File(directory.path + "/$filename");
       file.writeAsBytes(await pdf.save());
       return 'saved!';
@@ -407,7 +401,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
         if (await _reguestPremission(Permission.storage)) {
           directory = await getExternalStorageDirectory();
           print(directory.path);
-          // /storage/sdcard0/0/Android/data/hajermaq.alwasef_app/files
           List<String> folders = directory.path.split("/");
           for (int x = 1; x < folders.length; x++) {
             String folder = folders[x];
@@ -417,7 +410,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
               break;
             }
           }
-
           newPath = newPath + "/Download";
           directory = Directory(newPath);
           print(directory.path);
@@ -2652,6 +2644,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                           'refill']
                                                                       .toString(),
                                                                 );
+
                                                                 setState(() {
                                                                   savePdfFile(
                                                                           'p-${prescription.data()['prescription-id']}.pdf',

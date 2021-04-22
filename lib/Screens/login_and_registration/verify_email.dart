@@ -21,11 +21,14 @@ class VerifiyPage extends StatefulWidget {
 }
 
 class _VerifiyPageState extends State<VerifiyPage> {
+  //Variables
   final auth = FirebaseAuth.instance;
   User user;
   Timer timer;
   bool isVerified;
-  bool lodaing = false;
+  bool isLoading = false;
+
+  // Functions
   @override
   void initState() {
     user = auth.currentUser;
@@ -41,15 +44,15 @@ class _VerifiyPageState extends State<VerifiyPage> {
     super.dispose();
   }
 
+// check email is verified or not
   Future<void> checkEmailVerified() async {
     user = auth.currentUser;
     await user.reload();
     User user2 = auth.currentUser;
     if (user2.emailVerified) {
       setState(() {
-        lodaing = true;
+        isLoading = true;
       });
-
       timer.cancel();
       isVerified = user2.emailVerified;
     }
@@ -86,7 +89,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
               SizedBox(
                 height: 50.0,
               ),
-              lodaing
+              isLoading
                   ? Column(
                       children: [
                         CircleAvatar(
@@ -109,6 +112,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                 onPressed: () async {
                   setState(() {
                     if (isVerified) {
+                      // register a doctor
                       if ('طبيب' == widget.role) {
                         UserManagement().newDoctorSetUp(
                           context: context,
@@ -119,6 +123,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                           phoneNumber: '',
                           experienceYears: null,
                         );
+                        // register a pharmacist
                       } else if ('صيدلي' == widget.role) {
                         UserManagement().newPharmacistSetUp(
                           context: context,
@@ -127,6 +132,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                           role: widget.role,
                           speciality: null,
                         );
+                        // register a patient
                       } else if ('مريض' == widget.role) {
                         String pharmacistUID;
                         UserManagement().newPatientSetUp(
@@ -143,7 +149,7 @@ class _VerifiyPageState extends State<VerifiyPage> {
                             '4': null,
                           },
                         );
-                        //Hospital
+                        // register a hospital
                       } else {
                         UserManagement().newHospitalSetUp(
                           context: context,

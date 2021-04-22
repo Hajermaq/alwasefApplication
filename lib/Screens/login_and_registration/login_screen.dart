@@ -77,7 +77,7 @@ class _LogInScreenState extends State<LogInScreen> {
               },
             );
             return AlertDialog(
-              title: Text('لم يتم العثور على مستخدم لهذا البريد الإلكتروني.',
+              title: Text('لم يتم العثور على مستخدم بهذا البريد الإلكتروني.',
                   style: TextStyle(
                     color: kBlueColor,
                     fontFamily: 'Almarai',
@@ -138,7 +138,7 @@ class _LogInScreenState extends State<LogInScreen> {
             );
             return AlertDialog(
               title: Text(
-                  'يوجد محاولات كثيرة لتسجيل الدخول بهذا المستخدم، حاول مرة اخرى لاحقا.',
+                  'يوجد محاولات كثيرة لتسجيل الدخول بهذا المستخدم، حاول مرة أخرى لاحقا.',
                   style: TextStyle(
                     color: kBlueColor,
                     fontFamily: 'Almarai',
@@ -287,7 +287,6 @@ class _LogInScreenState extends State<LogInScreen> {
                     if (_key.currentState.validate()) {
                       //there is no error
                       _key.currentState.save();
-
                       // Log in a Doctor
                       logInUser(
                           email: email,

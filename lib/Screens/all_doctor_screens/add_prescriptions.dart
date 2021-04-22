@@ -27,9 +27,9 @@ class AddPrescriptions extends StatefulWidget {
 
 class _AddPrescriptionsState extends State<AddPrescriptions>
     with SingleTickerProviderStateMixin {
-  //FirrStore
+  //FireStore variables
   String prescriberId = FirebaseAuth.instance.currentUser.uid;
-  //Data from Api with default value
+  //Variables for data from Api with default value as ...
   String tradeName = '...';
   String tradeNameArabic = '...';
   String scientificName = '...';
@@ -43,50 +43,44 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
   String frequency = '...';
   String note1 = '...';
   String note2 = '...';
-  // formatted date
-  static final DateTime now = DateTime.now();
-  final String creationDate = formatter.format(now);
   //Data from TextFields
-  var dropdownvalue;
-  double dose;
-  int quantity;
   int refill;
-  int dosingExpire;
-  var doseUnit;
   String instructionNote;
   String doctorNotes;
   //Random Variables
-  String stringFromTF;
-  final maxLines = 5;
-  // the creation on the prescription date
+  // searched value from search text filed
+  String searchedValue;
+  //Dates
+  // formatted date
+  //formatter
   static final DateFormat formatter = DateFormat('yyyy-MM-dd');
-  // start date
+  // the creation on the prescription date
+  static final DateTime now = DateTime.now();
+  final String creationDate = formatter.format(now);
+  // start date of prescription
   String startDate;
   ValueNotifier<DateTime> tempStartDate =
       ValueNotifier<DateTime>(DateTime.now());
-  // end date
+  // end date of prescription
   String endDate;
-  //Form requirements
+  //Form requirements for text field validation
   GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   //to generate random number
   Random rnd = new Random();
   String s = '';
 
-  //Lists
-  static List<Prescription> drugsForDisplay = List<Prescription>();
-  List<Prescription> _drugs = List<Prescription>();
-
+  // the init function generate a new prescription id once this page loads
   @override
   void initState() {
     var l = new List.generate(6, (_) => rnd.nextInt(10));
-    print(l);
-
     for (var i in l) {
       s = '$s' + i.toString();
     }
-  } //Methods
+  }
 
+  //Methods
+// fetching data from API to use in prescription
   Future<List<Prescription>> fetchPrescription() async {
     String URL = "https://script.googleusercontent.com/macros/echo?user_content"
         "_key=DtUnRVrrV976kfvKU3mNP8xul3ifCzuTgCO75u82suviFYNAWBdvObx6JLtJ4W7P"
@@ -94,10 +88,11 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
         "yfhECjZEnAw0OEmvZ6ZgqAm5NuVvpOPxYabOLLgVAlR8GmMtquTES-_KsGjojP8n1DyVcpZpzTBf"
         "A0REAKN5qDJfrA-Atj5dRUoY4UnnfNz9Jw9Md8uu&lib=MZRMRjEYoeB3skfpJFu14OfaUQYat3_A-";
 
+// create a http request
     http.Response response = await http.get(URL);
-
-    List<Prescription> allDrugs = List<Prescription>();
-
+// create a list that stores the prescription data
+    List<Prescription> prescription = List<Prescription>();
+// if request is successful
     if (response.statusCode == 200) {
       List jsonArray = json.decode(response.body);
 
@@ -107,9 +102,9 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
           String tradename = obj['tradeName'].toLowerCase();
           String scientificname = obj['scientificName'].toLowerCase();
           String tradenamearabic = obj['tradeNameArabic'].toLowerCase();
-          if (scientificname.contains(stringFromTF) ||
-              tradename.contains(stringFromTF) ||
-              tradenamearabic.contains(stringFromTF)) {
+          if (scientificname.contains(searchedValue) ||
+              tradename.contains(searchedValue) ||
+              tradenamearabic.contains(searchedValue)) {
             registerNumber = obj['RegisterNumber'].toString();
             tradeName = obj['tradeName'].toString();
             scientificName = obj['scientificName'].toString();
@@ -127,8 +122,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
         }
       }
     }
-
-    return allDrugs;
+    return prescription;
   }
 
   _searchBar() {
@@ -137,10 +131,10 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
       onChanged: (text) {
         setState(() {
           if (!text.isEmpty) {
-            stringFromTF = text.toLowerCase();
+            searchedValue = text.toLowerCase();
             fetchPrescription();
           } else {
-            print('null');
+            print('the text field is empty');
           }
         });
       },

@@ -37,7 +37,7 @@ class _HospitalPatientsState extends State<HospitalPatients> {
           ),
         ),
         title: Text(
-          'صفحة المرضى ',
+          'قائمة المرضى ',
           style: GoogleFonts.almarai(
             color: kBlueColor,
             fontSize: 28.0,
@@ -70,8 +70,7 @@ class _HospitalPatientsState extends State<HospitalPatients> {
                         return Center(
                           child: CircularProgressIndicator(
                               backgroundColor: kGreyColor,
-                              valueColor: AlwaysStoppedAnimation(kBlueColor)
-                          ),
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
                         );
                       }
                       return ListView.builder(
@@ -115,6 +114,8 @@ class _HospitalPatientsState extends State<HospitalPatients> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 PatientManagement(
+                                              pahramacist_id: document
+                                                  .data()['pharmacist-uid'],
                                               patient_id:
                                                   document.data()['uid'],
                                               map: document

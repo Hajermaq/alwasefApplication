@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flushbar/flushbar.dart';
 import '../../constants.dart';
 
 class PatientManagement extends StatefulWidget {
-  PatientManagement({this.patient_id, this.map});
+  PatientManagement({this.patient_id, this.map, this.pahramacist_id});
   final String patient_id;
   final Map map;
-
+  final pahramacist_id;
   @override
   _PatientManagementState createState() => _PatientManagementState();
 }
@@ -20,30 +20,12 @@ class _PatientManagementState extends State<PatientManagement> {
   String doctor2_uid;
   String doctor3_uid;
   String doctor4_uid;
-  // String doctor1_name;
-  // String doctor2_name;
-  // String doctor3_name;
-  // String doctor4_name;
   String pharmacist_uid;
   String speciality;
-  var _selectedName;
-
-  getDoctorinfo() async {
-    await FirebaseFirestore.instance
-        .collection('/Doctors')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((doc) {
-      speciality = doc.data()['speciality'];
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
 
   @override
   void initState() {
-    print(widget.map);
+    print('print $pharmacist_uid');
   }
 
   @override
@@ -86,8 +68,9 @@ class _PatientManagementState extends State<PatientManagement> {
                       valueColor: AlwaysStoppedAnimation(kBlueColor)),
                 );
               }
+
+              //data snapshot
               DocumentSnapshot doc = snapshot.data;
-              Map docsMap = doc.get('doctors_map');
 
               return SingleChildScrollView(
                 child: Column(
@@ -141,7 +124,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                               .where('hospital-uid',
                                                   isEqualTo: FirebaseAuth
                                                       .instance.currentUser.uid)
-                                              .where('speciality',
+                                              .where('doctor-speciality',
                                                   isEqualTo: 'طبيب قلب')
                                               .snapshots(),
                                           builder: (context, snapshot) {
@@ -189,9 +172,6 @@ class _PatientManagementState extends State<PatientManagement> {
                                                       ),
                                                     ),
                                                     items: hospitalsNames,
-                                                    // onTap: () {
-                                                    //   setState(() {});
-                                                    // },
                                                     onChanged: (value) {
                                                       setState(() {
                                                         doctor1_uid = value;
@@ -236,7 +216,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                               .where('hospital-uid',
                                                   isEqualTo: FirebaseAuth
                                                       .instance.currentUser.uid)
-                                              .where('speciality',
+                                              .where('doctor-speciality',
                                                   isEqualTo: 'طبيب باطنية')
                                               .snapshots(),
                                           builder: (context, snapshot) {
@@ -252,7 +232,11 @@ class _PatientManagementState extends State<PatientManagement> {
                                                   DropdownMenuItem(
                                                     child: Text(
                                                       document.data()[
-                                                          'doctor-name'],
+                                                                  'doctor-name'] ==
+                                                              null
+                                                          ? ''
+                                                          : document.data()[
+                                                              'doctor-name'],
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),
@@ -266,8 +250,6 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     0, 0, 10.0, 0),
                                                 margin: EdgeInsets.only(
                                                     right: 10, left: 50),
-
-                                                // ),
                                                 child:
                                                     DropdownButtonHideUnderline(
                                                   child: DropdownButton(
@@ -342,7 +324,11 @@ class _PatientManagementState extends State<PatientManagement> {
                                                   DropdownMenuItem(
                                                     child: Text(
                                                       document.data()[
-                                                          'doctor-name'],
+                                                                  'doctor-name'] ==
+                                                              null
+                                                          ? ''
+                                                          : document.data()[
+                                                              'doctor-name'],
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),
@@ -414,7 +400,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                               .where('hospital-uid',
                                                   isEqualTo: FirebaseAuth
                                                       .instance.currentUser.uid)
-                                              .where('speciality',
+                                              .where('doctor-speciality',
                                                   isEqualTo: 'طبيب أسرة')
                                               .snapshots(),
                                           builder: (context, snapshot) {
@@ -544,16 +530,12 @@ class _PatientManagementState extends State<PatientManagement> {
                                                 hospitalsNames.add(
                                                   DropdownMenuItem(
                                                     child: Text(
-                                                      document
-                                                                  .data()[
-                                                                      'pharmacist-name']
-                                                                  .toString() ==
-                                                              null
+                                                      document.data()[
+                                                                  'pharmacist-name'] ==
+                                                              ''
                                                           ? ''
-                                                          : document
-                                                              .data()[
-                                                                  'pharmacist-name']
-                                                              .toString(),
+                                                          : document.data()[
+                                                              'pharmacist-name'],
                                                       style: TextStyle(
                                                           color: Colors.black54,
                                                           fontSize: 15),
@@ -582,20 +564,14 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     ),
                                                     items: hospitalsNames,
                                                     onChanged: (value) {
-                                                      pharmacist_uid = value;
-
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              '/Patient')
-                                                          .doc(
-                                                              widget.patient_id)
-                                                          .update(
-                                                        {
-                                                          'pharmacist-uid':
-                                                              pharmacist_uid,
-                                                        },
-                                                      );
+                                                      setState(() {
+                                                        pharmacist_uid = value;
+                                                      });
                                                     },
+                                                    value: pharmacist_uid ==
+                                                            null
+                                                        ? widget.pahramacist_id
+                                                        : pharmacist_uid,
                                                   ),
                                                 ),
                                               );
@@ -631,9 +607,6 @@ class _PatientManagementState extends State<PatientManagement> {
                             ),
                           ),
                           onPressed: () async {
-                            // if (_key.currentState
-                            //     .validate()) {
-                            //   _key.currentState.save();
                             await FirebaseFirestore.instance
                                 .collection('/Patient')
                                 .doc(widget.patient_id)
@@ -656,31 +629,32 @@ class _PatientManagementState extends State<PatientManagement> {
                               },
                             );
 
-                            // Flushbar(
-                            //   backgroundColor:
-                            //   Colors.white,
-                            //   borderRadius: 4.0,
-                            //   margin: EdgeInsets.all(8.0),
-                            //   duration:
-                            //   Duration(seconds: 4),
-                            //   messageText: Text(
-                            //     ' تم إضافة وصفة جديدة لهذا المريض',
-                            //     style: TextStyle(
-                            //       color: kBlueColor,
-                            //       fontFamily: 'Almarai',
-                            //     ),
-                            //     textAlign:
-                            //     TextAlign.center,
-                            //   ),
-                            // )..show(context).then((r) =>
-                            //     Navigator.pop(context));
-                            // } else {
-                            //   // there is an error
-                            //   setState(() {
-                            //     autovalidateMode =
-                            //         AutovalidateMode.always;
-                            //   });
-                            // }
+                            FirebaseFirestore.instance
+                                .collection('/Patient')
+                                .doc(widget.patient_id)
+                                .update(
+                              {
+                                'pharmacist-uid': pharmacist_uid == ''
+                                    ? widget.pahramacist_id
+                                    : pharmacist_uid,
+                              },
+                            );
+
+                            Flushbar(
+                              backgroundColor: Colors.white,
+                              borderRadius: 4.0,
+                              margin: EdgeInsets.all(8.0),
+                              duration: Duration(seconds: 4),
+                              messageText: Text(
+                                ' تم حفظ المعلومات بنجاح.',
+                                style: TextStyle(
+                                  color: kBlueColor,
+                                  fontFamily: 'Almarai',
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            )..show(context)
+                                .then((r) => Navigator.pop(context));
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
