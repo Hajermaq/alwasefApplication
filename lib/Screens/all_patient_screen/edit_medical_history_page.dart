@@ -254,6 +254,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 labelText: 'الوزن :',
                                 suffixText: 'كلجم',
                                 border: OutlineInputBorder(),
+                                errorStyle: TextStyle(
+                                  color: kRedColor,
+                                ),
                               ),
                               initialValue: weightVal,
                               validator: (value) {
@@ -285,6 +288,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                 labelText: 'الطول :',
                                 suffixText: 'سم',
                                 border: OutlineInputBorder(),
+                                errorStyle: TextStyle(
+                                  color: kRedColor,
+                                ),
                               ),
                               initialValue: heightVal,
                               validator: (value) {

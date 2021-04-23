@@ -54,7 +54,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             height: 200.0,
           ),
           OutinedButton(
-            text: 'إنضموا إلينا',
+            text: 'انضموا إلينا',
             onPressed: () {
               Navigator.pushNamed(context, LogInORSignIn.id);
             },

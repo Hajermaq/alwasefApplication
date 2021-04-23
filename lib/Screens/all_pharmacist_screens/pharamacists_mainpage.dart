@@ -5,6 +5,7 @@ import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 
 import '../../constants.dart';
+import 'bar_display_patients_repoerts_for_pharmacist.dart';
 import 'bar_pharmacist_home_page.dart';
 import 'bar_pharmacist_profile.dart';
 import 'bar_search_patients.dart';
@@ -38,7 +39,7 @@ class _PharmacistMainPageState extends State<PharmacistMainPage> {
               //search Page
               SearchPatientPage(),
               //patients reports
-              PatientsReports(role: 'pharmacist'),
+              DisplayReportsForPharmacist(),
               //profile
               PharmacistProfileInfo(),
             ],

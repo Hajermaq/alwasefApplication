@@ -160,8 +160,7 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                       subtitle: Text(
                                                           'قم بتعبئة سجلك الطبي'),
                                                       trailing: IconButton(
-                                                          icon: Icon(Icons
-                                                              .insert_drive_file_outlined),
+                                                          icon: Icon(Icons.note_add_outlined),
                                                           onPressed: () {
                                                             Navigator.push(
                                                                 context,
@@ -189,7 +188,7 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                     color: kGreyColor,
                                                     margin: EdgeInsets.fromLTRB(
                                                         10.0, 10.0, 10.0, 0),
-                                                    child: ListTile(
+                                                    child: ListTile( //eZipOgPrgjfI8GEzg2ZnWKP3YTo1
                                                       leading:
                                                           Icon(Icons.animation),
                                                       title: Text(

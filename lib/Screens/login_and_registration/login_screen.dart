@@ -252,7 +252,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   validator: Validation().validateEmail,
                   isObscure: false,
                   color: kButtonColor,
-                  hintMessage: 'ايميل',
+                  hintMessage: 'البريد الإلكتروني',
                   // onSaved: (value) {
                   //   email = value;
                   // },
@@ -283,7 +283,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   height: 48.0,
                 ),
                 RoundRaisedButton(
-                  text: ' إذهب',
+                  text: ' اذهب',
                   onPressed: () async {
                     if (_key.currentState.validate()) {
                       //there is no error
