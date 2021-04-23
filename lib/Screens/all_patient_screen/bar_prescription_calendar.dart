@@ -1,21 +1,23 @@
+import 'dart:io';
+
+import 'package:age/age.dart';
 import 'package:alwasef_app/Screens/services/PDF_screen.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../constants.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
-import 'package:age/age.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../../constants.dart';
 
 class PrescriptionsCalendar2 extends StatefulWidget {
   final String uid;
@@ -148,7 +150,6 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
   }) async {
     var data = await rootBundle.load("assets/fonts/Almarai-Regular.ttf");
     var myFont = pw.Font.ttf(data);
-    var myStyle = TextStyle(fontFamily: myFont.toString());
 
     pdf.addPage(
       pw.Page(

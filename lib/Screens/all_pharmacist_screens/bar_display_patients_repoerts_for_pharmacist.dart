@@ -1,8 +1,6 @@
-import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../constants.dart';
 
 class DisplayReportsPh extends StatefulWidget {
@@ -29,13 +27,14 @@ class _DisplayReportsPhState extends State<DisplayReportsPh> {
               bottomLeft: Radius.circular(6.0),
             ),
           ),
-          title: Text('تقاريرjjjjjj المرضى',
+          title: Text(
+            'تقاريرjjjjjj المرضى',
             style: GoogleFonts.almarai(color: kBlueColor, fontSize: 28.0),
           ),
         ),
         body: Center(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               print('ggg');
               return Container(color: Colors.green);
             },
@@ -43,8 +42,6 @@ class _DisplayReportsPhState extends State<DisplayReportsPh> {
               color: Colors.black,
             ),
           ),
-        )
-    );
-
+        ));
   }
 }

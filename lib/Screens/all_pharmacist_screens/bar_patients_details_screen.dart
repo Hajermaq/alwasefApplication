@@ -1,7 +1,6 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
-import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_for_patient.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_past_prescriptions.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_prescriptions.dart';
 import 'package:alwasef_app/constants.dart';
@@ -20,7 +19,6 @@ class PatientDetails2 extends StatefulWidget {
 
 class _PatientDetails2State extends State<PatientDetails2>
     with TickerProviderStateMixin {
-
   TabController _tabController;
 
   @override
@@ -101,20 +99,20 @@ class _PatientDetails2State extends State<PatientDetails2>
                             child: TabBar(
                               controller: _tabController,
                               labelStyle: TextStyle(
-                                //up to your taste
+                                  //up to your taste
                                   fontWeight: FontWeight.w700),
                               indicatorSize:
-                              TabBarIndicatorSize.label, //makes it better
+                                  TabBarIndicatorSize.label, //makes it better
                               labelColor: kBlueColor, //Google's sweet blue
                               unselectedLabelColor: kGreyColor, //niceish grey
                               isScrollable: true, //up to your taste
                               indicator: MD2Indicator(
-                                //it begins here
+                                  //it begins here
                                   indicatorHeight: 3,
                                   indicatorColor: kBlueColor,
                                   indicatorSize: MD2IndicatorSize
                                       .normal //3 different modes tiny-normal-full
-                              ),
+                                  ),
                               tabs: <Widget>[
                                 Tab(
                                   text: "الوصفات الطبية",

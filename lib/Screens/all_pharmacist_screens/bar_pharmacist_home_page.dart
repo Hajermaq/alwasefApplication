@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../constants.dart';
 
 // moath.y.m@hotmail.com  Moady@123
@@ -30,6 +31,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
   }
 
   @override
+  // ignore: must_call_super
   void initState() {
     getName();
   }
@@ -71,15 +73,14 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
               List myPatientsIDs = [];
               List myPatientsNames = [];
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator(
-                    backgroundColor: kGreyColor,
-                    valueColor: AlwaysStoppedAnimation(kBlueColor))
-                );
+                return Center(
+                    child: CircularProgressIndicator(
+                        backgroundColor: kGreyColor,
+                        valueColor: AlwaysStoppedAnimation(kBlueColor)));
               }
               if (snapshot.data.docs.length == 0) {
-                return Column(
-                    children: [
-                      Card(
+                return Column(children: [
+                  Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -104,7 +105,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                       ),
                     ),
                   ),
-                      Card(
+                  Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -145,7 +146,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                           ]),
                     ),
                   ),
-                      Card(
+                  Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -269,7 +270,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                                 .collection('/Patient')
                                                 .doc(myPatientsIDs[index])
                                                 .collection('/Prescriptions')
-                                            // can not use this method because do not give docs length
+                                                // can not use this method because do not give docs length
                                                 // .where('status',
                                                 //     isEqualTo: 'pending')
                                                 // .where('status',
@@ -278,29 +279,37 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Center(
-                                                    child:
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: LinearProgressIndicator(
-                                                              backgroundColor: kGreyColor,
-                                                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
-                                                        ));
+                                                    child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: LinearProgressIndicator(
+                                                      backgroundColor:
+                                                          kGreyColor,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              kBlueColor)),
+                                                ));
                                               }
                                               int patientNewPrescriptionsNo = 0;
-                                              snapshot.data.docs.forEach((prescription){
-                                                if(
-                                                prescription.data()['status'] == 'pending' ||
-                                                    prescription.data()['status'] == 'updated' ) {
+                                              snapshot.data.docs
+                                                  .forEach((prescription) {
+                                                if (prescription
+                                                            .data()['status'] ==
+                                                        'pending' ||
+                                                    prescription
+                                                            .data()['status'] ==
+                                                        'updated') {
                                                   patientNewPrescriptionsNo++;
                                                 }
                                               });
                                               // only display patients names who has one or more new prescription
-                                              if (patientNewPrescriptionsNo != 0) {
-                                                 return MedicalHistoyListTile(
+                                              if (patientNewPrescriptionsNo !=
+                                                  0) {
+                                                return MedicalHistoyListTile(
                                                   titleText:
-                                                  myPatientsNames[index],
+                                                      myPatientsNames[index],
                                                   dataText:
-                                                  'لديه/لديها $patientNewPrescriptionsNo وصفات جديدة',
+                                                      'لديه/لديها $patientNewPrescriptionsNo وصفات جديدة',
                                                 );
                                               } else {
                                                 return SizedBox();
@@ -368,13 +377,16 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Center(
-                                                    child:
-                                                        Padding(
-                                                          padding: const EdgeInsets.all(8.0),
-                                                          child: LinearProgressIndicator(
-                                                              backgroundColor: kGreyColor,
-                                                              valueColor: AlwaysStoppedAnimation(kBlueColor)),
-                                                        ));
+                                                    child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: LinearProgressIndicator(
+                                                      backgroundColor:
+                                                          kGreyColor,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              kBlueColor)),
+                                                ));
                                               } else {
                                                 int patientNewPrescriptionsNo =
                                                     snapshot.data.docs.length;
@@ -383,9 +395,9 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                                     0) {
                                                   return MedicalHistoyListTile(
                                                     titleText:
-                                                    myPatientsNames[index],
+                                                        myPatientsNames[index],
                                                     dataText:
-                                                    'طلب إعادة تعبئة لـ $patientNewPrescriptionsNo وصفات',
+                                                        'طلب إعادة تعبئة لـ $patientNewPrescriptionsNo وصفات',
                                                   );
                                                 } else {
                                                   return SizedBox();
@@ -402,10 +414,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                          height: 8,
-                          color: kGreyColor
-                      ),
+                      child: Container(height: 8, color: kGreyColor),
                     ),
                   ],
                 );
@@ -414,7 +423,4 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
       ),
     );
   }
-
-
-
 }

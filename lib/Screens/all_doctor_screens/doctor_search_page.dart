@@ -1,5 +1,4 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

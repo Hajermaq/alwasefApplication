@@ -1,12 +1,11 @@
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
-import 'package:alwasef_app/components/text_field_1.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
 
 class AddDiagnosis extends StatefulWidget {
   AddDiagnosis({this.uid});

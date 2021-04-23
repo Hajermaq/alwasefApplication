@@ -1,29 +1,25 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/add_diagnosis.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/add_prescriptions.dart';
-import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
-import 'package:provider/provider.dart';
-import 'Screens/all_doctor_screens/doctor_main_page.dart';
-import 'Screens/all_patient_screen/edit_medical_history_page.dart';
-import 'Screens/all_patient_screen/fill_medical_history_page.dart';
-import 'constants.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/patient_details_screen.dart';
+import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Screens/login_and_registration/Register_hospital_screen.dart';
-import 'Screens/all_admin_screen/admin_page.dart';
-import 'Screens/login_and_registration/login_screen.dart';
-import 'Screens/all_patient_screen/patients_mainpage.dart';
-import 'Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
-import 'Screens/login_and_registration/register_screen.dart';
-import 'Screens/login_and_registration/reset_password_screen.dart';
-import 'Screens/login_and_registration/welcome_screen.dart';
-import 'Screens/login_and_registration/login_or_signin_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'models/PrescriptionData.dart';
-
-//أناااااااااااااااااا هناا
+import 'Screens/all_admin_screen/admin_page.dart';
+import 'Screens/all_doctor_screens/doctor_main_page.dart';
+import 'Screens/all_patient_screen/edit_medical_history_page.dart';
+import 'Screens/all_patient_screen/fill_medical_history_page.dart';
+import 'Screens/all_patient_screen/patients_mainpage.dart';
+import 'Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
+import 'Screens/login_and_registration/Register_hospital_screen.dart';
+import 'Screens/login_and_registration/login_or_signin_screen.dart';
+import 'Screens/login_and_registration/login_screen.dart';
+import 'Screens/login_and_registration/register_screen.dart';
+import 'Screens/login_and_registration/reset_password_screen.dart';
+import 'Screens/login_and_registration/welcome_screen.dart';
+import 'constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,7 +69,7 @@ class MyApp extends StatelessWidget {
           RegisterScreen.id: (context) => RegisterScreen(),
           RegisterHospitalScreen.id: (context) => RegisterHospitalScreen(),
           ResetPassword.id: (context) => ResetPassword(),
-          VerifiyPage.id: (context) => VerifiyPage(),
+          VerifyPage.id: (context) => VerifyPage(),
           //Admin Screens
           AdminScreen.id: (context) => AdminScreen(),
           //Doctor Screens

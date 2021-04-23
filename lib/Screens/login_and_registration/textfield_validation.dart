@@ -82,9 +82,6 @@ class Validation {
   }
 
   String validateEmailLogin(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
       return ' \u26A0 هذا  الحقل مطلوب';
     } else if (!FirebaseAuth.instance.currentUser.email.contains(value)) {
@@ -106,9 +103,6 @@ class Validation {
   }
 
   String validatePasswordLogin(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = RegExp(pattern);
     if (value.length == 0) {
       return ' \u26A0 هذا  الحقل مطلوب';
     }

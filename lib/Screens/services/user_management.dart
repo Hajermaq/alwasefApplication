@@ -1,7 +1,7 @@
 import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 
 class UserManagement {
@@ -307,7 +307,6 @@ class UserManagement {
           FirebaseFirestore.instance.collection('/Patient');
 
       final currentUser = auth.currentUser;
-      String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
         await collection.doc(patientId).collection('/Prescriptions').add(
@@ -393,7 +392,6 @@ class UserManagement {
           FirebaseFirestore.instance.collection('/Patient');
 
       final currentUser = auth.currentUser;
-      String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
         await collection
@@ -536,7 +534,6 @@ class UserManagement {
           FirebaseFirestore.instance.collection('/Patient');
 
       final currentUser = FirebaseAuth.instance.currentUser;
-      String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
         await collection
@@ -608,7 +605,6 @@ class UserManagement {
           FirebaseFirestore.instance.collection('/Patient');
 
       final currentUser = FirebaseAuth.instance.currentUser;
-      String uid = currentUser.uid.toString();
 
       if (currentUser != null) {
         await collection

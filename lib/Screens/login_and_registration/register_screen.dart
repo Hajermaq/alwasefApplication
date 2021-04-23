@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:alwasef_app/Screens/login_and_registration/login_screen.dart';
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/login_and_registration/verify_email.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
+import 'package:alwasef_app/components/round-button.dart';
+import 'package:alwasef_app/components/round_text_fields.dart';
+import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:alwasef_app/constants.dart';
-import 'package:alwasef_app/components/round_text_fields.dart';
-import 'package:alwasef_app/components/round-button.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -60,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VerifiyPage(
+          builder: (context) => VerifyPage(
             email: email,
             password: password,
             name: name,
@@ -101,6 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: false,
         body: Form(
           key: _key,
           autovalidateMode: autovalidateMode,

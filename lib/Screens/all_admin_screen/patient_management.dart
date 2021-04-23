@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flushbar/flushbar.dart';
+
 import '../../constants.dart';
 
 class PatientManagement extends StatefulWidget {
@@ -22,11 +23,6 @@ class _PatientManagementState extends State<PatientManagement> {
   String doctor4_uid;
   String pharmacist_uid;
   String speciality;
-
-  @override
-  void initState() {
-    print('print $pharmacist_uid');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +66,6 @@ class _PatientManagementState extends State<PatientManagement> {
               }
 
               //data snapshot
-              DocumentSnapshot doc = snapshot.data;
 
               return SingleChildScrollView(
                 child: Column(

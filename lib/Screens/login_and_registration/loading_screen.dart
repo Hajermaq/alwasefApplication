@@ -4,7 +4,6 @@ import 'package:alwasef_app/Screens/all_admin_screen/admin_page.dart';
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/patients_mainpage.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/pharamacists_mainpage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

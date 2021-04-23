@@ -1,11 +1,9 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
-import 'package:alwasef_app/models/PrescriptionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+
 import '../../constants.dart';
 
 class PatientPastDiagnoses extends StatefulWidget {
@@ -43,12 +41,12 @@ class _PatientPastDiagnosesState extends State<PatientPastDiagnoses> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(
-                          backgroundColor: kGreyColor,
-                          valueColor: AlwaysStoppedAnimation(kBlueColor)
-                      )
-                      );
-                    } if (snapshot.data.docs.length == 0) {
+                      return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
+                    }
+                    if (snapshot.data.docs.length == 0) {
                       return Center(
                         child: Text(
                           'لا توجد تشخيصات سابقة.',

@@ -1,12 +1,11 @@
 import 'package:alwasef_app/components/medical_history_listTiles.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:alwasef_app/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:line_icons/line_icon.dart';
 
 class DoctorHomePage extends StatefulWidget {
   @override

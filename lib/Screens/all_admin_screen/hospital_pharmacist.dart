@@ -1,4 +1,3 @@
-import 'package:alwasef_app/Screens/all_admin_screen/patient_management.dart';
 import 'package:alwasef_app/Screens/all_admin_screen/pharmacist_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/components/profile_components.dart';
@@ -20,7 +19,6 @@ class _HospitalPharmacistState extends State<HospitalPharmacist> {
   String searchValue = '';
   @override
   Widget build(BuildContext context) {
-    String name;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

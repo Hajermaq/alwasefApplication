@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:alwasef_app/Screens/all_doctor_screens/doctor_main_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/round-button.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class VerifiyPage extends StatefulWidget {
+// ignore: must_be_immutable
+class VerifyPage extends StatefulWidget {
   static const String id = 'verify_screen';
-  VerifiyPage(
+  VerifyPage(
       {this.name, this.email, this.password, this.role, this.hospital_UID});
   String email;
   String password;
@@ -17,10 +17,10 @@ class VerifiyPage extends StatefulWidget {
   String role;
   String hospital_UID;
   @override
-  _VerifiyPageState createState() => _VerifiyPageState();
+  _VerifyPageState createState() => _VerifyPageState();
 }
 
-class _VerifiyPageState extends State<VerifiyPage> {
+class _VerifyPageState extends State<VerifyPage> {
   //Variables
   final auth = FirebaseAuth.instance;
   User user;

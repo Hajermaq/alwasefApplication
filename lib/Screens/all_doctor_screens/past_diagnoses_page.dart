@@ -1,13 +1,10 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/past_prescriptions_page.dart';
-import 'package:alwasef_app/Screens/all_doctor_screens/update_prescription.dart';
-import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../constants.dart';
-import 'add_prescriptions.dart';
 
 class PastDiagnoses extends StatefulWidget {
   PastDiagnoses({this.uid});
@@ -44,10 +41,9 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
-                        child: CircularProgressIndicator(
-                            backgroundColor: kGreyColor,
-                            valueColor: AlwaysStoppedAnimation(kBlueColor))
-                      );
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(
@@ -143,8 +139,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                               children: [
                                                 Text(
                                                   'وصف التشخيص',
-                                                  style:
-                                                      ksubBoldLabelTextStyle,
+                                                  style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 15.0,
@@ -154,8 +149,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                                   style: TextStyle(
                                                     color: Colors.black45,
                                                     fontSize: 15.0,
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ],
@@ -164,8 +158,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                               children: [
                                                 Text(
                                                   'النصيحة الطبية',
-                                                  style:
-                                                      ksubBoldLabelTextStyle,
+                                                  style: ksubBoldLabelTextStyle,
                                                 ),
                                                 SizedBox(
                                                   width: 15.0,
@@ -175,8 +168,7 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                                                   style: TextStyle(
                                                     color: Colors.black45,
                                                     fontSize: 15.0,
-                                                    fontWeight:
-                                                        FontWeight.bold,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
                                               ],
@@ -192,7 +184,6 @@ class _PastDiagnosesState extends State<PastDiagnoses> {
                             return SizedBox();
                           });
                     }
-                    return SizedBox();
                   }),
             ),
           ],

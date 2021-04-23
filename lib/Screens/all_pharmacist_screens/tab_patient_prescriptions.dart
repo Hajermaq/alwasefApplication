@@ -1,13 +1,14 @@
+import 'package:age/age.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../constants.dart';
 import 'check_prescriptions_inconsistencies.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:age/age.dart';
 
 class PrescriptionsPh extends StatefulWidget {
   PrescriptionsPh({this.uid});
@@ -167,10 +168,10 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                     // the prescriptions list that will be checked
                     List drugsToCheck = [];
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(
-                          backgroundColor: kGreyColor,
-                          valueColor: AlwaysStoppedAnimation(kBlueColor))
-                      );
+                      return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
                     }
                     if (snapshot.data.docs.length == 0) {
                       inconsistencyResult =
@@ -181,7 +182,6 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                         style: TextStyle(color: Colors.black54, fontSize: 17),
                       ));
                     } else {
-
                       // delete if 1 month passed
                       snapshot.data.docs.forEach((prescription) {
                         String status = prescription.data()['status'];
@@ -193,110 +193,56 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                             toDate: DateTime.now(),
                             includeToDate: false);
 
-                        if ((difference.months >=1 || difference.days >=28)
-                            && refill == 0 && status == 'dispensed') {
-                          UserManagement()
-                              .PastPrescriptionsSetUp(
+                        if ((difference.months >= 1 || difference.days >= 28) &&
+                            refill == 0 &&
+                            status == 'dispensed') {
+                          UserManagement().PastPrescriptionsSetUp(
                             context,
                             widget.uid,
+                            prescription.data()['prescriber-id'].toString(),
+                            prescription.data()['registerNumber'].toString(),
                             prescription
-                                .data()[
-                            'prescriber-id']
+                                .data()['prescription-creation-date']
+                                .toString(),
+                            prescription.data()['start-date'].toString(),
+                            prescription.data()['end-date'].toString(),
+                            prescription.data()['scientificName'].toString(),
+                            prescription
+                                .data()['scientificNameArabic']
+                                .toString(),
+                            prescription.data()['tradeName'].toString(),
+                            prescription.data()['tradeNameArabic'].toString(),
+                            prescription.data()['strength'].toString(),
+                            prescription.data()['strength-unit'].toString(),
+                            prescription.data()['size'].toString(),
+                            prescription.data()['size-unit'].toString(),
+                            prescription
+                                .data()['pharmaceutical-form']
                                 .toString(),
                             prescription
-                                .data()[
-                            'registerNumber']
+                                .data()['administration-route']
                                 .toString(),
                             prescription
-                                .data()[
-                            'prescription-creation-date']
+                                .data()['storage-conditions']
                                 .toString(),
-                            prescription
-                                .data()[
-                            'start-date']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'end-date']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'scientificName']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'scientificNameArabic']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'tradeName']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'tradeNameArabic']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'strength']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'strength-unit']
-                                .toString(),
-                            prescription
-                                .data()['size']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'size-unit']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'pharmaceutical-form']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'administration-route']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'storage-conditions']
-                                .toString(),
-                            prescription
-                                .data()['price']
-                                .toString(),
-                            prescription
-                                .data()['dose'],
-                            prescription.data()[
-                            'quantity'],
-                            prescription
-                                .data()['refill'],
-                            prescription.data()[
-                            'dosing-expire'],
-                            prescription.data()[
-                            'frequency'],
-                            prescription
-                                .data()[
-                            'instruction-note']
-                                .toString(),
-                            prescription
-                                .data()[
-                            'doctor-note']
-                                .toString(),
+                            prescription.data()['price'].toString(),
+                            prescription.data()['dose'],
+                            prescription.data()['quantity'],
+                            prescription.data()['refill'],
+                            prescription.data()['dosing-expire'],
+                            prescription.data()['frequency'],
+                            prescription.data()['instruction-note'].toString(),
+                            prescription.data()['doctor-note'].toString(),
                           );
-                          FirebaseFirestore
-                              .instance
-                              .collection(
-                              '/Patient')
+                          FirebaseFirestore.instance
+                              .collection('/Patient')
                               .doc(widget.uid)
-                              .collection(
-                              '/Prescriptions')
-                              .doc(
-                              prescription.id)
+                              .collection('/Prescriptions')
+                              .doc(prescription.id)
                               .delete();
                         } else {
-
-                          String scientificName = prescription.data()['scientificName'];
+                          String scientificName =
+                              prescription.data()['scientificName'];
                           print(scientificName);
                           drugsToCheck.add(scientificName);
                         }
@@ -334,7 +280,8 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                 snapshot.data.docs[index];
 
                             String status = prescription.data()['status'];
-                            String prescriberID = prescription.data()['prescriber-id'];
+                            String prescriberID =
+                                prescription.data()['prescriber-id'];
                             int refill = prescription.data()['refill'];
 
                             //search by
@@ -384,11 +331,12 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                     if (!snapshot.hasData) {
                                       return Center(
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: LinearProgressIndicator(
-                                                backgroundColor: kGreyColor,
-                                                valueColor: AlwaysStoppedAnimation(kBlueColor)),
-                                          ));
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: LinearProgressIndicator(
+                                            backgroundColor: kGreyColor,
+                                            valueColor: AlwaysStoppedAnimation(
+                                                kBlueColor)),
+                                      ));
                                     }
                                     DocumentSnapshot doc = snapshot.data;
 
@@ -1002,7 +950,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                       Text(
                                                         'ملاحظات الطبيب للصيدلي',
                                                         style:
-                                                        ksubBoldLabelTextStyle,
+                                                            ksubBoldLabelTextStyle,
                                                       ),
                                                       SizedBox(
                                                         width: 20.0,
@@ -1012,10 +960,10 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                           'انقر هنا للقراءة',
                                                           style: TextStyle(
                                                             color:
-                                                            Colors.black45,
+                                                                Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                            FontWeight.bold,
+                                                                FontWeight.bold,
                                                           ),
                                                         ),
                                                         onTap: () {
@@ -1027,42 +975,44 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                   height: 250,
                                                                   child: Card(
                                                                     shape:
-                                                                    RoundedRectangleBorder(
+                                                                        RoundedRectangleBorder(
                                                                       borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          15.0),
+                                                                          BorderRadius.circular(
+                                                                              15.0),
                                                                     ),
                                                                     color:
-                                                                    kGreyColor,
+                                                                        kGreyColor,
                                                                     child:
-                                                                    Column(
+                                                                        Column(
                                                                       children: [
                                                                         ListTile(
                                                                           title:
-                                                                          Text(
+                                                                              Text(
                                                                             'ملاحظات من الطبيب للصيدلي',
                                                                             textAlign:
-                                                                            TextAlign.center,
+                                                                                TextAlign.center,
                                                                             style:
-                                                                            kBoldLabelTextStyle,
+                                                                                kBoldLabelTextStyle,
                                                                           ),
                                                                         ),
                                                                         Divider(
                                                                           color:
-                                                                          klighterColor,
+                                                                              klighterColor,
                                                                           thickness:
-                                                                          0.9,
+                                                                              0.9,
                                                                           endIndent:
-                                                                          20,
+                                                                              20,
                                                                           indent:
-                                                                          20,
+                                                                              20,
                                                                         ),
                                                                         Padding(
                                                                           padding:
-                                                                          const EdgeInsets.all(15.0),
-                                                                          child: Text(
+                                                                              const EdgeInsets.all(15.0),
+                                                                          child:
+                                                                              Text(
                                                                             '${prescription.data()['doctor-note']}',
-                                                                            style: ksubBoldLabelTextStyle,
+                                                                            style:
+                                                                                ksubBoldLabelTextStyle,
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1117,11 +1067,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                             child:
                                                                                 Text('نعم'),
                                                                             onPressed: () async {
-                                                                              await FirebaseFirestore.instance.collection('/Patient')
-                                                                                  .doc(widget.uid)
-                                                                                  .collection('/Prescriptions')
-                                                                                  .doc(prescription.id)
-                                                                                  .update({
+                                                                              await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
                                                                                 'status': 'inconsistent',
                                                                                 'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                               });
@@ -1151,13 +1097,16 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                       titleTextStyle: TextStyle(
                                                                           fontSize:
                                                                               15,
-                                                                          fontWeight:
-                                                                              FontWeight.bold, color: kBlueColor),
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          color:
+                                                                              kBlueColor),
                                                                       content: Text(
                                                                           'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الطبيب بتعديلها',
                                                                           style:
                                                                               TextStyle(
-                                                                                color: kBlueColor,
+                                                                            color:
+                                                                                kBlueColor,
                                                                             fontFamily:
                                                                                 'Almarai',
                                                                           ),
@@ -1214,12 +1163,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                           yesButton = FlatButton(
                                                                               child: Text('نعم'),
                                                                               onPressed: () async {
-                                                                                await FirebaseFirestore.instance
-                                                                                    .collection('/Patient')
-                                                                                    .doc(widget.uid)
-                                                                                    .collection('/Prescriptions')
-                                                                                    .doc(prescription.id)
-                                                                                    .update({
+                                                                                await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
                                                                                   'refill': newRefill,
                                                                                   'status': 'dispensed',
                                                                                   'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
@@ -1238,13 +1182,12 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
 
                                                                           return AlertDialog(
                                                                             title: Text('هل تريد تأكيد الوصفة؟',
-                                                                                style: TextStyle(
-                                                                                  fontFamily: 'Almarai',
-                                                                                    color: kBlueColor
-                                                                                ),
+                                                                                style: TextStyle(fontFamily: 'Almarai', color: kBlueColor),
                                                                                 textAlign: TextAlign.center),
-                                                                            titleTextStyle:
-                                                                                TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                                            titleTextStyle: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                color: kBlueColor),
                                                                             content: Text('عند تأكيدك للوصفة سينقص عدد مرات إعادة التعبئة المسموح بها لهذ هالوصفة',
                                                                                 style: TextStyle(
                                                                                   color: kBlueColor,

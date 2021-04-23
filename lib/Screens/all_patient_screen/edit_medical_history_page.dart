@@ -1,15 +1,15 @@
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flushbar/flushbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:age/age.dart';
-import 'package:intl/intl.dart';
-import '../../constants.dart';
-import 'package:collection/collection.dart';
 import 'dart:math';
 
-import 'bar_patient_medical_info.dart';
+import 'package:age/age.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../constants.dart';
 
 class EditMedicalHistoryPage extends StatefulWidget {
   final String uid;

@@ -3,12 +3,13 @@ import 'package:alwasef_app/Screens/all_patient_screen/tab_past_prescriptions_fo
 import 'package:alwasef_app/Screens/all_patient_screen/tab_prescriptions_for_patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:md2_tab_indicator/md2_tab_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:md2_tab_indicator/md2_tab_indicator.dart';
+
 import '../../constants.dart';
-import 'tab_diagnoses_for_patient.dart';
 import 'edit_medical_history_page.dart';
 import 'fill_medical_history_page.dart';
+import 'tab_diagnoses_for_patient.dart';
 
 class PatientMedicalInfo extends StatefulWidget {
   final String name;
@@ -21,7 +22,6 @@ class PatientMedicalInfo extends StatefulWidget {
 
 class _PatientMedicalInfoState extends State<PatientMedicalInfo>
     with TickerProviderStateMixin {
-
   TabController _tabController;
   @override
   void initState() {
@@ -129,13 +129,15 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                           builder: (context, snapshot) {
                                             if (!snapshot.hasData) {
                                               return Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                          backgroundColor: kGreyColor,
-                                                          valueColor: AlwaysStoppedAnimation(kBlueColor))
-                                              );
+                                                  child: CircularProgressIndicator(
+                                                      backgroundColor:
+                                                          kGreyColor,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              kBlueColor)));
                                             }
-                                            if (snapshot.data.docs.length == 0) {
+                                            if (snapshot.data.docs.length ==
+                                                0) {
                                               return Column(
                                                 children: [
                                                   Card(

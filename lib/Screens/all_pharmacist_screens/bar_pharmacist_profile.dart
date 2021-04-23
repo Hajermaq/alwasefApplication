@@ -1,11 +1,12 @@
+import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
 import 'package:alwasef_app/Screens/services/profile_changes.dart';
+import 'package:alwasef_app/components/profile_components.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
-import 'package:alwasef_app/components/profile_components.dart';
 
 class PharmacistProfileInfo extends StatefulWidget {
   @override

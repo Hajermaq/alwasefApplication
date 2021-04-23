@@ -1,4 +1,3 @@
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -41,7 +40,6 @@ class RoundTextFields extends StatelessWidget {
           obscureText: isObscure,
           onChanged: onChanged,
           decoration: InputDecoration(
-
             contentPadding: EdgeInsets.fromLTRB(5.0, 10.0, 15.0, 10.0),
             errorStyle: TextStyle(
               color: kRedColor,

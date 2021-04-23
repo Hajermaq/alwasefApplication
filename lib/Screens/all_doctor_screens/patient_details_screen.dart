@@ -5,13 +5,9 @@ import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.d
 import 'package:alwasef_app/Screens/all_doctor_screens/prescriptions_page.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-import 'package:scroll_navigation/scroll_navigation.dart';
-import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class PatientDetails extends StatefulWidget {
   static final String id = 'patient_details_screen';

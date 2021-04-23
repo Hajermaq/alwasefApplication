@@ -1,16 +1,17 @@
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/services/profile_changes.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flushbar/flushbar.dart';
+import 'package:alwasef_app/components/round-button.dart';
+import 'package:alwasef_app/components/round_text_fields.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:alwasef_app/components/round_text_fields.dart';
-import 'package:alwasef_app/components/round-button.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'loading_screen.dart';
 
 class LogInScreen extends StatefulWidget {

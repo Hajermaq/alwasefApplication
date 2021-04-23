@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../constants.dart';
 
 class PatientDiagnoses extends StatefulWidget {
@@ -40,11 +41,12 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(
-                          backgroundColor: kGreyColor,
-                          valueColor: AlwaysStoppedAnimation(kBlueColor))
-                      );
-                    } if (snapshot.data.docs.length == 0) {
+                      return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
+                    }
+                    if (snapshot.data.docs.length == 0) {
                       return Center(
                         child: Text(
                           'لا توجد تشخيصات.',
@@ -56,25 +58,24 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
                             DocumentSnapshot diagnoses =
-                            snapshot.data.docs[index];
+                                snapshot.data.docs[index];
                             String status = diagnoses.data()['status'];
                             String medicalDiagnosis =
-                            diagnoses.data()['medical-diagnosis'];
+                                diagnoses.data()['medical-diagnosis'];
                             // search logic
                             if (medicalDiagnosis
-                                .toLowerCase()
-                                .contains(searchValue.toLowerCase()) ||
+                                    .toLowerCase()
+                                    .contains(searchValue.toLowerCase()) ||
                                 medicalDiagnosis
                                     .toUpperCase()
                                     .contains(searchValue.toUpperCase())) {
-
                               return Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15.0),
                                 ),
                                 color: kGreyColor,
                                 margin:
-                                EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                                 child: Column(
                                   children: [
                                     ListTile(
@@ -86,7 +87,7 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                         padding: const EdgeInsets.all(5.0),
                                         child: Text(
                                           diagnoses.data()[
-                                          'diagnosis-creation-date'],
+                                              'diagnosis-creation-date'],
                                           style: TextStyle(
                                               color: Colors.black54,
                                               fontSize: 15.0,
@@ -96,13 +97,13 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                       trailing: OutlinedButton.icon(
                                         icon: status == 'ongoing'
                                             ? Icon(
-                                          Icons.replay_circle_filled,
-                                          color: kBlueColor,
-                                        )
+                                                Icons.replay_circle_filled,
+                                                color: kBlueColor,
+                                              )
                                             : Icon(
-                                          Icons.update,
-                                          color: kBlueColor,
-                                        ),
+                                                Icons.update,
+                                                color: kBlueColor,
+                                              ),
                                         label: Text(
                                           "${diagnoses.data()['status']}",
                                           style: TextStyle(
@@ -116,7 +117,7 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                               width: 2.0, color: kBlueColor),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(32.0),
+                                                BorderRadius.circular(32.0),
                                           ),
                                         ),
                                       ),
@@ -132,16 +133,17 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                       child: Container(
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Row(
                                                 children: [
                                                   Text(
                                                     'وصف التشخيص',
                                                     style:
-                                                    ksubBoldLabelTextStyle,
+                                                        ksubBoldLabelTextStyle,
                                                   ),
                                                   SizedBox(
                                                     width: 15.0,
@@ -152,20 +154,21 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Row(
                                                 children: [
                                                   Text(
                                                     'النصيحة الطبية',
                                                     style:
-                                                    ksubBoldLabelTextStyle,
+                                                        ksubBoldLabelTextStyle,
                                                   ),
                                                   SizedBox(
                                                     width: 15.0,
@@ -176,7 +179,7 @@ class _PatientDiagnosesState extends State<PatientDiagnoses> {
                                                       color: Colors.black45,
                                                       fontSize: 15.0,
                                                       fontWeight:
-                                                      FontWeight.bold,
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                 ],

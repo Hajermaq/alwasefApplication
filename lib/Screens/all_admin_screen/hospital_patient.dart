@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icon.dart';
 
 import '../../constants.dart';
 
@@ -20,7 +19,6 @@ class _HospitalPatientsState extends State<HospitalPatients> {
   String searchValue = '';
   @override
   Widget build(BuildContext context) {
-    String name;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

@@ -1,11 +1,12 @@
 import 'package:alwasef_app/Screens/login_and_registration/welcome_screen.dart';
 import 'package:alwasef_app/Screens/services/profile_changes.dart';
+import 'package:alwasef_app/components/profile_components.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:alwasef_app/components/profile_components.dart';
+
+import '../../constants.dart';
 
 class PatientProfile extends StatefulWidget {
   @override
@@ -57,11 +58,10 @@ class _PatientProfileState extends State<PatientProfile> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(
-                          backgroundColor: kGreyColor,
-                          valueColor: AlwaysStoppedAnimation(kBlueColor)
-                      )
-                      );
+                      return Center(
+                          child: CircularProgressIndicator(
+                              backgroundColor: kGreyColor,
+                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
                     } else {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 40.0),

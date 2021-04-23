@@ -1,20 +1,20 @@
+import 'dart:convert';
 import 'dart:math';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
-import 'package:alwasef_app/components/drug_info_card.dart';
-import 'package:alwasef_app/components/text_field_1.dart';
-import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
+import 'package:alwasef_app/components/drug_info_card.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:alwasef_app/constants.dart';
+import 'package:alwasef_app/models/prescription_model.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class AddPrescriptions extends StatefulWidget {
   AddPrescriptions({this.uid, this.pharmacistUid});
@@ -72,6 +72,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
 
   // the init function generate a new prescription id once this page loads
   @override
+  // ignore: must_call_super
   void initState() {
     var l = new List.generate(6, (_) => rnd.nextInt(10));
     for (var i in l) {

@@ -1,12 +1,12 @@
 import 'dart:math';
+
+import 'package:age/age.dart';
 import 'package:alwasef_app/components/medical_history_listTiles.dart';
 import 'package:alwasef_app/components/profile_components.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:age/age.dart';
 
 class PatientMedicalHistory extends StatefulWidget {
   PatientMedicalHistory({this.uid});
@@ -49,10 +49,10 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator(
-                  backgroundColor: kGreyColor,
-                  valueColor: AlwaysStoppedAnimation(kBlueColor))
-              );
+              return Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: kGreyColor,
+                      valueColor: AlwaysStoppedAnimation(kBlueColor)));
             }
             if (snapshot.data.docs.length == 0) {
               return Center(
@@ -160,7 +160,7 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                         ),
                         MedicalHistoyListTile(
                           titleText: 'مؤشر كتلة الجسم',
-                          dataText: '${BMI} كجم/ متر2',
+                          dataText: '$BMI كجم/ متر2',
                         ),
                         SizedBox(
                           height: 10,

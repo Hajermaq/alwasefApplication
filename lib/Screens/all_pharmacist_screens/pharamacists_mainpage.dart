@@ -1,8 +1,9 @@
 import 'package:alwasef_app/Screens/services/display_patients_reports.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
+
 import '../../constants.dart';
 import 'bar_pharmacist_home_page.dart';
 import 'bar_pharmacist_profile.dart';

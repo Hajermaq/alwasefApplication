@@ -1,11 +1,12 @@
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescription_calendar.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/bar_prescriptions_reports.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
+
 import '../../constants.dart';
 import 'bar_patient_medical_info.dart';
 import 'bar_patient_profile.dart';
@@ -84,7 +85,6 @@ class _PatientMainPageState extends State<PatientMainPage> {
               ScrollNavigationItem(
                 icon: Icon(Icons.account_circle_outlined),
               ),
-
             ], // end of items
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../constants.dart';
 
 class DoctorProfileInfo extends StatefulWidget {
@@ -60,8 +61,7 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                       return Center(
                         child: CircularProgressIndicator(
                             backgroundColor: kGreyColor,
-                            valueColor: AlwaysStoppedAnimation(kBlueColor)
-                        ),
+                            valueColor: AlwaysStoppedAnimation(kBlueColor)),
                       );
                     } else {
                       return Padding(
