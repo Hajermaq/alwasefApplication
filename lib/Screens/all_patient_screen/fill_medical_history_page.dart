@@ -82,6 +82,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         onSaved: (value) {
                           medicalHistory.patientFullName = value;
                           medicalHistory.patientUID = authM.currentUser.uid;
+
                         },
                         //controller: nameCtrl,
                       ),
@@ -160,7 +161,7 @@ class _FillMedicalHistoryPageState extends State<FillMedicalHistoryPage> {
                         },
                         onSaved: (date){
                           medicalHistory.birthDate = dateFormat.format(date);
-
+                          medicalHistory.lastUpdated = dateFormat.format(DateTime.now());
                         },
                       ),
                     ),

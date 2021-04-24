@@ -81,6 +81,8 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                   toDate: DateTime.now(),
                   includeToDate: false);
               var age = ageComplete.years;
+              // last update
+              String lastUpdate = medicalHistory.data()['last-update'];
               //BMI related
               double heightInCm = medicalHistory.data()['height'];
               double heightInM = heightInCm / 100;
@@ -230,6 +232,10 @@ class _PatientMedicalHistoryState extends State<PatientMedicalHistory> {
                           children:
                               getArraytinfo(currentMedicationList, 'الدواء'),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0, 7.0, 8.0, 10),
+                          child: Text('اخر تحديث: $lastUpdate', style: TextStyle(color: Colors.black))
+                        )
                       ],
                     ),
                   ),

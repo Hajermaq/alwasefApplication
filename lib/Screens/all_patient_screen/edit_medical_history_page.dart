@@ -612,6 +612,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                         }
                                         if (somethingChanged) {
                                           this.somethingChanged = false;
+                                          medicalHistory.reference.update(
+                                              {'lastUpdated': dateFormat.format(DateTime.now())});
                                           Flushbar(
                                             backgroundColor: kLightColor,
                                             borderRadius: 4.0,

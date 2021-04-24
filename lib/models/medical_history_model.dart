@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MedicalHistory {
-  String patientUID;
-  String patientFullName, gender, birthDate, maritalStatus, pregnancy, smoking;
+  String patientUID,
+      patientFullName,
+      gender,
+      birthDate,
+      maritalStatus,
+      pregnancy,
+      smoking,
+      lastUpdated;
   double weight, height;
   List<String> hospitalizations,
       surgery,
@@ -31,6 +37,7 @@ class MedicalHistory {
         'current medications': currentMed,
         'allergies': allergies,
         'medication allergies': medAllergies,
+        'last-update': lastUpdated,
       });
     } catch (e) {
       print(e);
