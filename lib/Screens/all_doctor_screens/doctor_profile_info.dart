@@ -182,74 +182,86 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                         context: context,
                                         // isScrollControlled: true,
                                         builder: (context) {
-                                          return Container(
-                                            height: 600,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Text(
-                                                  'تسجيل الخروج ',
-                                                  style: TextStyle(
-                                                      color: kBlueColor,
-                                                      fontSize: 30.0),
-                                                ),
-                                                Text(
-                                                  'هل أنت متأكد أنك تريد تسجيل الخروج؟',
-                                                  style: TextStyle(
-                                                      color: kBlueColor,
-                                                      fontSize: 16.0),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 100.0,
-                                                      vertical: 20.0),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    height: 50.0,
-                                                    child: RaisedButton(
-                                                      onPressed: () async {
-                                                        await auth.signOut().then(
-                                                            (value) => Navigator
-                                                                .pushNamed(
-                                                                    context,
-                                                                    WelcomeScreen
-                                                                        .id));
-                                                      },
-                                                      color: kBlueColor,
-                                                      child: Text(
-                                                        'نعم',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          // fontFamily: 'Montserrat',
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          letterSpacing: 1,
+                                          return WillPopScope(
+                                            child: Container(
+                                              height: 600,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  Text(
+                                                    'تسجيل الخروج ',
+                                                    style: TextStyle(
+                                                        color: kBlueColor,
+                                                        fontSize: 30.0),
+                                                  ),
+                                                  Text(
+                                                    'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                                                    style: TextStyle(
+                                                        color: kBlueColor,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 100.0,
+                                                            vertical: 20.0),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      height: 50.0,
+                                                      child: RaisedButton(
+                                                        onPressed: () async {
+                                                          await auth
+                                                              .signOut()
+                                                              .then(
+                                                                (value) => Navigator
+                                                                    .pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            WelcomeScreen(),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                        },
+                                                        color: kBlueColor,
+                                                        child: Text(
+                                                          'نعم',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            // fontFamily: 'Montserrat',
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            letterSpacing: 1,
+                                                          ),
                                                         ),
-                                                      ),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(30.0),
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30.0),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text(
-                                                    'إلغاء الامر',
-                                                    style: TextStyle(
-                                                        color: kGreyColor,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text(
+                                                      'إلغاء الامر',
+                                                      style: TextStyle(
+                                                          color: kGreyColor,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           );
                                         },

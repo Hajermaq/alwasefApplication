@@ -69,7 +69,9 @@ class _PrescriptionsState extends State<Prescriptions> {
                       .collection('/Patient')
                       .doc(widget.uid)
                       .collection('/Prescriptions')
-                      //.where('status', isNotEqualTo: 'requested refill') // cant use because does not offer docs length method
+                      // .where('status',
+                      //     isNotEqualTo:
+                      //         'requested refill') // cant use because does not offer docs length method
                       .where('prescriber-id',
                           isEqualTo: FirebaseAuth.instance.currentUser.uid)
                       .snapshots(),

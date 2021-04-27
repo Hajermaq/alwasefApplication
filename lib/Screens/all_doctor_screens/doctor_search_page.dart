@@ -160,7 +160,6 @@ class _PatientDataState extends State<PatientData> {
                                                   AlwaysStoppedAnimation(
                                                       kLightColor)));
                                     } else {
-                                      print('hey');
                                       String name =
                                           snapshot.data.get('patient-name');
                                       if (name.toLowerCase().contains(
