@@ -69,7 +69,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
 
         for (String i in allergiesList) {
           allergies += i;
-          allergies += ' / ';
+          allergies += ' , ';
         }
 
         print(allergies);
@@ -476,62 +476,41 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                   return ListView.builder(
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot prescription =
-                            snapshot.data.docs[index];
-
+                        DocumentSnapshot prescription = snapshot.data.docs[index];
                         // time calculations for buttons (add report/request refill)
                         String start = prescription.data()['start-date'];
                         DateTime startDate = DateTime.tryParse(start);
                         int refill = prescription.data()['refill'];
+
                         if (startDate.isBefore(DateTime.now())) {
                           var difference = Age.dateDifference(
                               fromDate: startDate,
                               toDate: DateTime.now(),
                               includeToDate: false);
-                          print(difference);
-
                           // delete if 1 month passed
                           if ((difference.months >= 1 ||
-                                  difference.days >= 28) &&
-                              refill == 0) {
+                                  difference.days >= 28) && refill == 0) {
                             UserManagement().PastPrescriptionsSetUp(
                               context,
                               widget.uid,
                               prescription.data()['prescriber-id'].toString(),
-                              prescription.data()['registerNumber'].toString(),
-                              prescription
-                                  .data()['prescription-creation-date']
-                                  .toString(),
+                              prescription.data()['pharmacist-id'].toString(),
+                              'deleted',
+                              prescription.data()['prescription-creation-date'].toString(),
                               prescription.data()['start-date'].toString(),
                               prescription.data()['end-date'].toString(),
                               prescription.data()['scientificName'].toString(),
-                              prescription
-                                  .data()['scientificNameArabic']
-                                  .toString(),
                               prescription.data()['tradeName'].toString(),
                               prescription.data()['tradeNameArabic'].toString(),
                               prescription.data()['strength'].toString(),
                               prescription.data()['strength-unit'].toString(),
-                              prescription.data()['size'].toString(),
-                              prescription.data()['size-unit'].toString(),
-                              prescription
-                                  .data()['pharmaceutical-form']
-                                  .toString(),
-                              prescription
-                                  .data()['administration-route']
-                                  .toString(),
-                              prescription
-                                  .data()['storage-conditions']
-                                  .toString(),
+                              prescription.data()['pharmaceutical-form'].toString(),
+                              prescription.data()['administration-route'].toString(),
+                              prescription.data()['storage-conditions'].toString(),
                               prescription.data()['price'].toString(),
-                              prescription.data()['dose'],
-                              prescription.data()['quantity'],
                               prescription.data()['refill'],
-                              prescription.data()['dosing-expire'],
                               prescription.data()['frequency'],
-                              prescription
-                                  .data()['instruction-note']
-                                  .toString(),
+                              prescription.data()['instruction-note'].toString(),
                               prescription.data()['doctor-note'].toString(),
                             );
                             FirebaseFirestore.instance
@@ -541,29 +520,21 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                 .doc(prescription.id)
                                 .delete();
                           }
-
                           // doctor info
-                          String prescriberID =
-                              prescription.data()['prescriber-id'];
-                          String pharmacistID =
-                              prescription.data()['pharmacist-id'];
-
+                          String prescriberID = prescription.data()['prescriber-id'];
+                          String pharmacistID = prescription.data()['pharmacist-id'];
                           //search by
                           String tradeName = prescription.data()['tradeName'];
                           String dose = prescription.data()['dose'].toString();
 
                           // search logic
-                          if (tradeName
-                                  .toLowerCase()
+                          if (tradeName.toLowerCase()
                                   .contains(searchValue.toLowerCase()) ||
-                              tradeName
-                                  .toUpperCase()
+                              tradeName.toUpperCase()
                                   .contains(searchValue.toUpperCase()) ||
-                              dose
-                                  .toLowerCase()
+                              dose.toLowerCase()
                                   .contains(searchValue.toLowerCase()) ||
-                              dose
-                                  .toUpperCase()
+                              dose.toUpperCase()
                                   .contains(searchValue.toUpperCase())) {
                             return Card(
                               shape: RoundedRectangleBorder(
@@ -980,7 +951,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                 String doctorName =
                                                     doc.data()['doctor-name'];
                                                 String tempDoctorSpeciality =
-                                                    doc.data()['speciality'];
+                                                    doc.data()['doctor-speciality'];
                                                 String doctorSpeciality;
                                                 String experienceYears = doc
                                                     .data()['experience-years'];
@@ -1236,29 +1207,21 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                               Row(
                                                 children: [
                                                   //allow creating report if 7 days of more passed
-                                                  (difference.months >= 1 ||
-                                                          difference.days >= 7)
+                                                  (difference.months >= 1 || difference.days >= 7)
                                                       ? RaisedButton(
                                                           color: klighterColor,
                                                           shape: RoundedRectangleBorder(
                                                               side: BorderSide(
-                                                                  color:
-                                                                      kGreyColor,
+                                                                  color: kGreyColor,
                                                                   width: 2),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
-                                                          child: Text(
-                                                              "إنشاء تقرير"),
+                                                              borderRadius: BorderRadius.circular(10)),
+                                                          child: Text("إنشاء تقرير"),
                                                           onPressed: () {
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                    fullscreenDialog:
-                                                                        true,
-                                                                    builder:
-                                                                        (context) =>
+                                                                    fullscreenDialog: true,
+                                                                    builder: (context) =>
                                                                             CreateReportPage(
                                                                               uid: widget.uid,
                                                                               prescriberID: prescriberID,
@@ -1304,7 +1267,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                     String
                                                                         tempDoctorSpeciality =
                                                                         doc.data()[
-                                                                            'speciality'];
+                                                                            'doctor-speciality'];
                                                                     String
                                                                         doctorSpeciality;
 
@@ -1424,7 +1387,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                     String
                                                                         tempDoctorSpeciality =
                                                                         doc.data()[
-                                                                            'speciality'];
+                                                                            'doctor-speciality'];
                                                                     String
                                                                         doctorSpeciality;
 
@@ -1586,49 +1549,37 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                   ),
 
                                                   //allow request refill if a month passed and nom of refill is 1 or more
-                                                  (difference.months >= 1 ||
-                                                              difference.days >=
-                                                                  28) &&
-                                                          refill > 0
+                                                  (difference.months >= 1 || difference.days >= 28) && refill > 0
                                                       ? RaisedButton(
                                                           color: klighterColor,
                                                           shape: RoundedRectangleBorder(
                                                               side: BorderSide(
-                                                                  color:
-                                                                      kGreyColor,
+                                                                  color: kGreyColor,
                                                                   width: 2),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10)),
+                                                              borderRadius: BorderRadius.circular(10)),
                                                           child: Text(
                                                               "طلب إعادة تعبئة"),
                                                           onPressed: () async {
                                                             showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
+                                                                context: context,
+                                                                builder: (BuildContext context) {
                                                                   yesButton =
                                                                       FlatButton(
-                                                                          child: Text(
-                                                                              'نعم'),
-                                                                          onPressed:
-                                                                              () async {
-                                                                            await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
+                                                                          child: Text('نعم'),
+                                                                          onPressed: () async {
+                                                                            await FirebaseFirestore.instance.collection('/Patient')
+                                                                                .doc(widget.uid)
+                                                                                .collection('/Prescriptions')
+                                                                                .doc(prescription.id)
+                                                                                .update({
                                                                               'status': 'requested refill'
                                                                             });
                                                                             Navigator.pop(context);
                                                                           });
-                                                                  noButton =
-                                                                      FlatButton(
-                                                                    child: Text(
-                                                                        'لا'),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                  noButton = FlatButton(
+                                                                        child: Text('لا'),
+                                                                        onPressed: () {
+                                                                          Navigator.pop(context);
                                                                     },
                                                                   );
 
@@ -1651,7 +1602,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                         color:
                                                                             kBlueColor),
                                                                     content: Text(
-                                                                        'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الصيدلي بقبول الطلب',
+                                                                        'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الصيدلي بقبول الطلب \n\n الطلبات المرفوضة ستظهر عند قسم الوصفات السابقة',
                                                                         style:
                                                                             TextStyle(
                                                                           color:
@@ -1695,64 +1646,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                           }
                           return SizedBox();
                         } else {
-                          var difference = Age.dateDifference(
-                              fromDate: startDate,
-                              toDate: DateTime.now(),
-                              includeToDate: false);
-                          print(difference);
-
-                          // delete if 1 month passed
-                          if ((difference.months >= 1 ||
-                                  difference.days >= 28) &&
-                              refill == 0) {
-                            UserManagement().PastPrescriptionsSetUp(
-                              context,
-                              widget.uid,
-                              prescription.data()['prescriber-id'].toString(),
-                              prescription.data()['registerNumber'].toString(),
-                              prescription
-                                  .data()['prescription-creation-date']
-                                  .toString(),
-                              prescription.data()['start-date'].toString(),
-                              prescription.data()['end-date'].toString(),
-                              prescription.data()['scientificName'].toString(),
-                              prescription
-                                  .data()['scientificNameArabic']
-                                  .toString(),
-                              prescription.data()['tradeName'].toString(),
-                              prescription.data()['tradeNameArabic'].toString(),
-                              prescription.data()['strength'].toString(),
-                              prescription.data()['strength-unit'].toString(),
-                              prescription.data()['size'].toString(),
-                              prescription.data()['size-unit'].toString(),
-                              prescription
-                                  .data()['pharmaceutical-form']
-                                  .toString(),
-                              prescription
-                                  .data()['administration-route']
-                                  .toString(),
-                              prescription
-                                  .data()['storage-conditions']
-                                  .toString(),
-                              prescription.data()['price'].toString(),
-                              prescription.data()['dose'],
-                              prescription.data()['quantity'],
-                              prescription.data()['refill'],
-                              prescription.data()['dosing-expire'],
-                              prescription.data()['frequency'],
-                              prescription
-                                  .data()['instruction-note']
-                                  .toString(),
-                              prescription.data()['doctor-note'].toString(),
-                            );
-                            FirebaseFirestore.instance
-                                .collection('/Patient')
-                                .doc(widget.uid)
-                                .collection('/Prescriptions')
-                                .doc(prescription.id)
-                                .delete();
-                          }
-
                           // doctor info
                           String prescriberID =
                               prescription.data()['prescriber-id'];
@@ -2191,7 +2084,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                 String doctorName =
                                                     doc.data()['doctor-name'];
                                                 String tempDoctorSpeciality =
-                                                    doc.data()['speciality'];
+                                                    doc.data()['doctor-speciality'];
                                                 String doctorSpeciality;
                                                 String experienceYears = doc
                                                     .data()['experience-years'];
@@ -2474,7 +2367,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                 String
                                                                     tempDoctorSpeciality =
                                                                     doc.data()[
-                                                                        'speciality'];
+                                                                        'doctor-speciality'];
                                                                 String
                                                                     doctorSpeciality;
 
@@ -2590,7 +2483,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                 String
                                                                     tempDoctorSpeciality =
                                                                     doc.data()[
-                                                                        'speciality'];
+                                                                        'doctor-speciality'];
                                                                 String
                                                                     doctorSpeciality;
 

@@ -72,6 +72,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                       // .where('status',
                       //     isNotEqualTo:
                       //         'requested refill') // cant use because does not offer docs length method
+                      // cant use because does not offer docs length method
+                      //.where('status', isNotEqualTo: 'requested refill')
                       .where('prescriber-id',
                           isEqualTo: FirebaseAuth.instance.currentUser.uid)
                       .snapshots(),
@@ -96,7 +98,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                             Widget statusIcon;
                             DocumentSnapshot prescription =
                                 snapshot.data.docs[index];
-
+                            String pharmacistID =
+                                prescription.data()['pharmacist-id'];
                             String status = prescription.data()['status'];
                             String start = prescription.data()['start-date'];
                             DateTime startDate = DateTime.tryParse(start);
@@ -115,9 +118,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                                 context,
                                 widget.uid,
                                 prescription.data()['prescriber-id'].toString(),
-                                prescription
-                                    .data()['registerNumber']
-                                    .toString(),
+                                pharmacistID.isEmpty ? '' : pharmacistID,
+                                'deleted',
                                 prescription
                                     .data()['prescription-creation-date']
                                     .toString(),
@@ -126,17 +128,12 @@ class _PrescriptionsState extends State<Prescriptions> {
                                 prescription
                                     .data()['scientificName']
                                     .toString(),
-                                prescription
-                                    .data()['scientificNameArabic']
-                                    .toString(),
                                 prescription.data()['tradeName'].toString(),
                                 prescription
                                     .data()['tradeNameArabic']
                                     .toString(),
                                 prescription.data()['strength'].toString(),
                                 prescription.data()['strength-unit'].toString(),
-                                prescription.data()['size'].toString(),
-                                prescription.data()['size-unit'].toString(),
                                 prescription
                                     .data()['pharmaceutical-form']
                                     .toString(),
@@ -147,10 +144,7 @@ class _PrescriptionsState extends State<Prescriptions> {
                                     .data()['storage-conditions']
                                     .toString(),
                                 prescription.data()['price'].toString(),
-                                prescription.data()['dose'],
-                                prescription.data()['quantity'],
                                 prescription.data()['refill'],
-                                prescription.data()['dosing-expire'],
                                 prescription.data()['frequency'],
                                 prescription
                                     .data()['instruction-note']
@@ -166,14 +160,11 @@ class _PrescriptionsState extends State<Prescriptions> {
                             }
 
                             if (status != 'requested refill') {
-                              String pharmacistID =
-                                  prescription.data()['pharmacist-id'];
                               //search by
                               String tradeName =
                                   prescription.data()['tradeName'];
                               String dose =
                                   prescription.data()['dose'].toString();
-
                               if (status == 'pending') {
                                 statusIcon = Icon(
                                   Icons.hourglass_top_outlined,
@@ -192,7 +183,6 @@ class _PrescriptionsState extends State<Prescriptions> {
                                     Icons.assignment_turned_in_outlined,
                                     color: Colors.green);
                               }
-
                               // search logic
                               if (tradeName
                                       .toLowerCase()
@@ -740,26 +730,21 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                                 context,
                                                                                 widget.uid,
                                                                                 prescription.data()['prescriber-id'].toString(),
-                                                                                prescription.data()['registerNumber'].toString(),
+                                                                                pharmacistID,
+                                                                                'deleted',
                                                                                 prescription.data()['prescription-creation-date'].toString(),
                                                                                 prescription.data()['start-date'].toString(),
                                                                                 prescription.data()['end-date'].toString(),
                                                                                 prescription.data()['scientificName'].toString(),
-                                                                                prescription.data()['scientificNameArabic'].toString(),
                                                                                 prescription.data()['tradeName'].toString(),
                                                                                 prescription.data()['tradeNameArabic'].toString(),
                                                                                 prescription.data()['strength'].toString(),
                                                                                 prescription.data()['strength-unit'].toString(),
-                                                                                prescription.data()['size'].toString(),
-                                                                                prescription.data()['size-unit'].toString(),
                                                                                 prescription.data()['pharmaceutical-form'].toString(),
                                                                                 prescription.data()['administration-route'].toString(),
                                                                                 prescription.data()['storage-conditions'].toString(),
                                                                                 prescription.data()['price'].toString(),
-                                                                                prescription.data()['dose'],
-                                                                                prescription.data()['quantity'],
                                                                                 prescription.data()['refill'],
-                                                                                prescription.data()['dosing-expire'],
                                                                                 prescription.data()['frequency'],
                                                                                 prescription.data()['instruction-note'].toString(),
                                                                                 prescription.data()['doctor-note'].toString(),
@@ -1340,26 +1325,21 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                                               context,
                                                                               widget.uid,
                                                                               prescription.data()['prescriber-id'].toString(),
-                                                                              prescription.data()['registerNumber'].toString(),
+                                                                              '',
+                                                                              'deleted',
                                                                               prescription.data()['prescription-creation-date'].toString(),
                                                                               prescription.data()['start-date'].toString(),
                                                                               prescription.data()['end-date'].toString(),
                                                                               prescription.data()['scientificName'].toString(),
-                                                                              prescription.data()['scientificNameArabic'].toString(),
                                                                               prescription.data()['tradeName'].toString(),
                                                                               prescription.data()['tradeNameArabic'].toString(),
                                                                               prescription.data()['strength'].toString(),
                                                                               prescription.data()['strength-unit'].toString(),
-                                                                              prescription.data()['size'].toString(),
-                                                                              prescription.data()['size-unit'].toString(),
                                                                               prescription.data()['pharmaceutical-form'].toString(),
                                                                               prescription.data()['administration-route'].toString(),
                                                                               prescription.data()['storage-conditions'].toString(),
                                                                               prescription.data()['price'].toString(),
-                                                                              prescription.data()['dose'],
-                                                                              prescription.data()['quantity'],
                                                                               prescription.data()['refill'],
-                                                                              prescription.data()['dosing-expire'],
                                                                               prescription.data()['frequency'],
                                                                               prescription.data()['instruction-note'].toString(),
                                                                               prescription.data()['doctor-note'].toString(),

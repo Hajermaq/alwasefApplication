@@ -15,7 +15,7 @@ class CheckInconsistencies {
   String bisoprolol = 'BISOPROLOL';
   String deltiazim = 'DILTIAZEM';
 
-  List<dynamic> check(List<dynamic> drugsToCheck) {
+  List<dynamic> checkInconsistency(List<dynamic> drugsToCheck) {
     // do this if prescriptions number is 2 or more
     if (drugsToCheck.length >= 2) {
       List<dynamic> inconsistentDrugs = [];
@@ -40,7 +40,6 @@ class CheckInconsistencies {
           drugsToCheck.contains(deltiazim))) {
         inconsistentDrugs.add([bisoprolol, deltiazim]);
       }
-
       // if no inconsistencies found
       if (inconsistentDrugs.isEmpty) {
         return ['no inconsistencies', drugsToCheck.length];
@@ -49,7 +48,6 @@ class CheckInconsistencies {
         return [inconsistentDrugs, drugsToCheck.length];
         //return inconsistentDrugs;
       }
-
       // if less than 2
     } else {
       return ['can not compare less than 2'];

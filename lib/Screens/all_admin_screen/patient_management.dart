@@ -136,7 +136,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     child: Text(
                                                       document.data()[
                                                                   'doctor-name'] ==
-                                                              null
+                                                              ''
                                                           ? ''
                                                           : document.data()[
                                                               'doctor-name'],
@@ -228,7 +228,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     child: Text(
                                                       document.data()[
                                                                   'doctor-name'] ==
-                                                              null
+                                                              ''
                                                           ? ''
                                                           : document.data()[
                                                               'doctor-name'],
@@ -320,7 +320,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     child: Text(
                                                       document.data()[
                                                                   'doctor-name'] ==
-                                                              null
+                                                              ''
                                                           ? ''
                                                           : document.data()[
                                                               'doctor-name'],
@@ -412,7 +412,7 @@ class _PatientManagementState extends State<PatientManagement> {
                                                     child: Text(
                                                       document.data()[
                                                                   'doctor-name'] ==
-                                                              null
+                                                              ''
                                                           ? ''
                                                           : document.data()[
                                                               'doctor-name'],

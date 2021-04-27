@@ -498,21 +498,20 @@ class UserManagement {
     //id's
     String patientId,
     String prescriberId,
-    String registerNumber,
+    String pharmacistId,
+    //status
+    String status,
     //dates
     String creationDate,
     String startDate,
     String endDate,
     //names
     String scientificName,
-    String scientificNameArabic,
     String tradeName,
     String tradeNameArabic,
     //units
     String strength,
     String strengthUnit,
-    String size,
-    String sizeUnit,
     // random
     String pharmaceuticalForm,
     String administrationRoute,
@@ -520,10 +519,7 @@ class UserManagement {
     String publicPrice,
     //Textfiels data
     // integers
-    double dose,
-    int quantity,
     int refill,
-    int dosingExpire,
     // strings
     var frequency,
     String instructionNote,
@@ -542,11 +538,10 @@ class UserManagement {
             .add(
               {
                 // status
-                'status': 'deleted',
+                'status': status,
                 //id's
                 'prescriber-id': prescriberId,
-                'pharmacist-id': '',
-                'registerNumber': registerNumber,
+                'pharmacist-id': pharmacistId,
                 //dates
                 'prescription-creation-date': creationDate,
                 'start-date': startDate,
@@ -555,12 +550,9 @@ class UserManagement {
                 'scientificName': scientificName,
                 'tradeName': tradeName,
                 'tradeNameArabic': tradeNameArabic,
-                'scientificNameArabic': scientificNameArabic,
                 //units
                 'strength': strength,
                 'strength-unit': strengthUnit,
-                'size': size,
-                'size-unit': sizeUnit,
                 // random
                 'pharmaceutical-form': pharmaceuticalForm,
                 'administration-route': administrationRoute,
@@ -568,10 +560,7 @@ class UserManagement {
                 'price': publicPrice,
                 // textfiles data
                 //integers
-                'dose': dose,
-                'quantity': quantity,
                 'refill': refill,
-                'dosing-expire': dosingExpire,
                 // strings
                 'frequency': frequency,
                 'instruction-note': instructionNote,

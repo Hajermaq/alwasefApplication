@@ -1,14 +1,13 @@
-import 'package:age/age.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/filled_round_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 import '../../constants.dart';
 import 'check_prescriptions_inconsistencies.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:age/age.dart';
 
 class PrescriptionsPh extends StatefulWidget {
   PrescriptionsPh({this.uid});
@@ -75,6 +74,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                       elevation: 24.0,
                       backgroundColor: kScaffoldBackGroundColor,
                     );
+
                   } else if (inconsistencyResult[0] == 'no inconsistencies') {
                     int compared = inconsistencyResult[1];
                     return AlertDialog(
@@ -104,6 +104,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                       elevation: 24.0,
                       backgroundColor: kScaffoldBackGroundColor,
                     );
+
                   } else {
                     int compared = inconsistencyResult[1];
                     return AlertDialog(
@@ -142,8 +143,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                       backgroundColor: kScaffoldBackGroundColor,
                     );
                   }
-                });
-          },
+                });},
         ),
         body: Column(
           children: [
@@ -168,91 +168,76 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                     // the prescriptions list that will be checked
                     List drugsToCheck = [];
                     if (!snapshot.hasData) {
-                      return Center(
-                          child: CircularProgressIndicator(
-                              backgroundColor: kGreyColor,
-                              valueColor: AlwaysStoppedAnimation(kBlueColor)));
+                      return Center(child: CircularProgressIndicator(
+                          backgroundColor: kGreyColor,
+                          valueColor: AlwaysStoppedAnimation(kBlueColor))
+                      );
                     }
                     if (snapshot.data.docs.length == 0) {
                       inconsistencyResult =
-                          CheckInconsistencies().check(drugsToCheck);
+                          CheckInconsistencies().checkInconsistency(drugsToCheck);
                       return Center(
                           child: Text(
                         'لا توجد وصفات طبية.',
                         style: TextStyle(color: Colors.black54, fontSize: 17),
                       ));
                     } else {
-                      // delete if 1 month passed
+
+
                       snapshot.data.docs.forEach((prescription) {
                         String status = prescription.data()['status'];
                         String start = prescription.data()['start-date'];
                         DateTime startDate = DateTime.tryParse(start);
                         int refill = prescription.data()['refill'];
+
                         var difference = Age.dateDifference(
                             fromDate: startDate,
                             toDate: DateTime.now(),
                             includeToDate: false);
-
-                        if ((difference.months >= 1 || difference.days >= 28) &&
-                            refill == 0 &&
-                            status == 'dispensed') {
-                          UserManagement().PastPrescriptionsSetUp(
-                            context,
-                            widget.uid,
-                            prescription.data()['prescriber-id'].toString(),
-                            prescription.data()['registerNumber'].toString(),
-                            prescription
-                                .data()['prescription-creation-date']
-                                .toString(),
-                            prescription.data()['start-date'].toString(),
-                            prescription.data()['end-date'].toString(),
-                            prescription.data()['scientificName'].toString(),
-                            prescription
-                                .data()['scientificNameArabic']
-                                .toString(),
-                            prescription.data()['tradeName'].toString(),
-                            prescription.data()['tradeNameArabic'].toString(),
-                            prescription.data()['strength'].toString(),
-                            prescription.data()['strength-unit'].toString(),
-                            prescription.data()['size'].toString(),
-                            prescription.data()['size-unit'].toString(),
-                            prescription
-                                .data()['pharmaceutical-form']
-                                .toString(),
-                            prescription
-                                .data()['administration-route']
-                                .toString(),
-                            prescription
-                                .data()['storage-conditions']
-                                .toString(),
-                            prescription.data()['price'].toString(),
-                            prescription.data()['dose'],
-                            prescription.data()['quantity'],
-                            prescription.data()['refill'],
-                            prescription.data()['dosing-expire'],
-                            prescription.data()['frequency'],
-                            prescription.data()['instruction-note'].toString(),
-                            prescription.data()['doctor-note'].toString(),
-                          );
-                          FirebaseFirestore.instance
-                              .collection('/Patient')
-                              .doc(widget.uid)
-                              .collection('/Prescriptions')
-                              .doc(prescription.id)
-                              .delete();
-                        } else {
-                          String scientificName =
-                              prescription.data()['scientificName'];
-                          print(scientificName);
-                          drugsToCheck.add(scientificName);
+                        if(startDate.isBefore(DateTime.now())) {
+                          // delete if 1 month passed
+                          if ((difference.months >=1 || difference.days >=28)
+                              && refill == 0 && status == 'dispensed') {
+                            UserManagement()
+                                .PastPrescriptionsSetUp(
+                              context,
+                              widget.uid,
+                              prescription.data()['prescriber-id'].toString(),
+                              prescription.data()['pharmacist-id'].toString(),
+                              'deleted',
+                              prescription.data()['prescription-creation-date'].toString(),
+                              prescription.data()['start-date'].toString(),
+                              prescription.data()['end-date'].toString(),
+                              prescription.data()['scientificName'].toString(),
+                              prescription.data()['tradeName'].toString(),
+                              prescription.data()['tradeNameArabic'].toString(),
+                              prescription.data()['strength'].toString(),
+                              prescription.data()['strength-unit'].toString(),
+                              prescription.data()['pharmaceutical-form'].toString(),
+                              prescription.data()['administration-route'].toString(),
+                              prescription.data()['storage-conditions'].toString(),
+                              prescription.data()['price'].toString(),
+                              prescription.data()['refill'],
+                              prescription.data()['frequency'],
+                              prescription.data()['instruction-note'].toString(),
+                              prescription.data()['doctor-note'].toString(),
+                            );
+                            FirebaseFirestore.instance
+                                .collection('/Patient')
+                                .doc(widget.uid)
+                                .collection('/Prescriptions')
+                                .doc(
+                                prescription.id)
+                                .delete();
+                            print('deleted');
+                          }
                         }
+                        String scientificName = prescription.data()['scientificName'];
+                        drugsToCheck.add(scientificName);
                       });
+                      inconsistencyResult = CheckInconsistencies()
+                          .checkInconsistency(drugsToCheck);
 
-                      inconsistencyResult =
-                          CheckInconsistencies().check(drugsToCheck);
-
-                      print(drugsToCheck);
-                      print(inconsistencyResult);
                       // to test
 
                       // print([
@@ -280,8 +265,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                 snapshot.data.docs[index];
 
                             String status = prescription.data()['status'];
-                            String prescriberID =
-                                prescription.data()['prescriber-id'];
+                            String prescriberID = prescription.data()['prescriber-id'];
                             int refill = prescription.data()['refill'];
 
                             //search by
@@ -331,19 +315,18 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                     if (!snapshot.hasData) {
                                       return Center(
                                           child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: LinearProgressIndicator(
-                                            backgroundColor: kGreyColor,
-                                            valueColor: AlwaysStoppedAnimation(
-                                                kBlueColor)),
-                                      ));
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: LinearProgressIndicator(
+                                                backgroundColor: kGreyColor,
+                                                valueColor: AlwaysStoppedAnimation(kBlueColor)),
+                                          ));
                                     }
                                     DocumentSnapshot doc = snapshot.data;
 
                                     String doctorName =
                                         doc.data()['doctor-name'];
                                     String tempDoctorSpeciality =
-                                        doc.data()['speciality'];
+                                        doc.data()['doctor-speciality'];
                                     String doctorSpeciality;
                                     String experienceYears =
                                         doc.data()['experience-years'];
@@ -950,7 +933,7 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                       Text(
                                                         'ملاحظات الطبيب للصيدلي',
                                                         style:
-                                                            ksubBoldLabelTextStyle,
+                                                        ksubBoldLabelTextStyle,
                                                       ),
                                                       SizedBox(
                                                         width: 20.0,
@@ -960,10 +943,10 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                           'انقر هنا للقراءة',
                                                           style: TextStyle(
                                                             color:
-                                                                Colors.black45,
+                                                            Colors.black45,
                                                             fontSize: 15.0,
                                                             fontWeight:
-                                                                FontWeight.bold,
+                                                            FontWeight.bold,
                                                           ),
                                                         ),
                                                         onTap: () {
@@ -975,44 +958,42 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                   height: 250,
                                                                   child: Card(
                                                                     shape:
-                                                                        RoundedRectangleBorder(
+                                                                    RoundedRectangleBorder(
                                                                       borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              15.0),
+                                                                      BorderRadius.circular(
+                                                                          15.0),
                                                                     ),
                                                                     color:
-                                                                        kGreyColor,
+                                                                    kGreyColor,
                                                                     child:
-                                                                        Column(
+                                                                    Column(
                                                                       children: [
                                                                         ListTile(
                                                                           title:
-                                                                              Text(
+                                                                          Text(
                                                                             'ملاحظات من الطبيب للصيدلي',
                                                                             textAlign:
-                                                                                TextAlign.center,
+                                                                            TextAlign.center,
                                                                             style:
-                                                                                kBoldLabelTextStyle,
+                                                                            kBoldLabelTextStyle,
                                                                           ),
                                                                         ),
                                                                         Divider(
                                                                           color:
-                                                                              klighterColor,
+                                                                          klighterColor,
                                                                           thickness:
-                                                                              0.9,
+                                                                          0.9,
                                                                           endIndent:
-                                                                              20,
+                                                                          20,
                                                                           indent:
-                                                                              20,
+                                                                          20,
                                                                         ),
                                                                         Padding(
                                                                           padding:
-                                                                              const EdgeInsets.all(15.0),
-                                                                          child:
-                                                                              Text(
+                                                                          const EdgeInsets.all(15.0),
+                                                                          child: Text(
                                                                             '${prescription.data()['doctor-note']}',
-                                                                            style:
-                                                                                ksubBoldLabelTextStyle,
+                                                                            style: ksubBoldLabelTextStyle,
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1039,42 +1020,31 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                         children: [
                                                           // alert doctor
                                                           RaisedButton(
-                                                            color:
-                                                                klighterColor,
+                                                            color: klighterColor,
                                                             shape: RoundedRectangleBorder(
-                                                                side: BorderSide(
-                                                                    color:
-                                                                        kGreyColor,
-                                                                    width: 2),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10)),
+                                                                side: BorderSide( color: kGreyColor, width: 2),
+                                                                borderRadius: BorderRadius.circular(10)),
                                                             child: Text(
-                                                                "إرسال تنبيه للطبيب"),
+                                                                "تنبيه الطبيب"),
                                                             onPressed: () {
                                                               showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (BuildContext
-                                                                          context) {
-                                                                    int newRefill =
-                                                                        refill -
-                                                                            1;
-                                                                    yesButton =
-                                                                        FlatButton(
+                                                                  context: context,
+                                                                  builder: (BuildContext context) {
+                                                                    yesButton = FlatButton(
                                                                             child:
                                                                                 Text('نعم'),
                                                                             onPressed: () async {
-                                                                              await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
+                                                                              await FirebaseFirestore.instance.collection('/Patient')
+                                                                                  .doc(widget.uid)
+                                                                                  .collection('/Prescriptions')
+                                                                                  .doc(prescription.id)
+                                                                                  .update({
                                                                                 'status': 'inconsistent',
                                                                                 'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
                                                                               });
                                                                               Navigator.pop(context);
                                                                             });
-                                                                    noButton =
-                                                                        FlatButton(
+                                                                    noButton = FlatButton(
                                                                       child: Text(
                                                                           'لا'),
                                                                       onPressed:
@@ -1083,49 +1053,27 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                             context);
                                                                       },
                                                                     );
-
                                                                     return AlertDialog(
                                                                       title: Text(
                                                                           'هل أنت متأكد من إرسال تنبيه للطبيب لتعديلها؟',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            fontFamily:
-                                                                                'Almarai',
+                                                                          style: TextStyle(
+                                                                            fontFamily: 'Almarai',
                                                                           ),
-                                                                          textAlign:
-                                                                              TextAlign.center),
-                                                                      titleTextStyle: TextStyle(
-                                                                          fontSize:
-                                                                              15,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          color:
-                                                                              kBlueColor),
+                                                                          textAlign: TextAlign.center),
+                                                                      titleTextStyle: TextStyle( fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
                                                                       content: Text(
                                                                           'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الطبيب بتعديلها',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                kBlueColor,
-                                                                            fontFamily:
-                                                                                'Almarai',
-                                                                          ),
-                                                                          textAlign:
-                                                                              TextAlign.center),
+                                                                          style: TextStyle( color: kBlueColor, fontFamily: 'Almarai',),
+                                                                          textAlign: TextAlign.center),
                                                                       actions: [
                                                                         yesButton,
                                                                         noButton
                                                                       ],
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(25)),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.all(Radius.circular(25)),
                                                                       ),
-                                                                      elevation:
-                                                                          24.0,
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .white,
+                                                                      elevation: 24.0,
+                                                                      backgroundColor: Colors.white,
                                                                     );
                                                                   });
                                                             },
@@ -1133,164 +1081,392 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                           SizedBox(
                                                             width: 10.0,
                                                           ),
-                                                          // dispense prescription
-                                                          status ==
-                                                                  'requested refill'
-                                                              ? RaisedButton(
-                                                                  color:
-                                                                      klighterColor,
-                                                                  shape: RoundedRectangleBorder(
-                                                                      side: BorderSide(
-                                                                          color:
-                                                                              kGreyColor,
-                                                                          width:
-                                                                              2),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10)),
-                                                                  child: Text(
-                                                                      "تأكيد الوصفة"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    showDialog(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (BuildContext
-                                                                                context) {
-                                                                          int newRefill =
-                                                                              refill - 1;
-                                                                          yesButton = FlatButton(
-                                                                              child: Text('نعم'),
-                                                                              onPressed: () async {
-                                                                                await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
-                                                                                  'refill': newRefill,
-                                                                                  'status': 'dispensed',
-                                                                                  'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
-                                                                                });
-                                                                                Navigator.pop(context);
-                                                                              });
-                                                                          noButton =
-                                                                              FlatButton(
-                                                                            child:
-                                                                                Text('لا'),
-                                                                            onPressed:
-                                                                                () {
-                                                                              Navigator.pop(context);
-                                                                            },
-                                                                          );
 
-                                                                          return AlertDialog(
-                                                                            title: Text('هل تريد تأكيد الوصفة؟',
-                                                                                style: TextStyle(fontFamily: 'Almarai', color: kBlueColor),
-                                                                                textAlign: TextAlign.center),
-                                                                            titleTextStyle: TextStyle(
-                                                                                fontSize: 15,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: kBlueColor),
-                                                                            content: Text('عند تأكيدك للوصفة سينقص عدد مرات إعادة التعبئة المسموح بها لهذ هالوصفة',
-                                                                                style: TextStyle(
-                                                                                  color: kBlueColor,
-                                                                                  fontFamily: 'Almarai',
-                                                                                ),
-                                                                                textAlign: TextAlign.center),
-                                                                            actions: [
-                                                                              yesButton,
-                                                                              noButton
-                                                                            ],
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.all(Radius.circular(25)),
-                                                                            ),
-                                                                            elevation:
-                                                                                24.0,
-                                                                            backgroundColor:
-                                                                                Colors.white,
-                                                                          );
-                                                                        });
-                                                                  },
-                                                                )
-                                                              : RaisedButton(
-                                                                  color:
-                                                                      klighterColor,
-                                                                  shape: RoundedRectangleBorder(
-                                                                      side: BorderSide(
-                                                                          color:
-                                                                              kGreyColor,
-                                                                          width:
-                                                                              2),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10)),
-                                                                  child: Text(
-                                                                      "تأكيد الوصفة"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    if (status ==
-                                                                        'dispensed') {
-                                                                      showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext context) {
-                                                                            return AlertDialog(
-                                                                              title: Text(' تم تأكيد الوصفة سابقا ',
-                                                                                  style: TextStyle(
-                                                                                    fontFamily: 'Almarai',
-                                                                                  ),
-                                                                                  textAlign: TextAlign.center),
-                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.all(Radius.circular(25)),
-                                                                              ),
-                                                                              elevation: 24.0,
-                                                                              backgroundColor: Colors.white,
-                                                                            );
-                                                                          });
-                                                                    } else {
-                                                                      showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext context) {
-                                                                            yesButton = FlatButton(
-                                                                                child: Text('نعم'),
-                                                                                onPressed: () async {
-                                                                                  await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
-                                                                                    'status': 'dispensed',
-                                                                                    'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
-                                                                                  });
-                                                                                  Navigator.pop(context);
-                                                                                });
-                                                                            noButton =
-                                                                                FlatButton(
+                                                          // dispense prescription
+                                                          RaisedButton(
+                                                              color: klighterColor,
+                                                              shape: RoundedRectangleBorder(
+                                                                  side: BorderSide(
+                                                                      color: kGreyColor,
+                                                                      width: 2),
+                                                                  borderRadius: BorderRadius.circular(10)),
+                                                              child: Text("تأكيد الوصفة"),
+                                                              onPressed:(){
+
+                                                                if (status == 'requested refill') {  // if a patient send a refill request
+                                                                  showDialog(
+                                                                      context: context,
+                                                                      builder: (BuildContext context) {
+                                                                        int newRefill = refill - 1;
+                                                                        yesButton = FlatButton(
+                                                                            child: Text('نعم'),
+                                                                            onPressed: () async {
+                                                                              await FirebaseFirestore.instance
+                                                                                  .collection('/Patient')
+                                                                                  .doc(widget.uid)
+                                                                                  .collection('/Prescriptions')
+                                                                                  .doc(prescription.id)
+                                                                                  .update({
+                                                                                'refill': newRefill,
+                                                                                'status': 'dispensed',
+                                                                                'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                            });
+                                                                        noButton = FlatButton(
                                                                               child: Text('لا'),
                                                                               onPressed: () {
                                                                                 Navigator.pop(context);
                                                                               },
                                                                             );
-
-                                                                            return AlertDialog(
-                                                                              title: Text('هل تريد تأكيد الوصفة؟',
-                                                                                  style: TextStyle(
-                                                                                    fontFamily: 'Almarai',
-                                                                                  ),
-                                                                                  textAlign: TextAlign.center),
-                                                                              titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
-                                                                              actions: [
-                                                                                yesButton,
-                                                                                noButton
-                                                                              ],
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                        return AlertDialog(
+                                                                          title: Text('هل تريد تأكيد الوصفة؟',
+                                                                              style: TextStyle(
+                                                                                  fontFamily: 'Almarai',
+                                                                                  color: kBlueColor
                                                                               ),
-                                                                              elevation: 24.0,
-                                                                              backgroundColor: Colors.white,
+                                                                              textAlign: TextAlign.center),
+                                                                          titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                                          content: Text('عند تأكيدك للوصفة سينقص عدد مرات إعادة التعبئة المسموح بها لهذ هالوصفة',
+                                                                              style: TextStyle(
+                                                                                color: kBlueColor,
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign: TextAlign.center),
+                                                                          actions: [
+                                                                            yesButton,
+                                                                            noButton
+                                                                          ],
+                                                                          shape:
+                                                                          RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                          ),
+                                                                          elevation:
+                                                                          24.0,
+                                                                          backgroundColor:
+                                                                          Colors.white,
+                                                                        );
+                                                                      });
+
+                                                                } else if (status == 'dispensed') {  // if its already dispensed
+                                                                  showDialog(
+                                                                      context: context,
+                                                                      builder: (BuildContext context) {
+                                                                        return AlertDialog(
+                                                                          title: Text(' تم تأكيد الوصفة سابقا ',
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign: TextAlign.center),
+                                                                          titleTextStyle: TextStyle(fontSize: 15,
+                                                                              fontWeight: FontWeight.bold, color: kBlueColor),
+                                                                          shape: RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                          ),
+                                                                          elevation: 24.0,
+                                                                          backgroundColor: Colors.white,
+                                                                        );
+                                                                      });
+
+                                                                } else { // if pending or updated
+                                                                  showDialog(
+                                                                      context: context,
+                                                                      builder: (BuildContext context) {
+                                                                        yesButton = FlatButton(
+                                                                            child: Text('نعم'),
+                                                                            onPressed: () async {
+                                                                              await FirebaseFirestore.instance.collection('/Patient')
+                                                                                  .doc(widget.uid)
+                                                                                  .collection('/Prescriptions')
+                                                                                  .doc(prescription.id)
+                                                                                  .update({
+                                                                                'status': 'dispensed',
+                                                                                'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                            });
+                                                                        noButton = FlatButton(
+                                                                              child: Text('لا'),
+                                                                              onPressed: () {
+                                                                                Navigator.pop(context);
+                                                                              },
                                                                             );
-                                                                          });
-                                                                    }
-                                                                  },
-                                                                ),
+                                                                        return AlertDialog(
+                                                                          title: Text('هل تريد تأكيد الوصفة؟',
+                                                                              style: TextStyle(
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign: TextAlign.center),
+                                                                          titleTextStyle: TextStyle(fontSize: 15,
+                                                                              fontWeight: FontWeight.bold, color: kBlueColor),
+                                                                          actions: [
+                                                                            yesButton,
+                                                                            noButton
+                                                                          ],
+                                                                          shape: RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                          ),
+                                                                          elevation: 24.0,
+                                                                          backgroundColor: Colors.white,
+                                                                        );
+                                                                      });
+                                                                }
+                                                              }
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10.0,
+                                                          ),
+                                                          // reject request refill
+                                                          status == 'requested refill'
+                                                              ? RaisedButton(
+                                                                color: klighterColor,
+                                                                shape: RoundedRectangleBorder(
+                                                                  side: BorderSide(color: kGreyColor, width: 2),
+                                                                  borderRadius: BorderRadius.circular(10)),
+                                                                child: Text("رفض الطلب"),
+                                                                onPressed:() async{
+                                                                  showDialog(
+                                                                      context: context,
+                                                                      builder: (BuildContext context) {
+                                                                        yesButton = FlatButton(
+                                                                            child: Text('نعم'),
+                                                                            onPressed: () async {
+                                                                              UserManagement().PastPrescriptionsSetUp(
+                                                                                context,
+                                                                                widget.uid,
+                                                                                prescription.data()['prescriber-id'].toString(),
+                                                                                prescription.data()['pharmacist-id'].toString(),
+                                                                                'refill request rejected',
+                                                                                prescription.data()['prescription-creation-date'].toString(),
+                                                                                prescription.data()['start-date'].toString(),
+                                                                                prescription.data()['end-date'].toString(),
+                                                                                prescription.data()['scientificName'].toString(),
+                                                                                prescription.data()['tradeName'].toString(),
+                                                                                prescription.data()['tradeNameArabic'].toString(),
+                                                                                prescription.data()['strength'].toString(),
+                                                                                prescription.data()['strength-unit'].toString(),
+                                                                                prescription.data()['pharmaceutical-form'].toString(),
+                                                                                prescription.data()['administration-route'].toString(),
+                                                                                prescription.data()['storage-conditions'].toString(),
+                                                                                prescription.data()['price'].toString(),
+                                                                                prescription.data()['refill'],
+                                                                                prescription.data()['frequency'],
+                                                                                prescription.data()['instruction-note'].toString(),
+                                                                                prescription.data()['doctor-note'].toString(),
+                                                                              );
+                                                                              FirebaseFirestore.instance
+                                                                                  .collection('/Patient')
+                                                                                  .doc(widget.uid)
+                                                                                  .collection('/Prescriptions')
+                                                                                  .doc(prescription.id)
+                                                                                  .delete();
+                                                                              Navigator.pop(context);
+                                                                            });
+                                                                        noButton = FlatButton(
+                                                                          child:
+                                                                          Text('لا'),
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                        );
+                                                                        return AlertDialog(
+                                                                          title: Text('هل تريد رفض طلب التعبئة؟',
+                                                                              style: TextStyle(
+                                                                                  fontFamily: 'Almarai',
+                                                                                  color: kBlueColor
+                                                                              ),
+                                                                              textAlign: TextAlign.center),
+                                                                          titleTextStyle:
+                                                                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                                          content: Text('عند اختيارك (نعم) ستحذف الوصفة',
+                                                                              style: TextStyle(
+                                                                                color: kBlueColor,
+                                                                                fontFamily: 'Almarai',
+                                                                              ),
+                                                                              textAlign: TextAlign.center),
+                                                                          actions: [
+                                                                            yesButton,
+                                                                            noButton
+                                                                          ],
+                                                                          shape:
+                                                                          RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                                          ),
+                                                                          elevation:
+                                                                          24.0,
+                                                                          backgroundColor:
+                                                                          Colors.white,
+                                                                        );
+                                                                      });
+                                                                }
+                                                              )
+                                                              : SizedBox(),
+
+                                                          // dispense prescription
+                                                          // status ==
+                                                          //         'requested refill'
+                                                          //     ? RaisedButton(
+                                                          //         color:
+                                                          //             klighterColor,
+                                                          //         shape: RoundedRectangleBorder(
+                                                          //             side: BorderSide(
+                                                          //                 color:
+                                                          //                     kGreyColor,
+                                                          //                 width:
+                                                          //                     2),
+                                                          //             borderRadius:
+                                                          //                 BorderRadius.circular(
+                                                          //                     10)),
+                                                          //         child: Text(
+                                                          //             "تأكيد الوصفة"),
+                                                          //         onPressed:
+                                                          //             () {
+                                                          //           showDialog(
+                                                          //               context:
+                                                          //                   context,
+                                                          //               builder:
+                                                          //                   (BuildContext
+                                                          //                       context) {
+                                                          //                 int newRefill =
+                                                          //                     refill - 1;
+                                                          //                 yesButton = FlatButton(
+                                                          //                     child: Text('نعم'),
+                                                          //                     onPressed: () async {
+                                                          //                       await FirebaseFirestore.instance
+                                                          //                           .collection('/Patient')
+                                                          //                           .doc(widget.uid)
+                                                          //                           .collection('/Prescriptions')
+                                                          //                           .doc(prescription.id)
+                                                          //                           .update({
+                                                          //                         'refill': newRefill,
+                                                          //                         'status': 'dispensed',
+                                                          //                         'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                          //                       });
+                                                          //                       Navigator.pop(context);
+                                                          //                     });
+                                                          //                 noButton =
+                                                          //                     FlatButton(
+                                                          //                   child:
+                                                          //                       Text('لا'),
+                                                          //                   onPressed:
+                                                          //                       () {
+                                                          //                     Navigator.pop(context);
+                                                          //                   },
+                                                          //                 );
+                                                          //
+                                                          //                 return AlertDialog(
+                                                          //                   title: Text('هل تريد تأكيد الوصفة؟',
+                                                          //                       style: TextStyle(
+                                                          //                         fontFamily: 'Almarai',
+                                                          //                           color: kBlueColor
+                                                          //                       ),
+                                                          //                       textAlign: TextAlign.center),
+                                                          //                   titleTextStyle:
+                                                          //                       TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                          //                   content: Text('عند تأكيدك للوصفة سينقص عدد مرات إعادة التعبئة المسموح بها لهذ هالوصفة',
+                                                          //                       style: TextStyle(
+                                                          //                         color: kBlueColor,
+                                                          //                         fontFamily: 'Almarai',
+                                                          //                       ),
+                                                          //                       textAlign: TextAlign.center),
+                                                          //                   actions: [
+                                                          //                     yesButton,
+                                                          //                     noButton
+                                                          //                   ],
+                                                          //                   shape:
+                                                          //                       RoundedRectangleBorder(
+                                                          //                     borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                          //                   ),
+                                                          //                   elevation:
+                                                          //                       24.0,
+                                                          //                   backgroundColor:
+                                                          //                       Colors.white,
+                                                          //                 );
+                                                          //               });
+                                                          //         },
+                                                          //       )
+                                                          //     : RaisedButton(
+                                                          //         color:
+                                                          //             klighterColor,
+                                                          //         shape: RoundedRectangleBorder(
+                                                          //             side: BorderSide(
+                                                          //                 color:
+                                                          //                     kGreyColor,
+                                                          //                 width:
+                                                          //                     2),
+                                                          //             borderRadius:
+                                                          //                 BorderRadius.circular(
+                                                          //                     10)),
+                                                          //         child: Text(
+                                                          //             "تأكيد الوصفة"),
+                                                          //         onPressed:
+                                                          //             () {
+                                                          //           if (status ==
+                                                          //               'dispensed') {
+                                                          //             showDialog(
+                                                          //                 context:
+                                                          //                     context,
+                                                          //                 builder:
+                                                          //                     (BuildContext context) {
+                                                          //                   return AlertDialog(
+                                                          //                     title: Text(' تم تأكيد الوصفة سابقا ',
+                                                          //                         style: TextStyle(
+                                                          //                           fontFamily: 'Almarai',
+                                                          //                         ),
+                                                          //                         textAlign: TextAlign.center),
+                                                          //                     titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                          //                     shape: RoundedRectangleBorder(
+                                                          //                       borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                          //                     ),
+                                                          //                     elevation: 24.0,
+                                                          //                     backgroundColor: Colors.white,
+                                                          //                   );
+                                                          //                 });
+                                                          //           } else {
+                                                          //             showDialog(
+                                                          //                 context:
+                                                          //                     context,
+                                                          //                 builder:
+                                                          //                     (BuildContext context) {
+                                                          //                   yesButton = FlatButton(
+                                                          //                       child: Text('نعم'),
+                                                          //                       onPressed: () async {
+                                                          //                         await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
+                                                          //                           'status': 'dispensed',
+                                                          //                           'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                          //                         });
+                                                          //                         Navigator.pop(context);
+                                                          //                       });
+                                                          //                   noButton =
+                                                          //                       FlatButton(
+                                                          //                     child: Text('لا'),
+                                                          //                     onPressed: () {
+                                                          //                       Navigator.pop(context);
+                                                          //                     },
+                                                          //                   );
+                                                          //
+                                                          //                   return AlertDialog(
+                                                          //                     title: Text('هل تريد تأكيد الوصفة؟',
+                                                          //                         style: TextStyle(
+                                                          //                           fontFamily: 'Almarai',
+                                                          //                         ),
+                                                          //                         textAlign: TextAlign.center),
+                                                          //                     titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
+                                                          //                     actions: [
+                                                          //                       yesButton,
+                                                          //                       noButton
+                                                          //                     ],
+                                                          //                     shape: RoundedRectangleBorder(
+                                                          //                       borderRadius: BorderRadius.all(Radius.circular(25)),
+                                                          //                     ),
+                                                          //                     elevation: 24.0,
+                                                          //                     backgroundColor: Colors.white,
+                                                          //                   );
+                                                          //                 });
+                                                          //           }
+                                                          //         },
+                                                          //       ),
                                                         ],
                                                       ),
                                                     ],

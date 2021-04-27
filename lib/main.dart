@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'Screens/all_patient_screen/bar_patient_medical_info.dart';
 import 'Screens/all_admin_screen/admin_page.dart';
 import 'Screens/all_doctor_screens/doctor_main_page.dart';
 import 'Screens/all_patient_screen/edit_medical_history_page.dart';
@@ -83,6 +83,7 @@ class MyApp extends StatelessWidget {
           PatientMainPage.id: (context) => PatientMainPage(),
           FillMedicalHistoryPage.id: (context) => FillMedicalHistoryPage(),
           EditMedicalHistoryPage.id: (context) => EditMedicalHistoryPage(),
+          PatientMedicalInfo.id: (context) => PatientMedicalInfo(),
         },
       ),
     );

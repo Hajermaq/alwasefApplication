@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants.dart';
 
 class DoctorProfileInfo extends StatefulWidget {
@@ -182,86 +181,74 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                         context: context,
                                         // isScrollControlled: true,
                                         builder: (context) {
-                                          return WillPopScope(
-                                            child: Container(
-                                              height: 600,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Text(
-                                                    'تسجيل الخروج ',
-                                                    style: TextStyle(
-                                                        color: kBlueColor,
-                                                        fontSize: 30.0),
-                                                  ),
-                                                  Text(
-                                                    'هل أنت متأكد أنك تريد تسجيل الخروج؟',
-                                                    style: TextStyle(
-                                                        color: kBlueColor,
-                                                        fontSize: 16.0),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 100.0,
-                                                            vertical: 20.0),
-                                                    child: Container(
-                                                      width: double.infinity,
-                                                      height: 50.0,
-                                                      child: RaisedButton(
-                                                        onPressed: () async {
-                                                          await auth
-                                                              .signOut()
-                                                              .then(
-                                                                (value) => Navigator
-                                                                    .pushReplacement(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            WelcomeScreen(),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                        },
-                                                        color: kBlueColor,
-                                                        child: Text(
-                                                          'نعم',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            // fontFamily: 'Montserrat',
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            letterSpacing: 1,
-                                                          ),
+                                          return Container(
+                                            height: 600,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  'تسجيل الخروج ',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 30.0),
+                                                ),
+                                                Text(
+                                                  'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                                                  style: TextStyle(
+                                                      color: kBlueColor,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 100.0,
+                                                      vertical: 20.0),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 50.0,
+                                                    child: RaisedButton(
+                                                      onPressed: () async {
+                                                        await auth.signOut();
+                                                        Navigator.of(context)
+                                                            .popUntil(ModalRoute
+                                                                .withName(
+                                                                    WelcomeScreen
+                                                                        .id));
+                                                      },
+                                                      color: kBlueColor,
+                                                      child: Text(
+                                                        'نعم',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          // fontFamily: 'Montserrat',
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          letterSpacing: 1,
                                                         ),
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      30.0),
-                                                        ),
+                                                      ),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30.0),
                                                       ),
                                                     ),
                                                   ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                      'إلغاء الامر',
-                                                      style: TextStyle(
-                                                          color: kGreyColor,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'إلغاء الامر',
+                                                    style: TextStyle(
+                                                        color: kGreyColor,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           );
                                         },

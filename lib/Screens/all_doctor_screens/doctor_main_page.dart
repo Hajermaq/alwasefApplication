@@ -1,11 +1,13 @@
 import 'package:alwasef_app/Screens/all_doctor_screens/doctor_profile_info.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
 import '../../constants.dart';
-import '../services/display_patients_reports.dart';
+import 'dispaly_patients_reports_for_doctor.dart';
 import 'doctor_home_page.dart';
+import '../services/display_patients_reports.dart';
 import 'doctor_search_page.dart';
 
 class DoctorMainPage extends StatefulWidget {
@@ -15,6 +17,7 @@ class DoctorMainPage extends StatefulWidget {
 }
 
 class _DoctorMainPageState extends State<DoctorMainPage> {
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -37,7 +40,8 @@ class _DoctorMainPageState extends State<DoctorMainPage> {
               //search Page
               PatientData(),
               // patients reports
-              PatientsReports(role: 'doctor'),
+              DisplayReportsForDoctor(
+                  ),
               //Profile Page
               DoctorProfileInfo(),
             ], //end of pages
