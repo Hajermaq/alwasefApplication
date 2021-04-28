@@ -270,11 +270,10 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                                 .collection('/Patient')
                                                 .doc(myPatientsIDs[index])
                                                 .collection('/Prescriptions')
-                                                // can not use this method because do not give docs length
-                                                // .where('status',
-                                                //     isEqualTo: 'pending')
-                                                // .where('status',
-                                                //     isEqualTo: 'updated')
+                                                .where('status',
+                                                    isEqualTo: 'pending')
+                                                .where('status',
+                                                    isEqualTo: 'updated')
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
@@ -293,14 +292,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                               int patientNewPrescriptionsNo = 0;
                                               snapshot.data.docs
                                                   .forEach((prescription) {
-                                                if (prescription
-                                                            .data()['status'] ==
-                                                        'pending' ||
-                                                    prescription
-                                                            .data()['status'] ==
-                                                        'updated') {
-                                                  patientNewPrescriptionsNo++;
-                                                }
+                                                patientNewPrescriptionsNo++;
                                               });
                                               // only display patients names who has one or more new prescription
                                               if (patientNewPrescriptionsNo !=

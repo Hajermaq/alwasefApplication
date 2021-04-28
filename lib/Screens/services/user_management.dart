@@ -291,6 +291,7 @@ class UserManagement {
     String frequency,
     String note1,
     String note2,
+    String pharmacistNotes,
     String pharmaceuticalForm,
     String administrationRoute,
     String storageConditions,
@@ -331,6 +332,7 @@ class UserManagement {
             // random
             'note_1': note1,
             'note_2': note2,
+            'pharmacist-notes': pharmacistNotes,
             'pharmaceutical-form': pharmaceuticalForm,
             'administration-route': administrationRoute,
             'storage-conditions': storageConditions,
@@ -353,6 +355,7 @@ class UserManagement {
       print(e);
     }
   }
+
 
   //===============================================================================
   Future<void> prescriptionUpdate({

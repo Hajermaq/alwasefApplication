@@ -21,7 +21,9 @@ class MedicalHistory {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection('/Patient');
-      await collection.doc(userID).collection('/Medical History').add({
+      await collection.doc(userID)
+          .collection('/Medical History')
+          .add({
         'uid': patientUID,
         'full name': patientFullName,
         'gender': gender,
@@ -38,7 +40,7 @@ class MedicalHistory {
         'allergies': allergies,
         'medication allergies': medAllergies,
         'last-update': lastUpdated,
-      });
+          });
     } catch (e) {
       print(e);
     }

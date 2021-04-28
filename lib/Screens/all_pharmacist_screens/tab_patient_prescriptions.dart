@@ -1030,27 +1030,34 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                               showDialog(
                                                                   context: context,
                                                                   builder: (BuildContext context) {
+                                                                    String pharmacistNotes;
+                                                                    final GlobalKey<FormState>_formKey = new GlobalKey<FormState>();
                                                                     yesButton = FlatButton(
                                                                             child:
-                                                                                Text('نعم'),
+                                                                                Text('إرسال'),
                                                                             onPressed: () async {
-                                                                              await FirebaseFirestore.instance.collection('/Patient')
-                                                                                  .doc(widget.uid)
-                                                                                  .collection('/Prescriptions')
-                                                                                  .doc(prescription.id)
-                                                                                  .update({
-                                                                                'status': 'inconsistent',
-                                                                                'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
-                                                                              });
+                                                                              if (_formKey.currentState.validate()) {
+                                                                                _formKey.currentState.save();
+                                                                                await FirebaseFirestore.instance.collection('/Patient')
+                                                                                    .doc(widget.uid)
+                                                                                    .collection('/Prescriptions')
+                                                                                    .doc(prescription.id).update({
+                                                                                  'pharmacist-notes': pharmacistNotes,
+                                                                                  'status': 'inconsistent',
+                                                                                  'pharmacist-id': FirebaseAuth.instance.currentUser.uid,
+                                                                                });
+                                                                              }
                                                                               Navigator.pop(context);
                                                                             });
                                                                     noButton = FlatButton(
                                                                       child: Text(
-                                                                          'لا'),
+                                                                          'إلغاء'),
                                                                       onPressed:
                                                                           () {
+                                                                            _formKey.currentState.reset();
                                                                         Navigator.pop(
                                                                             context);
+
                                                                       },
                                                                     );
                                                                     return AlertDialog(
@@ -1061,10 +1068,36 @@ class _PrescriptionsPhState extends State<PrescriptionsPh> {
                                                                           ),
                                                                           textAlign: TextAlign.center),
                                                                       titleTextStyle: TextStyle( fontSize: 15, fontWeight: FontWeight.bold, color: kBlueColor),
-                                                                      content: Text(
-                                                                          'عند اختيارك (نعم) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الطبيب بتعديلها',
-                                                                          style: TextStyle( color: kBlueColor, fontFamily: 'Almarai',),
-                                                                          textAlign: TextAlign.center),
+                                                                      content: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Form(
+                                                                              key: _formKey,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: TextFormField(
+                                                                                  maxLines: 5,
+                                                                                  style: TextStyle(color: Colors.black54),
+                                                                                  decoration: InputDecoration(
+                                                                                    labelText: 'ملاحظات :',
+                                                                                    hintText: 'اكتب سبب عدم مناسبة هذه الوصفة ',
+                                                                                  ),
+                                                                                  onSaved: (value) {
+                                                                                    pharmacistNotes = value;
+                                                                                  },
+                                                                                  validator: (value) =>
+                                                                                  value == null
+                                                                                      ? 'هذا الحقل مطلوب'
+                                                                                      : null,                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(height: 30),
+                                                                            Text(
+                                                                            'عند اختيارك (إرسال) لن يكون بمقدورك معاينة الوصفة إلى أن يقوم الطبيب بتعديلها',
+                                                                            style: TextStyle( color: kBlueColor, fontFamily: 'Almarai',),
+                                                                            textAlign: TextAlign.center),
+
+                                                                      ]),
                                                                       actions: [
                                                                         yesButton,
                                                                         noButton

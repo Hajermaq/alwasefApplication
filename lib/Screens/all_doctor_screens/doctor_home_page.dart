@@ -15,13 +15,25 @@ class DoctorHomePage extends StatefulWidget {
 class _DoctorHomePageState extends State<DoctorHomePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   String name = ' ';
+  int mapKey;
 
-  getName() async {
+  getDoctorInfo() async {
+
     await FirebaseFirestore.instance
         .collection('/Doctors')
-        .doc(currentUser.uid)
+        .doc(FirebaseAuth.instance.currentUser.uid)
         .get()
         .then((doc) {
+
+      if (doc.data()['doctor-speciality'] ==  'طبيب قلب') {
+        mapKey = 1;
+      } else if (doc.data()['doctor-speciality'] == 'طبيب باطنية') {
+        mapKey = 2;
+      } else if (doc.data()['doctor-speciality'] == 'طبيب نفسي') {
+        mapKey = 3;
+      } else {
+        mapKey = 4;
+      }
       name = doc.data()['doctor-name'];
       if (mounted) {
         setState(() {});
@@ -29,11 +41,13 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
     });
   }
 
+  void initState() {
+    super.initState();
+    getDoctorInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      getName();
-    });
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -61,8 +75,10 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
       body: SafeArea(
         minimum: EdgeInsets.only(left: 6.0, right: 6.0),
         child: StreamBuilder(
-            stream:
-                FirebaseFirestore.instance.collection('/Patient').snapshots(),
+            stream: FirebaseFirestore.instance
+                    .collection('/Patient')
+                    .where('doctors_map.$mapKey', isEqualTo: currentUser.uid)
+                    .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Center(
@@ -75,13 +91,13 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
               List myPatientsNames = [];
               docs.forEach((doc) {
                 Map map = doc.data()['doctors_map'];
-                if (map.containsValue(FirebaseAuth.instance.currentUser.uid)) {
+                if (map.containsValue(currentUser.uid)) {
                   myPatientsIDs.add(doc.get('uid'));
                   myPatientsNames.add(doc.data()['patient-name']);
                 }
               });
 
-              if (myPatientsIDs.length == 0) {
+              if  (snapshot.data.docs.length == 0) {
                 return Column(children: [
                   SizedBox(
                     height: 30,
@@ -224,41 +240,38 @@ class _DoctorHomePageState extends State<DoctorHomePage> {
                                     child: ListView.builder(
                                         physics: ScrollPhysics(),
                                         shrinkWrap: true,
-                                        itemCount: myPatientsIDs.length,
+                                        itemCount: snapshot.data.docs.length,
                                         itemBuilder: (context, index) {
+                                          DocumentSnapshot patient = snapshot.data.docs[index];
                                           return StreamBuilder(
                                             stream: FirebaseFirestore.instance
                                                 .collection('/Patient')
-                                                .doc(myPatientsIDs[index])
+                                                .doc(patient.id)
                                                 .collection('/Prescriptions')
                                                 .where('prescriber-id',
                                                     isEqualTo: currentUser.uid)
-                                                // .where('status',
-                                                //     isEqualTo: 'inconsistent')
+                                                .where('status',
+                                                    isEqualTo: 'inconsistent')
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
                                                 return Center(
                                                     child: Padding(
-                                                  padding:
+                                                      padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: LinearProgressIndicator(
-                                                      backgroundColor:
+                                                      child: LinearProgressIndicator(
+                                                          backgroundColor:
                                                           kGreyColor,
-                                                      valueColor:
+                                                          valueColor:
                                                           AlwaysStoppedAnimation(
                                                               kBlueColor)),
-                                                ));
+                                                    ));
                                               } else {
                                                 int patientInconsistentPrescriptionsNo =
                                                     0;
                                                 snapshot.data.docs
                                                     .forEach((prescription) {
-                                                  if (prescription
-                                                          .data()['status'] ==
-                                                      'inconsistent') {
-                                                    patientInconsistentPrescriptionsNo++;
-                                                  }
+                                                  patientInconsistentPrescriptionsNo++;
                                                 });
                                                 // only display patients names who has one or more inconsistent prescription
                                                 if (patientInconsistentPrescriptionsNo !=

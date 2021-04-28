@@ -617,26 +617,102 @@ class _PrescriptionsState extends State<Prescriptions> {
                                                         height: 10,
                                                       ),
                                                       Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                         children: [
-                                                          Text(
-                                                            'الصيدلي',
-                                                            style:
-                                                                ksubBoldLabelTextStyle,
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                'الصيدلي',
+                                                                style:
+                                                                    ksubBoldLabelTextStyle,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 15.0,
+                                                              ),
+                                                              Text(
+                                                                'ص.  $pharmacistName',
+                                                                style: TextStyle(
+                                                                  color: Colors
+                                                                      .black45,
+                                                                  fontSize: 15.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
-                                                          SizedBox(
-                                                            width: 15.0,
-                                                          ),
-                                                          Text(
-                                                            'ص.  $pharmacistName',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .black45,
-                                                              fontSize: 15.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                          status == 'inconsistent'
+                                                              ? Padding(
+                                                            padding:
+                                                            const EdgeInsets.only(
+                                                                left: 20),
+                                                            child: IconButton(
+                                                              icon: Icon(
+                                                                  Icons.info_outline, color: Colors.red),
+                                                              onPressed: () {
+                                                                showModalBottomSheet(
+                                                                    context: context,
+                                                                    builder:
+                                                                        (context) {
+                                                                      return Container(
+                                                                        height: 200,
+                                                                        child: Card(
+                                                                          shape:
+                                                                          RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                15.0),
+                                                                          ),
+                                                                          color:
+                                                                          kGreyColor,
+                                                                          child:
+                                                                          Column(
+                                                                            children: [
+                                                                              ListTile(
+                                                                                title:
+                                                                                Text(
+                                                                                  'ملاحظات الصيدلي',
+                                                                                  textAlign:
+                                                                                  TextAlign.center,
+                                                                                  style:
+                                                                                  kBoldLabelTextStyle,
+                                                                                ),
+                                                                              ),
+                                                                              Divider(
+                                                                                color:
+                                                                                klighterColor,
+                                                                                thickness:
+                                                                                0.9,
+                                                                                endIndent:
+                                                                                20,
+                                                                                indent:
+                                                                                20,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding:
+                                                                                const EdgeInsets.all(15.0),
+                                                                                child:
+                                                                                Text(
+                                                                                  '${prescription.data()['pharmacist-notes']}',
+                                                                                  style: TextStyle(
+                                                                                    color: Colors.black45,
+                                                                                    fontSize: 15.0,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    });
+                                                              },
                                                             ),
                                                           )
+                                                              : SizedBox()
                                                         ],
                                                       ),
                                                       SizedBox(

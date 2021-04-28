@@ -53,35 +53,35 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         child: CircularProgressIndicator(
                             backgroundColor: kGreyColor,
                             valueColor: AlwaysStoppedAnimation(kBlueColor)));
-                  } else {
+                  } if (snapshot.data.docs.length != 0) {
                     DocumentSnapshot medicalHistory = snapshot.data.docs[0];
                     final age = Age.dateDifference(
                         fromDate:
-                            DateTime.parse(medicalHistory.get('birth date')),
+                        DateTime.parse(medicalHistory.get('birth date')),
                         toDate: DateTime.now(),
                         includeToDate: false);
                     String weightVal =
-                        medicalHistory.data()['weight'].toString();
+                    medicalHistory.data()['weight'].toString();
                     String heightVal =
-                        medicalHistory.data()['height'].toString();
+                    medicalHistory.data()['height'].toString();
                     double heightInM = double.parse(heightVal) / 100;
                     String BMI = (double.parse(weightVal) / pow(heightInM, 2))
                         .toStringAsFixed(2);
 
                     var maritalStatusVal =
-                        medicalHistory.data()['marital status'];
+                    medicalHistory.data()['marital status'];
                     var smokingVal = medicalHistory.data()['smoking'];
                     var pregnancyVal = medicalHistory.data()['pregnancy'];
                     //Lists
                     var hospVal = medicalHistory.data()['hospitalization'];
                     var surgeryVal = medicalHistory.data()['surgery'];
                     var chronicDisVal =
-                        medicalHistory.data()['chronic disease'];
+                    medicalHistory.data()['chronic disease'];
                     var currentMedVal =
-                        medicalHistory.data()['current medications'];
+                    medicalHistory.data()['current medications'];
                     var allergyVal = medicalHistory.data()['allergies'];
                     var medAllergyVal =
-                        medicalHistory.data()['medication allergies'];
+                    medicalHistory.data()['medication allergies'];
 
                     return Container(
                       child: SingleChildScrollView(
@@ -128,7 +128,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                                     .collection('/Patient')
                                                     .doc(widget.uid)
                                                     .collection(
-                                                        '/Medical History')
+                                                    '/Medical History')
                                                     .doc(medicalHistory.id)
                                                     .delete();
                                                 // Navigator.pushReplacement(
@@ -308,7 +308,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   });
                                 }
                               },
-                              //controller: heightCtrl,
                             ),
                           ),
                           //مؤشر كتلة الجسم
@@ -439,9 +438,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               initialValue: hospVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, hospVal) == false) {
                                   setState(() {
                                     medicalHistory.reference.update(
@@ -468,9 +467,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               initialValue: surgeryVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, surgeryVal) == false) {
                                   setState(() {
                                     medicalHistory.reference
@@ -496,9 +495,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               initialValue: chronicDisVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, chronicDisVal) == false) {
                                   setState(() {
                                     medicalHistory.reference.update(
@@ -524,9 +523,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               initialValue: currentMedVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, currentMedVal) == false) {
                                   setState(() {
                                     medicalHistory.reference.update(
@@ -553,9 +552,9 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               initialValue: allergyVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, allergyVal) == false) {
                                   setState(() {
                                     medicalHistory.reference
@@ -576,16 +575,16 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                               maxLines: 5,
                               decoration: InputDecoration(
                                 labelText:
-                                    'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
+                                'هل تعاني من أي حساسية تجاه نوع من الأدوية :',
                                 hintText: 'اكتب كل نوع في سطر',
                                 border: OutlineInputBorder(),
                               ),
                               initialValue: medAllergyVal.join('\n'),
                               onSaved: (value) {
                                 var valueAsList =
-                                    value.split('\n'); //save value as a list
+                                value.split('\n'); //save value as a list
                                 valueAsList.removeWhere(
-                                    (item) => item == ''); //remove ''
+                                        (item) => item == ''); //remove ''
                                 if (eq(valueAsList, medAllergyVal) == false) {
                                   setState(() {
                                     medicalHistory.reference.update(
@@ -613,7 +612,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                         if (somethingChanged) {
                                           this.somethingChanged = false;
                                           medicalHistory.reference.update(
-                                              {'lastUpdated': dateFormat.format(DateTime.now())});
+                                              {'lastUpdated': dateFormat.format(DateTime.now())}
+                                          );
                                           Flushbar(
                                             backgroundColor: kLightColor,
                                             borderRadius: 4.0,
@@ -628,7 +628,7 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                               textAlign: TextAlign.center,
                                             ),
                                           )..show(context).then(
-                                              (r) => Navigator.pop(context));
+                                                  (r) => Navigator.pop(context));
                                         }
                                       }),
                                 ),
@@ -649,6 +649,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         ]),
                       ),
                     );
+                  } else {
+                    return SizedBox();
                   }
                 }),
           ),

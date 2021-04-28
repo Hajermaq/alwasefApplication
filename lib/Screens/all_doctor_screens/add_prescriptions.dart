@@ -425,6 +425,7 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
                                                     strength: strength,
                                                     note1: note1,
                                                     note2: note2,
+                                                    pharmacistNotes: '',
                                                     pharmaceuticalForm:
                                                         pharmaceuticalForm,
                                                     administrationRoute:
