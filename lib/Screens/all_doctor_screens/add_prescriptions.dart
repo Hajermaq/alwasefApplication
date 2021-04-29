@@ -82,11 +82,8 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
   //Methods
 // fetching data from API to use in prescription
   Future<List<Prescription>> fetchPrescription() async {
-    String URL = "https://script.googleusercontent.com/macros/echo?user_content"
-        "_key=DtUnRVrrV976kfvKU3mNP8xul3ifCzuTgCO75u82suviFYNAWBdvObx6JLtJ4W7P"
-        "M8aaDVaPLQKTe3ntyu5paYYywn0RHb6Im5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_r"
-        "yfhECjZEnAw0OEmvZ6ZgqAm5NuVvpOPxYabOLLgVAlR8GmMtquTES-_KsGjojP8n1DyVcpZpzTBf"
-        "A0REAKN5qDJfrA-Atj5dRUoY4UnnfNz9Jw9Md8uu&lib=MZRMRjEYoeB3skfpJFu14OfaUQYat3_A-";
+    String URL =
+        "https://script.google.com/macros/s/AKfycbwg07KeyK46Obxh2tDdADsNzg_PMQnc9EY_VYyNmPlxohbHRbF-asGp-L24jyifUeBkMA/exec";
 
 // create a http request
     http.Response response = await http.get(URL);
