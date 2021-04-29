@@ -69,7 +69,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
 
         for (String i in allergiesList) {
           allergies += i;
-          allergies += ' / ';
+          allergies += ' , ';
         }
 
         print(allergies);
@@ -148,16 +148,13 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
     // footer
     String doctorSignature,
   }) async {
-    var data = await rootBundle.load("assets/fonts/NotoNaskhArabic-Regular.ttf");
+    var data =
+    await rootBundle.load("assets/fonts/NotoNaskhArabic-Regular.ttf");
     var myFont = pw.Font.ttf(data);
-    var data1 = await rootBundle.load("assets/fonts/Almarai-Regular.ttf");
-    var tff = pw.Font.ttf(data);
+
     pdf.addPage(
       pw.Page(
           pageFormat: PdfPageFormat.a4,
-          // theme: pw.ThemeData.withFont(
-          //   base: myFont,
-          // ),
           build: (pw.Context context) {
             return pw.Column(
               children: [
@@ -372,7 +369,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                           ),
                         ),
                         pw.Text(
-                          '${doctorSignature}',
+                          '$doctorSignature',
                           textDirection: pw.TextDirection.rtl,
                           style: pw.TextStyle(
                             font: myFont,
@@ -390,10 +387,9 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
   }
 
   Future<String> viewPdf(pw.Document pdf) async {
-    //using this path so thet the path is not visible by the user
+    //using this path so the the path is not visible by the user
     Directory directory = await getApplicationDocumentsDirectory();
     if (await directory.exists()) {
-      print('im inside function ${directory.path}');
       File file = File(directory.path + "/$filename");
       file.writeAsBytes(await pdf.save());
       return 'saved!';
@@ -408,7 +404,6 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
         if (await _reguestPremission(Permission.storage)) {
           directory = await getExternalStorageDirectory();
           print(directory.path);
-          // /storage/sdcard0/0/Android/data/hajermaq.alwasef_app/files
           List<String> folders = directory.path.split("/");
           for (int x = 1; x < folders.length; x++) {
             String folder = folders[x];
@@ -438,7 +433,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
 
   @override
   void initState() {
-    super.initState();
+    // ignore: must_call_super
     _calendarController = CalendarController();
     getPatientInfo();
     getHospitalInfo();
@@ -540,7 +535,7 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                               var startDate = DateTime.tryParse(start);
                               //map value as list
                               String prescriberID = doc.data()['prescriber-id'];
-                              String prescriptionID = doc.id;
+                              String prescriptionID = doc.data()['prescription-id'];
                               String creationDate =
                               doc.data()['prescription-creation-date'];
                               String scientificName = doc.data()['scientificName'];
@@ -652,8 +647,28 @@ class _PrescriptionsCalendar2State extends State<PrescriptionsCalendar2> {
                                                       //prescription prescriber info
                                                       String doctorName = doctorDoc
                                                           .get('doctor-name');
-                                                      String doctorSpeciality =
+
+                                                      String tempDoctorSpeciality =
                                                       doctorDoc.get('doctor-speciality');
+                                                      String
+                                                      doctorSpeciality;
+
+                                                      if (tempDoctorSpeciality ==
+                                                          'طبيب قلب') {
+                                                        doctorSpeciality =
+                                                        'cardiologist';
+                                                      } else if (tempDoctorSpeciality ==
+                                                          'طبيب باطنية') {
+                                                        doctorSpeciality =
+                                                        'Internal medicine physicians';
+                                                      } else if (tempDoctorSpeciality ==
+                                                          'طبيب أسرة') {
+                                                        doctorSpeciality =
+                                                        'family physician';
+                                                      } else {
+                                                        doctorSpeciality =
+                                                        'Psychologist';
+                                                      }
 
                                                       pdf = pw.Document();
                                                       writeToPdf(

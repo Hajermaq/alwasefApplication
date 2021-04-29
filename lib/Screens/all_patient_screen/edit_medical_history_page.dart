@@ -563,7 +563,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     medicalHistory.reference
                                         .update({'allergies': valueAsList});
                                     this.somethingChanged = true;
-                                    print('allerg');
                                   });
                                 }
                               },
