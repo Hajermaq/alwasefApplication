@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:alwasef_app/Screens/login_and_registration/textfield_validation.dart';
 import 'package:alwasef_app/Screens/services/user_management.dart';
 import 'package:alwasef_app/components/DatePicker.dart';
@@ -122,6 +121,10 @@ class _AddPrescriptionsState extends State<AddPrescriptions>
           }
         }
       }
+    } else {
+      print(" the current status code is: ${response.statusCode}");
+      print(" the error phrase is: ${response.reasonPhrase}");
+      print('the body message is :${response.body}');
     }
     return prescription;
   }

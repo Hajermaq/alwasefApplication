@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants.dart';
 
 class DoctorProfileInfo extends StatefulWidget {
@@ -209,10 +208,10 @@ class _DoctorProfileInfoState extends State<DoctorProfileInfo> {
                                                     height: 50.0,
                                                     child: RaisedButton(
                                                       onPressed: () async {
-                                                        await auth.signOut().then(
-                                                            (value) => Navigator
-                                                                .pushNamed(
-                                                                    context,
+                                                        await auth.signOut();
+                                                        Navigator.of(context)
+                                                            .popUntil(ModalRoute
+                                                                .withName(
                                                                     WelcomeScreen
                                                                         .id));
                                                       },

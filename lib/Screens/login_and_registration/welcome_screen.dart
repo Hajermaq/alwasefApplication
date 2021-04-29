@@ -56,7 +56,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           OutinedButton(
             text: 'انضموا إلينا',
             onPressed: () {
-              Navigator.pushNamed(context, LogInORSignIn.id);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  // settings: RouteSettings(name: "/WelcomeScreen"),
+                  builder: (context) => LogInORSignIn(),
+                ),
+              );
             },
           )
         ],

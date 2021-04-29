@@ -69,6 +69,9 @@ class _PrescriptionsState extends State<Prescriptions> {
                       .collection('/Patient')
                       .doc(widget.uid)
                       .collection('/Prescriptions')
+                      // .where('status',
+                      //     isNotEqualTo:
+                      //         'requested refill') // cant use because does not offer docs length method
                       // cant use because does not offer docs length method
                       //.where('status', isNotEqualTo: 'requested refill')
                       .where('prescriber-id',
@@ -83,7 +86,8 @@ class _PrescriptionsState extends State<Prescriptions> {
                     }
                     if (snapshot.data.docs.length == 0) {
                       return Center(
-                        child: Text('لا توجد وصفات طبية.',
+                        child: Text(
+                          'لا توجد وصفات طبية.',
                           style: TextStyle(color: Colors.black54, fontSize: 17),
                         ),
                       );
@@ -92,8 +96,10 @@ class _PrescriptionsState extends State<Prescriptions> {
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
                             Widget statusIcon;
-                            DocumentSnapshot prescription = snapshot.data.docs[index];
-                            String pharmacistID = prescription.data()['pharmacist-id'];
+                            DocumentSnapshot prescription =
+                                snapshot.data.docs[index];
+                            String pharmacistID =
+                                prescription.data()['pharmacist-id'];
                             String status = prescription.data()['status'];
                             String start = prescription.data()['start-date'];
                             DateTime startDate = DateTime.tryParse(start);
@@ -104,29 +110,45 @@ class _PrescriptionsState extends State<Prescriptions> {
                                 includeToDate: false);
 
                             // delete if 1 month passed
-                            if ((difference.months >= 1 || difference.days >= 28) && refill == 0 &&
+                            if ((difference.months >= 1 ||
+                                    difference.days >= 28) &&
+                                refill == 0 &&
                                 status == 'dispensed') {
                               UserManagement().PastPrescriptionsSetUp(
                                 context,
                                 widget.uid,
                                 prescription.data()['prescriber-id'].toString(),
-                                pharmacistID.isEmpty? '': pharmacistID,
+                                pharmacistID.isEmpty ? '' : pharmacistID,
                                 'deleted',
-                                prescription.data()['prescription-creation-date'].toString(),
+                                prescription
+                                    .data()['prescription-creation-date']
+                                    .toString(),
                                 prescription.data()['start-date'].toString(),
                                 prescription.data()['end-date'].toString(),
-                                prescription.data()['scientificName'].toString(),
+                                prescription
+                                    .data()['scientificName']
+                                    .toString(),
                                 prescription.data()['tradeName'].toString(),
-                                prescription.data()['tradeNameArabic'].toString(),
+                                prescription
+                                    .data()['tradeNameArabic']
+                                    .toString(),
                                 prescription.data()['strength'].toString(),
                                 prescription.data()['strength-unit'].toString(),
-                                prescription.data()['pharmaceutical-form'].toString(),
-                                prescription.data()['administration-route'].toString(),
-                                prescription.data()['storage-conditions'].toString(),
+                                prescription
+                                    .data()['pharmaceutical-form']
+                                    .toString(),
+                                prescription
+                                    .data()['administration-route']
+                                    .toString(),
+                                prescription
+                                    .data()['storage-conditions']
+                                    .toString(),
                                 prescription.data()['price'].toString(),
                                 prescription.data()['refill'],
                                 prescription.data()['frequency'],
-                                prescription.data()['instruction-note'].toString(),
+                                prescription
+                                    .data()['instruction-note']
+                                    .toString(),
                                 prescription.data()['doctor-note'].toString(),
                               );
                               FirebaseFirestore.instance
@@ -137,11 +159,12 @@ class _PrescriptionsState extends State<Prescriptions> {
                                   .delete();
                             }
 
-                            if (status != 'requested refill' ) {
-
+                            if (status != 'requested refill') {
                               //search by
-                              String tradeName = prescription.data()['tradeName'];
-                              String dose = prescription.data()['dose'].toString();
+                              String tradeName =
+                                  prescription.data()['tradeName'];
+                              String dose =
+                                  prescription.data()['dose'].toString();
                               if (status == 'pending') {
                                 statusIcon = Icon(
                                   Icons.hourglass_top_outlined,

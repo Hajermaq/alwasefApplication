@@ -209,10 +209,10 @@ class _PharmacistProfileInfoState extends State<PharmacistProfileInfo> {
                                                     height: 50.0,
                                                     child: RaisedButton(
                                                       onPressed: () async {
-                                                        await auth.signOut().then(
-                                                            (value) => Navigator
-                                                                .pushNamed(
-                                                                    context,
+                                                        await auth.signOut();
+                                                        Navigator.of(context)
+                                                            .popUntil(ModalRoute
+                                                                .withName(
                                                                     WelcomeScreen
                                                                         .id));
                                                       },

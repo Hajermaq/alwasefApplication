@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:md2_tab_indicator/md2_tab_indicator.dart';
-
 import '../../constants.dart';
 import 'edit_medical_history_page.dart';
 import 'fill_medical_history_page.dart';
@@ -16,6 +15,8 @@ class PatientMedicalInfo extends StatefulWidget {
   final String email;
   final String uid;
   PatientMedicalInfo({this.uid, this.name, this.email});
+  static const String id = 'patient_medical_into _screen';
+
   @override
   _PatientMedicalInfoState createState() => _PatientMedicalInfoState();
 }
@@ -160,7 +161,8 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                       subtitle: Text(
                                                           'قم بتعبئة سجلك الطبي'),
                                                       trailing: IconButton(
-                                                          icon: Icon(Icons.note_add_outlined),
+                                                          icon: Icon(Icons
+                                                              .note_add_outlined),
                                                           onPressed: () {
                                                             Navigator.push(
                                                                 context,
@@ -188,7 +190,8 @@ class _PatientMedicalInfoState extends State<PatientMedicalInfo>
                                                     color: kGreyColor,
                                                     margin: EdgeInsets.fromLTRB(
                                                         10.0, 10.0, 10.0, 0),
-                                                    child: ListTile( //eZipOgPrgjfI8GEzg2ZnWKP3YTo1
+                                                    child: ListTile(
+                                                      //eZipOgPrgjfI8GEzg2ZnWKP3YTo1
                                                       leading:
                                                           Icon(Icons.animation),
                                                       title: Text(
