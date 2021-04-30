@@ -83,20 +83,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Harmattan
-      fonts:
-        - asset: assets/fonts/Harmattan-Bold.ttf
-        - asset: assets/fonts/Harmattan-Regular.ttf
-    - family: Almarai
-      fonts:
-        - asset: assets/fonts/Almarai-ExtraBold.ttf
-        - asset: assets/fonts/Almarai-Bold.ttf
-        - asset: assets/fonts/Almarai-Light.ttf
-        - asset: assets/fonts/Almarai-Regular.ttf
+
     - family: Noto Naskh
       fonts:
         - asset: assets/fonts/NotoNaskhArabic-Regular.ttf
-    - family: Cairo
-      fonts:
-        - asset: assets/fonts/Cairo-Bold.ttf

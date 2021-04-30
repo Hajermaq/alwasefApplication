@@ -2,7 +2,6 @@ import 'package:alwasef_app/components/outlined_button.dart';
 import 'package:alwasef_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'login_or_signup_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {

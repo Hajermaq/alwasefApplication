@@ -103,9 +103,6 @@ class _LogInScreenState extends State<LogInScreen> {
                   isObscure: false,
                   color: kButtonColor,
                   hintMessage: 'البريد الإلكتروني',
-                  // onSaved: (value) {
-                  //   email = value;
-                  // },
                   onChanged: (value) {
                     email = value;
                   },
