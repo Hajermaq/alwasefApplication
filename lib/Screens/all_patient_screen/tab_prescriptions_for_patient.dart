@@ -72,7 +72,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
           allergies += ' , ';
         }
 
-        print(allergies);
         if (mounted) {
           setState(() {});
         }
@@ -93,7 +92,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
         .get()
         .then((doc) {
       hospitalUid = doc.data()['hospital-uid'];
-      print(hospitalUid);
       if (mounted) {
         setState(() {});
       }
@@ -106,7 +104,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
         .then((doc) {
       hospitalName = doc.data()['hospital-name'];
       hospitalPhoneNumber = doc.data()['phone-number'];
-      print(hospitalName);
 
       if (mounted) {
         setState(() {});
@@ -402,7 +399,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
       if (Platform.isAndroid) {
         if (await _reguestPremission(Permission.storage)) {
           directory = await getExternalStorageDirectory();
-          print(directory.path);
           List<String> folders = directory.path.split("/");
           for (int x = 1; x < folders.length; x++) {
             String folder = folders[x];
@@ -414,7 +410,6 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
           }
           newPath = newPath + "/Download";
           directory = Directory(newPath);
-          print(directory.path);
           // saving & saving the file
           File file = File(directory.path + "/$filename");
           file.writeAsBytes(await pdf.save());
@@ -476,7 +471,8 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                   return ListView.builder(
                       itemCount: snapshot.data.docs.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot prescription = snapshot.data.docs[index];
+                        DocumentSnapshot prescription =
+                            snapshot.data.docs[index];
                         // time calculations for buttons (add report/request refill)
                         String start = prescription.data()['start-date'];
                         DateTime startDate = DateTime.tryParse(start);
@@ -489,14 +485,17 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                               includeToDate: false);
                           // delete if 1 month passed
                           if ((difference.months >= 1 ||
-                                  difference.days >= 28) && refill == 0) {
+                                  difference.days >= 28) &&
+                              refill == 0) {
                             UserManagement().PastPrescriptionsSetUp(
                               context,
                               widget.uid,
                               prescription.data()['prescriber-id'].toString(),
                               prescription.data()['pharmacist-id'].toString(),
                               'deleted',
-                              prescription.data()['prescription-creation-date'].toString(),
+                              prescription
+                                  .data()['prescription-creation-date']
+                                  .toString(),
                               prescription.data()['start-date'].toString(),
                               prescription.data()['end-date'].toString(),
                               prescription.data()['scientificName'].toString(),
@@ -504,13 +503,21 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                               prescription.data()['tradeNameArabic'].toString(),
                               prescription.data()['strength'].toString(),
                               prescription.data()['strength-unit'].toString(),
-                              prescription.data()['pharmaceutical-form'].toString(),
-                              prescription.data()['administration-route'].toString(),
-                              prescription.data()['storage-conditions'].toString(),
+                              prescription
+                                  .data()['pharmaceutical-form']
+                                  .toString(),
+                              prescription
+                                  .data()['administration-route']
+                                  .toString(),
+                              prescription
+                                  .data()['storage-conditions']
+                                  .toString(),
                               prescription.data()['price'].toString(),
                               prescription.data()['refill'],
                               prescription.data()['frequency'],
-                              prescription.data()['instruction-note'].toString(),
+                              prescription
+                                  .data()['instruction-note']
+                                  .toString(),
                               prescription.data()['doctor-note'].toString(),
                             );
                             FirebaseFirestore.instance
@@ -521,20 +528,26 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                 .delete();
                           }
                           // doctor info
-                          String prescriberID = prescription.data()['prescriber-id'];
-                          String pharmacistID = prescription.data()['pharmacist-id'];
+                          String prescriberID =
+                              prescription.data()['prescriber-id'];
+                          String pharmacistID =
+                              prescription.data()['pharmacist-id'];
                           //search by
                           String tradeName = prescription.data()['tradeName'];
                           String dose = prescription.data()['dose'].toString();
 
                           // search logic
-                          if (tradeName.toLowerCase()
+                          if (tradeName
+                                  .toLowerCase()
                                   .contains(searchValue.toLowerCase()) ||
-                              tradeName.toUpperCase()
+                              tradeName
+                                  .toUpperCase()
                                   .contains(searchValue.toUpperCase()) ||
-                              dose.toLowerCase()
+                              dose
+                                  .toLowerCase()
                                   .contains(searchValue.toLowerCase()) ||
-                              dose.toUpperCase()
+                              dose
+                                  .toUpperCase()
                                   .contains(searchValue.toUpperCase())) {
                             return Card(
                               shape: RoundedRectangleBorder(
@@ -951,7 +964,8 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                 String doctorName =
                                                     doc.data()['doctor-name'];
                                                 String tempDoctorSpeciality =
-                                                    doc.data()['doctor-speciality'];
+                                                    doc.data()[
+                                                        'doctor-speciality'];
                                                 String doctorSpeciality;
                                                 String experienceYears = doc
                                                     .data()['experience-years'];
@@ -1207,21 +1221,29 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                               Row(
                                                 children: [
                                                   //allow creating report if 7 days of more passed
-                                                  (difference.months >= 1 || difference.days >= 7)
+                                                  (difference.months >= 1 ||
+                                                          difference.days >= 7)
                                                       ? RaisedButton(
                                                           color: klighterColor,
                                                           shape: RoundedRectangleBorder(
                                                               side: BorderSide(
-                                                                  color: kGreyColor,
+                                                                  color:
+                                                                      kGreyColor,
                                                                   width: 2),
-                                                              borderRadius: BorderRadius.circular(10)),
-                                                          child: Text("إنشاء تقرير"),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                          child: Text(
+                                                              "إنشاء تقرير"),
                                                           onPressed: () {
                                                             Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
-                                                                    fullscreenDialog: true,
-                                                                    builder: (context) =>
+                                                                    fullscreenDialog:
+                                                                        true,
+                                                                    builder:
+                                                                        (context) =>
                                                                             CreateReportPage(
                                                                               uid: widget.uid,
                                                                               prescriberID: prescriberID,
@@ -1335,8 +1357,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                         fullPath =
                                                                         documentPath +
                                                                             "/$filename";
-                                                                    print(
-                                                                        ' full path name $fullPath');
+
                                                                     Navigator
                                                                         .push(
                                                                       context,
@@ -1549,37 +1570,49 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                   ),
 
                                                   //allow request refill if a month passed and nom of refill is 1 or more
-                                                  (difference.months >= 1 || difference.days >= 28) && refill > 0
+                                                  (difference.months >= 1 ||
+                                                              difference.days >=
+                                                                  28) &&
+                                                          refill > 0
                                                       ? RaisedButton(
                                                           color: klighterColor,
                                                           shape: RoundedRectangleBorder(
                                                               side: BorderSide(
-                                                                  color: kGreyColor,
+                                                                  color:
+                                                                      kGreyColor,
                                                                   width: 2),
-                                                              borderRadius: BorderRadius.circular(10)),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
                                                           child: Text(
                                                               "طلب إعادة تعبئة"),
                                                           onPressed: () async {
                                                             showDialog(
-                                                                context: context,
-                                                                builder: (BuildContext context) {
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
                                                                   yesButton =
                                                                       FlatButton(
-                                                                          child: Text('نعم'),
-                                                                          onPressed: () async {
-                                                                            await FirebaseFirestore.instance.collection('/Patient')
-                                                                                .doc(widget.uid)
-                                                                                .collection('/Prescriptions')
-                                                                                .doc(prescription.id)
-                                                                                .update({
+                                                                          child: Text(
+                                                                              'نعم'),
+                                                                          onPressed:
+                                                                              () async {
+                                                                            await FirebaseFirestore.instance.collection('/Patient').doc(widget.uid).collection('/Prescriptions').doc(prescription.id).update({
                                                                               'status': 'requested refill'
                                                                             });
                                                                             Navigator.pop(context);
                                                                           });
-                                                                  noButton = FlatButton(
-                                                                        child: Text('لا'),
-                                                                        onPressed: () {
-                                                                          Navigator.pop(context);
+                                                                  noButton =
+                                                                      FlatButton(
+                                                                    child: Text(
+                                                                        'لا'),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
                                                                     },
                                                                   );
 
@@ -2084,7 +2117,8 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                 String doctorName =
                                                     doc.data()['doctor-name'];
                                                 String tempDoctorSpeciality =
-                                                    doc.data()['doctor-speciality'];
+                                                    doc.data()[
+                                                        'doctor-speciality'];
                                                 String doctorSpeciality;
                                                 String experienceYears = doc
                                                     .data()['experience-years'];
@@ -2435,8 +2469,7 @@ class _PatientPrescriptionsState extends State<PatientPrescriptions> {
                                                                     fullPath =
                                                                     documentPath +
                                                                         "/$filename";
-                                                                print(
-                                                                    ' full path name $fullPath');
+
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(

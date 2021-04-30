@@ -68,7 +68,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       );
-      // print("Done");
     } catch (e) {
       print(e);
       showDialog(

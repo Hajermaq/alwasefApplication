@@ -4,10 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants.dart';
 
-// moath.y.m@hotmail.com  Moady@123
 class PharmacistHomePage extends StatefulWidget {
   @override
   _PharmacistHomePageState createState() => _PharmacistHomePageState();
@@ -270,11 +268,10 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                                 .collection('/Patient')
                                                 .doc(myPatientsIDs[index])
                                                 .collection('/Prescriptions')
-                                                // can not use this method because do not give docs length
-                                                // .where('status',
-                                                //     isEqualTo: 'pending')
-                                                // .where('status',
-                                                //     isEqualTo: 'updated')
+                                                .where('status',
+                                                    isEqualTo: 'pending')
+                                                .where('status',
+                                                    isEqualTo: 'updated')
                                                 .snapshots(),
                                             builder: (context, snapshot) {
                                               if (!snapshot.hasData) {
@@ -293,14 +290,7 @@ class _PharmacistHomePageState extends State<PharmacistHomePage> {
                                               int patientNewPrescriptionsNo = 0;
                                               snapshot.data.docs
                                                   .forEach((prescription) {
-                                                if (prescription
-                                                            .data()['status'] ==
-                                                        'pending' ||
-                                                    prescription
-                                                            .data()['status'] ==
-                                                        'updated') {
-                                                  patientNewPrescriptionsNo++;
-                                                }
+                                                patientNewPrescriptionsNo++;
                                               });
                                               // only display patients names who has one or more new prescription
                                               if (patientNewPrescriptionsNo !=

@@ -1,4 +1,4 @@
-import 'package:alwasef_app/Screens/all_doctor_screens/patient_medical_history.dart';
+import 'package:alwasef_app/Screens/all_doctor_screens/tab_patient_medical_history.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_patient_screen/tab_past_diagnoses_for_patient.dart';
 import 'package:alwasef_app/Screens/all_pharmacist_screens/tab_patient_past_prescriptions.dart';

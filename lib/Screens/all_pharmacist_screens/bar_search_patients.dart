@@ -148,8 +148,6 @@ class _SearchPatientPageState extends State<SearchPatientPage> {
                                         onTap: () async {
                                           currentUID = snapshot.data.docs[index]
                                               .get('uid');
-                                          print(
-                                              " the id: ${snapshot.data.docs[index].get('uid')}");
                                           currentName = snapshot
                                               .data.docs[index]
                                               .get('patient-name');

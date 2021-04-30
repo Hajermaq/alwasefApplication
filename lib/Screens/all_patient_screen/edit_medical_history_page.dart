@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../constants.dart';
-import 'bar_patient_medical_info.dart';
 
 class EditMedicalHistoryPage extends StatefulWidget {
   final String uid;
@@ -52,7 +51,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         child: CircularProgressIndicator(
                             backgroundColor: kGreyColor,
                             valueColor: AlwaysStoppedAnimation(kBlueColor)));
-                  } else {
+                  }
+                  if (snapshot.data.docs.length != 0) {
                     DocumentSnapshot medicalHistory = snapshot.data.docs[0];
                     final age = Age.dateDifference(
                         fromDate:
@@ -130,19 +130,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                                         '/Medical History')
                                                     .doc(medicalHistory.id)
                                                     .delete();
-                                                // Navigator.pop(context);
-                                                // Navigator.of(context).popUntil(
-                                                //                                                 //     ModalRoute.withName(
-                                                //                                                 //         PatientMedicalInfo.id));
-                                                // Navigator.pushReplacement(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             FillMedicalHistoryPage())); //TODO: gives error in previous page
                                                 Navigator.pop(context);
                                                 Navigator.pop(context);
-                                                //Navigator.popUntil(context, ModalRoute.withName('/PatientMainPage'));
-                                                //Navigator.pushNamed(context,WelcomeScreen.id);
                                               });
                                           noButton = FlatButton(
                                             child: Text('لا'),
@@ -150,7 +139,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                               Navigator.pop(context);
                                             },
                                           );
-
                                           return AlertDialog(
                                             title: Text(
                                                 'هل أنت متأكد من حذف السجل الصحي؟',
@@ -311,7 +299,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                   });
                                 }
                               },
-                              //controller: heightCtrl,
                             ),
                           ),
                           //مؤشر كتلة الجسم
@@ -535,7 +522,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     medicalHistory.reference.update(
                                         {'current medications': valueAsList});
                                     this.somethingChanged = true;
-                                    print('current');
                                   });
                                 }
                               },
@@ -564,7 +550,6 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                     medicalHistory.reference
                                         .update({'allergies': valueAsList});
                                     this.somethingChanged = true;
-                                    print('allerg');
                                   });
                                 }
                               },
@@ -615,6 +600,10 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                                         }
                                         if (somethingChanged) {
                                           this.somethingChanged = false;
+                                          medicalHistory.reference.update({
+                                            'lastUpdated': dateFormat
+                                                .format(DateTime.now())
+                                          });
                                           Flushbar(
                                             backgroundColor: kLightColor,
                                             borderRadius: 4.0,
@@ -650,6 +639,8 @@ class _EditMedicalHistoryPageState extends State<EditMedicalHistoryPage> {
                         ]),
                       ),
                     );
+                  } else {
+                    return SizedBox();
                   }
                 }),
           ),

@@ -3,7 +3,6 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants.dart';
 
 class PharmacistManagement extends StatefulWidget {
@@ -101,7 +100,6 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                                       var doc = snapshot.data;
                                       String speciality =
                                           doc.docs[0].data()['speciality'];
-                                      print(speciality);
                                       List<String> specialities = [
                                         'صيدلي',
                                         'صيدلي إكلينيكي',
@@ -139,9 +137,6 @@ class _PharmacistManagementState extends State<PharmacistManagement> {
                                                 value: speciality,
                                                 onTap: () {
                                                   speciality = speciality;
-
-                                                  print(speciality);
-                                                  print(widget.pharmacist_id);
                                                 },
                                               );
                                             }).toList(),

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../constants.dart';
 
 //Variables
@@ -26,11 +25,9 @@ AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
 Future resetEmail(
     String newEmail, String password, String collectionName) async {
-  print('collection name $collectionName');
   var authResult = await auth.signInWithEmailAndPassword(
       email: currentUser.email, password: password);
   await authResult.user.updateEmail(newEmail);
-  print(authResult.user.uid);
   await FirebaseFirestore.instance
       .collection('/$collectionName')
       .doc(authResult.user.uid)
@@ -42,7 +39,6 @@ Future<void> resetPassword(
   if (email == currentUser.email) {
     await auth.sendPasswordResetEmail(email: email);
   } else {
-    print('no');
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -127,7 +123,6 @@ class _ChangeEmailState extends State<ChangeEmail> {
                   validator: Validation().validatePasswordLogin,
                   onSaved: (value) {
                     password = value;
-                    print(password);
                   },
                   decoration: InputDecoration(
                     hintText: 'كلمة المرور',

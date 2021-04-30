@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 
 //Colors
 // pink Color(0xffffc6c7);
-const kLightGreenColor = Color(0xffabd1c6);
 const kPinkColor = Color(0xffffc6c7);
 const kBlueColor = Color(0xff2F3890);
 const kRedColor = Color(0xFFF05A22);

@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_navigation/misc/navigation_helpers.dart';
 import 'package:scroll_navigation/navigation/scroll_navigation.dart';
-
 import '../../constants.dart';
 import 'bar_patient_medical_info.dart';
 import 'bar_patient_profile.dart';
