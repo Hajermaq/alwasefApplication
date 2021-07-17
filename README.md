@@ -1,16 +1,8 @@
-# alwasef_app
+# alwasef_app Graduation Project
 
-A new Flutter application.
+Al-Wasef is an e-prescribing system that will develop the prototype of a mobile application to enhance the functionality of the archaic paper-based system. 
+The main purpose of this application is to serve a certain hospital with its healthcare providers and as well as its patients. To provide more accurate and well-prescribed medications for patients, the application is tracking all medication data history written by doctors to prevent medication mistakes.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ We Applied Dart as programming language and Flutter as a Framework. 
+ We also managed a working customer database with Firebase NoSQL database.
+ 
